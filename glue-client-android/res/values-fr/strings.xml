@@ -6,10 +6,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="mail_address">Mail address</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="or">or</string>
-	
+    <string name="mail_address">Adresse Mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Connexion</string>
+    <string name="register">S\'inscrire</string>
+    <string name="or">ou</string>
+
 </resources>
