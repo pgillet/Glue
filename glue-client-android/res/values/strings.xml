@@ -9,7 +9,13 @@
     <string name="mail_address">Mail address</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
+    <string name="sign_up">Sign Up</string>
     <string name="or">or</string>
-	
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="first_name">First Name :</string>
+    <string name="last_name">Last Name :</string>
+    <string name="your_email">Your Email :</string>
+    <string name="re_enter_email_">Re-enter Email :</string>
+    <string name="new_password">New Password :</string>
+
 </resources>

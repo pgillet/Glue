@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
         android:contentDescription="TODO"
         android:src="@drawable/ic_launcher" />
 
@@ -21,11 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text="@string/mail_address" >
+        android:hint="@string/mail_address"
+        android:inputType="textEmailAddress" >
 
         <requestFocus />
     </EditText>
@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText3"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword" />
@@ -49,8 +49,8 @@
         android:layout_alignLeft="@+id/editText3"
         android:layout_alignRight="@+id/editText3"
         android:layout_below="@+id/editText2"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:text="@string/login" />
 
     <TextView
@@ -59,8 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/button1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
         android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
         android:text="@string/or"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -71,8 +71,8 @@
         android:layout_alignLeft="@+id/button1"
         android:layout_alignRight="@+id/editText2"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:text="@string/register" />
+        android:layout_marginTop="4dp"
+        android:text="@string/sign_up" />
 
 </RelativeLayout>
