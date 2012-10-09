@@ -12,10 +12,20 @@
     <string name="sign_up">Sign Up</string>
     <string name="or">or</string>
     <string name="title_activity_sign_up">Sign Up</string>
-    <string name="first_name">First Name :</string>
-    <string name="last_name">Last Name :</string>
-    <string name="your_email">Your Email :</string>
-    <string name="re_enter_email_">Re-enter Email :</string>
-    <string name="new_password">New Password :</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="your_email">Your Email</string>
+    <string name="re_enter_email_">Re-enter Email</string>
+    <string name="new_password">New Password</string>
+    <string name="title_activity_create_stream_main">Create Stream</string>
+    <string name="togglePrivate">Private</string>
+    <string name="togglePublic">Public</string>
+    <string name="private_description">Only participants and guests can access to the stream</string>
+    <string name="public_description">Anyone can access to the stream</string>  
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="privacy">Privacy</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
 </resources>

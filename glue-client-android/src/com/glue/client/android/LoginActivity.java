@@ -5,18 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
-		Button button = (Button) findViewById(R.id.button2);
-		button.setOnClickListener(this);
 	}
 
 	@Override
@@ -25,11 +20,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 		return true;
 	}
 
-	@Override
-	public void onClick(View v) {
+	public void onClickSignUp(View v) {
 		Intent intent = new Intent();
 		intent.setClassName("com.glue.client.android",
 				"com.glue.client.android.SignUpActivity");
+		startActivity(intent);
+	}
+
+	public void onClickLogin(View v) {
+		Intent intent = new Intent();
+		intent.setClassName("com.glue.client.android",
+				"com.glue.client.android.CreateStreamMainActivity");
 		startActivity(intent);
 	}
 }
