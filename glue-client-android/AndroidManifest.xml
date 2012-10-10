@@ -47,6 +47,10 @@
             android:label="@string/title_activity_sign_up"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
+        <activity
+            android:name=".CreateStreamMainActivity"
+            android:label="@string/title_activity_create_stream_main" >
+        </activity>
     </application>
 
 </manifest>
