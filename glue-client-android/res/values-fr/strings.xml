@@ -17,5 +17,15 @@
     <string name="your_email">Votre adresse\nélectronique</string>
     <string name="re_enter_email_">Saisissez à nouveau votre\nadresse électronique</string>
     <string name="new_password">Nouveau mot de passe</string>
+    <string name="title_activity_create_stream_main">Créer une Stream</string>
+    <string name="togglePrivate">Privé</string>
+    <string name="togglePublic">Public</string>
+    <string name="private_description">Seuls les participants et les invités peuvent accéder à la stream</string>
+    <string name="public_description">Tout le monde peut accéder à la stream</string>  
+    <string name="title">Titre</string>
+    <string name="description">Description</string>
+    <string name="privacy">Confidentialité</string>
+    <string name="next">Suivant</string>
+    <string name="finish">Finir</string>
 
 </resources>
