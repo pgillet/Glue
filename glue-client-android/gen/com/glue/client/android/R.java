@@ -73,6 +73,8 @@ public final class R {
         public static final int next=0x7f040019;
         public static final int or=0x7f04000a;
         public static final int password=0x7f040007;
+        public static final int press_to_enter_a_title=0x7f04001b;
+        public static final int press_to_enter_one_or_more_tags=0x7f04001c;
         public static final int privacy=0x7f040018;
         public static final int private_description=0x7f040014;
         public static final int public_description=0x7f040015;
