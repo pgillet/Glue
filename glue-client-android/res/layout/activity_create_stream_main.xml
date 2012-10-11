@@ -76,15 +76,16 @@
                     android:layout_weight="1"
                     android:text="@string/private_description"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="italic" />
+                    android:textSize="15sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton1"
-                    android:layout_width="75dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:onClick="onToggleClicked"
                     android:text="ToggleButton"
+                    android:drawableRight="@drawable/device_access_not_secure"
                     android:textOff="@string/togglePrivate"
                     android:textOn="@string/togglePublic" />
             </LinearLayout>
