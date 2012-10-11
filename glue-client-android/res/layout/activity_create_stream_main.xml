@@ -85,7 +85,8 @@
                     android:layout_gravity="right"
                     android:onClick="onToggleClicked"
                     android:text="ToggleButton"
-                    android:drawableRight="@drawable/device_access_not_secure"
+                    android:checked="false"
+                    android:drawableRight="@drawable/device_access_secure"
                     android:textOff="@string/togglePrivate"
                     android:textOn="@string/togglePublic" />
             </LinearLayout>
