@@ -15,52 +15,61 @@ public final class R {
         public static final int device_access_secure=0x7f020001;
         public static final int ic_action_search=0x7f020002;
         public static final int ic_launcher=0x7f020003;
+        public static final int navigation_accept=0x7f020004;
+        public static final int navigation_next_item=0x7f020005;
+        public static final int social_add_group=0x7f020006;
+        public static final int social_group=0x7f020007;
     }
     public static final class id {
+        public static final int TableLayout1=0x7f07000d;
         public static final int button1=0x7f07000c;
         public static final int button2=0x7f07000b;
         public static final int editText1=0x7f070004;
         public static final int editText2=0x7f070006;
-        public static final int editText3=0x7f070013;
-        public static final int editText4=0x7f070016;
-        public static final int editText5=0x7f070018;
-        public static final int footer=0x7f070011;
-        public static final int header=0x7f07000f;
-        public static final int imageView1=0x7f070010;
-        public static final int item_detail=0x7f070019;
-        public static final int item_detail_container=0x7f07000d;
-        public static final int item_list=0x7f07000e;
-        public static final int layout01=0x7f070014;
+        public static final int editText3=0x7f070014;
+        public static final int editText4=0x7f070017;
+        public static final int editText5=0x7f070019;
+        public static final int footer=0x7f070012;
+        public static final int header=0x7f070010;
+        public static final int imageView1=0x7f070011;
+        public static final int item_detail=0x7f07001a;
+        public static final int item_detail_container=0x7f07000e;
+        public static final int item_list=0x7f07000f;
+        public static final int layout01=0x7f070015;
         public static final int layout03=0x7f070002;
         public static final int layout04=0x7f070000;
         public static final int layout05=0x7f070001;
         public static final int layout06=0x7f07000a;
-        public static final int loginForm=0x7f070012;
-        public static final int menu_settings=0x7f07001a;
+        public static final int loginForm=0x7f070013;
+        public static final int menu_settings=0x7f07001b;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070005;
         public static final int textView3=0x7f070007;
         public static final int textView4=0x7f070008;
-        public static final int textView5=0x7f070015;
-        public static final int textView6=0x7f070017;
+        public static final int textView5=0x7f070016;
+        public static final int textView6=0x7f070018;
         public static final int toggleButton1=0x7f070009;
     }
     public static final class layout {
         public static final int activity_create_stream_main=0x7f030000;
-        public static final int activity_item_detail=0x7f030001;
-        public static final int activity_item_list=0x7f030002;
-        public static final int activity_item_twopane=0x7f030003;
-        public static final int activity_login=0x7f030004;
-        public static final int activity_sign_up=0x7f030005;
-        public static final int fragment_item_detail=0x7f030006;
+        public static final int activity_create_stream_user=0x7f030001;
+        public static final int activity_item_detail=0x7f030002;
+        public static final int activity_item_list=0x7f030003;
+        public static final int activity_item_twopane=0x7f030004;
+        public static final int activity_login=0x7f030005;
+        public static final int activity_sign_up=0x7f030006;
+        public static final int fragment_item_detail=0x7f030007;
     }
     public static final class menu {
         public static final int activity_create_stream_main=0x7f060000;
-        public static final int activity_login=0x7f060001;
-        public static final int activity_sign_up=0x7f060002;
+        public static final int activity_create_stream_user=0x7f060001;
+        public static final int activity_login=0x7f060002;
+        public static final int activity_sign_up=0x7f060003;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int closed=0x7f04001f;
+        public static final int closed_description=0x7f040020;
         public static final int description=0x7f040017;
         public static final int finish=0x7f04001a;
         public static final int first_name=0x7f04000c;
@@ -71,7 +80,10 @@ public final class R {
         public static final int menu_settings=0x7f040004;
         public static final int new_password=0x7f040010;
         public static final int next=0x7f040019;
+        public static final int open=0x7f04001e;
+        public static final int open_description=0x7f040021;
         public static final int or=0x7f04000a;
+        public static final int participation_type=0x7f040022;
         public static final int password=0x7f040007;
         public static final int press_to_enter_a_title=0x7f04001b;
         public static final int press_to_enter_one_or_more_tags=0x7f04001c;
@@ -82,6 +94,7 @@ public final class R {
         public static final int sign_up=0x7f040009;
         public static final int title=0x7f040016;
         public static final int title_activity_create_stream_main=0x7f040011;
+        public static final int title_activity_create_stream_user=0x7f04001d;
         public static final int title_activity_login=0x7f040005;
         public static final int title_activity_sign_up=0x7f04000b;
         public static final int title_item_detail=0x7f040001;

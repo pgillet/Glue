@@ -49,7 +49,11 @@
         </activity>
         <activity
             android:name=".CreateStreamMainActivity"
-            android:label="@string/title_activity_create_stream_main">
+            android:label="@string/title_activity_create_stream_main" >
+        </activity>
+        <activity
+            android:name=".CreateStreamUserActivity"
+            android:label="@string/title_activity_create_stream_user" >
         </activity>
     </application>
 
