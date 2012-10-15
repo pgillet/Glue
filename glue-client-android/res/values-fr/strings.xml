@@ -20,8 +20,8 @@
     <string name="title_activity_create_stream_main">Créer une Stream</string>
     <string name="togglePrivate">Privé</string>
     <string name="togglePublic">Public</string>
-    <string name="private_description">Seuls les participants et les invités peuvent accéder à la stream</string>
-    <string name="public_description">Tout le monde peut accéder à la stream</string>  
+    <string name="private_description">Seuls les participants et les invités peuvent afficher la stream</string>
+    <string name="public_description">Tout le monde peut afficher la stream</string>
     <string name="title">Titre</string>
     <string name="description">Description</string>
     <string name="privacy">Confidentialité</string>
@@ -33,7 +33,9 @@
     <string name="open">Ouvert</string>
     <string name="closed">Fermé</string>
     <string name="closed_description">Seules les personnes explicitement invitées peuvent participer à la stream</string>
-	<string name="open_description">Tout le monde peut participer à la stream selon les choix ci-dessous</string>
-	<string name="participation_type">Type de participation</string>
+    <string name="open_description">Tout le monde peut participer à la stream selon les choix ci-dessous</string>
+    <string name="participation_type">Type de participation</string>
+    <string name="participants">Participants</string>
+    <string name="press_enter_to_add_a_participant">Appuyez pour ajouter un participant</string>
 
 </resources>

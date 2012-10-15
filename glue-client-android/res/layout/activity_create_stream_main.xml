@@ -13,8 +13,8 @@
             android:id="@+id/layout03"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="10dp" >
 
             <TextView
                 android:id="@+id/textView1"
@@ -50,11 +50,7 @@
                 android:gravity="top"
                 android:inputType="textMultiLine" />
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="4dp"
-                android:background="#444444" />
+            <include layout="@layout/separator" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -72,11 +68,10 @@
                     android:id="@+id/textView4"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    
                     android:layout_weight="1"
                     android:text="@string/private_description"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton1"
