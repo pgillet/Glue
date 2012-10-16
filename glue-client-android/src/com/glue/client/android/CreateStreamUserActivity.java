@@ -74,8 +74,9 @@ public class CreateStreamUserActivity extends Activity {
 			if (cursor.moveToFirst()) { // True if the cursor is not empty
 				int columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
 				String name = cursor.getString(columnIndex);
-				
-				Button button = new Button(this);
+
+				Button button = new Button(this, null,
+						android.R.attr.buttonStyleSmall);
 				button.setText(name);
 				contactList.addView(button);
 			}
