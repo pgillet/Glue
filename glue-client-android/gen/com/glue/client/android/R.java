@@ -24,32 +24,33 @@ public final class R {
         public static final int LinearLayout1=0x7f07000d;
         public static final int button1=0x7f07000c;
         public static final int button2=0x7f07000b;
+        public static final int contactList=0x7f07000f;
         public static final int editText1=0x7f070004;
         public static final int editText2=0x7f070006;
-        public static final int editText3=0x7f070016;
-        public static final int editText4=0x7f070019;
-        public static final int editText5=0x7f07001b;
-        public static final int footer=0x7f070014;
-        public static final int header=0x7f070012;
-        public static final int imageView1=0x7f070013;
-        public static final int item_detail=0x7f07001c;
-        public static final int item_detail_container=0x7f070010;
-        public static final int item_list=0x7f070011;
-        public static final int layout01=0x7f070017;
+        public static final int editText3=0x7f070017;
+        public static final int editText4=0x7f07001a;
+        public static final int editText5=0x7f07001c;
+        public static final int footer=0x7f070015;
+        public static final int header=0x7f070013;
+        public static final int imageView1=0x7f070014;
+        public static final int item_detail=0x7f07001d;
+        public static final int item_detail_container=0x7f070011;
+        public static final int item_list=0x7f070012;
+        public static final int layout01=0x7f070018;
         public static final int layout02=0x7f07000e;
         public static final int layout03=0x7f070002;
         public static final int layout04=0x7f070000;
         public static final int layout05=0x7f070001;
         public static final int layout06=0x7f07000a;
-        public static final int layout07=0x7f07000f;
-        public static final int loginForm=0x7f070015;
-        public static final int menu_settings=0x7f07001d;
+        public static final int layout07=0x7f070010;
+        public static final int loginForm=0x7f070016;
+        public static final int menu_settings=0x7f07001e;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070005;
         public static final int textView3=0x7f070007;
         public static final int textView4=0x7f070008;
-        public static final int textView5=0x7f070018;
-        public static final int textView6=0x7f07001a;
+        public static final int textView5=0x7f070019;
+        public static final int textView6=0x7f07001b;
         public static final int toggleButton1=0x7f070009;
     }
     public static final class layout {
@@ -111,4 +112,33 @@ public final class R {
     public static final class style {
         public static final int AppTheme=0x7f050000;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a FlowLayout.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #FlowLayout_android_horizontalSpacing com.glue.client.android:android_horizontalSpacing}</code></td><td></td></tr>
+           <tr><td><code>{@link #FlowLayout_android_verticalSpacing com.glue.client.android:android_verticalSpacing}</code></td><td></td></tr>
+           </table>
+           @see #FlowLayout_android_horizontalSpacing
+           @see #FlowLayout_android_verticalSpacing
+         */
+        public static final int[] FlowLayout = {
+            0x01010114, 0x01010115
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.glue.client.android.R.attr#android_horizontalSpacing}
+          attribute's value can be found in the {@link #FlowLayout} array.
+          @attr name android:android_horizontalSpacing
+        */
+        public static final int FlowLayout_android_horizontalSpacing = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.glue.client.android.R.attr#android_verticalSpacing}
+          attribute's value can be found in the {@link #FlowLayout} array.
+          @attr name android:android_verticalSpacing
+        */
+        public static final int FlowLayout_android_verticalSpacing = 1;
+    };
 }

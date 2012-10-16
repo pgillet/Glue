@@ -47,6 +47,11 @@
         android:text="@string/participants"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <com.glue.client.android.view.FlowLayout
+        android:id="@+id/contactList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/layout07"
         android:layout_width="match_parent"
@@ -70,9 +75,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:onClick="onClickAdd"
             android:text="Add" />
     </LinearLayout>
-    
+
     <include layout="@layout/separator" />
 
 </LinearLayout>
