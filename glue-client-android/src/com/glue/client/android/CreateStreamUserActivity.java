@@ -21,11 +21,14 @@ public class CreateStreamUserActivity extends Activity {
 	static final int PICK_CONTACT_REQUEST = 0;
 	private EditText editText;
 	private FlowLayout contactList;
+	private TextView tv;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_stream_user);
+		
+		tv = (TextView) findViewById(R.id.textView1);
 		editText = (EditText) findViewById(R.id.editText1);
 		contactList = (FlowLayout) findViewById(R.id.contactList);
 	}
@@ -39,7 +42,7 @@ public class CreateStreamUserActivity extends Activity {
 	public void onClickToggle(View view) {
 		ToggleButton toggle = (ToggleButton) view;
 		boolean on = toggle.isChecked();
-		TextView tv = (TextView) findViewById(R.id.textView1);
+		
 		Resources res = getResources();
 		Drawable drawable = null;
 		if (on) {

@@ -12,10 +12,13 @@ import android.widget.ToggleButton;
 
 public class CreateStreamMainActivity extends Activity {
 
+	private TextView tv;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_stream_main);
+		tv = (TextView) findViewById(R.id.textView4);
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class CreateStreamMainActivity extends Activity {
 
 		ToggleButton toggle = (ToggleButton) view;
 		boolean on = toggle.isChecked();
-		TextView tv = (TextView) findViewById(R.id.textView4);
+		
 		Resources res = getResources();
 		Drawable drawable = null;
 		if (on) {
