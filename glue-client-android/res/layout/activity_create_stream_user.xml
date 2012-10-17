@@ -58,18 +58,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <EditText
-            android:id="@+id/editText1"
+        <AutoCompleteTextView
+            android:id="@+id/autocomplete_contacts"
             android:layout_width="0dp"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="top"
-            android:hint="@string/press_enter_to_add_a_participant"
-            android:inputType="textMultiLine" >
+            android:hint="@string/press_enter_to_add_a_participant">
 
             <requestFocus />
-        </EditText>
+        </AutoCompleteTextView>
 
         <Button
             android:id="@+id/button1"
