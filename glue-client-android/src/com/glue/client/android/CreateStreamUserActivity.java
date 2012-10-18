@@ -11,6 +11,8 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FilterQueryProvider;
@@ -21,7 +23,8 @@ import android.widget.ToggleButton;
 
 import com.glue.client.android.view.FlowLayout;
 
-public class CreateStreamUserActivity extends Activity {
+public class CreateStreamUserActivity extends Activity implements
+		OnItemClickListener {
 
 	static final int PICK_CONTACT_REQUEST = 0;
 	private FlowLayout contactList;
@@ -40,6 +43,8 @@ public class CreateStreamUserActivity extends Activity {
 
 		textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_contacts);
 		populateContactList();
+
+		textView.setOnItemClickListener(this);
 	}
 
 	/**
@@ -150,11 +155,32 @@ public class CreateStreamUserActivity extends Activity {
 				int columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
 				String name = cursor.getString(columnIndex);
 
-				Button button = new Button(this, null,
-						android.R.attr.buttonStyleSmall);
-				button.setText(name);
-				contactList.addView(button);
+				addContact(name);
 			}
 		}
+	}
+
+	/**
+	 * Adds a button with the given contact name above the auto-complete text
+	 * view.
+	 * 
+	 * @param name
+	 */
+	private void addContact(String name) {
+		Button button = new Button(this, null, android.R.attr.buttonStyleSmall);
+		button.setText(name);
+		contactList.addView(button);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		Cursor cursor = (Cursor) arg0.getItemAtPosition(arg2);
+		int columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
+		String name = cursor.getString(columnIndex);
+
+		addContact(name);
+
+		// Clear
+		textView.setText(null);
 	}
 }
