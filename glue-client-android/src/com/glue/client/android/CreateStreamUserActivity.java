@@ -71,7 +71,7 @@ public class CreateStreamUserActivity extends Activity implements
 					+ " OR " + Email.ADDRESS + " LIKE '%" + arg + "%')";
 		}
 
-		String sortOrder = null;
+		String sortOrder = Data.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
 		return getContentResolver().query(uri, projection, selection,
 				selectionArgs, sortOrder);
