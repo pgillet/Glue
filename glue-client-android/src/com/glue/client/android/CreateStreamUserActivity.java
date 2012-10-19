@@ -8,7 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.Data;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,25 +56,28 @@ public class CreateStreamUserActivity extends Activity implements
 	 */
 	private Cursor getContacts(String arg) {
 		// Run query
-		Uri uri = ContactsContract.Contacts.CONTENT_URI;
-		String[] projection = new String[] { ContactsContract.Contacts._ID,
-				ContactsContract.Contacts.DISPLAY_NAME };
+		Uri uri = Data.CONTENT_URI;
+		String[] projection = new String[] { Data._ID, Data.DISPLAY_NAME,
+				Email.ADDRESS };
 		// String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP +
 		// " = '"
 		// + (mShowInvisible ? "0" : "1") + "'";
 
-		String selection = null;
+		String selection = Data.MIMETYPE + "='" + Email.CONTENT_ITEM_TYPE + "'";
+		String[] selectionArgs = null;
 		if (arg != null) {
-			selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE '%"
-					+ arg + "%'";
+			// selectionArgs = new String[]{arg, arg};
+			selection += " AND (" + Data.DISPLAY_NAME + " LIKE '%" + arg + "%'"
+					+ " OR " + Email.ADDRESS + " LIKE '%" + arg + "%')";
 		}
 
-		String[] selectionArgs = null;
-		String sortOrder = ContactsContract.Contacts.DISPLAY_NAME
-				+ " COLLATE LOCALIZED ASC";
+		String sortOrder = null;
 
-		return managedQuery(uri, projection, selection, selectionArgs,
-				sortOrder);
+		return getContentResolver().query(uri, projection, selection,
+				selectionArgs, sortOrder);
+
+		// return managedQuery(uri, projection, selection, selectionArgs,
+		// sortOrder);
 	}
 
 	/**
@@ -82,10 +87,11 @@ public class CreateStreamUserActivity extends Activity implements
 	private void populateContactList() {
 		// Build adapter with contact entries
 		Cursor cursor = getContacts(null);
-		String[] fields = new String[] { ContactsContract.Data.DISPLAY_NAME };
+		String[] fields = new String[] { Data.DISPLAY_NAME, Email.ADDRESS };
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.contact_entry, cursor, fields,
-				new int[] { R.id.contactEntryText });
+				R.layout.contact_entry, cursor, fields, new int[] {
+						R.id.contactEntryDisplayName,
+						R.id.contactEntryEmailAddress });
 
 		adapter.setCursorToStringConverter(new CursorToStringConverter() {
 

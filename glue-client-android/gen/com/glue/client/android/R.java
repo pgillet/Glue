@@ -25,7 +25,8 @@ public final class R {
         public static final int autocomplete_contacts=0x7f070011;
         public static final int button1=0x7f07000c;
         public static final int button2=0x7f07000b;
-        public static final int contactEntryText=0x7f07001e;
+        public static final int contactEntryDisplayName=0x7f07001e;
+        public static final int contactEntryEmailAddress=0x7f07001f;
         public static final int contactList=0x7f07000f;
         public static final int editText1=0x7f070004;
         public static final int editText2=0x7f070006;
@@ -35,7 +36,7 @@ public final class R {
         public static final int footer=0x7f070016;
         public static final int header=0x7f070014;
         public static final int imageView1=0x7f070015;
-        public static final int item_detail=0x7f07001f;
+        public static final int item_detail=0x7f070020;
         public static final int item_detail_container=0x7f070012;
         public static final int item_list=0x7f070013;
         public static final int layout01=0x7f070019;
@@ -46,7 +47,7 @@ public final class R {
         public static final int layout06=0x7f07000a;
         public static final int layout07=0x7f070010;
         public static final int loginForm=0x7f070017;
-        public static final int menu_settings=0x7f070020;
+        public static final int menu_settings=0x7f070021;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070005;
         public static final int textView3=0x7f070007;
