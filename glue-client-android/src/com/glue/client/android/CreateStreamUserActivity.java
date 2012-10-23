@@ -1,5 +1,10 @@
 package com.glue.client.android;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -7,7 +12,6 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
@@ -28,8 +32,11 @@ import com.glue.client.android.view.FlowLayout;
 public class CreateStreamUserActivity extends Activity implements
 		OnItemClickListener {
 
+	private static final String PARTICIPANTS = "participants";
 	static final int PICK_CONTACT_REQUEST = 0;
 	private FlowLayout contactList;
+	private Bundle participants = new Bundle();
+
 	private TextView tv;
 
 	private boolean mShowInvisible;
@@ -43,10 +50,26 @@ public class CreateStreamUserActivity extends Activity implements
 		tv = (TextView) findViewById(R.id.textView1);
 		contactList = (FlowLayout) findViewById(R.id.contactList);
 
+		if (savedInstanceState != null) {
+			Bundle participants = savedInstanceState.getBundle(PARTICIPANTS);
+
+			Set<String> emailAddresses = participants.keySet();
+			for (String emailAddress : emailAddresses) {
+				String name = participants.getString(emailAddress);
+				addContact(emailAddress, name);
+			}
+		}
+
 		textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_contacts);
 		populateContactList();
 
 		textView.setOnItemClickListener(this);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBundle(PARTICIPANTS, participants);
 	}
 
 	/**
@@ -99,7 +122,7 @@ public class CreateStreamUserActivity extends Activity implements
 			public String convertToString(android.database.Cursor cursor) {
 				// Get the label for this row out of the "state" column
 				final int columnIndex = cursor
-						.getColumnIndexOrThrow(ContactsContract.Data.DISPLAY_NAME);
+						.getColumnIndexOrThrow(Data.DISPLAY_NAME);
 				final String str = cursor.getString(columnIndex);
 				return str;
 			}
@@ -156,12 +179,16 @@ public class CreateStreamUserActivity extends Activity implements
 			// Perform a query to the contact's content provider for the
 			// contact's name
 			Cursor cursor = getContentResolver().query(data.getData(),
-					new String[] { Contacts.DISPLAY_NAME }, null, null, null);
+					new String[] { Data.DISPLAY_NAME, Email.ADDRESS }, null,
+					null, null);
 			if (cursor.moveToFirst()) { // True if the cursor is not empty
-				int columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
+				int columnIndex = cursor.getColumnIndex(Email.ADDRESS);
+				String emailAddress = cursor.getString(columnIndex);
+
+				columnIndex = cursor.getColumnIndex(Data.DISPLAY_NAME);
 				String name = cursor.getString(columnIndex);
 
-				addContact(name);
+				addContact(emailAddress, name);
 			}
 		}
 	}
@@ -172,7 +199,10 @@ public class CreateStreamUserActivity extends Activity implements
 	 * 
 	 * @param name
 	 */
-	private void addContact(String name) {
+	private void addContact(String emailAddress, String name) {
+
+		participants.putString(emailAddress, name);
+
 		Button button = new Button(this, null, android.R.attr.buttonStyleSmall);
 		button.setText(name);
 		contactList.addView(button);
@@ -181,10 +211,14 @@ public class CreateStreamUserActivity extends Activity implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		Cursor cursor = (Cursor) arg0.getItemAtPosition(arg2);
-		int columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
+
+		int columnIndex = cursor.getColumnIndex(Email.ADDRESS);
+		String emailAddress = cursor.getString(columnIndex);
+
+		columnIndex = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
 		String name = cursor.getString(columnIndex);
 
-		addContact(name);
+		addContact(emailAddress, name);
 
 		// Clear
 		textView.setText(null);
