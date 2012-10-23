@@ -37,4 +37,6 @@
 	<string name="participation_type">Participation type</string>
 	<string name="participants">Participants</string>
 	<string name="press_enter_to_add_a_participant">Press enter to add a participant</string>
+	<string name="remove">Remove</string>
+	<string name="cancel">Cancel</string>
 </resources>

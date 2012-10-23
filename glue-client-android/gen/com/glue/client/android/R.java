@@ -76,6 +76,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int cancel=0x7f040026;
         public static final int closed=0x7f04001f;
         public static final int closed_description=0x7f040020;
         public static final int description=0x7f040017;
@@ -101,6 +102,7 @@ public final class R {
         public static final int private_description=0x7f040014;
         public static final int public_description=0x7f040015;
         public static final int re_enter_email_=0x7f04000f;
+        public static final int remove=0x7f040025;
         public static final int sign_up=0x7f040009;
         public static final int title=0x7f040016;
         public static final int title_activity_create_stream_main=0x7f040011;

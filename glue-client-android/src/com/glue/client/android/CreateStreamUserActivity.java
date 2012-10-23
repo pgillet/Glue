@@ -1,8 +1,5 @@
 package com.glue.client.android;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import android.app.Activity;
@@ -15,8 +12,11 @@ import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -29,9 +29,10 @@ import android.widget.ToggleButton;
 
 import com.glue.client.android.view.FlowLayout;
 
-public class CreateStreamUserActivity extends Activity implements
-		OnItemClickListener {
+public class CreateStreamUserActivity extends FragmentActivity implements
+		OnItemClickListener, RemoveParticipantDialog.NoticeDialogListener {
 
+	private static final String REMOVE_PARTICIPANT = "removeParticipant";
 	private static final String PARTICIPANTS = "participants";
 	static final int PICK_CONTACT_REQUEST = 0;
 	private FlowLayout contactList;
@@ -195,16 +196,33 @@ public class CreateStreamUserActivity extends Activity implements
 
 	/**
 	 * Adds a button with the given contact name above the auto-complete text
-	 * view.
+	 * view, and with the associated email address.
 	 * 
+	 * @param emailAddress
 	 * @param name
 	 */
-	private void addContact(String emailAddress, String name) {
+	private void addContact(final String emailAddress, final String name) {
 
 		participants.putString(emailAddress, name);
 
 		Button button = new Button(this, null, android.R.attr.buttonStyleSmall);
 		button.setText(name);
+		button.setId(emailAddress.hashCode());
+
+		final Activity activity = this;
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				DialogFragment newFragment = RemoveParticipantDialog
+						.newInstance(activity, emailAddress, name);
+				newFragment.show(getSupportFragmentManager(),
+						REMOVE_PARTICIPANT);
+			}
+		});
+
 		contactList.addView(button);
 	}
 
@@ -222,5 +240,25 @@ public class CreateStreamUserActivity extends Activity implements
 
 		// Clear
 		textView.setText(null);
+	}
+
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		// Nothing to do
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		
+		RemoveParticipantDialog f = (RemoveParticipantDialog) dialog;
+		int id = f.getEmailAddress().hashCode();
+
+		for (int i = 0; i < contactList.getChildCount(); i++) {
+			View view = contactList.getChildAt(i);
+			if (id == view.getId()) {
+				contactList.removeView(view);
+				participants.remove(f.getEmailAddress());
+			}
+		}
 	}
 }
