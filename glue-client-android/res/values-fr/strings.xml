@@ -43,5 +43,6 @@
 	<string name="shared_secret_question_help">Les participants doivent répondre à la question secrète pour avoir accès à la stream</string>
 	<string name="press_to_enter_a_secret_question">Appuyez pour saisir une question secrète</string>
 	<string name="press_to_enter_the_corresponding_answer">Appuyez pour saisir la réponse attendue</string>
+	<string name="help">Aide</string>
 
 </resources>

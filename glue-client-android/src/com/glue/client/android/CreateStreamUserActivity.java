@@ -261,4 +261,13 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 			}
 		}
 	}
+	
+	public void onClickHelp(View view){
+	}
+	
+	public void onClickFinish(View view){
+	}
+	
+	public void onClickNext(View view){
+	}
 }
