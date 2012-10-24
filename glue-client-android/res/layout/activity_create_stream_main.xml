@@ -2,15 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout04"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
 
     <ScrollView
         android:id="@+id/layout05"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layout06"
+        android:layout_alignParentTop="true" >
 
         <LinearLayout
-            android:id="@+id/layout03"
+            android:id="@+id/layout01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -70,9 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="@string/private_description"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="12sp" />
+                    android:text="@string/private_description" />
 
                 <ToggleButton
                     android:id="@+id/toggleButton1"
