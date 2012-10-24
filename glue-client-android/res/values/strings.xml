@@ -39,4 +39,8 @@
 	<string name="press_enter_to_add_a_participant">Press enter to add a participant</string>
 	<string name="remove">Remove</string>
 	<string name="cancel">Cancel</string>
+	<string name="shared_secret_question">Shared secret question</string>
+	<string name="shared_secret_question_help">Participants must answer to the secret question to be granted access to the protected stream</string>
+	<string name="press_to_enter_a_secret_question">Press to enter a secret question</string>
+	<string name="press_to_enter_the_corresponding_answer">Press to enter the corresponding answer</string>
 </resources>
