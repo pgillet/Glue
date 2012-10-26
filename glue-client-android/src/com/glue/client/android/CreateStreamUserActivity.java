@@ -32,7 +32,8 @@ import android.widget.ToggleButton;
 import com.glue.client.android.view.FlowLayout;
 
 public class CreateStreamUserActivity extends FragmentActivity implements
-		OnItemClickListener, RemoveParticipantDialog.NoticeDialogListener {
+		OnItemClickListener, RemoveParticipantDialog.NoticeDialogListener,
+		EmailPickerDialog.NoticeDialogListener {
 
 	private static final String PICK_EMAIL = "pick_email";
 	private static final String REMOVE_PARTICIPANT = "remove_participant";
@@ -304,6 +305,12 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	public void onClickNext(View view) {
 		// TODO
+	}
+
+	@Override
+	public void onSelectedItem(DialogFragment dialog) {
+		EmailPickerDialog f = (EmailPickerDialog) dialog;
+		addContact(f.getSelectedItem(), f.getDisplayName());
 	}
 
 }

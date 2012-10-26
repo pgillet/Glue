@@ -2,6 +2,7 @@ package com.glue.client.android;
 
 import java.util.Set;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,9 +17,28 @@ public class EmailPickerDialog extends DialogFragment {
 
 	private String displayName;
 
+	private String selectedItem;
+
 	private boolean mRemoved;
 
 	private int mBackStackId;
+
+	/**
+	 * The activity that creates an instance of this dialog fragment must
+	 * implement this interface in order to receive event callbacks. Each method
+	 * passes the DialogFragment in case the host needs to query it.
+	 */
+	public interface NoticeDialogListener {
+		/**
+		 * Called when the user selected an item from the list
+		 * 
+		 * @param dialog
+		 */
+		public void onSelectedItem(DialogFragment dialog);
+	}
+
+	// Use this instance of the interface to deliver action events
+	static NoticeDialogListener mListener;
 
 	/**
 	 * Create a new instance of RemoveParticipantDialog, providing
@@ -38,6 +58,23 @@ public class EmailPickerDialog extends DialogFragment {
 		return f;
 	}
 
+	// Override the Fragment.onAttach() method to instantiate the
+	// NoticeDialogListener
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Verify that the host activity implements the callback interface
+		try {
+			// Instantiate the NoticeDialogListener so we can send events to the
+			// host
+			mListener = (NoticeDialogListener) activity;
+		} catch (ClassCastException e) {
+			// The activity doesn't implement the interface, throw exception
+			throw new ClassCastException(activity.toString()
+					+ " must implement NoticeDialogListener");
+		}
+	}
+
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -45,13 +82,15 @@ public class EmailPickerDialog extends DialogFragment {
 		Bundle emailAddresses = getArguments().getBundle(EMAIL_ADDRESSES);
 
 		Set<String> keys = emailAddresses.keySet();
+		final String[] items = keys.toArray(new String[keys.size()]);
 
-		builder.setTitle(displayName).setItems(
-				keys.toArray(new String[keys.size()]),
+		builder.setTitle(displayName).setItems(items,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						// The 'which' argument contains the index position
 						// of the selected item
+						setSelectedItem(items[which]);
+						mListener.onSelectedItem(EmailPickerDialog.this);
 					}
 				});
 		return builder.create();
@@ -83,6 +122,22 @@ public class EmailPickerDialog extends DialogFragment {
 		mBackStackId = allowStateLoss ? transaction.commitAllowingStateLoss()
 				: transaction.commit();
 		return mBackStackId;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getSelectedItem() {
+		return selectedItem;
+	}
+
+	public void setSelectedItem(String selectedItem) {
+		this.selectedItem = selectedItem;
 	}
 
 }
