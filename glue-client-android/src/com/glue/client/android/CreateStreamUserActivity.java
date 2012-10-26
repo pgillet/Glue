@@ -209,10 +209,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 			if (bundle.isEmpty()) {
 				// Contact has no email address
-				Context context = getApplicationContext();
-				Toast toast = Toast.makeText(context,
-						R.string.no_email_address, Toast.LENGTH_SHORT);
-				toast.show();
+				Toast.makeText(getApplicationContext(),
+						R.string.no_email_address, Toast.LENGTH_SHORT).show();
 			} else {
 				Set<String> emailAddresses = bundle.keySet();
 				if (emailAddresses.size() > 1) {
@@ -237,6 +235,14 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	 * @param name
 	 */
 	private void addContact(final String emailAddress, final String name) {
+
+		if (participants.containsKey(emailAddress)) {
+			// Email address already added
+			Toast.makeText(getApplicationContext(),
+					R.string.email_address_already_added, Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
 
 		participants.putString(emailAddress, name);
 

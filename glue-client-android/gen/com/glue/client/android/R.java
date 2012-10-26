@@ -87,6 +87,7 @@ public final class R {
         public static final int closed=0x7f04001f;
         public static final int closed_description=0x7f040020;
         public static final int description=0x7f040017;
+        public static final int email_address_already_added=0x7f04002d;
         public static final int finish=0x7f04001a;
         public static final int first_name=0x7f04000c;
         public static final int hello_world=0x7f040003;
