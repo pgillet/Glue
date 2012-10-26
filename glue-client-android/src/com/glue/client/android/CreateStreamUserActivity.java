@@ -32,7 +32,8 @@ import com.glue.client.android.view.FlowLayout;
 public class CreateStreamUserActivity extends FragmentActivity implements
 		OnItemClickListener, RemoveParticipantDialog.NoticeDialogListener {
 
-	private static final String REMOVE_PARTICIPANT = "removeParticipant";
+	private static final String PICK_EMAIL = "pick_email";
+	private static final String REMOVE_PARTICIPANT = "remove_participant";
 	private static final String PARTICIPANTS = "participants";
 	static final int PICK_CONTACT_REQUEST = 0;
 	private FlowLayout contactList;
@@ -90,7 +91,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		String selection = Data.MIMETYPE + "='" + Email.CONTENT_ITEM_TYPE + "'";
 		String[] selectionArgs = null;
 		if (arg != null) {
-			// selectionArgs = new String[]{arg, arg};
+			// selectionArgs = new String[]{arg, arg}; // Messing up!
 			selection += " AND (" + Data.DISPLAY_NAME + " LIKE '%" + arg + "%'"
 					+ " OR " + Email.ADDRESS + " LIKE '%" + arg + "%')";
 		}
@@ -99,9 +100,6 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 		return getContentResolver().query(uri, projection, selection,
 				selectionArgs, sortOrder);
-
-		// return managedQuery(uri, projection, selection, selectionArgs,
-		// sortOrder);
 	}
 
 	/**
@@ -179,18 +177,34 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 				&& requestCode == PICK_CONTACT_REQUEST) {
 			// Perform a query to the contact's content provider for the
 			// contact's name
-			Cursor cursor = getContentResolver().query(data.getData(),
-					new String[] { Data.DISPLAY_NAME, Email.ADDRESS }, null,
-					null, null);
-			if (cursor.moveToFirst()) { // True if the cursor is not empty
+
+			Uri result = data.getData();
+
+			// get the contact id from the Uri
+			String id = result.getLastPathSegment();
+
+			Cursor cursor = getContentResolver().query(Email.CONTENT_URI, null,
+					Email.CONTACT_ID + "=?", new String[] { id }, null);
+
+			Bundle bundle = new Bundle();
+			String displayName = null;
+			while (cursor.moveToNext()) {
 				int columnIndex = cursor.getColumnIndex(Email.ADDRESS);
 				String emailAddress = cursor.getString(columnIndex);
 
-				columnIndex = cursor.getColumnIndex(Data.DISPLAY_NAME);
-				String name = cursor.getString(columnIndex);
+				columnIndex = cursor.getColumnIndex(Email.TYPE);
+				int type = cursor.getInt(columnIndex);
 
-				addContact(emailAddress, name);
+				columnIndex = cursor.getColumnIndex(Data.DISPLAY_NAME);
+				displayName = cursor.getString(columnIndex);
+
+				bundle.putInt(emailAddress, type);
 			}
+
+			EmailPickerDialog newFragment = EmailPickerDialog.newInstance(
+					displayName, bundle);
+			newFragment.show(getSupportFragmentManager().beginTransaction(),
+					PICK_EMAIL, true);
 		}
 	}
 
@@ -209,15 +223,13 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		button.setText(name);
 		button.setId(emailAddress.hashCode());
 
-		final Activity activity = this;
-
 		button.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
 				DialogFragment newFragment = RemoveParticipantDialog
-						.newInstance(activity, emailAddress, name);
+						.newInstance(emailAddress, name);
 				newFragment.show(getSupportFragmentManager(),
 						REMOVE_PARTICIPANT);
 			}
@@ -249,7 +261,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
-		
+
 		RemoveParticipantDialog f = (RemoveParticipantDialog) dialog;
 		int id = f.getEmailAddress().hashCode();
 
@@ -261,13 +273,17 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 			}
 		}
 	}
-	
-	public void onClickHelp(View view){
+
+	public void onClickHelp(View view) {
+		// TODO
 	}
-	
-	public void onClickFinish(View view){
+
+	public void onClickFinish(View view) {
+		// TODO
 	}
-	
-	public void onClickNext(View view){
+
+	public void onClickNext(View view) {
+		// TODO
 	}
+
 }
