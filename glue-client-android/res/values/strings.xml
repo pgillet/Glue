@@ -44,4 +44,5 @@
 	<string name="press_to_enter_a_secret_question">Press to enter a secret question</string>
 	<string name="press_to_enter_the_corresponding_answer">Press to enter the corresponding answer</string>
 	<string name="help">Help</string>
+	<string name="no_email_address">This contact has no email address</string>
 </resources>

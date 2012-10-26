@@ -44,5 +44,6 @@
 	<string name="press_to_enter_a_secret_question">Appuyez pour saisir une question secrète</string>
 	<string name="press_to_enter_the_corresponding_answer">Appuyez pour saisir la réponse attendue</string>
 	<string name="help">Aide</string>
+	<string name="no_email_address">Ce contact n\'a aucune adresse mail</string>
 
 </resources>

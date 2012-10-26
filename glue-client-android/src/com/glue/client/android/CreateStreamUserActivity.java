@@ -3,6 +3,7 @@ package com.glue.client.android;
 import java.util.Set;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.glue.client.android.view.FlowLayout;
@@ -188,23 +190,41 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 			Bundle bundle = new Bundle();
 			String displayName = null;
+			String emailAddress = null;
+			int type;
 			while (cursor.moveToNext()) {
 				int columnIndex = cursor.getColumnIndex(Email.ADDRESS);
-				String emailAddress = cursor.getString(columnIndex);
+				emailAddress = cursor.getString(columnIndex);
 
 				columnIndex = cursor.getColumnIndex(Email.TYPE);
-				int type = cursor.getInt(columnIndex);
+				type = cursor.getInt(columnIndex);
 
 				columnIndex = cursor.getColumnIndex(Data.DISPLAY_NAME);
 				displayName = cursor.getString(columnIndex);
 
+				// Inserts the email address along its type
 				bundle.putInt(emailAddress, type);
 			}
 
-			EmailPickerDialog newFragment = EmailPickerDialog.newInstance(
-					displayName, bundle);
-			newFragment.show(getSupportFragmentManager().beginTransaction(),
-					PICK_EMAIL, true);
+			if (bundle.isEmpty()) {
+				// Contact has no email address
+				Context context = getApplicationContext();
+				Toast toast = Toast.makeText(context,
+						R.string.no_email_address, Toast.LENGTH_SHORT);
+				toast.show();
+			} else {
+				Set<String> emailAddresses = bundle.keySet();
+				if (emailAddresses.size() > 1) {
+					// Contact has several email addresses
+					EmailPickerDialog newFragment = EmailPickerDialog
+							.newInstance(displayName, bundle);
+					newFragment.show(getSupportFragmentManager()
+							.beginTransaction(), PICK_EMAIL, true);
+				} else {
+					// Contact has only one email address
+					addContact(emailAddress, displayName);
+				}
+			}
 		}
 	}
 
