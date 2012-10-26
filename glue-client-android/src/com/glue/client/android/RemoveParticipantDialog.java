@@ -31,18 +31,7 @@ public class RemoveParticipantDialog extends DialogFragment {
 	 * Create a new instance of RemoveParticipantDialog, providing
 	 * "emailAddress" and "name" as arguments.
 	 */
-	static RemoveParticipantDialog newInstance(Activity host,
-			String emailAddress, String name) {
-		// Verify that the host activity implements the callback interface
-		try {
-			// Instantiate the NoticeDialogListener so we can send events with
-			// it
-			mListener = (NoticeDialogListener) host;
-		} catch (ClassCastException e) {
-			// The activity doesn't implement the interface, throw exception
-			throw new ClassCastException(host.toString()
-					+ " must implement NoticeDialogListener");
-		}
+	static RemoveParticipantDialog newInstance(String emailAddress, String name) {
 
 		RemoveParticipantDialog f = new RemoveParticipantDialog();
 
@@ -53,6 +42,23 @@ public class RemoveParticipantDialog extends DialogFragment {
 		f.setArguments(args);
 
 		return f;
+	}
+
+	// Override the Fragment.onAttach() method to instantiate the
+	// NoticeDialogListener
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Verify that the host activity implements the callback interface
+		try {
+			// Instantiate the NoticeDialogListener so we can send events to the
+			// host
+			mListener = (NoticeDialogListener) activity;
+		} catch (ClassCastException e) {
+			// The activity doesn't implement the interface, throw exception
+			throw new ClassCastException(activity.toString()
+					+ " must implement NoticeDialogListener");
+		}
 	}
 
 	@Override
