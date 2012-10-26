@@ -19,7 +19,8 @@ public final class R {
         public static final int navigation_accept=0x7f020005;
         public static final int navigation_next_item=0x7f020006;
         public static final int social_add_group=0x7f020007;
-        public static final int social_group=0x7f020008;
+        public static final int social_add_person=0x7f020008;
+        public static final int social_group=0x7f020009;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070011;
