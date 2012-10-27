@@ -26,6 +26,7 @@ public class FlowLayout extends ViewGroup {
 	private final int horizontalSpacing;
 	private final int verticalSpacing;
 	private List<RowMeasurement> currentRows = Collections.emptyList();
+	private List<RowMeasurement> rows = new ArrayList<RowMeasurement>();
 
 	public FlowLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -48,7 +49,7 @@ public class FlowLayout extends ViewGroup {
 				- getHorizontalPadding();
 		final int maxInternalHeight = MeasureSpec.getSize(heightMeasureSpec)
 				- getVerticalPadding();
-		List<RowMeasurement> rows = new ArrayList<RowMeasurement>();
+		rows.clear();
 		RowMeasurement currentRow = new RowMeasurement(maxInternalWidth,
 				widthMode);
 		rows.add(currentRow);
