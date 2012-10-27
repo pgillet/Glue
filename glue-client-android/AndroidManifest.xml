@@ -59,6 +59,10 @@
             android:name=".CreateStreamUserActivity"
             android:label="@string/title_activity_create_stream_user" >
         </activity>
+        <activity
+            android:name=".CreateStreamLocationActivity"
+            android:label="@string/title_activity_create_stream_location" >
+        </activity>
     </application>
 
 </manifest>

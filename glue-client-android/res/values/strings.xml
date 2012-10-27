@@ -33,22 +33,23 @@
     <string name="open">Open</string>
     <string name="closed">Closed</string>
     <string name="closed_description">Only explicitly invited people can participate to the stream</string>
-	<string name="open_description">Anyone can participate to the stream according to the limitations below</string>
-	<string name="participation_type">Participation type</string>
-	<string name="participants">Invited participants</string>
-	<string name="press_enter_to_add_a_participant">Press enter to add a participant</string>
-	<string name="remove">Remove</string>
-	<string name="cancel">Cancel</string>
-	<string name="shared_secret_question">Shared secret question</string>
-	<string name="shared_secret_question_help">Uninvited persons must answer to the secret question to be granted access to the protected stream</string>
-	<string name="press_to_enter_a_secret_question">Press to enter a secret question</string>
-	<string name="press_to_enter_the_corresponding_answer">Press to enter the corresponding answer</string>
-	<string name="help">Help</string>
-	<string name="no_email_address">This contact has no email address</string>
-	<string name="email_address_already_added">This email address has already been added</string>
-	<string name="participation_request">Participation request</string>
-	<string name="participation_request_text">Uninvited persons must request to participate</string>
-	<string name="glue_application_icon">Glue application icon</string>
-	<string name="no_participant_error">Add one participant at least</string>
-	
+    <string name="open_description">Anyone can participate to the stream according to the limitations below</string>
+    <string name="participation_type">Participation type</string>
+    <string name="participants">Invited participants</string>
+    <string name="press_enter_to_add_a_participant">Press enter to add a participant</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="shared_secret_question">Shared secret question</string>
+    <string name="shared_secret_question_help">Uninvited persons must answer to the secret question to be granted access to the protected stream</string>
+    <string name="press_to_enter_a_secret_question">Press to enter a secret question</string>
+    <string name="press_to_enter_the_corresponding_answer">Press to enter the corresponding answer</string>
+    <string name="help">Help</string>
+    <string name="no_email_address">This contact has no email address</string>
+    <string name="email_address_already_added">This email address has already been added</string>
+    <string name="participation_request">Participation request</string>
+    <string name="participation_request_text">Uninvited persons must request to participate</string>
+    <string name="glue_application_icon">Glue application icon</string>
+    <string name="no_participant_error">Add one participant at least</string>
+    <string name="title_activity_create_stream_location">Create Stream</string>
+
 </resources>

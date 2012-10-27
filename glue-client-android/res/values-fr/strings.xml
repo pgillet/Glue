@@ -50,5 +50,6 @@
 	<string name="participation_request_text">Les personnes non invitées doivent demander pour participer</string>
 	<string name="glue_application_icon">Glue application icon</string>
 	<string name="no_participant_error">Ajoutez au moins un participant</string>
+	<string name="title_activity_create_stream_location">Créer une Stream</string>
 
 </resources>

@@ -352,6 +352,11 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 					R.string.no_participant_error, Toast.LENGTH_SHORT).show();
 			return;
 		}
+		
+		Intent intent = new Intent();
+		intent.setClassName("com.glue.client.android",
+				"com.glue.client.android.CreateStreamLocationActivity");
+		startActivity(intent);
 	}
 
 	@Override
