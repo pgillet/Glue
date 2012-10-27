@@ -14,9 +14,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light" >
+
+        <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
+        <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
+        <!-- android:label="@string/title_activity_login" -->
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
