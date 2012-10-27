@@ -99,6 +99,7 @@ public final class R {
         public static final int new_password=0x7f040010;
         public static final int next=0x7f040019;
         public static final int no_email_address=0x7f04002c;
+        public static final int no_participant_error=0x7f040031;
         public static final int open=0x7f04001e;
         public static final int open_description=0x7f040021;
         public static final int or=0x7f04000a;

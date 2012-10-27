@@ -49,6 +49,10 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	private boolean mShowInvisible;
 	private AutoCompleteTextView textView;
 	private ViewGroup vg;
+	/**
+	 * The participation type, open or closed. Open by default.
+	 */
+	private boolean participationType = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		tv = (TextView) findViewById(R.id.textView1);
 		contactList = (FlowLayout) findViewById(R.id.contactList);
 		vg = (ViewGroup) findViewById(R.id.LinearLayout1);
+		participationType = ((ToggleButton) findViewById(R.id.toggleButton1))
+				.isChecked();
 
 		if (savedInstanceState != null) {
 			Bundle participants = savedInstanceState.getBundle(PARTICIPANTS);
@@ -153,11 +159,12 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	public void onClickToggle(View view) {
 		ToggleButton toggle = (ToggleButton) view;
-		boolean on = toggle.isChecked();
+		participationType = toggle.isChecked();
 
+		// Set the right icon according to the type of participation
 		Resources res = getResources();
 		Drawable drawable = null;
-		if (on) {
+		if (participationType) {
 			drawable = res.getDrawable(R.drawable.social_add_group);
 			tv.setText(R.string.open_description);
 		} else {
@@ -167,8 +174,10 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
 				null);
 
-		setEnabled(on, vg, Arrays.asList(R.id.textView2, R.id.textView3,
-				R.id.contactList, R.id.layout07, R.id.layout02));
+		// Set the enable state of some views according to the type of
+		// participation
+		setEnabled(participationType, vg, Arrays.asList(R.id.textView2,
+				R.id.textView3, R.id.contactList, R.id.layout07, R.id.layout02));
 	}
 
 	/**
@@ -337,7 +346,12 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	}
 
 	public void onClickNext(View view) {
-		// TODO
+		if (!participationType && participants.isEmpty()) {
+			// Participation type is closed and no participant
+			Toast.makeText(getApplicationContext(),
+					R.string.no_participant_error, Toast.LENGTH_SHORT).show();
+			return;
+		}
 	}
 
 	@Override
