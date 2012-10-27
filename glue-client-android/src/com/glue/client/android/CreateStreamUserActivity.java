@@ -1,9 +1,10 @@
 package com.glue.client.android;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -46,6 +48,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	private boolean mShowInvisible;
 	private AutoCompleteTextView textView;
+	private ViewGroup vg;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 		tv = (TextView) findViewById(R.id.textView1);
 		contactList = (FlowLayout) findViewById(R.id.contactList);
+		vg = (ViewGroup) findViewById(R.id.LinearLayout1);
 
 		if (savedInstanceState != null) {
 			Bundle participants = savedInstanceState.getBundle(PARTICIPANTS);
@@ -162,6 +166,29 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		}
 		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
 				null);
+
+		setEnabled(on, vg, Arrays.asList(R.id.textView2, R.id.textView3,
+				R.id.contactList, R.id.layout07, R.id.layout02));
+	}
+
+	/**
+	 * Set the enabled state of all the views within the given ViewGroup
+	 * recursively. The views with the given ids will be ignored.
+	 * 
+	 * @param enabled
+	 * @param vg
+	 */
+	private void setEnabled(boolean enabled, ViewGroup vg, List<Integer> ids) {
+		for (int i = 0; i < vg.getChildCount(); i++) {
+			View child = vg.getChildAt(i);
+
+			if (!ids.contains(child.getId())) {
+				child.setEnabled(enabled);
+				if (child instanceof ViewGroup) {
+					setEnabled(enabled, (ViewGroup) child, ids);
+				}
+			}
+		}
 	}
 
 	public void onClickAdd(View view) {
