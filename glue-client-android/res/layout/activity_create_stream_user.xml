@@ -83,8 +83,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
-                    android:onClick="onClickAdd"
                     android:drawableRight="@drawable/social_add_person"
+                    android:onClick="onClickAdd"
                     android:text="" />
             </LinearLayout>
 
@@ -120,6 +120,34 @@
                 android:inputType="text" />
 
             <include layout="@layout/separator" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/participation_request"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:id="@+id/layout02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/participation_request_text"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <CheckBox
+                    android:id="@+id/checkBox1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -131,7 +159,7 @@
         android:background="#888888"
         android:gravity="center"
         android:padding="4dp" >
-        
+
         <Button
             android:id="@+id/button3"
             android:layout_width="0dp"
@@ -159,5 +187,5 @@
             android:onClick="onClickNext"
             android:text="@string/next" />
     </LinearLayout>
-    
+
 </RelativeLayout>

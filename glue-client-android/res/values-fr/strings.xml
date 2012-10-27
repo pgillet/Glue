@@ -32,19 +32,21 @@
     <string name="title_activity_create_stream_user">Créer une Stream</string>
     <string name="open">Ouvert</string>
     <string name="closed">Fermé</string>
-    <string name="closed_description">Seules les personnes explicitement invitées peuvent participer à la stream</string>
-    <string name="open_description">Tout le monde peut participer à la stream selon les choix ci-dessous</string>
+    <string name="closed_description">Seules les personnes invitées peuvent participer à la stream</string>
+    <string name="open_description">Tout le monde peut participer à la stream avec les restrictions ci-dessous</string>
     <string name="participation_type">Type de participation</string>
-    <string name="participants">Participants</string>
+    <string name="participants">Participants invités</string>
     <string name="press_enter_to_add_a_participant">Appuyez pour ajouter un participant</string>
     <string name="remove">Supprimer</string>
 	<string name="cancel">Annuler</string>
 	<string name="shared_secret_question">Question secrète</string>
-	<string name="shared_secret_question_help">Les participants doivent répondre à la question secrète pour avoir accès à la stream</string>
+	<string name="shared_secret_question_help">Les personnes non invitées devront répondre à la question secrète pour participer</string>
 	<string name="press_to_enter_a_secret_question">Appuyez pour saisir une question secrète</string>
 	<string name="press_to_enter_the_corresponding_answer">Appuyez pour saisir la réponse attendue</string>
 	<string name="help">Aide</string>
 	<string name="no_email_address">Ce contact n\'a aucune adresse mail</string>
 	<string name="email_address_already_added">Cette adresse mail a déjà été ajoutée</string>
+	<string name="participation_request">Demande de participation</string>
+	<string name="participation_request_text">Les personnes non invitées doivent demander pour participer</string>
 
 </resources>
