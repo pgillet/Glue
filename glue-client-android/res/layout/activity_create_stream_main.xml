@@ -82,7 +82,6 @@
                     android:checked="false"
                     android:drawableRight="@drawable/device_access_secure"
                     android:onClick="onClickToggle"
-                    android:text="ToggleButton"
                     android:textOff="@string/togglePrivate"
                     android:textOn="@string/togglePublic" />
             </LinearLayout>

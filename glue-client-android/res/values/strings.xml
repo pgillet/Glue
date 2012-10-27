@@ -48,4 +48,5 @@
 	<string name="email_address_already_added">This email address has already been added</string>
 	<string name="participation_request">Participation request</string>
 	<string name="participation_request_text">Uninvited persons must request to participate</string>
+	<string name="glue_application_icon">Glue application icon</string>
 </resources>
