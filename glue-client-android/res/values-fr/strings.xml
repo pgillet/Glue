@@ -51,5 +51,9 @@
 	<string name="glue_application_icon">Glue application icon</string>
 	<string name="no_participant_error">Ajoutez au moins un participant</string>
 	<string name="title_activity_create_stream_location">Créer une Stream</string>
+	<string name="date_pattern">EEE dd/MM/yyyy</string>
+	<string name="time_pattern">hh:mm</string>
+	<string name="from">De</string>
+	<string name="to">A</string>
 
 </resources>
