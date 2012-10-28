@@ -7,10 +7,13 @@ import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.glue.client.android.dialog.DatePickerFragment;
 import com.glue.client.android.dialog.TimePickerFragment;
+import com.glue.client.android.utils.Utils;
 
 public class CreateStreamLocationActivity extends FragmentActivity {
 
@@ -29,6 +32,10 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 
 	private Button buttonToDate;
 	private Button buttonToTime;
+	private CheckBox checkBoxFrom;
+	private CheckBox checkBoxTo;
+	private ViewGroup layoutFrom;
+	private ViewGroup layoutTo;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,18 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 
 		buttonToTime = (Button) findViewById(R.id.buttonToTime);
 		buttonToTime.setText(DateFormat.format(timePattern, to));
+
+		checkBoxFrom = (CheckBox) findViewById(R.id.checkBoxFrom);
+		checkBoxTo = (CheckBox) findViewById(R.id.checkBoxTo);
+
+		layoutFrom = (ViewGroup) findViewById(R.id.layoutFrom);
+		layoutTo = (ViewGroup) findViewById(R.id.layoutTo);
+
+		// Set the initial enabled state of both layouts, according to the
+		// default checked value of their respective checkbox
+		onClickCheckBoxFrom(null);
+		onClickCheckBoxTo(null);
+
 	}
 
 	@Override
@@ -75,6 +94,21 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 
 	public void onClickToTime(View v) {
 		showTimePickerDialog(to);
+	}
+
+	public void onClickCheckBoxFrom(View v) {
+		boolean checked = checkBoxFrom.isChecked();
+		Utils.setEnabled(checked, layoutFrom, checkBoxFrom.getId());
+		checkBoxTo.setEnabled(checked);
+		if (!checked) {
+			checkBoxTo.setChecked(checked);
+			onClickCheckBoxTo(null);
+		}
+	}
+
+	public void onClickCheckBoxTo(View v) {
+		boolean checked = checkBoxTo.isChecked();
+		Utils.setEnabled(checked, layoutTo, checkBoxTo.getId());
 	}
 
 	/**

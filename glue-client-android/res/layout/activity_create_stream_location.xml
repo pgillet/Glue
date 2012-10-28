@@ -12,7 +12,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
-        android:id="@+id/fromLayout"
+        android:id="@+id/layoutFrom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -20,7 +20,7 @@
             android:id="@+id/buttonFromDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:onClick="onClickFromDate"
             android:text="@string/date_pattern" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/buttonFromTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:onClick="onClickFromTime"
             android:text="@string/time_pattern" />
 
@@ -37,7 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:checked="true" />
+            android:checked="true"
+            android:visibility="invisible"
+            android:onClick="onClickCheckBoxFrom" />
     </LinearLayout>
 
     <include layout="@layout/separator" />
@@ -50,7 +52,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
-        android:id="@+id/toLayout"
+        android:id="@+id/layoutTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -58,7 +60,7 @@
             android:id="@+id/buttonToDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:onClick="onClickToDate"
             android:text="@string/date_pattern" />
 
@@ -66,7 +68,7 @@
             android:id="@+id/buttonToTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:onClick="onClickToTime"
             android:text="@string/time_pattern" />
 
@@ -74,7 +76,8 @@
             android:id="@+id/checkBoxTo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:onClick="onClickCheckBoxTo" />
     </LinearLayout>
 
     <include layout="@layout/separator" />

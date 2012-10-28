@@ -1,7 +1,6 @@
 package com.glue.client.android;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import android.app.Activity;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.glue.client.android.utils.Utils;
 import com.glue.client.android.view.FlowLayout;
 
 public class CreateStreamUserActivity extends FragmentActivity implements
@@ -176,28 +176,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 		// Set the enable state of some views according to the type of
 		// participation
-		setEnabled(participationType, vg, Arrays.asList(R.id.textView2,
-				R.id.textView3, R.id.contactList, R.id.layout07, R.id.layout02));
-	}
-
-	/**
-	 * Set the enabled state of all the views within the given ViewGroup
-	 * recursively. The views with the given ids will be ignored.
-	 * 
-	 * @param enabled
-	 * @param vg
-	 */
-	private void setEnabled(boolean enabled, ViewGroup vg, List<Integer> ids) {
-		for (int i = 0; i < vg.getChildCount(); i++) {
-			View child = vg.getChildAt(i);
-
-			if (!ids.contains(child.getId())) {
-				child.setEnabled(enabled);
-				if (child instanceof ViewGroup) {
-					setEnabled(enabled, (ViewGroup) child, ids);
-				}
-			}
-		}
+		Utils.setEnabled(participationType, vg, R.id.textView2, R.id.textView3,
+				R.id.contactList, R.id.layout07, R.id.layout02);
 	}
 
 	public void onClickAdd(View view) {
@@ -352,7 +332,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 					R.string.no_participant_error, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		Intent intent = new Intent();
 		intent.setClassName("com.glue.client.android",
 				"com.glue.client.android.CreateStreamLocationActivity");

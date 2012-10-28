@@ -44,7 +44,6 @@ public final class R {
         public static final int editText3=0x7f070027;
         public static final int editText4=0x7f070028;
         public static final int editText5=0x7f070029;
-        public static final int fromLayout=0x7f070001;
         public static final int imageView1=0x7f070026;
         public static final int item_detail=0x7f07002c;
         public static final int item_detail_container=0x7f070024;
@@ -59,6 +58,8 @@ public final class R {
         public static final int layout08=0x7f070017;
         public static final int layout09=0x7f070016;
         public static final int layout10=0x7f070018;
+        public static final int layoutFrom=0x7f070001;
+        public static final int layoutTo=0x7f070006;
         public static final int menu_settings=0x7f07002d;
         public static final int textView1=0x7f070000;
         public static final int textView2=0x7f070005;
@@ -67,7 +68,6 @@ public final class R {
         public static final int textView5=0x7f07001f;
         public static final int textView6=0x7f070021;
         public static final int textView7=0x7f070020;
-        public static final int toLayout=0x7f070006;
         public static final int toggleButton1=0x7f070013;
     }
     public static final class layout {
