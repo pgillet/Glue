@@ -3,6 +3,7 @@ package com.glue.client.android;
 import java.util.Calendar;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
@@ -12,10 +13,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.glue.client.android.dialog.DatePickerFragment;
+import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
 import com.glue.client.android.utils.Utils;
 
-public class CreateStreamLocationActivity extends FragmentActivity {
+public class CreateStreamLocationActivity extends FragmentActivity implements
+		TimeDialogListener {
 
 	private static final int DEFAULT_STREAM_LENGTH = 2;
 	private static final String TIME_PICKER = "timePicker";
@@ -32,8 +35,10 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 
 	private Button buttonToDate;
 	private Button buttonToTime;
+
 	private CheckBox checkBoxFrom;
 	private CheckBox checkBoxTo;
+
 	private ViewGroup layoutFrom;
 	private ViewGroup layoutTo;
 
@@ -50,19 +55,15 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 		timePattern = getString(R.string.time_pattern);
 
 		buttonFromDate = (Button) findViewById(R.id.buttonFromDate);
-		buttonFromDate.setText(DateFormat.format(datePattern, from));
-
 		buttonFromTime = (Button) findViewById(R.id.buttonFromTime);
-		buttonFromTime.setText(DateFormat.format(timePattern, from));
-
 		buttonToDate = (Button) findViewById(R.id.buttonToDate);
-		buttonToDate.setText(DateFormat.format(datePattern, to));
-
 		buttonToTime = (Button) findViewById(R.id.buttonToTime);
-		buttonToTime.setText(DateFormat.format(timePattern, to));
 
 		checkBoxFrom = (CheckBox) findViewById(R.id.checkBoxFrom);
 		checkBoxTo = (CheckBox) findViewById(R.id.checkBoxTo);
+
+		// Set the initial text to Date & Time text views
+		onTimeSet(null);
 
 		layoutFrom = (ViewGroup) findViewById(R.id.layoutFrom);
 		layoutTo = (ViewGroup) findViewById(R.id.layoutTo);
@@ -131,6 +132,17 @@ public class CreateStreamLocationActivity extends FragmentActivity {
 		TimePickerFragment newFragment = new TimePickerFragment();
 		newFragment.setCalendar(c);
 		newFragment.show(getSupportFragmentManager(), TIME_PICKER);
+	}
+
+	@Override
+	public void onTimeSet(DialogFragment dialog) {
+		// One of both Calendar instances has changed
+		// Refresh all the Date & Time text views
+
+		buttonFromDate.setText(DateFormat.format(datePattern, from));
+		buttonFromTime.setText(DateFormat.format(timePattern, from));
+		buttonToDate.setText(DateFormat.format(datePattern, to));
+		buttonToTime.setText(DateFormat.format(timePattern, to));
 	}
 
 }

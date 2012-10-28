@@ -5,21 +5,10 @@ import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
-public class DatePickerFragment extends DialogFragment implements
-		DatePickerDialog.OnDateSetListener {
-
-	private Calendar calendar;
-
-	public Calendar getCalendar() {
-		return calendar;
-	}
-
-	public void setCalendar(Calendar calendar) {
-		this.calendar = calendar;
-	}
+public class DatePickerFragment extends AbstractDateTimePickerFragment
+		implements DatePickerDialog.OnDateSetListener {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,6 +24,9 @@ public class DatePickerFragment extends DialogFragment implements
 	}
 
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		// Do something with the date chosen by the user
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+		mListener.onTimeSet(DatePickerFragment.this);
 	}
 }

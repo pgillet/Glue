@@ -5,22 +5,11 @@ import java.util.Calendar;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
-public class TimePickerFragment extends DialogFragment implements
+public class TimePickerFragment extends AbstractDateTimePickerFragment implements
 		TimePickerDialog.OnTimeSetListener {
-
-	private Calendar calendar;
-
-	public Calendar getCalendar() {
-		return calendar;
-	}
-
-	public void setCalendar(Calendar calendar) {
-		this.calendar = calendar;
-	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,6 +26,9 @@ public class TimePickerFragment extends DialogFragment implements
 	}
 
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		// Do something with the time chosen by the user
+		calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		calendar.set(Calendar.MINUTE, minute);
+		mListener.onTimeSet(TimePickerFragment.this);
 	}
+
 }
