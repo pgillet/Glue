@@ -3,21 +3,24 @@ package com.glue.client.android;
 import java.util.Calendar;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.glue.client.android.dialog.DatePickerFragment;
 import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
+import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.utils.Utils;
 
-public class CreateStreamLocationActivity extends FragmentActivity implements
+public class CreateStreamLocationActivity extends LocationActivity implements
 		TimeDialogListener {
 
 	private static final int DEFAULT_STREAM_LENGTH = 2;
@@ -41,6 +44,11 @@ public class CreateStreamLocationActivity extends FragmentActivity implements
 
 	private ViewGroup layoutFrom;
 	private ViewGroup layoutTo;
+
+	private TextView address;
+	private String latLong;
+
+	private Handler mHandler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +81,29 @@ public class CreateStreamLocationActivity extends FragmentActivity implements
 		onClickCheckBoxFrom(null);
 		onClickCheckBoxTo(null);
 
+		// Location section
+		address = (TextView) findViewById(R.id.address);
+		address.setText(R.string.unknown);
+		latLong = getString(R.string.unknown);
+
+		// Handler for updating text fields on the UI like the lat/long and
+		// address.
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				switch (msg.what) {
+				case UPDATE_ADDRESS:
+					address.setText((String) msg.obj);
+					break;
+				case UPDATE_LATLNG:
+					latLong = (String) msg.obj;
+					break;
+				}
+			}
+		};
+
+		// Set up location.
+		setup();
 	}
 
 	@Override
@@ -143,6 +174,11 @@ public class CreateStreamLocationActivity extends FragmentActivity implements
 		buttonFromTime.setText(DateFormat.format(timePattern, from));
 		buttonToDate.setText(DateFormat.format(datePattern, to));
 		buttonToTime.setText(DateFormat.format(timePattern, to));
+	}
+
+	@Override
+	public Handler getHandler() {
+		return mHandler;
 	}
 
 }

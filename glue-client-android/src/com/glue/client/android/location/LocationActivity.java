@@ -31,7 +31,7 @@ import com.glue.client.android.R;
  * 
  * @author pgillet
  */
-public class LocationActivity extends FragmentActivity {
+public abstract class LocationActivity extends FragmentActivity {
 
 	/**
 	 * Dialog to prompt users to enable GPS on the device.
@@ -53,6 +53,7 @@ public class LocationActivity extends FragmentActivity {
 							}).create();
 		}
 	}
+
 	// AsyncTask encapsulating the reverse-geocoding API. Since the geocoder API
 	// is blocked,
 	// we do not want to invoke it from the UI thread.
@@ -78,7 +79,7 @@ public class LocationActivity extends FragmentActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 				// Update UI field with the exception.
-				Message.obtain(mHandler, UPDATE_ADDRESS, e.toString())
+				Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
 						.sendToTarget();
 			}
 			if (addresses != null && addresses.size() > 0) {
@@ -91,7 +92,7 @@ public class LocationActivity extends FragmentActivity {
 								.getAddressLine(0) : "", address.getLocality(),
 						address.getCountryName());
 				// Update the UI via a message handler.
-				Message.obtain(mHandler, UPDATE_ADDRESS, addressText)
+				Message.obtain(getHandler(), UPDATE_ADDRESS, addressText)
 						.sendToTarget();
 			}
 			return null;
@@ -103,11 +104,8 @@ public class LocationActivity extends FragmentActivity {
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 
 	// UI handler codes.
-	private static final int UPDATE_ADDRESS = 1;
-	private static final int UPDATE_LATLNG = 2;
-
-	private String address;
-	private String latLong;
+	public static final int UPDATE_ADDRESS = 1;
+	public static final int UPDATE_LATLNG = 2;
 
 	private final LocationListener listener = new LocationListener() {
 
@@ -134,8 +132,6 @@ public class LocationActivity extends FragmentActivity {
 
 	private boolean mGeocoderAvailable;
 
-	private Handler mHandler;
-
 	LocationManager mLocationManager;
 
 	private void doReverseGeocoding(Location location) {
@@ -149,10 +145,6 @@ public class LocationActivity extends FragmentActivity {
 		Intent settingsIntent = new Intent(
 				Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		startActivity(settingsIntent);
-	}
-
-	public String getAddress() {
-		return address;
 	}
 
 	/**
@@ -216,10 +208,6 @@ public class LocationActivity extends FragmentActivity {
 		return currentBestLocation;
 	}
 
-	public String getLatLong() {
-		return latLong;
-	}
-
 	/** Checks whether two providers are the same */
 	private boolean isSameProvider(String provider1, String provider2) {
 		if (provider1 == null) {
@@ -240,25 +228,14 @@ public class LocationActivity extends FragmentActivity {
 		mGeocoderAvailable = true; // We try our luck!
 		// Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
 		// && Geocoder.isPresent();
-
-		// Handler for updating text fields on the UI like the lat/long and
-		// address.
-		mHandler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				switch (msg.what) {
-				case UPDATE_ADDRESS:
-					address = (String) msg.obj;
-					break;
-				case UPDATE_LATLNG:
-					latLong = (String) msg.obj;
-					break;
-				}
-			}
-		};
-
-		setup();
 	}
+
+	/**
+	 * Handler for updating text fields on the UI like the lat/long and address.
+	 * 
+	 * @return
+	 */
+	public abstract Handler getHandler();
 
 	@Override
 	protected void onResume() {
@@ -320,23 +297,14 @@ public class LocationActivity extends FragmentActivity {
 		return location;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public void setLatLong(String latLong) {
-		this.latLong = latLong;
-	}
-
-	// Set up fine and/or coarse location providers depending on whether the
-	// fine provider or
-	// both providers button is pressed.
-	private void setup() {
+	/**
+	 * Set up fine and/or coarse location providers depending on whether both
+	 * providers are enabled and supported.
+	 */
+	protected void setup() {
 		Location gpsLocation = null;
 		Location networkLocation = null;
 		mLocationManager.removeUpdates(listener);
-		latLong = getString(R.string.unknown);
-		address = getString(R.string.unknown);
 
 		final boolean gpsEnabled = mLocationManager
 				.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -369,9 +337,8 @@ public class LocationActivity extends FragmentActivity {
 
 	private void updateUILocation(Location location) {
 		// We're sending the update to a handler which then updates the UI with
-		// the new
-		// location.
-		Message.obtain(mHandler, UPDATE_LATLNG,
+		// the new location.
+		Message.obtain(getHandler(), UPDATE_LATLNG,
 				location.getLatitude() + ", " + location.getLongitude())
 				.sendToTarget();
 
