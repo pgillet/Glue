@@ -55,5 +55,6 @@
 	<string name="time_pattern">hh:mmaa</string>
 	<string name="from">From</string>
 	<string name="to">To</string>
+	<string name="location">Location</string>
 
 </resources>

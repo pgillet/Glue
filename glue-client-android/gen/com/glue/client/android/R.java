@@ -39,8 +39,8 @@ public final class R {
         public static final int contactEntryDisplayName=0x7f07002a;
         public static final int contactEntryEmailAddress=0x7f07002b;
         public static final int contactList=0x7f07001b;
-        public static final int editText1=0x7f07000e;
-        public static final int editText2=0x7f07000f;
+        public static final int editText1=0x7f07000f;
+        public static final int editText2=0x7f070010;
         public static final int editText3=0x7f070027;
         public static final int editText4=0x7f070028;
         public static final int editText5=0x7f070029;
@@ -48,12 +48,12 @@ public final class R {
         public static final int item_detail=0x7f07002c;
         public static final int item_detail_container=0x7f070024;
         public static final int item_list=0x7f070025;
-        public static final int layout01=0x7f07000d;
+        public static final int layout01=0x7f07000e;
         public static final int layout02=0x7f07001a;
         public static final int layout03=0x7f070011;
-        public static final int layout04=0x7f07000a;
-        public static final int layout05=0x7f07000b;
-        public static final int layout06=0x7f07000c;
+        public static final int layout04=0x7f07000b;
+        public static final int layout05=0x7f07000c;
+        public static final int layout06=0x7f07000d;
         public static final int layout07=0x7f07001c;
         public static final int layout08=0x7f070017;
         public static final int layout09=0x7f070016;
@@ -63,7 +63,7 @@ public final class R {
         public static final int menu_settings=0x7f07002d;
         public static final int textView1=0x7f070000;
         public static final int textView2=0x7f070005;
-        public static final int textView3=0x7f070010;
+        public static final int textView3=0x7f07000a;
         public static final int textView4=0x7f070012;
         public static final int textView5=0x7f07001f;
         public static final int textView6=0x7f070021;
@@ -105,6 +105,7 @@ public final class R {
         public static final int hello_world=0x7f040003;
         public static final int help=0x7f04002b;
         public static final int last_name=0x7f04000d;
+        public static final int location=0x7f040037;
         public static final int login=0x7f040008;
         public static final int mail_address=0x7f040006;
         public static final int menu_settings=0x7f040004;
