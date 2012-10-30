@@ -98,6 +98,8 @@ public final class R {
         public static final int date_pattern=0x7f040033;
         public static final int description=0x7f040017;
         public static final int email_address_already_added=0x7f04002d;
+        public static final int enable_gps=0x7f040038;
+        public static final int enable_gps_dialog=0x7f040039;
         public static final int finish=0x7f04001a;
         public static final int first_name=0x7f04000c;
         public static final int from=0x7f040035;
@@ -113,6 +115,8 @@ public final class R {
         public static final int next=0x7f040019;
         public static final int no_email_address=0x7f04002c;
         public static final int no_participant_error=0x7f040031;
+        public static final int not_support_gps=0x7f04003b;
+        public static final int not_support_network=0x7f04003c;
         public static final int open=0x7f04001e;
         public static final int open_description=0x7f040021;
         public static final int or=0x7f04000a;
@@ -146,6 +150,7 @@ public final class R {
         public static final int to=0x7f040036;
         public static final int togglePrivate=0x7f040012;
         public static final int togglePublic=0x7f040013;
+        public static final int unknown=0x7f04003a;
         public static final int your_email=0x7f04000e;
     }
     public static final class style {
