@@ -12,15 +12,17 @@ public final class R {
     }
     public static final class drawable {
         public static final int action_help=0x7f020000;
-        public static final int device_access_not_secure=0x7f020001;
-        public static final int device_access_secure=0x7f020002;
-        public static final int ic_action_search=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int navigation_accept=0x7f020005;
-        public static final int navigation_next_item=0x7f020006;
-        public static final int social_add_group=0x7f020007;
-        public static final int social_add_person=0x7f020008;
-        public static final int social_group=0x7f020009;
+        public static final int collections_labels=0x7f020001;
+        public static final int device_access_accounts=0x7f020002;
+        public static final int device_access_not_secure=0x7f020003;
+        public static final int device_access_secure=0x7f020004;
+        public static final int ic_action_search=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int navigation_accept=0x7f020007;
+        public static final int navigation_next_item=0x7f020008;
+        public static final int social_add_group=0x7f020009;
+        public static final int social_add_person=0x7f02000a;
+        public static final int social_group=0x7f02000b;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f07001a;
