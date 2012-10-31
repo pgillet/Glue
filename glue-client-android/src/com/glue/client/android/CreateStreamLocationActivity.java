@@ -2,6 +2,8 @@ package com.glue.client.android;
 
 import java.util.Calendar;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -49,6 +51,8 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private String latLong;
 
 	private Handler mHandler;
+
+	private boolean locationEnabled = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -181,4 +185,29 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		return mHandler;
 	}
 
+	public void onClickToggle(View v) {
+		Button toggle = (Button) v;
+		// Cannot use a ToggleButton here as it is not well rendered when there
+		// is just an icon to display without text.
+		// The checked state is given by the locationEnabled field's boolean
+		// value.
+
+		Resources res = getResources();
+		Drawable drawable = null;
+
+		if (locationEnabled) {
+			// Switch off
+			drawable = res.getDrawable(R.drawable.device_access_location_off);
+			address.setText(R.string.none);
+		} else {
+			// Switch on
+			drawable = res.getDrawable(R.drawable.device_access_location_found);
+			address.setText(R.string.unknown);
+		}
+		// Switch state
+		locationEnabled = !locationEnabled;
+
+		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
+				null);
+	}
 }

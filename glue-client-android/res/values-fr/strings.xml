@@ -61,5 +61,6 @@
     <string name="unknown">--Inconnu--</string>
     <string name="not_support_gps">GPS non supporté</string>
     <string name="not_support_network">Réseau non supporté</string>
+    <string name="none">Aucun</string>
 
 </resources>
