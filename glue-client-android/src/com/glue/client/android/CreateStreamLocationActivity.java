@@ -194,19 +194,20 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 		Resources res = getResources();
 		Drawable drawable = null;
-
-		if (locationEnabled) {
-			// Switch off
-			drawable = res.getDrawable(R.drawable.device_access_location_off);
-			address.setText(R.string.none);
-		} else {
-			// Switch on
-			drawable = res.getDrawable(R.drawable.device_access_location_found);
-			address.setText(R.string.unknown);
-		}
 		// Switch state
 		locationEnabled = !locationEnabled;
 
+		if (locationEnabled) {
+			// Switch on
+			drawable = res.getDrawable(R.drawable.device_access_location_found);
+			address.setText(R.string.unknown);
+		} else {
+			// Switch off
+			drawable = res.getDrawable(R.drawable.device_access_location_off);
+			address.setText(R.string.none);
+		}
+
+		setLocationEnabled(locationEnabled);
 		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
 				null);
 	}

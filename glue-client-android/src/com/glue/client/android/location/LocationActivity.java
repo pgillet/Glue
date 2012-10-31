@@ -298,6 +298,21 @@ public abstract class LocationActivity extends FragmentActivity {
 	}
 
 	/**
+	 * Enables (or disables) the location capabilities of this Activity.
+	 * 
+	 * @param b
+	 *            true to enable the location, otherwise false
+	 */
+	public void setLocationEnabled(boolean b) {
+		if (b) {
+			setup();
+		} else {
+			// Stop receiving location updates
+			mLocationManager.removeUpdates(listener);
+		}
+	}
+
+	/**
 	 * Set up fine and/or coarse location providers depending on whether both
 	 * providers are enabled and supported.
 	 */
