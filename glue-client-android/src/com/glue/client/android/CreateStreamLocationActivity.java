@@ -52,8 +52,6 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	private Handler mHandler;
 
-	private boolean locationEnabled = true;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,13 +93,18 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				switch (msg.what) {
-				case UPDATE_ADDRESS:
-					address.setText((String) msg.obj);
-					break;
-				case UPDATE_LATLNG:
-					latLong = (String) msg.obj;
-					break;
+
+				// The location may have be disabled just right when the handler
+				// received an update
+				if (isLocationEnabled()) {
+					switch (msg.what) {
+					case UPDATE_ADDRESS:
+						address.setText((String) msg.obj);
+						break;
+					case UPDATE_LATLNG:
+						latLong = (String) msg.obj;
+						break;
+					}
 				}
 			}
 		};
@@ -189,16 +192,15 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		Button toggle = (Button) v;
 		// Cannot use a ToggleButton here as it is not well rendered when there
 		// is just an icon to display without text.
-		// The checked state is given by the locationEnabled field's boolean
-		// value.
+		// The checked state is given by the locationEnabled boolean
+		// property.
 
 		Resources res = getResources();
 		Drawable drawable = null;
 		// Switch state
-		locationEnabled = !locationEnabled;
-		setLocationEnabled(locationEnabled);
+		setLocationEnabled(!isLocationEnabled());
 
-		if (locationEnabled) {
+		if (isLocationEnabled()) {
 			// Switch on
 			drawable = res.getDrawable(R.drawable.device_access_location_found);
 			address.setText(R.string.unknown);
@@ -207,7 +209,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			drawable = res.getDrawable(R.drawable.device_access_location_off);
 			address.setText(R.string.none);
 		}
-		
+
 		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
 				null);
 	}

@@ -112,8 +112,7 @@ public abstract class LocationActivity extends FragmentActivity {
 		@Override
 		public void onLocationChanged(Location location) {
 			// A new location update is received. Do something useful with it.
-			// Update the UI with
-			// the location update.
+			// Update the UI with the location update.
 			updateUILocation(location);
 		}
 
@@ -129,6 +128,8 @@ public abstract class LocationActivity extends FragmentActivity {
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
 	};
+
+	private boolean locationEnabled;
 
 	private boolean mGeocoderAvailable;
 
@@ -240,7 +241,9 @@ public abstract class LocationActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setup();
+		if (isLocationEnabled()) {
+			setup();
+		}
 	}
 
 	@Override
@@ -298,13 +301,23 @@ public abstract class LocationActivity extends FragmentActivity {
 	}
 
 	/**
+	 * Tells whether the location is enabled or disabled.
+	 * 
+	 * @return true if enabled, false otherwise
+	 */
+	protected boolean isLocationEnabled() {
+		return locationEnabled;
+	}
+
+	/**
 	 * Enables (or disables) the location capabilities of this Activity.
 	 * 
 	 * @param b
 	 *            true to enable the location, otherwise false
 	 */
-	public void setLocationEnabled(boolean b) {
-		if (b) {
+	protected void setLocationEnabled(boolean b) {
+		locationEnabled = b;
+		if (locationEnabled) {
 			setup();
 		} else {
 			// Stop receiving location updates
