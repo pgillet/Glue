@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.glue.client.android.dialog.DatePickerFragment;
@@ -47,8 +48,10 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private ViewGroup layoutFrom;
 	private ViewGroup layoutTo;
 
+	private ProgressBar locationProgressBar;
 	private TextView address;
 	private String latLong;
+	private Button locationSwitch;
 
 	private Handler mHandler;
 
@@ -84,9 +87,9 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		onClickCheckBoxTo(null);
 
 		// Location section
+		locationProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		address = (TextView) findViewById(R.id.address);
-		address.setText(R.string.unknown);
-		latLong = getString(R.string.unknown);
+		locationSwitch = (Button) findViewById(R.id.toggleButton1);
 
 		// Handler for updating text fields on the UI like the lat/long and
 		// address.
@@ -100,6 +103,8 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 					switch (msg.what) {
 					case UPDATE_ADDRESS:
 						address.setText((String) msg.obj);
+						address.setVisibility(View.VISIBLE);
+						locationProgressBar.setVisibility(View.INVISIBLE);
 						break;
 					case UPDATE_LATLNG:
 						latLong = (String) msg.obj;
@@ -110,7 +115,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		};
 
 		// Set up location.
-		setup();
+		setLocationEnabled(true);
 	}
 
 	@Override
@@ -188,29 +193,38 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		return mHandler;
 	}
 
+	@Override
+	protected void setLocationEnabled(boolean b) {
+		super.setLocationEnabled(b);
+
+		Resources res = getResources();
+		Drawable drawable = null;
+
+		if (isLocationEnabled()) {
+			// Switch on
+			locationProgressBar.setVisibility(View.VISIBLE);
+			address.setText(R.string.unknown);
+			address.setVisibility(View.INVISIBLE);
+			drawable = res.getDrawable(R.drawable.device_access_location_found);
+		} else {
+			// Switch off
+			locationProgressBar.setVisibility(View.INVISIBLE);
+			address.setText(R.string.none);
+			address.setVisibility(View.VISIBLE);
+			drawable = res.getDrawable(R.drawable.device_access_location_off);
+		}
+
+		locationSwitch.setCompoundDrawablesWithIntrinsicBounds(null, null,
+				drawable, null);
+	}
+
 	public void onClickToggle(View v) {
-		Button toggle = (Button) v;
 		// Cannot use a ToggleButton here as it is not well rendered when there
 		// is just an icon to display without text.
 		// The checked state is given by the locationEnabled boolean
 		// property.
 
-		Resources res = getResources();
-		Drawable drawable = null;
 		// Switch state
 		setLocationEnabled(!isLocationEnabled());
-
-		if (isLocationEnabled()) {
-			// Switch on
-			drawable = res.getDrawable(R.drawable.device_access_location_found);
-			address.setText(R.string.unknown);
-		} else {
-			// Switch off
-			drawable = res.getDrawable(R.drawable.device_access_location_off);
-			address.setText(R.string.none);
-		}
-
-		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
-				null);
 	}
 }
