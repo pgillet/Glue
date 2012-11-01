@@ -20,6 +20,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light" >
+        <uses-library android:name="com.google.android.maps" />
 
         <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
         <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
@@ -36,14 +37,6 @@
         <activity
             android:name=".ItemListActivity"
             android:label="@string/title_item_list" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".ItemDetailActivity"
@@ -68,6 +61,11 @@
         <activity
             android:name=".CreateStreamLocationActivity"
             android:label="@string/title_activity_create_stream_location" >
+        </activity>
+        <activity
+            android:name=".LocationPickerMapActivity"
+            android:label="@string/title_activity_location_picker_map"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
     </application>
 

@@ -63,5 +63,6 @@
     <string name="not_support_network">Réseau non supporté</string>
     <string name="none">Aucun</string>
 	<string name="address_not_available">Adresse non disponible</string>
+	<string name="title_activity_location_picker_map">LocationPickerMapActivity</string>
     
 </resources>

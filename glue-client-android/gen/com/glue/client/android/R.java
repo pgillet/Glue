@@ -42,16 +42,16 @@ public final class R {
         public static final int checkBox1=0x7f070026;
         public static final int checkBoxFrom=0x7f070004;
         public static final int checkBoxTo=0x7f070009;
-        public static final int contactEntryDisplayName=0x7f07002e;
-        public static final int contactEntryEmailAddress=0x7f07002f;
+        public static final int contactEntryDisplayName=0x7f07002f;
+        public static final int contactEntryEmailAddress=0x7f070030;
         public static final int contactList=0x7f07001f;
         public static final int editText1=0x7f070014;
         public static final int editText2=0x7f070015;
-        public static final int editText3=0x7f07002b;
-        public static final int editText4=0x7f07002c;
-        public static final int editText5=0x7f07002d;
-        public static final int imageView1=0x7f07002a;
-        public static final int item_detail=0x7f070030;
+        public static final int editText3=0x7f07002c;
+        public static final int editText4=0x7f07002d;
+        public static final int editText5=0x7f07002e;
+        public static final int imageView1=0x7f07002b;
+        public static final int item_detail=0x7f070031;
         public static final int item_detail_container=0x7f070028;
         public static final int item_list=0x7f070029;
         public static final int layout01=0x7f070013;
@@ -68,7 +68,8 @@ public final class R {
         public static final int layoutLocation=0x7f07000b;
         public static final int layoutTo=0x7f070006;
         public static final int locationMapButton=0x7f07000e;
-        public static final int menu_settings=0x7f070031;
+        public static final int mapview=0x7f07002a;
+        public static final int menu_settings=0x7f070032;
         public static final int progressBar1=0x7f07000c;
         public static final int textView1=0x7f070000;
         public static final int textView2=0x7f070005;
@@ -86,18 +87,20 @@ public final class R {
         public static final int activity_item_detail=0x7f030003;
         public static final int activity_item_list=0x7f030004;
         public static final int activity_item_twopane=0x7f030005;
-        public static final int activity_login=0x7f030006;
-        public static final int activity_sign_up=0x7f030007;
-        public static final int contact_entry=0x7f030008;
-        public static final int fragment_item_detail=0x7f030009;
-        public static final int separator=0x7f03000a;
+        public static final int activity_location_picker_map=0x7f030006;
+        public static final int activity_login=0x7f030007;
+        public static final int activity_sign_up=0x7f030008;
+        public static final int contact_entry=0x7f030009;
+        public static final int fragment_item_detail=0x7f03000a;
+        public static final int separator=0x7f03000b;
     }
     public static final class menu {
         public static final int activity_create_stream_location=0x7f060000;
         public static final int activity_create_stream_main=0x7f060001;
         public static final int activity_create_stream_user=0x7f060002;
-        public static final int activity_login=0x7f060003;
-        public static final int activity_sign_up=0x7f060004;
+        public static final int activity_location_picker_map=0x7f060003;
+        public static final int activity_login=0x7f060004;
+        public static final int activity_sign_up=0x7f060005;
     }
     public static final class string {
         public static final int address_not_available=0x7f04003e;
@@ -154,6 +157,7 @@ public final class R {
         public static final int title_activity_create_stream_location=0x7f040032;
         public static final int title_activity_create_stream_main=0x7f040011;
         public static final int title_activity_create_stream_user=0x7f04001d;
+        public static final int title_activity_location_picker_map=0x7f04003f;
         public static final int title_activity_login=0x7f040005;
         public static final int title_activity_sign_up=0x7f04000b;
         public static final int title_item_detail=0x7f040001;

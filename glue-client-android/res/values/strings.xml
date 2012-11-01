@@ -63,5 +63,6 @@
     <string name="not_support_network">Network provider not supported</string>
     <string name="none">None</string>
     <string name="address_not_available">Address not available</string>
+    <string name="title_activity_location_picker_map">LocationPickerMapActivity</string>
 
 </resources>

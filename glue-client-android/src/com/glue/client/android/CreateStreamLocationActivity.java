@@ -2,6 +2,7 @@ package com.glue.client.android;
 
 import java.util.Calendar;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -222,7 +223,10 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	}
 	
 	public void onClickLocationMap(View v){
-		
+		Intent intent = new Intent();
+		intent.setClassName("com.glue.client.android",
+				"com.glue.client.android.LocationPickerMapActivity");
+		startActivity(intent);
 	}
 
 	public void onClickToggle(View v) {
