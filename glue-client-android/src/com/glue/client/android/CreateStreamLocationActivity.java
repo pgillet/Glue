@@ -196,6 +196,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		Drawable drawable = null;
 		// Switch state
 		locationEnabled = !locationEnabled;
+		setLocationEnabled(locationEnabled);
 
 		if (locationEnabled) {
 			// Switch on
@@ -206,8 +207,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			drawable = res.getDrawable(R.drawable.device_access_location_off);
 			address.setText(R.string.none);
 		}
-
-		setLocationEnabled(locationEnabled);
+		
 		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
 				null);
 	}
