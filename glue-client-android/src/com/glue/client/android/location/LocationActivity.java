@@ -85,8 +85,8 @@ public abstract class LocationActivity extends FragmentActivity {
 				Message.obtain(
 						getHandler(),
 						UPDATE_ADDRESS,
-						"Lat: " + loc.getLatitude() + "\nLong: "
-								+ loc.getLongitude() + "\n"
+						"Lat: " + loc.getLatitude() + ", Long: "
+								+ loc.getLongitude() + ", "
 								+ getString(R.string.address_not_available))
 						.sendToTarget();
 			}

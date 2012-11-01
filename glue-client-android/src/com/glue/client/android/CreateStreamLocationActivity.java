@@ -106,7 +106,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 					case UPDATE_ADDRESS:
 						address.setText((String) msg.obj);
 						address.setVisibility(View.VISIBLE);
-						locationProgressBar.setVisibility(View.INVISIBLE);
+						locationProgressBar.setVisibility(View.GONE);
 						break;
 					case UPDATE_LATLNG:
 						latLong = (String) msg.obj;
@@ -210,7 +210,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			drawable = res.getDrawable(R.drawable.device_access_location_found);
 		} else {
 			// Switch off
-			locationProgressBar.setVisibility(View.INVISIBLE);
+			locationProgressBar.setVisibility(View.GONE);
 			address.setText(R.string.none);
 			address.setVisibility(View.VISIBLE);
 			drawable = res.getDrawable(R.drawable.device_access_location_off);
