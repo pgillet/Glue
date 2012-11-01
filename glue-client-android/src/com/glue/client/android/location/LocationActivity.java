@@ -129,11 +129,13 @@ public abstract class LocationActivity extends FragmentActivity {
 		}
 	};
 
-	private boolean locationEnabled;
+	private boolean locationEnabled = true;
 
 	private boolean mGeocoderAvailable;
 
 	LocationManager mLocationManager;
+
+	private boolean reverseGeocodingEnabled = true;
 
 	private void doReverseGeocoding(Location location) {
 		// Since the geocoding API is synchronous and may take a while. You
@@ -209,6 +211,31 @@ public abstract class LocationActivity extends FragmentActivity {
 		return currentBestLocation;
 	}
 
+	/**
+	 * Handler for updating text fields on the UI like the lat/long and address.
+	 * 
+	 * @return
+	 */
+	public abstract Handler getHandler();
+
+	/**
+	 * Tells whether the location is enabled or disabled.
+	 * 
+	 * @return true if enabled, false otherwise
+	 */
+	protected boolean isLocationEnabled() {
+		return locationEnabled;
+	}
+
+	/**
+	 * Tells whether the reverse geocoding is enabled or disabled.
+	 * 
+	 * @return
+	 */
+	public boolean isReverseGeocodingEnabled() {
+		return reverseGeocodingEnabled;
+	}
+
 	/** Checks whether two providers are the same */
 	private boolean isSameProvider(String provider1, String provider2) {
 		if (provider1 == null) {
@@ -230,13 +257,6 @@ public abstract class LocationActivity extends FragmentActivity {
 		// Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
 		// && Geocoder.isPresent();
 	}
-
-	/**
-	 * Handler for updating text fields on the UI like the lat/long and address.
-	 * 
-	 * @return
-	 */
-	public abstract Handler getHandler();
 
 	@Override
 	protected void onResume() {
@@ -301,15 +321,6 @@ public abstract class LocationActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Tells whether the location is enabled or disabled.
-	 * 
-	 * @return true if enabled, false otherwise
-	 */
-	protected boolean isLocationEnabled() {
-		return locationEnabled;
-	}
-
-	/**
 	 * Enables (or disables) the location capabilities of this Activity.
 	 * 
 	 * @param b
@@ -323,6 +334,16 @@ public abstract class LocationActivity extends FragmentActivity {
 			// Stop receiving location updates
 			mLocationManager.removeUpdates(listener);
 		}
+	}
+
+	/**
+	 * Enables (or disables) the reverse geocoding, i.e. the process of
+	 * translating latitude longitude coordinates to a human-readable address.
+	 * 
+	 * @param reverseGeocodingEnabled
+	 */
+	public void setReverseGeocodingEnabled(boolean reverseGeocodingEnabled) {
+		this.reverseGeocodingEnabled = reverseGeocodingEnabled;
 	}
 
 	/**
@@ -372,7 +393,7 @@ public abstract class LocationActivity extends FragmentActivity {
 
 		// Bypass reverse-geocoding only if the Geocoder service is available on
 		// the device.
-		if (mGeocoderAvailable) {
+		if (mGeocoderAvailable && isReverseGeocodingEnabled()) {
 			doReverseGeocoding(location);
 		}
 	}
