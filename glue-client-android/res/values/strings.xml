@@ -62,5 +62,6 @@
     <string name="not_support_gps">GPS provider not supported</string>
     <string name="not_support_network">Network provider not supported</string>
     <string name="none">None</string>
+    <string name="address_not_available">Address not available</string>
 
 </resources>

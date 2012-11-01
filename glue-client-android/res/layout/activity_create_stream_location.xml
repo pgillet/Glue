@@ -108,6 +108,15 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:text="@string/unknown" />
+        
+        <Button
+            android:id="@+id/locationMapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:drawableRight="@drawable/location_map"
+            android:onClick="onClickLocationMap"
+            android:text="" />
 
         <Button
             android:id="@+id/toggleButton1"

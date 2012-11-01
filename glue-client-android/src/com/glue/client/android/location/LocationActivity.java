@@ -79,7 +79,15 @@ public abstract class LocationActivity extends FragmentActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 				// Update UI field with the exception.
-				Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
+				// Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
+				// .sendToTarget();
+
+				Message.obtain(
+						getHandler(),
+						UPDATE_ADDRESS,
+						"Lat: " + loc.getLatitude() + "\nLong: "
+								+ loc.getLongitude() + "\n"
+								+ getString(R.string.address_not_available))
 						.sendToTarget();
 			}
 			if (addresses != null && addresses.size() > 0) {

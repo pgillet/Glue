@@ -51,6 +51,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private ProgressBar locationProgressBar;
 	private TextView address;
 	private String latLong;
+	private Button locationMap;
 	private Button locationSwitch;
 
 	private Handler mHandler;
@@ -89,6 +90,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		// Location section
 		locationProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		address = (TextView) findViewById(R.id.address);
+		locationMap = (Button) findViewById(R.id.locationMapButton);
 		locationSwitch = (Button) findViewById(R.id.toggleButton1);
 
 		// Handler for updating text fields on the UI like the lat/long and
@@ -214,8 +216,13 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			drawable = res.getDrawable(R.drawable.device_access_location_off);
 		}
 
+		locationMap.setEnabled(isLocationEnabled());
 		locationSwitch.setCompoundDrawablesWithIntrinsicBounds(null, null,
 				drawable, null);
+	}
+	
+	public void onClickLocationMap(View v){
+		
 	}
 
 	public void onClickToggle(View v) {
