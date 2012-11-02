@@ -56,8 +56,9 @@
 	<string name="from">De</string>
 	<string name="to">A</string>
 	<string name="location">Emplacement</string>
-	<string name="enable_gps">Activer le GPS</string>
-    <string name="enable_gps_dialog">Le GPS n\'est pas activé. Voulez-vous l\'activer?</string>
+	<string name="gps_disabled">GPS désactivé</string>
+    <string name="enable_gps_dialog">Afficher les paramètres de localisation?</string>
+    <string name="ok">OK</string>
     <string name="unknown">--Inconnu--</string>
     <string name="not_support_gps">GPS non supporté</string>
     <string name="not_support_network">Réseau non supporté</string>

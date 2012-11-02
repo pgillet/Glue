@@ -41,9 +41,9 @@ public abstract class LocationActivity extends FragmentActivity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			return new AlertDialog.Builder(getActivity())
-					.setTitle(R.string.enable_gps)
+					.setTitle(R.string.gps_disabled)
 					.setMessage(R.string.enable_gps_dialog)
-					.setPositiveButton(R.string.enable_gps,
+					.setPositiveButton(R.string.ok,
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,

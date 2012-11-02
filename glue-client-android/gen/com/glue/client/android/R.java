@@ -109,7 +109,7 @@ public final class R {
         public static final int activity_sign_up=0x7f060005;
     }
     public static final class string {
-        public static final int address_not_available=0x7f04003e;
+        public static final int address_not_available=0x7f04003f;
         public static final int app_name=0x7f040000;
         public static final int cancel=0x7f040026;
         public static final int closed=0x7f04001f;
@@ -117,12 +117,12 @@ public final class R {
         public static final int date_pattern=0x7f040033;
         public static final int description=0x7f040017;
         public static final int email_address_already_added=0x7f04002d;
-        public static final int enable_gps=0x7f040038;
         public static final int enable_gps_dialog=0x7f040039;
         public static final int finish=0x7f04001a;
         public static final int first_name=0x7f04000c;
         public static final int from=0x7f040035;
         public static final int glue_application_icon=0x7f040030;
+        public static final int gps_disabled=0x7f040038;
         public static final int hello_world=0x7f040003;
         public static final int help=0x7f04002b;
         public static final int last_name=0x7f04000d;
@@ -134,9 +134,10 @@ public final class R {
         public static final int next=0x7f040019;
         public static final int no_email_address=0x7f04002c;
         public static final int no_participant_error=0x7f040031;
-        public static final int none=0x7f04003d;
-        public static final int not_support_gps=0x7f04003b;
-        public static final int not_support_network=0x7f04003c;
+        public static final int none=0x7f04003e;
+        public static final int not_support_gps=0x7f04003c;
+        public static final int not_support_network=0x7f04003d;
+        public static final int ok=0x7f04003a;
         public static final int open=0x7f04001e;
         public static final int open_description=0x7f040021;
         public static final int or=0x7f04000a;
@@ -163,7 +164,7 @@ public final class R {
         public static final int title_activity_create_stream_location=0x7f040032;
         public static final int title_activity_create_stream_main=0x7f040011;
         public static final int title_activity_create_stream_user=0x7f04001d;
-        public static final int title_activity_location_picker_map=0x7f04003f;
+        public static final int title_activity_location_picker_map=0x7f040040;
         public static final int title_activity_login=0x7f040005;
         public static final int title_activity_sign_up=0x7f04000b;
         public static final int title_item_detail=0x7f040001;
@@ -171,7 +172,7 @@ public final class R {
         public static final int to=0x7f040036;
         public static final int togglePrivate=0x7f040012;
         public static final int togglePublic=0x7f040013;
-        public static final int unknown=0x7f04003a;
+        public static final int unknown=0x7f04003b;
         public static final int your_email=0x7f04000e;
     }
     public static final class style {

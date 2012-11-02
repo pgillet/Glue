@@ -56,8 +56,9 @@
 	<string name="from">From</string>
 	<string name="to">To</string>
 	<string name="location">Location</string>
-	<string name="enable_gps">Enable GPS</string>
-    <string name="enable_gps_dialog">GPS provider not enabled. Would you like to enable it?</string>
+	<string name="gps_disabled">GPS is disabled</string>
+    <string name="enable_gps_dialog">Show location settings?</string>
+    <string name="ok">OK</string>
     <string name="unknown">--Unknown--</string>
     <string name="not_support_gps">GPS provider not supported</string>
     <string name="not_support_network">Network provider not supported</string>
