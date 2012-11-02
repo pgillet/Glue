@@ -221,15 +221,15 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		locationSwitch.setCompoundDrawablesWithIntrinsicBounds(null, null,
 				drawable, null);
 	}
-	
-	public void onClickFinish(View v){
+
+	public void onClickFinish(View v) {
 		// TODO
 	}
-	
-	public void onClickLocationMap(View v){
+
+	public void onClickLocationMap(View v) {
 		Intent intent = new Intent();
-		intent.setClassName("com.glue.client.android",
-				"com.glue.client.android.LocationPickerMapActivity");
+		intent.setClassName(this,
+				"com.glue.client.android.location.LocationPickerMapActivity");
 		startActivity(intent);
 	}
 

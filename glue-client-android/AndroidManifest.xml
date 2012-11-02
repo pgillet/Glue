@@ -63,7 +63,7 @@
             android:label="@string/title_activity_create_stream_location" >
         </activity>
         <activity
-            android:name=".LocationPickerMapActivity"
+            android:name=".location.LocationPickerMapActivity"
             android:label="@string/title_activity_location_picker_map"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>

@@ -1,4 +1,4 @@
-package com.glue.client.android;
+package com.glue.client.android.location;
 
 import android.os.Bundle;
 import android.view.Menu;
