@@ -52,11 +52,13 @@
         </activity>
         <activity
             android:name=".CreateStreamMainActivity"
-            android:label="@string/title_activity_create_stream_main" >
+            android:label="@string/title_activity_create_stream_main"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".CreateStreamUserActivity"
-            android:label="@string/title_activity_create_stream_user" >
+            android:label="@string/title_activity_create_stream_user"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".CreateStreamLocationActivity"
