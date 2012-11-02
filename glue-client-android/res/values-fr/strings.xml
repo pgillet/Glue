@@ -26,7 +26,7 @@
     <string name="description">Description</string>
     <string name="privacy">Confidentialité</string>
     <string name="next">Suivant</string>
-    <string name="finish">Finir</string>
+    <string name="finish">Terminer</string>
     <string name="press_to_enter_a_title">Appuyez pour entrer un titre</string>
     <string name="press_to_enter_one_or_more_tags">Appuyez pour entrer un ou plusieurs tags</string>
     <string name="title_activity_create_stream_user">Créer une Stream</string>

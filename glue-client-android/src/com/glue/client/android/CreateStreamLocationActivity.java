@@ -222,6 +222,10 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 				drawable, null);
 	}
 	
+	public void onClickFinish(View v){
+		// TODO
+	}
+	
 	public void onClickLocationMap(View v){
 		Intent intent = new Intent();
 		intent.setClassName("com.glue.client.android",

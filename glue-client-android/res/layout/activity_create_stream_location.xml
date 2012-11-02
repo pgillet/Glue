@@ -1,131 +1,164 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/from"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout10" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/from"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:id="@+id/layoutFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/buttonFromDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:onClick="onClickFromDate"
+                    android:text="@string/date_pattern" />
+
+                <Button
+                    android:id="@+id/buttonFromTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:onClick="onClickFromTime"
+                    android:text="@string/time_pattern" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:checked="true"
+                    android:onClick="onClickCheckBoxFrom"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:id="@+id/layoutTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/buttonToDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:onClick="onClickToDate"
+                    android:text="@string/date_pattern" />
+
+                <Button
+                    android:id="@+id/buttonToTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:onClick="onClickToTime"
+                    android:text="@string/time_pattern" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:onClick="onClickCheckBoxTo" />
+            </LinearLayout>
+
+            <include layout="@layout/separator" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:id="@+id/layoutLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/unknown" />
+
+                <Button
+                    android:id="@+id/locationMapButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:drawableRight="@drawable/location_map"
+                    android:onClick="onClickLocationMap"
+                    android:text="" />
+
+                <Button
+                    android:id="@+id/toggleButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:drawableRight="@drawable/device_access_location_found"
+                    android:onClick="onClickToggle"
+                    android:text="" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
-        android:id="@+id/layoutFrom"
+        android:id="@+id/layout10"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/buttonFromDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:onClick="onClickFromDate"
-            android:text="@string/date_pattern" />
-
-        <Button
-            android:id="@+id/buttonFromTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:onClick="onClickFromTime"
-            android:text="@string/time_pattern" />
-
-        <CheckBox
-            android:id="@+id/checkBoxFrom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:checked="true"
-            android:onClick="onClickCheckBoxFrom"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-    <include layout="@layout/separator" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/to"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
-        android:id="@+id/layoutTo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_alignParentBottom="true"
+        android:background="#888888"
+        android:gravity="center"
+        android:padding="4dp" >
 
         <Button
-            android:id="@+id/buttonToDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:onClick="onClickToDate"
-            android:text="@string/date_pattern" />
-
-        <Button
-            android:id="@+id/buttonToTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:onClick="onClickToTime"
-            android:text="@string/time_pattern" />
-
-        <CheckBox
-            android:id="@+id/checkBoxTo"
-            android:layout_width="wrap_content"
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:onClick="onClickCheckBoxTo" />
+            android:drawableRight="@drawable/navigation_accept"
+            android:onClick="onClickFinish"
+            android:text="@string/finish" />
     </LinearLayout>
 
-    <include layout="@layout/separator" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/location"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
-        android:id="@+id/layoutLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="@string/unknown" />
-        
-        <Button
-            android:id="@+id/locationMapButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:drawableRight="@drawable/location_map"
-            android:onClick="onClickLocationMap"
-            android:text="" />
-
-        <Button
-            android:id="@+id/toggleButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:drawableRight="@drawable/device_access_location_found"
-            android:onClick="onClickToggle"
-            android:text="" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
