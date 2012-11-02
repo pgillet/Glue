@@ -10,4 +10,42 @@
         android:apiKey="0bGgz7SRbNEONr3gtrE_0WxzTopKJH8Emc2KeXQ"
         android:clickable="true" />
 
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#888888"
+        android:padding="4dp" >
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/action_search"
+            android:ems="10"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/buttonSearch"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:drawableRight="@drawable/action_search"
+            android:onClick="onClickSearch"
+            android:text="" />
+
+        <Button
+            android:id="@+id/buttonPickLocation"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:drawableRight="@drawable/av_make_available_offline"
+            android:onClick="onClickPickLocation"
+            android:text="" />
+    </LinearLayout>
+
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.glue.client.android.location;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.glue.client.android.R;
 import com.google.android.maps.MapActivity;
@@ -45,5 +46,13 @@ public class LocationPickerMapActivity extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+
+	public void onClickPickLocation(View v) {
+		// TODO
+	}
+
+	public void onClickSearch(View v) {
+		// TODO
 	}
 }
