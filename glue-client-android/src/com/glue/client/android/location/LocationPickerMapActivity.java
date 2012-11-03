@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		final List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(
-				R.drawable.av_make_available_offline);
+				R.drawable.location_place);
 		final PinItemizedOverlay itemizedOverlay = new PinItemizedOverlay(
 				drawable, this);
 
@@ -87,11 +88,20 @@ public class LocationPickerMapActivity extends MapActivity {
 					GeoPoint point = new GeoPoint(
 							(int) (address.getLatitude() * 1E6),
 							(int) (address.getLongitude() * 1E6));
-					OverlayItem overlayitem = new OverlayItem(point,
-							"Hola, Mundo!", addressText);
+					OverlayItem overlayitem = new OverlayItem(point, null,
+							addressText);
 
+					itemizedOverlay.clear(); // Only one possible pick
 					itemizedOverlay.addOverlay(overlayitem);
 					mapOverlays.add(itemizedOverlay);
+
+					// Hide the virtual keyboard
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(tv.getWindowToken(), 0);
+
+					mc.animateTo(point);
+					mc.setZoom(ZOOM_LEVEL);
+
 					break;
 				case ADDRESS_NOT_FOUND:
 					String text = (String) msg.obj;
@@ -113,6 +123,10 @@ public class LocationPickerMapActivity extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+
+	public void onClickOK(View v) {
+		// TODO
 	}
 
 	public void onClickPickLocation(View v) {

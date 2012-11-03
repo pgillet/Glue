@@ -47,5 +47,9 @@ public class PinItemizedOverlay extends ItemizedOverlay {
 	  dialog.show();
 	  return true;
 	}
+	
+	public void clear(){
+		mOverlays.clear();
+	}
 
 }
