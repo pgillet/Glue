@@ -71,6 +71,10 @@ public abstract class LocationActivity extends FragmentActivity {
 
 			Location loc = params[0];
 			List<Address> addresses = null;
+			SimpleLocation locationMsg = new SimpleLocation();
+			locationMsg.setLatitude(loc.getLatitude());
+			locationMsg.setLongitude(loc.getLongitude());
+
 			try {
 				// Call the synchronous getFromLocation() method by passing in
 				// the lat/long values.
@@ -82,12 +86,7 @@ public abstract class LocationActivity extends FragmentActivity {
 				// Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
 				// .sendToTarget();
 
-				Message.obtain(
-						getHandler(),
-						UPDATE_ADDRESS,
-						"Lat: " + loc.getLatitude() + ", Long: "
-								+ loc.getLongitude() + ", "
-								+ getString(R.string.address_not_available))
+				Message.obtain(getHandler(), UPDATE_ADDRESS, locationMsg)
 						.sendToTarget();
 			}
 			if (addresses != null && addresses.size() > 0) {
@@ -100,7 +99,8 @@ public abstract class LocationActivity extends FragmentActivity {
 								.getAddressLine(0) : "", address.getLocality(),
 						address.getCountryName());
 				// Update the UI via a message handler.
-				Message.obtain(getHandler(), UPDATE_ADDRESS, addressText)
+				locationMsg.setAddressText(addressText);
+				Message.obtain(getHandler(), UPDATE_ADDRESS, locationMsg)
 						.sendToTarget();
 			}
 			return null;
@@ -225,6 +225,10 @@ public abstract class LocationActivity extends FragmentActivity {
 	 * @return
 	 */
 	public abstract Handler getHandler();
+
+	public boolean isGeocoderAvailable() {
+		return mGeocoderAvailable;
+	}
 
 	/**
 	 * Tells whether the location is enabled or disabled.
@@ -395,13 +399,16 @@ public abstract class LocationActivity extends FragmentActivity {
 	private void updateUILocation(Location location) {
 		// We're sending the update to a handler which then updates the UI with
 		// the new location.
-		Message.obtain(getHandler(), UPDATE_LATLNG,
-				location.getLatitude() + ", " + location.getLongitude())
-				.sendToTarget();
+
+		SimpleLocation locationMsg = new SimpleLocation();
+		locationMsg.setLatitude(location.getLatitude());
+		locationMsg.setLongitude(location.getLongitude());
+
+		Message.obtain(getHandler(), UPDATE_LATLNG, locationMsg).sendToTarget();
 
 		// Bypass reverse-geocoding only if the Geocoder service is available on
 		// the device.
-		if (mGeocoderAvailable && isReverseGeocodingEnabled()) {
+		if (isGeocoderAvailable() && isReverseGeocodingEnabled()) {
 			doReverseGeocoding(location);
 		}
 	}

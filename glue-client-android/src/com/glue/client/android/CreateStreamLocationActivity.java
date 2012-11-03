@@ -17,11 +17,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.glue.client.android.dialog.DatePickerFragment;
 import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
 import com.glue.client.android.location.LocationActivity;
+import com.glue.client.android.location.SimpleLocation;
 import com.glue.client.android.utils.Utils;
 
 public class CreateStreamLocationActivity extends LocationActivity implements
@@ -51,7 +53,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	private ProgressBar locationProgressBar;
 	private TextView address;
-	private String latLong;
+	private SimpleLocation location;
 	private Button locationMap;
 	private Button locationSwitch;
 
@@ -103,14 +105,22 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 				// The location may have be disabled just right when the handler
 				// received an update
 				if (isLocationEnabled()) {
+
+					location = (SimpleLocation) msg.obj;
 					switch (msg.what) {
 					case UPDATE_ADDRESS:
-						address.setText((String) msg.obj);
-						address.setVisibility(View.VISIBLE);
-						locationProgressBar.setVisibility(View.GONE);
+						if (location.getAddressText() == null) {
+							Toast.makeText(CreateStreamLocationActivity.this,
+									getString(R.string.address_not_available),
+									Toast.LENGTH_SHORT).show();
+						}
+						updateAddressTextView();
 						break;
 					case UPDATE_LATLNG:
-						latLong = (String) msg.obj;
+						if (!isGeocoderAvailable()
+						/* || !isReverseGeocodingEnabled() */) {
+							updateAddressTextView();
+						}
 						break;
 					}
 				}
@@ -119,6 +129,19 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 		// Set up location.
 		setLocationEnabled(true);
+	}
+
+	private void updateAddressTextView() {
+		String text = null;
+		if (location.getAddressText() != null) {
+			text = location.getAddressText();
+		} else {
+			text = "Lat: " + location.getLatitude() + ", Long: "
+					+ location.getLongitude();
+		}
+		address.setText(text);
+		address.setVisibility(View.VISIBLE);
+		locationProgressBar.setVisibility(View.GONE);
 	}
 
 	@Override
