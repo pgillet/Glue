@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:checked="true"
-                    android:drawableRight="@drawable/social_add_group"
+                    android:drawableRight="@drawable/participation_type_selector"
                     android:onClick="onClickToggle"
                     android:textOff="@string/closed"
                     android:textOn="@string/open" />
@@ -161,14 +161,16 @@
         android:gravity="center"
         android:padding="4dp" >
 
-        <!-- <Button
+        <!--
+             <Button
             android:id="@+id/button3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/action_help"
             android:onClick="onClickHelp"
-            android:text="@string/help" /> -->
+            android:text="@string/help" />
+        -->
 
         <Button
             android:id="@+id/button2"

@@ -1,6 +1,5 @@
 package com.glue.client.android;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import android.app.Activity;
@@ -162,17 +161,11 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		participationType = toggle.isChecked();
 
 		// Set the right icon according to the type of participation
-		Resources res = getResources();
-		Drawable drawable = null;
 		if (participationType) {
-			drawable = res.getDrawable(R.drawable.social_add_group);
 			tv.setText(R.string.open_description);
 		} else {
-			drawable = res.getDrawable(R.drawable.social_group);
 			tv.setText(R.string.closed_description);
 		}
-		toggle.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable,
-				null);
 
 		// Set the enable state of some views according to the type of
 		// participation
