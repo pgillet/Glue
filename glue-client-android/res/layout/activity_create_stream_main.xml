@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:checked="false"
-                    android:drawableRight="@drawable/device_access_secure"
+                    android:drawableRight="@drawable/privacy_selector"
                     android:onClick="onClickToggle"
                     android:textOff="@string/togglePrivate"
                     android:textOn="@string/togglePublic" />
