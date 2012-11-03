@@ -67,5 +67,6 @@
     <string name="title_activity_location_picker_map">LocationPickerMapActivity</string>
     <string name="no_result">No result found for</string>
     <string name="network_not_available">The network is not available</string>
+    <string name="searching_for">Searching for</string>
 
 </resources>

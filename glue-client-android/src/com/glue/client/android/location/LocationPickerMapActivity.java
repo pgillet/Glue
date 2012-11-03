@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -29,7 +30,7 @@ import com.google.android.maps.OverlayItem;
 
 public class LocationPickerMapActivity extends MapActivity {
 
-	private static final int ZOOM_LEVEL = 17;
+	private static final int ZOOM_LEVEL = 16;
 	private MyLocationOverlay myLocation = null;
 
 	private Handler mHandler;
@@ -39,36 +40,43 @@ public class LocationPickerMapActivity extends MapActivity {
 	public static final int ADDRESS_NOT_FOUND = 2;
 	private TextView tv;
 
+	private boolean searching;
+
+	private boolean isSearching() {
+		return searching;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location_picker_map);
 
-		MapView mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setBuiltInZoomControls(true);
-
 		tv = (TextView) findViewById(R.id.editText1);
 
-		myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
-		mapView.getOverlays().add(myLocation);
-		myLocation.enableMyLocation();
-
-		final MapController mc = mapView.getController();
-		myLocation.runOnFirstFix(new Runnable() {
-			public void run() {
-				mc.animateTo(myLocation.getMyLocation());
-				mc.setZoom(ZOOM_LEVEL);
-			}
-		});
-
+		MapView mapView = (MapView) findViewById(R.id.mapview);
+		mapView.setBuiltInZoomControls(true);
 		final List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(
 				R.drawable.location_place);
 		final PinItemizedOverlay itemizedOverlay = new PinItemizedOverlay(
 				drawable, this);
 
-		// Handler for updating text fields on the UI like the lat/long and
-		// address.
+		// Add current location on the map
+		myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
+		mapOverlays.add(myLocation);
+		myLocation.enableMyLocation();
+
+		final MapController mc = mapView.getController();
+		myLocation.runOnFirstFix(new Runnable() {
+			public void run() {
+				if (!isSearching() && itemizedOverlay.size() == 0) {
+					mc.animateTo(myLocation.getMyLocation());
+					mc.setZoom(ZOOM_LEVEL);
+				}
+			}
+		});
+
+		// Handler for adding an overlay item on the map with the address found
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -77,8 +85,7 @@ public class LocationPickerMapActivity extends MapActivity {
 				case UPDATE_ADDRESS:
 					Address address = (Address) msg.obj;
 					// Format the first line of address (if available), city,
-					// and
-					// country name.
+					// and country name.
 					String addressText = String.format(
 							"%s, %s, %s",
 							address.getMaxAddressLineIndex() > 0 ? address
@@ -99,6 +106,7 @@ public class LocationPickerMapActivity extends MapActivity {
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(tv.getWindowToken(), 0);
 
+					// Center the map on the overlay
 					mc.animateTo(point);
 					mc.setZoom(ZOOM_LEVEL);
 
@@ -152,6 +160,7 @@ public class LocationPickerMapActivity extends MapActivity {
 	private class GeocodingTask extends AsyncTask<String, Void, Void> {
 		private static final int MAX_RESULTS = 5;
 		Context mContext;
+		private ProgressDialog progressDialog;
 
 		public GeocodingTask(Context context) {
 			super();
@@ -191,6 +200,21 @@ public class LocationPickerMapActivity extends MapActivity {
 						.sendToTarget();
 			}
 			return null;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			searching = true;
+			progressDialog = ProgressDialog.show(
+					LocationPickerMapActivity.this, null,
+					getString(R.string.searching_for) + ": " + tv.getText(),
+					true);
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			searching = false;
+			progressDialog.dismiss();
 		}
 	}
 }

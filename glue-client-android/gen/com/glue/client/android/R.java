@@ -159,6 +159,7 @@ public final class R {
         public static final int public_description=0x7f040015;
         public static final int re_enter_email_=0x7f04000f;
         public static final int remove=0x7f040025;
+        public static final int searching_for=0x7f040043;
         public static final int shared_secret_question=0x7f040027;
         public static final int shared_secret_question_help=0x7f040028;
         public static final int sign_up=0x7f040009;
