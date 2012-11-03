@@ -130,14 +130,17 @@
                     android:onClick="onClickLocationMap"
                     android:text="" />
 
-                <Button
+                <ToggleButton
                     android:id="@+id/toggleButton1"
+                    style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:drawableRight="@drawable/device_access_location_found"
+                    android:checked="true"
+                    android:drawableRight="@drawable/location_selector"
                     android:onClick="onClickToggle"
-                    android:text="" />
+                    android:textOff=""
+                    android:textOn="" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

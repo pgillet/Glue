@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.glue.client.android.dialog.DatePickerFragment;
 import com.glue.client.android.dialog.TimeDialogListener;
@@ -55,7 +56,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private TextView address;
 	private SimpleLocation location;
 	private Button locationMap;
-	private Button locationSwitch;
+	private ToggleButton toggleLocation;
 
 	private Handler mHandler;
 
@@ -94,7 +95,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		locationProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		address = (TextView) findViewById(R.id.address);
 		locationMap = (Button) findViewById(R.id.locationMapButton);
-		locationSwitch = (Button) findViewById(R.id.toggleButton1);
+		toggleLocation = (ToggleButton) findViewById(R.id.toggleButton1);
 
 		// Handler for updating text fields on the UI like the lat/long and
 		// address.
@@ -223,26 +224,18 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	protected void setLocationEnabled(boolean b) {
 		super.setLocationEnabled(b);
 
-		Resources res = getResources();
-		Drawable drawable = null;
-
 		if (isLocationEnabled()) {
 			// Switch on
 			locationProgressBar.setVisibility(View.VISIBLE);
 			address.setText(R.string.unknown);
 			address.setVisibility(View.INVISIBLE);
-			drawable = res.getDrawable(R.drawable.device_access_location_found);
 		} else {
 			// Switch off
 			locationProgressBar.setVisibility(View.GONE);
 			address.setText(R.string.none);
 			address.setVisibility(View.VISIBLE);
-			drawable = res.getDrawable(R.drawable.device_access_location_off);
 		}
-
 		locationMap.setEnabled(isLocationEnabled());
-		locationSwitch.setCompoundDrawablesWithIntrinsicBounds(null, null,
-				drawable, null);
 	}
 
 	public void onClickFinish(View v) {
@@ -257,12 +250,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	}
 
 	public void onClickToggle(View v) {
-		// Cannot use a ToggleButton here as it is not well rendered when there
-		// is just an icon to display without text.
-		// The checked state is given by the locationEnabled boolean
-		// property.
-
 		// Switch state
-		setLocationEnabled(!isLocationEnabled());
+		setLocationEnabled(toggleLocation.isChecked());
 	}
 }
