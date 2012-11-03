@@ -130,10 +130,12 @@ public final class R {
         public static final int login=0x7f040008;
         public static final int mail_address=0x7f040006;
         public static final int menu_settings=0x7f040004;
+        public static final int network_not_available=0x7f040042;
         public static final int new_password=0x7f040010;
         public static final int next=0x7f040019;
         public static final int no_email_address=0x7f04002c;
         public static final int no_participant_error=0x7f040031;
+        public static final int no_result=0x7f040041;
         public static final int none=0x7f04003e;
         public static final int not_support_gps=0x7f04003c;
         public static final int not_support_network=0x7f04003d;
