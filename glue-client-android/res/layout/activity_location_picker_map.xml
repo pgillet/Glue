@@ -36,16 +36,18 @@
             android:onClick="onClickSearch"
             android:text="" />
 
-        <Button
+        <ToggleButton
             android:id="@+id/buttonPickLocation"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
+            android:checked="false"
             android:drawableRight="@drawable/location_place"
             android:onClick="onClickPickLocation"
-            android:text="" />
-        
+            android:textOff=""
+            android:textOn="" />
+
         <Button
             android:id="@+id/buttonOK"
             style="?android:attr/buttonStyleSmall"
@@ -53,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:drawableRight="@drawable/navigation_accept"
+            android:enabled="false"
             android:onClick="onClickOK"
             android:text="" />
     </LinearLayout>
