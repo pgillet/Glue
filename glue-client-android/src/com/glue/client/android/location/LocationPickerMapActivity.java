@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +17,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,9 @@ import com.google.android.maps.OverlayItem;
 
 public class LocationPickerMapActivity extends MapActivity {
 
+	private static final String ADDRESS_TEXT = "address_text";
+	private static final String LONGITUDE = "longitude";
+	private static final String LATITUDE = "latitude";
 	private static final int ZOOM_LEVEL = 16;
 	private MyLocationOverlay myLocation = null;
 
@@ -39,8 +44,10 @@ public class LocationPickerMapActivity extends MapActivity {
 	public static final int UPDATE_ADDRESS = 1;
 	public static final int ADDRESS_NOT_FOUND = 2;
 	private TextView tv;
+	private Button buttonOK;
 
 	private boolean searching;
+	private PinItemizedOverlay itemizedOverlay;
 
 	private boolean isSearching() {
 		return searching;
@@ -52,14 +59,14 @@ public class LocationPickerMapActivity extends MapActivity {
 		setContentView(R.layout.activity_location_picker_map);
 
 		tv = (TextView) findViewById(R.id.editText1);
+		buttonOK = (Button) findViewById(R.id.buttonOK);
 
 		MapView mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		final List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(
 				R.drawable.location_place);
-		final PinItemizedOverlay itemizedOverlay = new PinItemizedOverlay(
-				drawable, this);
+		itemizedOverlay = new PinItemizedOverlay(drawable, this);
 
 		// Add current location on the map
 		myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
@@ -110,6 +117,9 @@ public class LocationPickerMapActivity extends MapActivity {
 					mc.animateTo(point);
 					mc.setZoom(ZOOM_LEVEL);
 
+					// Set enabled the OK button
+					buttonOK.setEnabled(true);
+
 					break;
 				case ADDRESS_NOT_FOUND:
 					String text = (String) msg.obj;
@@ -134,7 +144,15 @@ public class LocationPickerMapActivity extends MapActivity {
 	}
 
 	public void onClickOK(View v) {
-		// TODO
+		OverlayItem item = itemizedOverlay.getItem(0);
+
+		Intent data = new Intent();
+		data.putExtra(LATITUDE, item.getPoint().getLatitudeE6() / 1E6);
+		data.putExtra(LONGITUDE, item.getPoint().getLongitudeE6() / 1E6);
+		data.putExtra(ADDRESS_TEXT, item.getSnippet());
+
+		setResult(RESULT_OK, data);
+		finish();
 	}
 
 	public void onClickPickLocation(View v) {

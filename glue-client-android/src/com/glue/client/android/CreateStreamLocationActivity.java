@@ -30,6 +30,7 @@ import com.glue.client.android.utils.Utils;
 public class CreateStreamLocationActivity extends LocationActivity implements
 		TimeDialogListener {
 
+	private static final int PICK_LOCATION_REQUEST = 0;
 	private static final int DEFAULT_STREAM_LENGTH = 2;
 	private static final String TIME_PICKER = "timePicker";
 	private static final String DATE_PICKER = "datePicker";
@@ -243,10 +244,30 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	}
 
 	public void onClickLocationMap(View v) {
+		super.setLocationEnabled(false);
+
 		Intent intent = new Intent();
 		intent.setClassName(this,
 				"com.glue.client.android.location.LocationPickerMapActivity");
-		startActivity(intent);
+		startActivityForResult(intent, PICK_LOCATION_REQUEST);
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PICK_LOCATION_REQUEST) {
+			if (resultCode == RESULT_OK) {
+				// A location was picked
+				location = new SimpleLocation();
+				location.setLatitude(data.getDoubleExtra("latitude", 0));
+				location.setLongitude(data.getDoubleExtra("longitude", 0));
+				location.setAddressText(data.getStringExtra("address_text"));
+
+				updateAddressTextView();
+			} else {
+				// No location was picked.
+				// Pick the current location again.
+				super.setLocationEnabled(true);
+			}
+		}
 	}
 
 	public void onClickToggle(View v) {
