@@ -14,8 +14,7 @@
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#888888"
-        android:padding="4dp" >
+        android:background="#888888" >
 
         <EditText
             android:id="@+id/editText1"
@@ -43,8 +42,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:drawableRight="@drawable/av_make_available_offline"
+            android:drawableRight="@drawable/location_place"
             android:onClick="onClickPickLocation"
+            android:text="" />
+        
+        <Button
+            android:id="@+id/buttonOK"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:drawableRight="@drawable/navigation_accept"
+            android:onClick="onClickOK"
             android:text="" />
     </LinearLayout>
 
