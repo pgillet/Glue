@@ -35,26 +35,195 @@ import com.google.android.maps.OverlayItem;
 
 public class LocationPickerMapActivity extends MapActivity {
 
-	private static final String ADDRESS_TEXT = "address_text";
-	private static final String LONGITUDE = "longitude";
-	private static final String LATITUDE = "latitude";
-	private static final int ZOOM_LEVEL = 16;
-	private MyLocationOverlay myLocation = null;
+	// AsyncTask encapsulating the geocoding API. Since the geocoder API
+	// is blocked, we do not want to invoke it from the UI thread.
+	private class GeocodingTask extends AsyncTask<String, Void, Void> {
+		private static final int MAX_RESULTS = 5;
+		Context mContext;
+		private ProgressDialog progressDialog;
 
-	private Handler mHandler;
+		public GeocodingTask(Context context) {
+			super();
+			mContext = context;
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+			String locationName = params[0];
+			List<Address> addresses = null;
+			try {
+				// Call the synchronous getFromLocationName() method by passing
+				// in
+				// the entered location name.
+				addresses = geocoder.getFromLocationName(locationName,
+						MAX_RESULTS);
+			} catch (IOException e) {
+				e.printStackTrace();
+				// Update UI field with the exception.
+				// Message.obtain(getHandler(), ADDRESS_NOT_FOUND, e.toString())
+				// .sendToTarget();
+
+				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
+						getString(R.string.network_not_available))
+						.sendToTarget();
+			}
+			if (addresses != null && addresses.size() > 0) {
+				Address address = addresses.get(0);
+				// Update the UI via a message handler.
+				Message.obtain(mHandler, UPDATE_ADDRESS, address)
+						.sendToTarget();
+			} else {
+				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
+						getString(R.string.no_result) + ": " + locationName)
+						.sendToTarget();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			searching = false;
+			progressDialog.dismiss();
+		}
+
+		@Override
+		protected void onPreExecute() {
+			searching = true;
+			progressDialog = ProgressDialog.show(
+					LocationPickerMapActivity.this, null,
+					getString(R.string.searching_for) + ": " + tv.getText(),
+					true);
+		}
+	}
+	private class PinItemizedOverlay extends ItemizedOverlay {
+
+		private boolean hasOverlay;
+		private Context mContext;
+		private OverlayItem mOverlay;
+
+		public PinItemizedOverlay(Drawable defaultMarker) {
+			super(boundCenterBottom(defaultMarker));
+			mOverlay = new OverlayItem(new GeoPoint(0, 0), null, null);
+			populate();
+		}
+
+		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
+			this(defaultMarker);
+			mContext = context;
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return mOverlay;
+		}
+
+		/**
+		 * Tests if the overlay has been set.
+		 * 
+		 * @return
+		 */
+		public boolean hasOverlay() {
+			return hasOverlay;
+		}
+
+		@Override
+		public boolean onTap(GeoPoint p, MapView mapView) {
+			if (super.onTap(p, mapView)) {
+				return true;
+			}
+
+			if (togglePickLocation.isChecked()) {
+				setOverlay(new OverlayItem(p, null, "Lat: "
+						+ (p.getLatitudeE6() / 1E6) + ", Long: "
+						+ (p.getLongitudeE6() / 1E6)));
+
+				// Set enabled the OK button
+				buttonOK.setEnabled(true);
+			}
+			return false;
+		}
+
+		@Override
+		protected boolean onTap(int index) {
+			OverlayItem item = mOverlay;
+			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+			dialog.setTitle(item.getTitle());
+			dialog.setMessage(item.getSnippet());
+			dialog.show();
+			return true;
+		}
+
+		public void setOverlay(OverlayItem overlay) {
+			mOverlay = overlay;
+			hasOverlay = true;
+			populate();
+		}
+
+		@Override
+		public int size() {
+			return 1;
+		}
+
+	}
+	public static final int ADDRESS_NOT_FOUND = 2;
+	private static final String ADDRESS_TEXT = "address_text";
+	private static final String LATITUDE = "latitude";
+
+	private static final String LONGITUDE = "longitude";
 
 	// UI handler codes.
 	public static final int UPDATE_ADDRESS = 1;
-	public static final int ADDRESS_NOT_FOUND = 2;
-	private TextView tv;
+	private static final int ZOOM_LEVEL = 16;
 	private Button buttonOK;
-
-	private boolean searching;
 	private PinItemizedOverlay itemizedOverlay;
+
+	private Handler mHandler;
+	private MyLocationOverlay myLocation = null;
+	private boolean searching;
+
 	private ToggleButton togglePickLocation;
+
+	private TextView tv;
+
+	private void doGeocoding(String locationName) {
+		// Since the geocoding API is synchronous and may take a while. You
+		// don't want to lock up the UI thread. Invoking geocoding in an
+		// AsyncTask.
+		(new GeocodingTask(this)).execute(new String[] { locationName });
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
 
 	private boolean isSearching() {
 		return searching;
+	}
+
+	public void onClickOK(View v) {
+		OverlayItem item = itemizedOverlay.getItem(0);
+
+		Intent data = new Intent();
+		data.putExtra(LATITUDE, item.getPoint().getLatitudeE6() / 1E6);
+		data.putExtra(LONGITUDE, item.getPoint().getLongitudeE6() / 1E6);
+		data.putExtra(ADDRESS_TEXT, item.getSnippet());
+
+		setResult(RESULT_OK, data);
+		finish();
+	}
+
+	public void onClickPickLocation(View v) {
+		// TODO
+	}
+
+	public void onClickSearch(View v) {
+		CharSequence locationName = tv.getText();
+		if (locationName != null && locationName.length() > 0) {
+			doGeocoding(locationName.toString());
+		}
 	}
 
 	@Override
@@ -142,174 +311,5 @@ public class LocationPickerMapActivity extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_location_picker_map, menu);
 		return true;
-	}
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
-
-	public void onClickOK(View v) {
-		OverlayItem item = itemizedOverlay.getItem(0);
-
-		Intent data = new Intent();
-		data.putExtra(LATITUDE, item.getPoint().getLatitudeE6() / 1E6);
-		data.putExtra(LONGITUDE, item.getPoint().getLongitudeE6() / 1E6);
-		data.putExtra(ADDRESS_TEXT, item.getSnippet());
-
-		setResult(RESULT_OK, data);
-		finish();
-	}
-
-	public void onClickPickLocation(View v) {
-		// TODO
-	}
-
-	public void onClickSearch(View v) {
-		CharSequence locationName = tv.getText();
-		if (locationName != null && locationName.length() > 0) {
-			doGeocoding(locationName.toString());
-		}
-	}
-
-	private void doGeocoding(String locationName) {
-		// Since the geocoding API is synchronous and may take a while. You
-		// don't want to lock up the UI thread. Invoking geocoding in an
-		// AsyncTask.
-		(new GeocodingTask(this)).execute(new String[] { locationName });
-	}
-
-	// AsyncTask encapsulating the geocoding API. Since the geocoder API
-	// is blocked, we do not want to invoke it from the UI thread.
-	private class GeocodingTask extends AsyncTask<String, Void, Void> {
-		private static final int MAX_RESULTS = 5;
-		Context mContext;
-		private ProgressDialog progressDialog;
-
-		public GeocodingTask(Context context) {
-			super();
-			mContext = context;
-		}
-
-		@Override
-		protected Void doInBackground(String... params) {
-			Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
-			String locationName = params[0];
-			List<Address> addresses = null;
-			try {
-				// Call the synchronous getFromLocationName() method by passing
-				// in
-				// the entered location name.
-				addresses = geocoder.getFromLocationName(locationName,
-						MAX_RESULTS);
-			} catch (IOException e) {
-				e.printStackTrace();
-				// Update UI field with the exception.
-				// Message.obtain(getHandler(), ADDRESS_NOT_FOUND, e.toString())
-				// .sendToTarget();
-
-				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
-						getString(R.string.network_not_available))
-						.sendToTarget();
-			}
-			if (addresses != null && addresses.size() > 0) {
-				Address address = addresses.get(0);
-				// Update the UI via a message handler.
-				Message.obtain(mHandler, UPDATE_ADDRESS, address)
-						.sendToTarget();
-			} else {
-				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
-						getString(R.string.no_result) + ": " + locationName)
-						.sendToTarget();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			searching = true;
-			progressDialog = ProgressDialog.show(
-					LocationPickerMapActivity.this, null,
-					getString(R.string.searching_for) + ": " + tv.getText(),
-					true);
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			searching = false;
-			progressDialog.dismiss();
-		}
-	}
-
-	private class PinItemizedOverlay extends ItemizedOverlay {
-
-		private OverlayItem mOverlay;
-		private Context mContext;
-		private boolean hasOverlay;
-
-		public PinItemizedOverlay(Drawable defaultMarker) {
-			super(boundCenterBottom(defaultMarker));
-			mOverlay = new OverlayItem(new GeoPoint(0, 0), null, null);
-			populate();
-		}
-
-		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
-			this(defaultMarker);
-			mContext = context;
-		}
-
-		@Override
-		protected OverlayItem createItem(int i) {
-			return mOverlay;
-		}
-
-		@Override
-		public int size() {
-			return 1;
-		}
-
-		public void setOverlay(OverlayItem overlay) {
-			mOverlay = overlay;
-			hasOverlay = true;
-			populate();
-		}
-
-		/**
-		 * Tests if the overlay has been set.
-		 * 
-		 * @return
-		 */
-		public boolean hasOverlay() {
-			return hasOverlay;
-		}
-
-		@Override
-		public boolean onTap(GeoPoint p, MapView mapView) {
-			if (super.onTap(p, mapView)) {
-				return true;
-			}
-
-			if (togglePickLocation.isChecked()) {
-				setOverlay(new OverlayItem(p, null, "Lat: "
-						+ (p.getLatitudeE6() / 1E6) + ", Long: "
-						+ (p.getLongitudeE6() / 1E6)));
-
-				// Set enabled the OK button
-				buttonOK.setEnabled(true);
-			}
-			return false;
-		}
-
-		@Override
-		protected boolean onTap(int index) {
-			OverlayItem item = mOverlay;
-			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-			dialog.setTitle(item.getTitle());
-			dialog.setMessage(item.getSnippet());
-			dialog.show();
-			return true;
-		}
-
 	}
 }
