@@ -22,15 +22,17 @@ public final class R {
         public static final int ic_action_search=0x7f020008;
         public static final int ic_launcher=0x7f020009;
         public static final int location_map=0x7f02000a;
-        public static final int location_place=0x7f02000b;
-        public static final int location_selector=0x7f02000c;
-        public static final int navigation_accept=0x7f02000d;
-        public static final int navigation_next_item=0x7f02000e;
-        public static final int participation_type_selector=0x7f02000f;
-        public static final int privacy_selector=0x7f020010;
-        public static final int social_add_group=0x7f020011;
-        public static final int social_add_person=0x7f020012;
-        public static final int social_group=0x7f020013;
+        public static final int location_pick_selector=0x7f02000b;
+        public static final int location_place=0x7f02000c;
+        public static final int location_place_dark=0x7f02000d;
+        public static final int location_selector=0x7f02000e;
+        public static final int navigation_accept=0x7f02000f;
+        public static final int navigation_next_item=0x7f020010;
+        public static final int participation_type_selector=0x7f020011;
+        public static final int privacy_selector=0x7f020012;
+        public static final int social_add_group=0x7f020013;
+        public static final int social_add_person=0x7f020014;
+        public static final int social_group=0x7f020015;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f07001f;

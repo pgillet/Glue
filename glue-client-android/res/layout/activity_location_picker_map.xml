@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:checked="false"
-            android:drawableRight="@drawable/location_place"
+            android:drawableRight="@drawable/location_pick_selector"
             android:onClick="onClickPickLocation"
             android:textOff=""
             android:textOn="" />
