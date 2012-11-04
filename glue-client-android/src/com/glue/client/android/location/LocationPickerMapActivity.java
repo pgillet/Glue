@@ -84,7 +84,7 @@ public class LocationPickerMapActivity extends MapActivity {
 		final MapController mc = mapView.getController();
 		myLocation.runOnFirstFix(new Runnable() {
 			public void run() {
-				if (!isSearching() && itemizedOverlay.size() == 0) {
+				if (!isSearching() && !itemizedOverlay.hasOverlay()) {
 					mc.animateTo(myLocation.getMyLocation());
 					mc.setZoom(ZOOM_LEVEL);
 				}
@@ -246,10 +246,12 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		private OverlayItem mOverlay;
 		private Context mContext;
+		private boolean hasOverlay;
 
 		public PinItemizedOverlay(Drawable defaultMarker) {
 			super(boundCenterBottom(defaultMarker));
-			setOverlay(new OverlayItem(new GeoPoint(0, 0), null, null));
+			mOverlay = new OverlayItem(new GeoPoint(0, 0), null, null);
+			populate();
 		}
 
 		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
@@ -269,7 +271,17 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		public void setOverlay(OverlayItem overlay) {
 			mOverlay = overlay;
+			hasOverlay = true;
 			populate();
+		}
+
+		/**
+		 * Tests if the overlay has been set.
+		 * 
+		 * @return
+		 */
+		public boolean hasOverlay() {
+			return hasOverlay;
 		}
 
 		@Override
@@ -282,6 +294,9 @@ public class LocationPickerMapActivity extends MapActivity {
 				setOverlay(new OverlayItem(p, null, "Lat: "
 						+ (p.getLatitudeE6() / 1E6) + ", Long: "
 						+ (p.getLongitudeE6() / 1E6)));
+
+				// Set enabled the OK button
+				buttonOK.setEnabled(true);
 			}
 			return false;
 		}
