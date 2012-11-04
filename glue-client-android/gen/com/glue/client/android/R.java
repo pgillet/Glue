@@ -42,7 +42,6 @@ public final class R {
         public static final int buttonFromDate=0x7f070005;
         public static final int buttonFromTime=0x7f070006;
         public static final int buttonOK=0x7f07002f;
-        public static final int buttonPickLocation=0x7f07002e;
         public static final int buttonSearch=0x7f07002d;
         public static final int buttonToDate=0x7f07000a;
         public static final int buttonToTime=0x7f07000b;
@@ -89,6 +88,7 @@ public final class R {
         public static final int textView6=0x7f070027;
         public static final int textView7=0x7f070026;
         public static final int toggleButton1=0x7f070012;
+        public static final int togglePickLocation=0x7f07002e;
     }
     public static final class layout {
         public static final int activity_create_stream_location=0x7f030000;

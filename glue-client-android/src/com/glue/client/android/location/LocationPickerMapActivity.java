@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +21,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.glue.client.android.R;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -48,6 +51,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 	private boolean searching;
 	private PinItemizedOverlay itemizedOverlay;
+	private ToggleButton togglePickLocation;
 
 	private boolean isSearching() {
 		return searching;
@@ -60,13 +64,17 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		tv = (TextView) findViewById(R.id.editText1);
 		buttonOK = (Button) findViewById(R.id.buttonOK);
+		togglePickLocation = (ToggleButton) findViewById(R.id.togglePickLocation);
 
 		MapView mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		final List<Overlay> mapOverlays = mapView.getOverlays();
+
+		// Add an overlay for the location picked by the user
 		Drawable drawable = this.getResources().getDrawable(
 				R.drawable.location_place);
 		itemizedOverlay = new PinItemizedOverlay(drawable, this);
+		mapOverlays.add(itemizedOverlay);
 
 		// Add current location on the map
 		myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
@@ -105,9 +113,7 @@ public class LocationPickerMapActivity extends MapActivity {
 					OverlayItem overlayitem = new OverlayItem(point, null,
 							addressText);
 
-					itemizedOverlay.clear(); // Only one possible pick
-					itemizedOverlay.addOverlay(overlayitem);
-					mapOverlays.add(itemizedOverlay);
+					itemizedOverlay.setOverlay(overlayitem);
 
 					// Hide the virtual keyboard
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -234,5 +240,61 @@ public class LocationPickerMapActivity extends MapActivity {
 			searching = false;
 			progressDialog.dismiss();
 		}
+	}
+
+	private class PinItemizedOverlay extends ItemizedOverlay {
+
+		private OverlayItem mOverlay;
+		private Context mContext;
+
+		public PinItemizedOverlay(Drawable defaultMarker) {
+			super(boundCenterBottom(defaultMarker));
+			setOverlay(new OverlayItem(new GeoPoint(0, 0), null, null));
+		}
+
+		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
+			this(defaultMarker);
+			mContext = context;
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return mOverlay;
+		}
+
+		@Override
+		public int size() {
+			return 1;
+		}
+
+		public void setOverlay(OverlayItem overlay) {
+			mOverlay = overlay;
+			populate();
+		}
+
+		@Override
+		public boolean onTap(GeoPoint p, MapView mapView) {
+			if (super.onTap(p, mapView)) {
+				return true;
+			}
+
+			if (togglePickLocation.isChecked()) {
+				setOverlay(new OverlayItem(p, null, "Lat: "
+						+ (p.getLatitudeE6() / 1E6) + ", Long: "
+						+ (p.getLongitudeE6() / 1E6)));
+			}
+			return false;
+		}
+
+		@Override
+		protected boolean onTap(int index) {
+			OverlayItem item = mOverlay;
+			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+			dialog.setTitle(item.getTitle());
+			dialog.setMessage(item.getSnippet());
+			dialog.show();
+			return true;
+		}
+
 	}
 }
