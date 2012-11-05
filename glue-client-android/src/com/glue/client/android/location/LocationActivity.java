@@ -1,20 +1,13 @@
 package com.glue.client.android.location;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,66 +47,9 @@ public abstract class LocationActivity extends FragmentActivity {
 		}
 	}
 
-	// AsyncTask encapsulating the reverse-geocoding API. Since the geocoder API
-	// is blocked,
-	// we do not want to invoke it from the UI thread.
-	private class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
-		Context mContext;
-
-		public ReverseGeocodingTask(Context context) {
-			super();
-			mContext = context;
-		}
-
-		@Override
-		protected Void doInBackground(Location... params) {
-			Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
-			Location loc = params[0];
-			List<Address> addresses = null;
-			SimpleLocation locationMsg = new SimpleLocation();
-			locationMsg.setLatitude(loc.getLatitude());
-			locationMsg.setLongitude(loc.getLongitude());
-
-			try {
-				// Call the synchronous getFromLocation() method by passing in
-				// the lat/long values.
-				addresses = geocoder.getFromLocation(loc.getLatitude(),
-						loc.getLongitude(), 1);
-			} catch (IOException e) {
-				e.printStackTrace();
-				// Update UI field with the exception.
-				// Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
-				// .sendToTarget();
-
-				Message.obtain(getHandler(), UPDATE_ADDRESS, locationMsg)
-						.sendToTarget();
-			}
-			if (addresses != null && addresses.size() > 0) {
-				Address address = addresses.get(0);
-				// Format the first line of address (if available), city, and
-				// country name.
-				String addressText = String.format(
-						"%s, %s, %s",
-						address.getMaxAddressLineIndex() > 0 ? address
-								.getAddressLine(0) : "", address.getLocality(),
-						address.getCountryName());
-				// Update the UI via a message handler.
-				locationMsg.setAddressText(addressText);
-				Message.obtain(getHandler(), UPDATE_ADDRESS, locationMsg)
-						.sendToTarget();
-			}
-			return null;
-		}
-	}
-
 	private static final int TEN_METERS = 10;
 	private static final int TEN_SECONDS = 10000;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
-
-	// UI handler codes.
-	public static final int UPDATE_ADDRESS = 1;
-	public static final int UPDATE_LATLNG = 2;
 
 	private final LocationListener listener = new LocationListener() {
 
@@ -147,9 +83,10 @@ public abstract class LocationActivity extends FragmentActivity {
 
 	private void doReverseGeocoding(Location location) {
 		// Since the geocoding API is synchronous and may take a while. You
-		// don't want to lock
-		// up the UI thread. Invoking reverse geocoding in an AsyncTask.
-		(new ReverseGeocodingTask(this)).execute(new Location[] { location });
+		// don't want to lock up the UI thread. Invoking reverse geocoding in an
+		// AsyncTask.
+		(new ReverseGeocodingTask(this, getHandler()))
+				.execute(new Location[] { location });
 	}
 
 	private void enableLocationSettings() {
@@ -404,7 +341,8 @@ public abstract class LocationActivity extends FragmentActivity {
 		locationMsg.setLatitude(location.getLatitude());
 		locationMsg.setLongitude(location.getLongitude());
 
-		Message.obtain(getHandler(), UPDATE_LATLNG, locationMsg).sendToTarget();
+		Message.obtain(getHandler(), LocationConstants.UPDATE_LATLNG,
+				locationMsg).sendToTarget();
 
 		// Bypass reverse-geocoding only if the Geocoder service is available on
 		// the device.

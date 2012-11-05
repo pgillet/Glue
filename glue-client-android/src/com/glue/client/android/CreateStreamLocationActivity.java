@@ -24,6 +24,7 @@ import com.glue.client.android.dialog.DatePickerFragment;
 import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
 import com.glue.client.android.location.LocationActivity;
+import com.glue.client.android.location.LocationConstants;
 import com.glue.client.android.location.SimpleLocation;
 import com.glue.client.android.utils.Utils;
 
@@ -110,7 +111,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 					location = (SimpleLocation) msg.obj;
 					switch (msg.what) {
-					case UPDATE_ADDRESS:
+					case LocationConstants.UPDATE_ADDRESS:
 						if (location.getAddressText() == null) {
 							Toast.makeText(CreateStreamLocationActivity.this,
 									getString(R.string.address_not_available),
@@ -118,7 +119,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 						}
 						updateAddressTextView();
 						break;
-					case UPDATE_LATLNG:
+					case LocationConstants.UPDATE_LATLNG:
 						if (!isGeocoderAvailable()
 						/* || !isReverseGeocodingEnabled() */) {
 							updateAddressTextView();
