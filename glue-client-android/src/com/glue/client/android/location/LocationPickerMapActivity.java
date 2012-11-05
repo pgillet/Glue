@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -118,12 +119,40 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		private boolean hasOverlay;
 		private Context mContext;
+		private Handler mHandler;
 		private List<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
 		public PinItemizedOverlay(Drawable defaultMarker) {
 			super(boundCenterBottom(defaultMarker));
 			// See http://code.google.com/p/android/issues/detail?id=2035
 			populate();
+
+			// Handler that gets an Address from the location tapped by the user
+			// on the map view with the given latitude and longitude, and
+			// overrides the OverlayItem's snippet with it.
+			mHandler = new Handler() {
+				@Override
+				public void handleMessage(Message msg) {
+					switch (msg.what) {
+					case LocationConstants.UPDATE_ADDRESS:
+						SimpleLocation locationMsg = (SimpleLocation) msg.obj;
+
+						if (locationMsg.getAddressText() != null) {
+							// Overrides the OverlayItem snippet with the
+							// address found
+							OverlayItem item = mOverlays.get(0);
+							setOverlay(new OverlayItem(item.getPoint(),
+									item.getTitle(),
+									locationMsg.getAddressText()));
+
+							// TODO refresh the dialog if it is currently
+							// showing
+						}
+
+						break;
+					}
+				}
+			};
 		}
 
 		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
@@ -134,6 +163,20 @@ public class LocationPickerMapActivity extends MapActivity {
 		@Override
 		protected OverlayItem createItem(int i) {
 			return mOverlays.get(i);
+		}
+
+		private void doReverseGeocoding(GeoPoint p) {
+			// Constructs a new Location with a null provider
+			Location location = new Location((String) null);
+			location.setLatitude(p.getLatitudeE6() / 1E6);
+			location.setLongitude(p.getLongitudeE6() / 1E6);
+
+			// Since the geocoding API is synchronous and may take a while. You
+			// don't want to lock up the UI thread. Invoking reverse geocoding
+			// in an
+			// AsyncTask.
+			(new ReverseGeocodingTask(LocationPickerMapActivity.this, mHandler))
+					.execute(new Location[] { location });
 		}
 
 		/**
@@ -155,6 +198,8 @@ public class LocationPickerMapActivity extends MapActivity {
 				setOverlay(new OverlayItem(p, null, "Lat: "
 						+ (p.getLatitudeE6() / 1E6) + ", Long: "
 						+ (p.getLongitudeE6() / 1E6)));
+
+				doReverseGeocoding(p);
 
 				// Set enabled the OK button
 				buttonOK.setEnabled(true);
