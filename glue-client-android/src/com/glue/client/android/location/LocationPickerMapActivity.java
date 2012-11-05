@@ -65,17 +65,17 @@ public class LocationPickerMapActivity extends MapActivity {
 				// Message.obtain(getHandler(), ADDRESS_NOT_FOUND, e.toString())
 				// .sendToTarget();
 
-				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
+				Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND,
 						getString(R.string.network_not_available))
 						.sendToTarget();
 			}
 			if (addresses != null && addresses.size() > 0) {
 				Address address = addresses.get(0);
 				// Update the UI via a message handler.
-				Message.obtain(mHandler, UPDATE_ADDRESS, address)
-						.sendToTarget();
+				Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS,
+						address).sendToTarget();
 			} else {
-				Message.obtain(mHandler, ADDRESS_NOT_FOUND,
+				Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND,
 						getString(R.string.no_result) + ": " + locationName)
 						.sendToTarget();
 			}
@@ -97,6 +97,7 @@ public class LocationPickerMapActivity extends MapActivity {
 					true);
 		}
 	}
+
 	private class PinItemizedOverlay extends ItemizedOverlay {
 
 		private boolean hasOverlay;
@@ -167,14 +168,7 @@ public class LocationPickerMapActivity extends MapActivity {
 		}
 
 	}
-	public static final int ADDRESS_NOT_FOUND = 2;
-	private static final String ADDRESS_TEXT = "address_text";
-	private static final String LATITUDE = "latitude";
 
-	private static final String LONGITUDE = "longitude";
-
-	// UI handler codes.
-	public static final int UPDATE_ADDRESS = 1;
 	private static final int ZOOM_LEVEL = 16;
 	private Button buttonOK;
 	private PinItemizedOverlay itemizedOverlay;
@@ -207,9 +201,11 @@ public class LocationPickerMapActivity extends MapActivity {
 		OverlayItem item = itemizedOverlay.getItem(0);
 
 		Intent data = new Intent();
-		data.putExtra(LATITUDE, item.getPoint().getLatitudeE6() / 1E6);
-		data.putExtra(LONGITUDE, item.getPoint().getLongitudeE6() / 1E6);
-		data.putExtra(ADDRESS_TEXT, item.getSnippet());
+		data.putExtra(LocationConstants.LATITUDE, item.getPoint()
+				.getLatitudeE6() / 1E6);
+		data.putExtra(LocationConstants.LONGITUDE, item.getPoint()
+				.getLongitudeE6() / 1E6);
+		data.putExtra(LocationConstants.ADDRESS_TEXT, item.getSnippet());
 
 		setResult(RESULT_OK, data);
 		finish();
@@ -266,7 +262,7 @@ public class LocationPickerMapActivity extends MapActivity {
 			public void handleMessage(Message msg) {
 
 				switch (msg.what) {
-				case UPDATE_ADDRESS:
+				case LocationConstants.UPDATE_ADDRESS:
 					Address address = (Address) msg.obj;
 					// Format the first line of address (if available), city,
 					// and country name.
@@ -296,7 +292,7 @@ public class LocationPickerMapActivity extends MapActivity {
 					buttonOK.setEnabled(true);
 
 					break;
-				case ADDRESS_NOT_FOUND:
+				case LocationConstants.ADDRESS_NOT_FOUND:
 					String text = (String) msg.obj;
 					Toast.makeText(getApplicationContext(), text,
 							Toast.LENGTH_SHORT).show();

@@ -3,8 +3,6 @@ package com.glue.client.android;
 import java.util.Calendar;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -258,9 +256,12 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			if (resultCode == RESULT_OK) {
 				// A location was picked
 				location = new SimpleLocation();
-				location.setLatitude(data.getDoubleExtra("latitude", 0));
-				location.setLongitude(data.getDoubleExtra("longitude", 0));
-				location.setAddressText(data.getStringExtra("address_text"));
+				location.setLatitude(data.getDoubleExtra(
+						LocationConstants.LATITUDE, 0));
+				location.setLongitude(data.getDoubleExtra(
+						LocationConstants.LONGITUDE, 0));
+				location.setAddressText(data
+						.getStringExtra(LocationConstants.ADDRESS_TEXT));
 
 				updateAddressTextView();
 			} else {
