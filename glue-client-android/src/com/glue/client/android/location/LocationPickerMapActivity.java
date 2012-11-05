@@ -1,6 +1,7 @@
 package com.glue.client.android.location;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,15 +99,30 @@ public class LocationPickerMapActivity extends MapActivity {
 		}
 	}
 
+	/**
+	 * An overlay that draws a marker for the location chosen by the user,
+	 * either by searching for an address or by taping on the map view.
+	 * 
+	 * For some reason, we get a NullPointerException when getting a MapView
+	 * with an ItemizedOverlay with no OverlayItems (there is no initial overlay
+	 * item and the user must pick a location on tap or search for an address).
+	 * The workaround is to maintain a list of OverlayItems while we actually
+	 * need a single instance, and call {@link ItemizedOverlay#populate()} after
+	 * the call of the super constructor.
+	 * 
+	 * @see http://code.google.com/p/android/issues/detail?id=2035
+	 * 
+	 * @author pgillet
+	 */
 	private class PinItemizedOverlay extends ItemizedOverlay {
 
 		private boolean hasOverlay;
 		private Context mContext;
-		private OverlayItem mOverlay;
+		private List<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
 		public PinItemizedOverlay(Drawable defaultMarker) {
 			super(boundCenterBottom(defaultMarker));
-			mOverlay = new OverlayItem(new GeoPoint(0, 0), null, null);
+			// See http://code.google.com/p/android/issues/detail?id=2035
 			populate();
 		}
 
@@ -117,7 +133,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		@Override
 		protected OverlayItem createItem(int i) {
-			return mOverlay;
+			return mOverlays.get(i);
 		}
 
 		/**
@@ -148,7 +164,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		@Override
 		protected boolean onTap(int index) {
-			OverlayItem item = mOverlay;
+			OverlayItem item = mOverlays.get(index);
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
@@ -157,14 +173,16 @@ public class LocationPickerMapActivity extends MapActivity {
 		}
 
 		public void setOverlay(OverlayItem overlay) {
-			mOverlay = overlay;
+			// Only one overlay
+			mOverlays.clear();
+			mOverlays.add(overlay);
 			hasOverlay = true;
 			populate();
 		}
 
 		@Override
 		public int size() {
-			return 1;
+			return mOverlays.size();
 		}
 
 	}
