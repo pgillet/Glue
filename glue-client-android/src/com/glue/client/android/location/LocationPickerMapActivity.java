@@ -8,6 +8,7 @@ import java.util.Locale;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -213,6 +214,19 @@ public class LocationPickerMapActivity extends MapActivity {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
+			dialog.setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							onClickOK(null);
+						}
+					})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// User cancelled the dialog
+								}
+							});
 			dialog.show();
 			return true;
 		}
