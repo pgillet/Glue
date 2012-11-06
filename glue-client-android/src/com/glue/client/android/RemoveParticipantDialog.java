@@ -73,19 +73,19 @@ public class RemoveParticipantDialog extends DialogFragment {
 		this.name = args[1];
 
 		builder.setMessage(name + " (" + emailAddress + ")")
-				.setPositiveButton(R.string.cancel,
+				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								// User cancelled the dialog
 								mListener
-										.onDialogPositiveClick(RemoveParticipantDialog.this);
+										.onDialogNegativeClick(RemoveParticipantDialog.this);
 							}
 						})
-				.setNegativeButton(R.string.remove,
+				.setPositiveButton(R.string.remove,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								mListener
-										.onDialogNegativeClick(RemoveParticipantDialog.this);
+										.onDialogPositiveClick(RemoveParticipantDialog.this);
 							}
 						});
 		// Create the AlertDialog object and return it

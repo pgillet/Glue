@@ -43,7 +43,8 @@ public abstract class LocationActivity extends FragmentActivity {
 										int which) {
 									enableLocationSettings();
 								}
-							}).create();
+							}).setNegativeButton(R.string.cancel, null)
+					.create();
 		}
 	}
 
