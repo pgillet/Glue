@@ -14,6 +14,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.glue.client.android.R;
@@ -33,9 +34,20 @@ public abstract class LocationActivity extends FragmentActivity {
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			return new AlertDialog.Builder(getActivity())
-					.setTitle(R.string.gps_disabled)
-					.setMessage(R.string.enable_gps_dialog)
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+			// Get the layout inflater
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+
+			// Inflate and set the layout for the dialog
+			// Pass null as the parent view because its going in the dialog
+			// layout
+			builder.setTitle(R.string.gps_disabled)
+					.setView(
+							inflater.inflate(
+									R.layout.dialog_enable_location_settings,
+									null))
 					.setPositiveButton(R.string.ok,
 							new DialogInterface.OnClickListener() {
 								@Override
@@ -43,8 +55,9 @@ public abstract class LocationActivity extends FragmentActivity {
 										int which) {
 									enableLocationSettings();
 								}
-							}).setNegativeButton(R.string.cancel, null)
-					.create();
+							}).setNegativeButton(R.string.cancel, null);
+
+			return builder.create();
 		}
 	}
 
