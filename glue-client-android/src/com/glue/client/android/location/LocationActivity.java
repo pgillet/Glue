@@ -219,21 +219,25 @@ public abstract class LocationActivity extends FragmentActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		if (isLocationEnabled()) {
 
-		// This verification should be done during onStart() because the system
-		// calls this method when the user returns to the activity, which
-		// ensures the desired location provider is enabled each time the
-		// activity resumes from the stopped state.
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		final boolean gpsEnabled = locationManager
-				.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			// This verification should be done during onStart() because the
+			// system calls this method when the user returns to the activity,
+			// which ensures the desired location provider is enabled each time
+			// the activity resumes from the stopped state.
+			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			final boolean gpsEnabled = locationManager
+					.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-		if (!gpsEnabled) {
-			// Build an alert dialog here that requests that the user enable
-			// the location services, then when the user clicks the "OK" button,
-			// call enableLocationSettings()
-			new EnableGpsDialogFragment().show(getSupportFragmentManager(),
-					"enableGpsDialog");
+			if (!gpsEnabled) {
+				// Build an alert dialog here that requests that the user enable
+				// the location services, then when the user clicks the "OK"
+				// button,
+				// call enableLocationSettings()
+				new EnableGpsDialogFragment().show(getSupportFragmentManager(),
+						"enableGpsDialog");
+			}
 		}
 	}
 
