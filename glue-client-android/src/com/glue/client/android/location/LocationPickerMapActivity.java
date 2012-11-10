@@ -513,7 +513,7 @@ public class LocationPickerMapActivity extends MapActivity {
 					break;
 				case LocationConstants.ADDRESS_NOT_FOUND:
 					String text = (String) msg.obj;
-					Toast.makeText(getApplicationContext(), text,
+					Toast.makeText(LocationPickerMapActivity.this, text,
 							Toast.LENGTH_SHORT).show();
 					break;
 				}

@@ -218,8 +218,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 			if (bundle.isEmpty()) {
 				// Contact has no email address
-				Toast.makeText(getApplicationContext(),
-						R.string.no_email_address, Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.no_email_address,
+						Toast.LENGTH_SHORT).show();
 			} else {
 				Set<String> emailAddresses = bundle.keySet();
 				if (emailAddresses.size() > 1) {
@@ -247,9 +247,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 		if (participants.containsKey(emailAddress)) {
 			// Email address already added
-			Toast.makeText(getApplicationContext(),
-					R.string.email_address_already_added, Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, R.string.email_address_already_added,
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -321,8 +320,8 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	public void onClickNext(View view) {
 		if (!participationType && participants.isEmpty()) {
 			// Participation type is closed and no participant
-			Toast.makeText(getApplicationContext(),
-					R.string.no_participant_error, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.no_participant_error,
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
