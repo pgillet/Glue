@@ -100,8 +100,8 @@ public class LocationPickerMapActivity extends MapActivity {
 
 			if (result != null) {
 				// adapter.clear();
-				adapter = new ArrayAdapter<Address>(
-						LocationPickerMapActivity.this, R.layout.address_entry);
+				adapter = new AddressAdapter(LocationPickerMapActivity.this,
+						R.layout.address_entry);
 				adapter.setNotifyOnChange(true);
 				tv.setAdapter(adapter);
 
@@ -319,7 +319,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 	private static final int ZOOM_LEVEL = 16;
 
-	private ArrayAdapter<Address> adapter;
+	private AddressAdapter adapter;
 
 	private Button buttonOK;
 	private PinItemizedOverlay itemizedOverlay;
@@ -333,6 +333,11 @@ public class LocationPickerMapActivity extends MapActivity {
 
 	private AutoCompleteTextView tv;
 
+	/**
+	 * Add a marker on the map view at the given address.
+	 * 
+	 * @param address
+	 */
 	private void addMarker(Address address) {
 		String addressText = formatAddress(address);
 
@@ -352,6 +357,8 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		// Reset the text view
 		tv.setText(null);
+		tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.action_search, 0,
+				0, 0);
 
 		// Set enabled the OK button
 		buttonOK.setEnabled(true);
@@ -417,7 +424,7 @@ public class LocationPickerMapActivity extends MapActivity {
 		setContentView(R.layout.activity_location_picker_map);
 
 		tv = (AutoCompleteTextView) findViewById(R.id.editText1);
-		adapter = new ArrayAdapter<Address>(this, R.layout.address_entry);
+		adapter = new AddressAdapter(this, R.layout.address_entry);
 		adapter.setNotifyOnChange(true);
 		tv.setAdapter(adapter);
 

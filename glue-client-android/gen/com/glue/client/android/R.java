@@ -37,6 +37,8 @@ public final class R {
     public static final class id {
         public static final int LinearLayout1=0x7f07001f;
         public static final int address=0x7f070010;
+        public static final int addressLine=0x7f070034;
+        public static final int addressLocality=0x7f070035;
         public static final int autocomplete_contacts=0x7f070023;
         public static final int button1=0x7f07001c;
         public static final int button2=0x7f070013;
@@ -50,8 +52,8 @@ public final class R {
         public static final int checkBox1=0x7f070028;
         public static final int checkBoxFrom=0x7f070007;
         public static final int checkBoxTo=0x7f07000c;
-        public static final int contactEntryDisplayName=0x7f070034;
-        public static final int contactEntryEmailAddress=0x7f070035;
+        public static final int contactEntryDisplayName=0x7f070036;
+        public static final int contactEntryEmailAddress=0x7f070037;
         public static final int contactList=0x7f070021;
         public static final int editText1=0x7f070018;
         public static final int editText2=0x7f070019;
@@ -59,7 +61,7 @@ public final class R {
         public static final int editText4=0x7f070032;
         public static final int editText5=0x7f070033;
         public static final int imageView1=0x7f070030;
-        public static final int item_detail=0x7f070036;
+        public static final int item_detail=0x7f070038;
         public static final int item_detail_container=0x7f070029;
         public static final int item_list=0x7f07002a;
         public static final int layout01=0x7f070017;
@@ -77,7 +79,7 @@ public final class R {
         public static final int layoutTo=0x7f070009;
         public static final int locationMapButton=0x7f070011;
         public static final int mapview=0x7f07002b;
-        public static final int menu_settings=0x7f070037;
+        public static final int menu_settings=0x7f070039;
         public static final int progressBar1=0x7f07000f;
         public static final int rootLayout=0x7f070000;
         public static final int scrollView=0x7f070001;
