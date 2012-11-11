@@ -25,21 +25,16 @@ import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
 import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.location.LocationConstants;
+import com.glue.client.android.stream.StreamData;
 import com.glue.client.android.utils.Utils;
 
 public class CreateStreamLocationActivity extends LocationActivity implements
 		TimeDialogListener {
 
-	private static final int PICK_LOCATION_REQUEST = 0;
-	private static final int DEFAULT_STREAM_LENGTH = 2;
-	private static final String TIME_PICKER = "timePicker";
 	private static final String DATE_PICKER = "datePicker";
-
-	private Calendar from;
-	private Calendar to;
-
-	private String datePattern;
-	private String timePattern;
+	private static final int DEFAULT_STREAM_LENGTH = 2;
+	private static final int PICK_LOCATION_REQUEST = 0;
+	private static final String TIME_PICKER = "timePicker";
 
 	private Button buttonFromDate;
 	private Button buttonFromTime;
@@ -50,15 +45,131 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private CheckBox checkBoxFrom;
 	private CheckBox checkBoxTo;
 
+	private String datePattern;
+	private Calendar from;
+
 	private ViewGroup layoutFrom;
 	private ViewGroup layoutTo;
 
-	private ProgressBar locationProgressBar;
-	private TextView address;
 	private Button locationMap;
+	private ProgressBar locationProgressBar;
+
+	private Address mAddress;
+	private Handler mHandler;
+	private Location mLocation;
+	private TextView textViewAddress;
+
+	private String timePattern;
+	private Calendar to;
 	private ToggleButton toggleLocation;
 
-	private Handler mHandler;
+	private void collectStreamData() {
+		StreamData data = StreamData.getInstance();
+		data.setStartDate(from.getTime().getTime());
+		if (checkBoxTo.isChecked()) {
+			data.setEndDate(to.getTime().getTime());
+		}
+		if (isLocationEnabled()) {
+			if (mAddress != null) {
+				data.setAddress(formatAddress(mAddress));
+				data.setLatitude(mAddress.getLatitude());
+				data.setLongitude(mAddress.getLongitude());
+			} else if (mLocation != null) {
+				data.setLatitude(mLocation.getLatitude());
+				data.setLongitude(mLocation.getLongitude());
+			}
+		}
+	}
+
+	/**
+	 * Format the first line of address (if available), city, and country name.
+	 * 
+	 * @param address
+	 * @return
+	 */
+	private String formatAddress(Address address) {
+		String addressText = String.format("%s, %s, %s", address
+				.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+				address.getLocality(), address.getCountryName());
+		return addressText;
+	}
+
+	@Override
+	public Handler getHandler() {
+		return mHandler;
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PICK_LOCATION_REQUEST) {
+			if (resultCode == RESULT_OK) {
+				// A location was picked
+
+				Address address = data
+						.getParcelableExtra(LocationConstants.ADDRESS);
+				if (address == null) {
+					Location location = data
+							.getParcelableExtra(LocationConstants.LOCATION);
+					doReverseGeocoding(location);
+				} else {
+					updateAddress(address);
+				}
+
+			} else {
+				// No location was picked.
+				// Pick the current location again.
+				super.setLocationEnabled(true);
+			}
+		}
+	}
+
+	public void onClickCheckBoxFrom(View v) {
+		boolean checked = checkBoxFrom.isChecked();
+		Utils.setEnabled(checked, layoutFrom, checkBoxFrom.getId());
+		checkBoxTo.setEnabled(checked);
+		if (!checked) {
+			checkBoxTo.setChecked(checked);
+			onClickCheckBoxTo(null);
+		}
+	}
+
+	public void onClickCheckBoxTo(View v) {
+		boolean checked = checkBoxTo.isChecked();
+		Utils.setEnabled(checked, layoutTo, checkBoxTo.getId());
+	}
+
+	public void onClickFinish(View v) {
+		collectStreamData();
+	}
+
+	public void onClickFromDate(View v) {
+		showDatePickerDialog(from);
+	}
+
+	public void onClickFromTime(View v) {
+		showTimePickerDialog(from);
+	}
+
+	public void onClickLocationMap(View v) {
+		super.setLocationEnabled(false);
+
+		Intent intent = new Intent();
+		intent.setClassName(this,
+				"com.glue.client.android.location.LocationPickerMapActivity");
+		startActivityForResult(intent, PICK_LOCATION_REQUEST);
+	}
+
+	public void onClickToDate(View v) {
+		showDatePickerDialog(to);
+	}
+
+	public void onClickToggle(View v) {
+		// Switch state
+		setLocationEnabled(toggleLocation.isChecked());
+	}
+
+	public void onClickToTime(View v) {
+		showTimePickerDialog(to);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +204,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 		// Location section
 		locationProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
-		address = (TextView) findViewById(R.id.address);
+		textViewAddress = (TextView) findViewById(R.id.address);
 		locationMap = (Button) findViewById(R.id.locationMapButton);
 		toggleLocation = (ToggleButton) findViewById(R.id.toggleButton1);
 
@@ -109,12 +220,12 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 					switch (msg.what) {
 					case LocationConstants.UPDATE_ADDRESS:
 						Address address = (Address) msg.obj;
-						updateAddressTextView(address);
+						updateAddress(address);
 						break;
 
 					case LocationConstants.UPDATE_LATLNG:
 						Location location = (Location) msg.obj;
-						updateAddressTextView(location);
+						updateLocation(location);
 
 						if (!isGeocoderAvailable()
 						/* || !isReverseGeocodingEnabled() */) {
@@ -126,7 +237,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 					case LocationConstants.ADDRESS_NOT_FOUND:
 						Location loc = (Location) msg.obj;
-						updateAddressTextView(loc);
+						updateLocation(loc);
 
 						Toast.makeText(CreateStreamLocationActivity.this,
 								getString(R.string.address_not_available),
@@ -142,71 +253,39 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		setLocationEnabled(true);
 	}
 
-	private void updateAddressTextView(Address address) {
-		String text = formatAddress(address);
-		updateAddressTextView(text);
-	}
-
-	private void updateAddressTextView(Location location) {
-		String text = "Lat: " + location.getLatitude() + ", Long: "
-				+ location.getLongitude();
-		updateAddressTextView(text);
-	}
-
-	private void updateAddressTextView(String text) {
-		address.setText(text);
-		address.setVisibility(View.VISIBLE);
-		locationProgressBar.setVisibility(View.GONE);
-	}
-
-	/**
-	 * Format the first line of address (if available), city, and country name.
-	 * 
-	 * @param address
-	 * @return
-	 */
-	private String formatAddress(Address address) {
-		String addressText = String.format("%s, %s, %s", address
-				.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-				address.getLocality(), address.getCountryName());
-		return addressText;
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_create_stream_location, menu);
 		return true;
 	}
 
-	public void onClickFromDate(View v) {
-		showDatePickerDialog(from);
+	@Override
+	public void onTimeSet(DialogFragment dialog) {
+		// One of both Calendar instances has changed
+		// Refresh all the Date & Time text views
+
+		buttonFromDate.setText(DateFormat.format(datePattern, from));
+		buttonFromTime.setText(DateFormat.format(timePattern, from));
+		buttonToDate.setText(DateFormat.format(datePattern, to));
+		buttonToTime.setText(DateFormat.format(timePattern, to));
 	}
 
-	public void onClickFromTime(View v) {
-		showTimePickerDialog(from);
-	}
+	@Override
+	protected void setLocationEnabled(boolean b) {
+		super.setLocationEnabled(b);
 
-	public void onClickToDate(View v) {
-		showDatePickerDialog(to);
-	}
-
-	public void onClickToTime(View v) {
-		showTimePickerDialog(to);
-	}
-
-	public void onClickCheckBoxFrom(View v) {
-		boolean checked = checkBoxFrom.isChecked();
-		Utils.setEnabled(checked, layoutFrom, checkBoxFrom.getId());
-		checkBoxTo.setEnabled(checked);
-		if (!checked) {
-			checkBoxTo.setChecked(checked);
-			onClickCheckBoxTo(null);
+		if (isLocationEnabled()) {
+			// Switch on
+			locationProgressBar.setVisibility(View.VISIBLE);
+			textViewAddress.setText(R.string.unknown);
+			textViewAddress.setVisibility(View.INVISIBLE);
+		} else {
+			// Switch off
+			locationProgressBar.setVisibility(View.GONE);
+			textViewAddress.setText(R.string.none);
+			textViewAddress.setVisibility(View.VISIBLE);
 		}
-	}
-
-	public void onClickCheckBoxTo(View v) {
-		boolean checked = checkBoxTo.isChecked();
-		Utils.setEnabled(checked, layoutTo, checkBoxTo.getId());
+		locationMap.setEnabled(isLocationEnabled());
 	}
 
 	/**
@@ -231,78 +310,22 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		newFragment.show(getSupportFragmentManager(), TIME_PICKER);
 	}
 
-	@Override
-	public void onTimeSet(DialogFragment dialog) {
-		// One of both Calendar instances has changed
-		// Refresh all the Date & Time text views
-
-		buttonFromDate.setText(DateFormat.format(datePattern, from));
-		buttonFromTime.setText(DateFormat.format(timePattern, from));
-		buttonToDate.setText(DateFormat.format(datePattern, to));
-		buttonToTime.setText(DateFormat.format(timePattern, to));
+	private void updateAddress(Address address) {
+		mAddress = address;
+		String text = formatAddress(address);
+		updateAddressTextView(text);
 	}
 
-	@Override
-	public Handler getHandler() {
-		return mHandler;
+	private void updateAddressTextView(String text) {
+		textViewAddress.setText(text);
+		textViewAddress.setVisibility(View.VISIBLE);
+		locationProgressBar.setVisibility(View.GONE);
 	}
 
-	@Override
-	protected void setLocationEnabled(boolean b) {
-		super.setLocationEnabled(b);
-
-		if (isLocationEnabled()) {
-			// Switch on
-			locationProgressBar.setVisibility(View.VISIBLE);
-			address.setText(R.string.unknown);
-			address.setVisibility(View.INVISIBLE);
-		} else {
-			// Switch off
-			locationProgressBar.setVisibility(View.GONE);
-			address.setText(R.string.none);
-			address.setVisibility(View.VISIBLE);
-		}
-		locationMap.setEnabled(isLocationEnabled());
-	}
-
-	public void onClickFinish(View v) {
-		// TODO
-	}
-
-	public void onClickLocationMap(View v) {
-		super.setLocationEnabled(false);
-
-		Intent intent = new Intent();
-		intent.setClassName(this,
-				"com.glue.client.android.location.LocationPickerMapActivity");
-		startActivityForResult(intent, PICK_LOCATION_REQUEST);
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PICK_LOCATION_REQUEST) {
-			if (resultCode == RESULT_OK) {
-				// A location was picked
-
-				Address address = data
-						.getParcelableExtra(LocationConstants.ADDRESS);
-				if (address == null) {
-					Location location = data
-							.getParcelableExtra(LocationConstants.LOCATION);
-					doReverseGeocoding(location);
-				} else {
-					updateAddressTextView(address);
-				}
-
-			} else {
-				// No location was picked.
-				// Pick the current location again.
-				super.setLocationEnabled(true);
-			}
-		}
-	}
-
-	public void onClickToggle(View v) {
-		// Switch state
-		setLocationEnabled(toggleLocation.isChecked());
+	private void updateLocation(Location location) {
+		mLocation = location;
+		String text = "Lat: " + location.getLatitude() + ", Long: "
+				+ location.getLongitude();
+		updateAddressTextView(text);
 	}
 }
