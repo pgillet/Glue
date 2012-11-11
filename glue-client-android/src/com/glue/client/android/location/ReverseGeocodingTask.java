@@ -35,9 +35,6 @@ class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
 
 		Location loc = params[0];
 		List<Address> addresses = null;
-		SimpleLocation locationMsg = new SimpleLocation();
-		locationMsg.setLatitude(loc.getLatitude());
-		locationMsg.setLongitude(loc.getLongitude());
 
 		try {
 			// Call the synchronous getFromLocation() method by passing in
@@ -50,20 +47,18 @@ class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
 			// Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
 			// .sendToTarget();
 
-			Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS,
-					locationMsg).sendToTarget();
+			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc)
+					.sendToTarget();
 		}
 		if (addresses != null && addresses.size() > 0) {
 			Address address = addresses.get(0);
-			// Format the first line of address (if available), city, and
-			// country name.
-			String addressText = String.format("%s, %s, %s", address
-					.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0)
-					: "", address.getLocality(), address.getCountryName());
+
 			// Update the UI via a message handler.
-			locationMsg.setAddressText(addressText);
-			Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS,
-					locationMsg).sendToTarget();
+			Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS, address)
+					.sendToTarget();
+		} else {
+			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc)
+					.sendToTarget();
 		}
 		return null;
 	}

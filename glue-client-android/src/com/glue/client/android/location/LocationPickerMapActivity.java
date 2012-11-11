@@ -26,7 +26,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,6 +42,46 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class LocationPickerMapActivity extends MapActivity {
+
+	/**
+	 * The basic component of SingleItemizedOverlay.
+	 */
+	private class AddressedOverlayItem extends OverlayItem {
+
+		private Address address;
+
+		public AddressedOverlayItem(GeoPoint point, String title, String snippet) {
+			super(point, title, snippet);
+		}
+
+		/**
+		 * @return the address
+		 */
+		public Address getAddress() {
+			return address;
+		}
+
+		public Location getPointAsLocation() {
+
+			GeoPoint p = getPoint();
+			// Constructs a new Location with a null provider
+			Location location = new Location((String) null);
+			location.setLatitude(p.getLatitudeE6() / 1E6);
+			location.setLongitude(p.getLongitudeE6() / 1E6);
+
+			return location;
+
+		}
+
+		/**
+		 * @param address
+		 *            the address to set
+		 */
+		public void setAddress(Address address) {
+			this.address = address;
+		}
+
+	}
 
 	private class DynamicGeocodingTask extends
 			AsyncTask<String, Void, List<Address>> {
@@ -175,8 +214,9 @@ public class LocationPickerMapActivity extends MapActivity {
 	}
 
 	/**
-	 * An overlay that draws a marker for the location chosen by the user,
-	 * either by searching for an address or by taping on the map view.
+	 * An overlay that maintains a single overlay item. The class draws a marker
+	 * for the location chosen by the user, either by searching for an address
+	 * or by taping on the map view.
 	 * 
 	 * For some reason, we get a NullPointerException when getting a MapView
 	 * with an ItemizedOverlay with no OverlayItems (there is no initial overlay
@@ -189,14 +229,14 @@ public class LocationPickerMapActivity extends MapActivity {
 	 * 
 	 * @author pgillet
 	 */
-	private class PinItemizedOverlay extends ItemizedOverlay {
+	private class SingleItemizedOverlay extends ItemizedOverlay {
 
 		private boolean hasOverlay;
 		private Context mContext;
 		private Handler mHandler;
 		private List<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
-		public PinItemizedOverlay(Drawable defaultMarker) {
+		public SingleItemizedOverlay(Drawable defaultMarker) {
 			super(boundCenterBottom(defaultMarker));
 			// See http://code.google.com/p/android/issues/detail?id=2035
 			populate();
@@ -205,23 +245,19 @@ public class LocationPickerMapActivity extends MapActivity {
 			// on the map view with the given latitude and longitude, and
 			// overrides the OverlayItem's snippet with it.
 			mHandler = new Handler() {
+
 				@Override
 				public void handleMessage(Message msg) {
 					switch (msg.what) {
 					case LocationConstants.UPDATE_ADDRESS:
-						SimpleLocation locationMsg = (SimpleLocation) msg.obj;
+						Address address = (Address) msg.obj;
 
-						if (locationMsg.getAddressText() != null) {
-							// Overrides the OverlayItem snippet with the
-							// address found
-							OverlayItem item = mOverlays.get(0);
-							setOverlay(new OverlayItem(item.getPoint(),
-									item.getTitle(),
-									locationMsg.getAddressText()));
+						AddressedOverlayItem item = (AddressedOverlayItem) mOverlays
+								.get(0);
+						item.setAddress(address);
 
-							// TODO refresh the dialog if it is currently
-							// showing
-						}
+						// TODO refresh the dialog if it is currently
+						// showing
 
 						break;
 					}
@@ -229,7 +265,7 @@ public class LocationPickerMapActivity extends MapActivity {
 			};
 		}
 
-		public PinItemizedOverlay(Drawable defaultMarker, Context context) {
+		public SingleItemizedOverlay(Drawable defaultMarker, Context context) {
 			this(defaultMarker);
 			mContext = context;
 		}
@@ -239,16 +275,10 @@ public class LocationPickerMapActivity extends MapActivity {
 			return mOverlays.get(i);
 		}
 
-		private void doReverseGeocoding(GeoPoint p) {
-			// Constructs a new Location with a null provider
-			Location location = new Location((String) null);
-			location.setLatitude(p.getLatitudeE6() / 1E6);
-			location.setLongitude(p.getLongitudeE6() / 1E6);
-
+		private void doReverseGeocoding(Location location) {
 			// Since the geocoding API is synchronous and may take a while. You
 			// don't want to lock up the UI thread. Invoking reverse geocoding
-			// in an
-			// AsyncTask.
+			// in an AsyncTask.
 			(new ReverseGeocodingTask(LocationPickerMapActivity.this, mHandler))
 					.execute(new Location[] { location });
 		}
@@ -269,11 +299,14 @@ public class LocationPickerMapActivity extends MapActivity {
 			}
 
 			if (togglePickLocation.isChecked()) {
-				setOverlay(new OverlayItem(p, null, "Lat: "
-						+ (p.getLatitudeE6() / 1E6) + ", Long: "
-						+ (p.getLongitudeE6() / 1E6)));
 
-				doReverseGeocoding(p);
+				AddressedOverlayItem item = new AddressedOverlayItem(p, null,
+						"Lat: " + (p.getLatitudeE6() / 1E6) + ", Long: "
+								+ (p.getLongitudeE6() / 1E6));
+
+				setOverlay(item);
+
+				doReverseGeocoding(item.getPointAsLocation());
 
 				// Set enabled the OK button
 				buttonOK.setEnabled(true);
@@ -283,10 +316,18 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		@Override
 		protected boolean onTap(int index) {
-			OverlayItem item = mOverlays.get(index);
+			AddressedOverlayItem item = (AddressedOverlayItem) mOverlays
+					.get(index);
+			if (item.getAddress() == null) {
+				// Retry
+				doReverseGeocoding(item.getPointAsLocation());
+			}
+			
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
-			dialog.setMessage(item.getSnippet());
+			Address address = item.getAddress();
+			dialog.setMessage(address != null ? formatAddress(address) : item
+					.getSnippet());
 			dialog.setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
@@ -322,7 +363,7 @@ public class LocationPickerMapActivity extends MapActivity {
 	private AddressAdapter adapter;
 
 	private Button buttonOK;
-	private PinItemizedOverlay itemizedOverlay;
+	private SingleItemizedOverlay itemizedOverlay;
 	private MapController mc;
 
 	private Handler mHandler;
@@ -343,7 +384,9 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		GeoPoint point = new GeoPoint((int) (address.getLatitude() * 1E6),
 				(int) (address.getLongitude() * 1E6));
-		OverlayItem overlayitem = new OverlayItem(point, null, addressText);
+		AddressedOverlayItem overlayitem = new AddressedOverlayItem(point,
+				null, addressText);
+		overlayitem.setAddress(address);
 
 		itemizedOverlay.setOverlay(overlayitem);
 
@@ -394,14 +437,17 @@ public class LocationPickerMapActivity extends MapActivity {
 	}
 
 	public void onClickOK(View v) {
-		OverlayItem item = itemizedOverlay.getItem(0);
+		AddressedOverlayItem item = (AddressedOverlayItem) itemizedOverlay
+				.getItem(0);
 
 		Intent data = new Intent();
-		data.putExtra(LocationConstants.LATITUDE, item.getPoint()
-				.getLatitudeE6() / 1E6);
-		data.putExtra(LocationConstants.LONGITUDE, item.getPoint()
-				.getLongitudeE6() / 1E6);
-		data.putExtra(LocationConstants.ADDRESS_TEXT, item.getSnippet());
+		Address address = item.getAddress();
+
+		if (address != null) {
+			data.putExtra(LocationConstants.ADDRESS, address);
+		} else {
+			data.putExtra(LocationConstants.LOCATION, item.getPointAsLocation());
+		}
 
 		setResult(RESULT_OK, data);
 		finish();
@@ -483,7 +529,7 @@ public class LocationPickerMapActivity extends MapActivity {
 		// Add an overlay for the location picked by the user
 		Drawable drawable = this.getResources().getDrawable(
 				R.drawable.location_place);
-		itemizedOverlay = new PinItemizedOverlay(drawable, this);
+		itemizedOverlay = new SingleItemizedOverlay(drawable, this);
 		mapOverlays.add(itemizedOverlay);
 
 		// Add current location on the map

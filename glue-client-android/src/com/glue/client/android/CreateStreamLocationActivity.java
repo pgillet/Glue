@@ -3,6 +3,8 @@ package com.glue.client.android;
 import java.util.Calendar;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +25,6 @@ import com.glue.client.android.dialog.TimeDialogListener;
 import com.glue.client.android.dialog.TimePickerFragment;
 import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.location.LocationConstants;
-import com.glue.client.android.location.SimpleLocation;
 import com.glue.client.android.utils.Utils;
 
 public class CreateStreamLocationActivity extends LocationActivity implements
@@ -54,7 +55,6 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	private ProgressBar locationProgressBar;
 	private TextView address;
-	private SimpleLocation location;
 	private Button locationMap;
 	private ToggleButton toggleLocation;
 
@@ -106,23 +106,33 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 				// The location may have be disabled just right when the handler
 				// received an update
 				if (isLocationEnabled()) {
-
-					location = (SimpleLocation) msg.obj;
 					switch (msg.what) {
 					case LocationConstants.UPDATE_ADDRESS:
-						if (location.getAddressText() == null) {
+						Address address = (Address) msg.obj;
+						updateAddressTextView(address);
+						break;
+
+					case LocationConstants.UPDATE_LATLNG:
+						Location location = (Location) msg.obj;
+						updateAddressTextView(location);
+
+						if (!isGeocoderAvailable()
+						/* || !isReverseGeocodingEnabled() */) {
 							Toast.makeText(CreateStreamLocationActivity.this,
 									getString(R.string.address_not_available),
 									Toast.LENGTH_SHORT).show();
 						}
-						updateAddressTextView();
 						break;
-					case LocationConstants.UPDATE_LATLNG:
-						if (!isGeocoderAvailable()
-						/* || !isReverseGeocodingEnabled() */) {
-							updateAddressTextView();
-						}
+
+					case LocationConstants.ADDRESS_NOT_FOUND:
+						Location loc = (Location) msg.obj;
+						updateAddressTextView(loc);
+
+						Toast.makeText(CreateStreamLocationActivity.this,
+								getString(R.string.address_not_available),
+								Toast.LENGTH_SHORT).show();
 						break;
+
 					}
 				}
 			}
@@ -132,17 +142,34 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		setLocationEnabled(true);
 	}
 
-	private void updateAddressTextView() {
-		String text = null;
-		if (location.getAddressText() != null) {
-			text = location.getAddressText();
-		} else {
-			text = "Lat: " + location.getLatitude() + ", Long: "
-					+ location.getLongitude();
-		}
+	private void updateAddressTextView(Address address) {
+		String text = formatAddress(address);
+		updateAddressTextView(text);
+	}
+
+	private void updateAddressTextView(Location location) {
+		String text = "Lat: " + location.getLatitude() + ", Long: "
+				+ location.getLongitude();
+		updateAddressTextView(text);
+	}
+
+	private void updateAddressTextView(String text) {
 		address.setText(text);
 		address.setVisibility(View.VISIBLE);
 		locationProgressBar.setVisibility(View.GONE);
+	}
+
+	/**
+	 * Format the first line of address (if available), city, and country name.
+	 * 
+	 * @param address
+	 * @return
+	 */
+	private String formatAddress(Address address) {
+		String addressText = String.format("%s, %s, %s", address
+				.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+				address.getLocality(), address.getCountryName());
+		return addressText;
 	}
 
 	@Override
@@ -255,15 +282,17 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		if (requestCode == PICK_LOCATION_REQUEST) {
 			if (resultCode == RESULT_OK) {
 				// A location was picked
-				location = new SimpleLocation();
-				location.setLatitude(data.getDoubleExtra(
-						LocationConstants.LATITUDE, 0));
-				location.setLongitude(data.getDoubleExtra(
-						LocationConstants.LONGITUDE, 0));
-				location.setAddressText(data
-						.getStringExtra(LocationConstants.ADDRESS_TEXT));
 
-				updateAddressTextView();
+				Address address = data
+						.getParcelableExtra(LocationConstants.ADDRESS);
+				if (address == null) {
+					Location location = data
+							.getParcelableExtra(LocationConstants.LOCATION);
+					doReverseGeocoding(location);
+				} else {
+					updateAddressTextView(address);
+				}
+
 			} else {
 				// No location was picked.
 				// Pick the current location again.

@@ -82,7 +82,7 @@ public abstract class LocationActivity extends FragmentActivity {
 
 	private boolean reverseGeocodingEnabled = true;
 
-	private void doReverseGeocoding(Location location) {
+	protected void doReverseGeocoding(Location location) {
 		// Since the geocoding API is synchronous and may take a while. You
 		// don't want to lock up the UI thread. Invoking reverse geocoding in an
 		// AsyncTask.
@@ -341,13 +341,8 @@ public abstract class LocationActivity extends FragmentActivity {
 	private void updateUILocation(Location location) {
 		// We're sending the update to a handler which then updates the UI with
 		// the new location.
-
-		SimpleLocation locationMsg = new SimpleLocation();
-		locationMsg.setLatitude(location.getLatitude());
-		locationMsg.setLongitude(location.getLongitude());
-
-		Message.obtain(getHandler(), LocationConstants.UPDATE_LATLNG,
-				locationMsg).sendToTarget();
+		Message.obtain(getHandler(), LocationConstants.UPDATE_LATLNG, location)
+				.sendToTarget();
 
 		// Bypass reverse-geocoding only if the Geocoder service is available on
 		// the device.
