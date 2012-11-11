@@ -22,7 +22,7 @@ public interface IStream {
 	 * Tells whether this stream is public or private.
 	 * 
 	 * <p>
-	 * Only participants and guests can watch a stream.
+	 * Only participants and guests can watch a private stream.
 	 * </p>
 	 * 
 	 * @return true if public, false otherwise
