@@ -69,5 +69,6 @@
 	<string name="network_not_available">Le réseau n\'est pas disponible</string>
 	<string name="searching_for">Recherche de</string>
 	<string name="search">Rechercher</string>
+	<string name="title_activity_create_stream_summary">Créer une Stream</string>
     
 </resources>

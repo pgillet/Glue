@@ -69,6 +69,10 @@
             android:label="@string/title_activity_location_picker_map"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".CreateStreamSummaryActivity"
+            android:label="@string/title_activity_create_stream_summary" >
+        </activity>
     </application>
 
 </manifest>

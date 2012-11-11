@@ -139,6 +139,11 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	public void onClickFinish(View v) {
 		collectStreamData();
+		
+		Intent intent = new Intent();
+		intent.setClassName(this,
+				"com.glue.client.android.CreateStreamSummaryActivity");
+		startActivity(intent);
 	}
 
 	public void onClickFromDate(View v) {

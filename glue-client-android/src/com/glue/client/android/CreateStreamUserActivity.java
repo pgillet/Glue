@@ -332,6 +332,11 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	public void onClickFinish(View view) {
 		collectStreamData();
+		
+		Intent intent = new Intent();
+		intent.setClassName(this,
+				"com.glue.client.android.CreateStreamSummaryActivity");
+		startActivity(intent);
 	}
 
 	public void onClickNext(View view) {

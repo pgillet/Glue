@@ -97,25 +97,27 @@ public final class R {
     public static final class layout {
         public static final int activity_create_stream_location=0x7f030000;
         public static final int activity_create_stream_main=0x7f030001;
-        public static final int activity_create_stream_user=0x7f030002;
-        public static final int activity_item_detail=0x7f030003;
-        public static final int activity_item_list=0x7f030004;
-        public static final int activity_item_twopane=0x7f030005;
-        public static final int activity_location_picker_map=0x7f030006;
-        public static final int activity_login=0x7f030007;
-        public static final int activity_sign_up=0x7f030008;
-        public static final int address_entry=0x7f030009;
-        public static final int contact_entry=0x7f03000a;
-        public static final int fragment_item_detail=0x7f03000b;
-        public static final int separator=0x7f03000c;
+        public static final int activity_create_stream_summary=0x7f030002;
+        public static final int activity_create_stream_user=0x7f030003;
+        public static final int activity_item_detail=0x7f030004;
+        public static final int activity_item_list=0x7f030005;
+        public static final int activity_item_twopane=0x7f030006;
+        public static final int activity_location_picker_map=0x7f030007;
+        public static final int activity_login=0x7f030008;
+        public static final int activity_sign_up=0x7f030009;
+        public static final int address_entry=0x7f03000a;
+        public static final int contact_entry=0x7f03000b;
+        public static final int fragment_item_detail=0x7f03000c;
+        public static final int separator=0x7f03000d;
     }
     public static final class menu {
         public static final int activity_create_stream_location=0x7f060000;
         public static final int activity_create_stream_main=0x7f060001;
-        public static final int activity_create_stream_user=0x7f060002;
-        public static final int activity_location_picker_map=0x7f060003;
-        public static final int activity_login=0x7f060004;
-        public static final int activity_sign_up=0x7f060005;
+        public static final int activity_create_stream_summary=0x7f060002;
+        public static final int activity_create_stream_user=0x7f060003;
+        public static final int activity_location_picker_map=0x7f060004;
+        public static final int activity_login=0x7f060005;
+        public static final int activity_sign_up=0x7f060006;
     }
     public static final class string {
         public static final int address_not_available=0x7f04003f;
@@ -176,6 +178,7 @@ public final class R {
         public static final int title=0x7f040016;
         public static final int title_activity_create_stream_location=0x7f040032;
         public static final int title_activity_create_stream_main=0x7f040011;
+        public static final int title_activity_create_stream_summary=0x7f040045;
         public static final int title_activity_create_stream_user=0x7f04001d;
         public static final int title_activity_location_picker_map=0x7f040040;
         public static final int title_activity_login=0x7f040005;

@@ -52,11 +52,11 @@
     <string name="no_participant_error">Add one participant at least</string>
     <string name="title_activity_create_stream_location">Create Stream</string>
     <string name="date_pattern">EEE yyyy-MM-dd</string>
-	<string name="time_pattern">hh:mmaa</string>
-	<string name="from">From</string>
-	<string name="to">To</string>
-	<string name="location">Location</string>
-	<string name="gps_disabled">GPS is disabled</string>
+    <string name="time_pattern">hh:mmaa</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="location">Location</string>
+    <string name="gps_disabled">GPS is disabled</string>
     <string name="enable_gps_dialog">Show location settings?</string>
     <string name="ok">OK</string>
     <string name="unknown">--Unknown--</string>
@@ -69,5 +69,6 @@
     <string name="network_not_available">The network is not available</string>
     <string name="searching_for">Searching for</string>
     <string name="search">Search</string>
+    <string name="title_activity_create_stream_summary">Create Stream</string>
 
 </resources>
