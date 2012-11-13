@@ -1,9 +1,9 @@
 package com.glue.api;
 
+import com.glue.IStream;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.api.model.GlueException;
-import com.glue.api.model.Stream;
 
 public class CreateStreamTest {
 
@@ -18,7 +18,7 @@ public class CreateStreamTest {
 
 		// Create a stream
 		try {
-			Stream myFirstStream = glue.createStream("Mon premier test!!!");
+			IStream myFirstStream = glue.createStream("Mon premier test!!!");
 			System.out.println(myFirstStream.getTitle());
 		} catch (GlueException e) {
 			// TODO Auto-generated catch block

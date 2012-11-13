@@ -13,11 +13,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.glue.IStream;
 import com.glue.api.conf.Configuration;
 import com.glue.api.json.JSONObjectFactory;
 import com.glue.api.json.JSONObjectFactoryImpl;
 import com.glue.api.model.GlueException;
-import com.glue.api.model.Stream;
 
 public class GlueImpl implements Glue {
 
@@ -61,7 +61,7 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public Stream createStream(String title) throws GlueException {
+	public IStream createStream(String title) throws GlueException {
 		ensureAuthorizationEnabled();
 		ArrayList<NameValuePair> donnees = new ArrayList<NameValuePair>();
 		donnees.add(new BasicNameValuePair("title", title));
