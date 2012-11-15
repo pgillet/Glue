@@ -1,7 +1,5 @@
 package com.glue.client.android;
 
-import com.glue.client.android.dummy.DummyContent;
-
 import android.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +8,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ItemListFragment extends ListFragment {
+import com.glue.client.android.dummy.DummyContent;
+
+public class StreamDetailsListFragment extends ListFragment {
 
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
@@ -28,14 +28,13 @@ public class ItemListFragment extends ListFragment {
         }
     };
 
-    public ItemListFragment() {
+    public StreamDetailsListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-        		/* R.layout.simple_list_item_activated_1 has been introduced in API Level 11 only */
                 R.layout.simple_list_item_1,
                 R.id.text1,
                 DummyContent.ITEMS));

@@ -1,9 +1,9 @@
 package com.glue.client.android;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +15,8 @@ import com.glue.api.application.GlueFactory;
 import com.glue.api.model.GlueException;
 import com.glue.client.android.stream.StreamData;
 
-public class CreateStreamSummaryActivity extends Activity {
+public class CreateStreamSummaryActivity extends FragmentActivity implements
+		StreamDetailsListFragment.Callbacks {
 
 	private TextView output;
 
@@ -44,8 +45,8 @@ public class CreateStreamSummaryActivity extends Activity {
 		private final ProgressDialog dialog = new ProgressDialog(
 				CreateStreamSummaryActivity.this);
 		private Glue glue = new GlueFactory().getInstance();
-		
-		public CreateStreamTask(){
+
+		public CreateStreamTask() {
 			super();
 		}
 
@@ -84,5 +85,10 @@ public class CreateStreamSummaryActivity extends Activity {
 
 			CreateStreamSummaryActivity.this.output.setText(result);
 		}
+	}
+
+	@Override
+	public void onItemSelected(String id) {
+		// TODO Auto-generated method stub
 	}
 }
