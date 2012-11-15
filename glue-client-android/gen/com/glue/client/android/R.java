@@ -18,21 +18,23 @@ public final class R {
         public static final int device_access_location_found=0x7f020004;
         public static final int device_access_location_off=0x7f020005;
         public static final int device_access_not_secure=0x7f020006;
-        public static final int device_access_secure=0x7f020007;
-        public static final int ic_action_search=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int location_map=0x7f02000a;
-        public static final int location_pick_selector=0x7f02000b;
-        public static final int location_place=0x7f02000c;
-        public static final int location_place_dark=0x7f02000d;
-        public static final int location_selector=0x7f02000e;
-        public static final int navigation_accept=0x7f02000f;
-        public static final int navigation_next_item=0x7f020010;
-        public static final int participation_type_selector=0x7f020011;
-        public static final int privacy_selector=0x7f020012;
-        public static final int social_add_group=0x7f020013;
-        public static final int social_add_person=0x7f020014;
-        public static final int social_group=0x7f020015;
+        public static final int device_access_not_secure_holo_dark=0x7f020007;
+        public static final int device_access_secure=0x7f020008;
+        public static final int device_access_secure_holo_dark=0x7f020009;
+        public static final int ic_action_search=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int location_map=0x7f02000c;
+        public static final int location_pick_selector=0x7f02000d;
+        public static final int location_place=0x7f02000e;
+        public static final int location_place_dark=0x7f02000f;
+        public static final int location_selector=0x7f020010;
+        public static final int navigation_accept=0x7f020011;
+        public static final int navigation_next_item=0x7f020012;
+        public static final int participation_type_selector=0x7f020013;
+        public static final int privacy_selector=0x7f020014;
+        public static final int social_add_group=0x7f020015;
+        public static final int social_add_person=0x7f020016;
+        public static final int social_group=0x7f020017;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070021;
@@ -63,7 +65,9 @@ public final class R {
         public static final int imageView1=0x7f070031;
         public static final int item_detail=0x7f070039;
         public static final int item_detail_container=0x7f07002b;
+        public static final int item_label=0x7f07003a;
         public static final int item_list=0x7f07001d;
+        public static final int item_value=0x7f07003b;
         public static final int layout01=0x7f070017;
         public static final int layout02=0x7f070022;
         public static final int layout03=0x7f07001a;
@@ -79,7 +83,7 @@ public final class R {
         public static final int layoutTo=0x7f070009;
         public static final int locationMapButton=0x7f070011;
         public static final int mapview=0x7f07002c;
-        public static final int menu_settings=0x7f07003a;
+        public static final int menu_settings=0x7f07003c;
         public static final int output=0x7f07001e;
         public static final int progressBar1=0x7f07000f;
         public static final int rootLayout=0x7f070000;
@@ -109,7 +113,8 @@ public final class R {
         public static final int address_entry=0x7f03000a;
         public static final int contact_entry=0x7f03000b;
         public static final int fragment_item_detail=0x7f03000c;
-        public static final int separator=0x7f03000d;
+        public static final int fragment_stream_item=0x7f03000d;
+        public static final int separator=0x7f03000e;
     }
     public static final class menu {
         public static final int activity_create_stream_location=0x7f060000;

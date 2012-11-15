@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/item_list"
-        android:name="com.glue.client.android.StreamDetailsListFragment"
+        android:name="com.glue.client.android.StreamDetailListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CreateStreamSummaryActivity" />

@@ -16,7 +16,7 @@ import com.glue.api.model.GlueException;
 import com.glue.client.android.stream.StreamData;
 
 public class CreateStreamSummaryActivity extends FragmentActivity implements
-		StreamDetailsListFragment.Callbacks {
+		StreamDetailListFragment.Callbacks {
 
 	private TextView output;
 
@@ -89,6 +89,10 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements
 
 	@Override
 	public void onItemSelected(String id) {
-		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public IStream getStreamData() {
+		return StreamData.getInstance();
 	}
 }
