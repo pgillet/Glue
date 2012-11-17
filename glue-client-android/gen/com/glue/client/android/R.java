@@ -83,12 +83,13 @@ public final class R {
         public static final int layoutTo=0x7f070009;
         public static final int locationMapButton=0x7f070011;
         public static final int mapview=0x7f07002c;
-        public static final int menu_settings=0x7f07003c;
+        public static final int menu_settings=0x7f07003d;
         public static final int output=0x7f07001e;
         public static final int progressBar1=0x7f07000f;
         public static final int rootLayout=0x7f070000;
         public static final int scrollView=0x7f070001;
         public static final int searchLayout=0x7f07002d;
+        public static final int separator=0x7f07003c;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070008;
         public static final int textView3=0x7f07000d;
