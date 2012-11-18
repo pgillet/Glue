@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/action_search"
+            android:drawableLeft="@drawable/holo_light_action_search"
             android:ems="10"
             android:hint="@string/search"
             android:inputType="text" />
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:drawableRight="@drawable/action_search"
+            android:drawableRight="@drawable/holo_light_action_search"
             android:onClick="onClickSearch"
             android:text="" />
 
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:drawableRight="@drawable/navigation_accept"
+            android:drawableRight="@drawable/holo_light_navigation_accept"
             android:enabled="false"
             android:onClick="onClickOK"
             android:text="" />

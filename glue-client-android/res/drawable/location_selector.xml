@@ -1,6 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:drawable="@drawable/device_access_location_found" android:state_checked="true"/>
-    <item android:drawable="@drawable/device_access_location_off" android:state_checked="false"/>
+    <item android:drawable="@drawable/holo_light_device_access_location_found" android:state_checked="true"/>
+    <item android:drawable="@drawable/holo_light_device_access_location_off" android:state_checked="false"/>
 
 </selector>

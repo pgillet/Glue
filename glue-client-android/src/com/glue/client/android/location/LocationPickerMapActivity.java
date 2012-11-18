@@ -400,7 +400,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		// Reset the text view
 		tv.setText(null);
-		tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.action_search, 0,
+		tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.holo_light_action_search, 0,
 				0, 0);
 
 		// Set enabled the OK button
@@ -528,7 +528,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		// Add an overlay for the location picked by the user
 		Drawable drawable = this.getResources().getDrawable(
-				R.drawable.location_place);
+				R.drawable.holo_light_location_place);
 		itemizedOverlay = new SingleItemizedOverlay(drawable, this);
 		mapOverlays.add(itemizedOverlay);
 

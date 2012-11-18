@@ -103,7 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/navigation_accept"
+            android:drawableRight="@drawable/holo_light_navigation_accept"
             android:onClick="onClickFinish"
             android:text="@string/finish" />
 
@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/navigation_next_item"
+            android:drawableRight="@drawable/holo_light_navigation_next_item"
             android:onClick="onClickNext"
             android:text="@string/next" />
     </LinearLayout>
