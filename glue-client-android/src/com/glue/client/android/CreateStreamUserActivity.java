@@ -82,7 +82,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		populateContactList();
 
 		textView.setOnItemClickListener(this);
-		
+
 		editTextSecretQuestion = (TextView) findViewById(R.id.editText1);
 		editTextSecretAnswer = (TextView) findViewById(R.id.editText2);
 		checkBoxRequest = (CheckBox) findViewById(R.id.checkBox1);
@@ -299,12 +299,6 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 
 	@Override
 	public void onDialogPositiveClick(DialogFragment dialog) {
-		// Nothing to do
-	}
-
-	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
-
 		RemoveParticipantDialog f = (RemoveParticipantDialog) dialog;
 		int id = f.getEmailAddress().hashCode();
 
@@ -317,22 +311,28 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		}
 	}
 
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// Nothing to do
+	}
+
 	public void onClickHelp(View view) {
 		// TODO
 	}
-	
+
 	private void collectStreamData() {
 		StreamData data = StreamData.getInstance();
 		data.setOpen(participationType);
 		data.setInvitedParticipants(new ArrayList<String>(participants.keySet()));
-		data.setSharedSecretQuestion(editTextSecretQuestion.getText().toString());
+		data.setSharedSecretQuestion(editTextSecretQuestion.getText()
+				.toString());
 		data.setSharedSecretAnswer(editTextSecretAnswer.getText().toString());
 		data.setShouldRequestToParticipate(checkBoxRequest.isChecked());
 	}
 
 	public void onClickFinish(View view) {
 		collectStreamData();
-		
+
 		Intent intent = new Intent();
 		intent.setClassName(this,
 				"com.glue.client.android.CreateStreamSummaryActivity");
@@ -346,7 +346,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		collectStreamData();
 
 		Intent intent = new Intent();
