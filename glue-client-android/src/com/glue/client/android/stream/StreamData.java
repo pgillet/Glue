@@ -12,7 +12,7 @@ public class StreamData implements IStream {
 
 	private boolean mPublic;
 
-	private boolean open;
+	private boolean open = true;
 
 	private List<String> guests;
 

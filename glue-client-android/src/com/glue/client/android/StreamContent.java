@@ -62,6 +62,10 @@ public class StreamContent {
 						: R.drawable.holo_dark_device_access_secure,
 				stream.isPublic() ? R.string.togglePublic
 						: R.string.togglePrivate);
+		addItem(R.string.participation_type,
+				stream.isOpen() ? R.drawable.holo_dark_social_add_group
+						: R.drawable.holo_dark_social_group,
+				stream.isOpen() ? R.string.open : R.string.closed);
 
 	}
 
