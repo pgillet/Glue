@@ -1,6 +1,7 @@
 package com.glue.client.android.stream;
 
 import java.util.List;
+import java.util.Map;
 
 import com.glue.IStream;
 
@@ -16,7 +17,7 @@ public class StreamData implements IStream {
 
 	private List<String> guests;
 
-	private List<String> invitedParticipants;
+	private Map<String, String> invitedParticipants;
 
 	private String sharedSecretQuestion;
 
@@ -121,7 +122,7 @@ public class StreamData implements IStream {
 	/**
 	 * @return the invitedParticipants
 	 */
-	public List<String> getInvitedParticipants() {
+	public Map<String, String> getInvitedParticipants() {
 		return invitedParticipants;
 	}
 
@@ -129,7 +130,7 @@ public class StreamData implements IStream {
 	 * @param invitedParticipants
 	 *            the invitedParticipants to set
 	 */
-	public void setInvitedParticipants(List<String> invitedParticipants) {
+	public void setInvitedParticipants(Map<String, String> invitedParticipants) {
 		this.invitedParticipants = invitedParticipants;
 	}
 

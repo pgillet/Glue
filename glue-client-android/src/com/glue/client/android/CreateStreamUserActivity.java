@@ -1,6 +1,7 @@
 package com.glue.client.android;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
@@ -323,7 +324,14 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	private void collectStreamData() {
 		StreamData data = StreamData.getInstance();
 		data.setOpen(participationType);
-		data.setInvitedParticipants(new ArrayList<String>(participants.keySet()));
+
+		// Convert the Bundle to a Map
+		Map<String, String> participantsAsMap = new HashMap<String, String>();
+		for (String key : participants.keySet()) {
+			participantsAsMap.put(key, participants.getString(key));
+		}
+		data.setInvitedParticipants(participantsAsMap);
+
 		data.setSharedSecretQuestion(editTextSecretQuestion.getText()
 				.toString());
 		data.setSharedSecretAnswer(editTextSecretAnswer.getText().toString());

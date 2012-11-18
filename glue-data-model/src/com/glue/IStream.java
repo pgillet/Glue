@@ -1,6 +1,7 @@
 package com.glue;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IStream {
 
@@ -49,12 +50,12 @@ public interface IStream {
 	List<String> getGuests();
 
 	/**
-	 * Returns a list of the email addresses of the persons invited to
-	 * participate to this stream.
+	 * Returns a map that maps the email addresses of the persons invited to
+	 * participate to this stream to their names.
 	 * 
-	 * @return a List of String, or an empty list if none.
+	 * @return a Map that maps Strings to Strings, or an empty Map if none.
 	 */
-	List<String> getInvitedParticipants();
+	Map<String, String> getInvitedParticipants();
 
 	/**
 	 * Returns the shared secret question.

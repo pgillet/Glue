@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/item_label"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".StreamDetailListFragment" />
+
+    <com.glue.client.android.view.FlowLayout
+                android:id="@+id/item_map_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+</LinearLayout>

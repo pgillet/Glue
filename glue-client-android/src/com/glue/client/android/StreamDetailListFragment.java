@@ -54,9 +54,7 @@ public class StreamDetailListFragment extends ListFragment {
 
 		StreamContent content = new StreamContent(getActivity(),
 				mCallbacks.getStreamData());
-		setListAdapter(new StreamItemAdapter(getActivity(),
-				R.layout.fragment_stream_item, android.R.id.text1,
-				content.getItems()));
+		setListAdapter(new StreamItemAdapter(getActivity(), content.getItems()));
 	}
 
 	@Override

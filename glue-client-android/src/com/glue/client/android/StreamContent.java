@@ -2,6 +2,7 @@ package com.glue.client.android;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 
@@ -9,14 +10,14 @@ import com.glue.IStream;
 
 public class StreamContent {
 
-	public static class StreamItem {
+	public static class StreamItem<T> {
 
 		private int drawableId;
 		private int labelId;
 
-		private String value;
+		private T value;
 
-		public StreamItem(int labelId, int drawableId, String value) {
+		public StreamItem(int labelId, int drawableId, T value) {
 			this.labelId = labelId;
 			this.drawableId = drawableId;
 			this.value = value;
@@ -39,14 +40,19 @@ public class StreamContent {
 		/**
 		 * @return the value
 		 */
-		public String getValue() {
+		public T getValue() {
 			return value;
 		}
+
+		public Class<T> getValueType() {
+			return (Class<T>) value.getClass();
+		}
+
 	}
 
 	private Context context;
 
-	private List<StreamItem> items = new ArrayList<StreamItem>();
+	private List<StreamItem<?>> items = new ArrayList<StreamItem<?>>();
 
 	private IStream stream;
 
@@ -67,6 +73,9 @@ public class StreamContent {
 						: R.drawable.holo_dark_social_group,
 				stream.isOpen() ? R.string.open : R.string.closed);
 
+		items.add(new StreamItem<Map<String, String>>(R.string.participants, 0,
+				stream.getInvitedParticipants()));
+
 	}
 
 	private void addItem(int labelId, int drawableId, int resId) {
@@ -74,13 +83,13 @@ public class StreamContent {
 	}
 
 	private void addItem(int labelId, int drawableId, String value) {
-		items.add(new StreamItem(labelId, drawableId, value));
+		items.add(new StreamItem<String>(labelId, drawableId, value));
 	}
 
 	/**
 	 * @return the items
 	 */
-	public List<StreamItem> getItems() {
+	public List<StreamItem<?>> getItems() {
 		return items;
 	}
 

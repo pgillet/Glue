@@ -69,6 +69,7 @@ public final class R {
         public static final int item_detail_container=0x7f07002b;
         public static final int item_label=0x7f07003a;
         public static final int item_list=0x7f07001d;
+        public static final int item_map_value=0x7f07003c;
         public static final int item_value=0x7f07003b;
         public static final int layout01=0x7f070017;
         public static final int layout02=0x7f070022;
@@ -85,13 +86,13 @@ public final class R {
         public static final int layoutTo=0x7f070009;
         public static final int locationMapButton=0x7f070011;
         public static final int mapview=0x7f07002c;
-        public static final int menu_settings=0x7f07003d;
+        public static final int menu_settings=0x7f07003e;
         public static final int output=0x7f07001e;
         public static final int progressBar1=0x7f07000f;
         public static final int rootLayout=0x7f070000;
         public static final int scrollView=0x7f070001;
         public static final int searchLayout=0x7f07002d;
-        public static final int separator=0x7f07003c;
+        public static final int separator=0x7f07003d;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070008;
         public static final int textView3=0x7f07000d;
@@ -117,7 +118,8 @@ public final class R {
         public static final int contact_entry=0x7f03000b;
         public static final int fragment_item_detail=0x7f03000c;
         public static final int fragment_stream_item=0x7f03000d;
-        public static final int separator=0x7f03000e;
+        public static final int fragment_stream_map_item=0x7f03000e;
+        public static final int separator=0x7f03000f;
     }
     public static final class menu {
         public static final int activity_create_stream_location=0x7f060000;
