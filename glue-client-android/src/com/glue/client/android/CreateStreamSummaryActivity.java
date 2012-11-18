@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.glue.IStream;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.api.model.GlueException;
 import com.glue.client.android.stream.StreamData;
+import com.glue.struct.IStream;
 
 public class CreateStreamSummaryActivity extends FragmentActivity implements
 		StreamDetailListFragment.Callbacks {

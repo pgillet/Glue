@@ -13,11 +13,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.glue.IStream;
 import com.glue.api.conf.Configuration;
 import com.glue.api.json.JSONObjectFactory;
 import com.glue.api.json.JSONObjectFactoryImpl;
 import com.glue.api.model.GlueException;
+import com.glue.struct.IStream;
 
 public class GlueImpl implements Glue {
 

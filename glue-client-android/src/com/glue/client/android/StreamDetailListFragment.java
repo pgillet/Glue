@@ -6,8 +6,8 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
-import com.glue.IStream;
 import com.glue.client.android.dummy.DummyContent;
+import com.glue.struct.IStream;
 
 public class StreamDetailListFragment extends ListFragment {
 

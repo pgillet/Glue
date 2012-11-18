@@ -3,7 +3,7 @@ package com.glue.client.android.stream;
 import java.util.List;
 import java.util.Map;
 
-import com.glue.IStream;
+import com.glue.struct.IStream;
 
 public class StreamData implements IStream {
 

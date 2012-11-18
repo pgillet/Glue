@@ -6,7 +6,7 @@ import java.util.Map;
 
 import android.content.Context;
 
-import com.glue.IStream;
+import com.glue.struct.IStream;
 
 public class StreamContent {
 

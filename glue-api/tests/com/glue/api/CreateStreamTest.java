@@ -1,9 +1,9 @@
 package com.glue.api;
 
-import com.glue.IStream;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.api.model.GlueException;
+import com.glue.struct.IStream;
 
 public class CreateStreamTest {
 

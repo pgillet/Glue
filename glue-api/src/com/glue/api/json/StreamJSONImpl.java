@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 
-import com.glue.IStream;
 import com.glue.api.external.org.json.JSONObject;
 import com.glue.api.model.GlueException;
+import com.glue.struct.IStream;
 
 public class StreamJSONImpl extends RootJSONImpl implements IStream {
 
