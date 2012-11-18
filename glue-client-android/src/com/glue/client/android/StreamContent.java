@@ -55,11 +55,11 @@ public class StreamContent {
 		this.stream = stream;
 
 		addItem(R.string.title, 0, stream.getTitle());
-		addItem(R.string.description, R.drawable.collections_labels,
+		addItem(R.string.description, R.drawable.holo_dark_collections_labels,
 				stream.getDescription());
 		addItem(R.string.privacy,
-				stream.isPublic() ? R.drawable.device_access_not_secure_holo_dark
-						: R.drawable.device_access_secure_holo_dark,
+				stream.isPublic() ? R.drawable.holo_dark_device_access_not_secure
+						: R.drawable.holo_dark_device_access_secure,
 				stream.isPublic() ? R.string.togglePublic
 						: R.string.togglePrivate);
 

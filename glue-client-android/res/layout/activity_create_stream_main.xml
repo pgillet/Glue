@@ -40,7 +40,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/collections_labels"
+                android:drawableRight="@drawable/holo_dark_collections_labels"
                 android:text="@string/description"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 

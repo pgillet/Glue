@@ -95,7 +95,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/device_access_accounts"
+                android:drawableRight="@drawable/holo_dark_device_access_accounts"
                 android:text="@string/shared_secret_question"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
