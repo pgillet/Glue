@@ -8,6 +8,7 @@
         android:name="com.glue.client.android.StreamDetailListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/layout10"
         tools:context=".CreateStreamSummaryActivity" />
 
     <LinearLayout
