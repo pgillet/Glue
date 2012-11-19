@@ -6,7 +6,6 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
-import com.glue.client.android.dummy.DummyContent;
 import com.glue.struct.IStream;
 
 public class StreamDetailListFragment extends ListFragment {
@@ -33,6 +32,7 @@ public class StreamDetailListFragment extends ListFragment {
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
 	private Callbacks mCallbacks = sDummyCallbacks;
+	private StreamContent content;
 
 	public StreamDetailListFragment() {
 	}
@@ -52,8 +52,7 @@ public class StreamDetailListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		StreamContent content = new StreamContent(getActivity(),
-				mCallbacks.getStreamData());
+		content = new StreamContent(getActivity(), mCallbacks.getStreamData());
 		setListAdapter(new StreamItemAdapter(getActivity(), content.getItems()));
 	}
 
@@ -67,7 +66,9 @@ public class StreamDetailListFragment extends ListFragment {
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		mCallbacks.onItemSelected(Integer.toString(position)); // TODO:
+																// content.getItems().get(position).id
+																// ?
 	}
 
 	@Override
