@@ -94,6 +94,21 @@ public class StreamContent {
 				stream.shouldRequestToParticipate() ? R.string.yes
 						: R.string.no);
 
+		String location = stream.getAddress();
+		if (location == null) {
+			double latitude = stream.getLatitude();
+			double longitude = stream.getLongitude();
+
+			if (latitude != 0 && longitude != 0) {
+				location = "Lat: " + latitude + ", Long: " + longitude;
+			} else {
+				location = null;
+			}
+		}
+
+		addItem(R.string.location, R.drawable.holo_dark_location_place,
+				location);
+
 	}
 
 	private void addItem(int labelId, int drawableId, int resId) {
