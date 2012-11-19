@@ -155,6 +155,7 @@ public final class R {
         public static final int network_not_available=0x7f040042;
         public static final int new_password=0x7f040010;
         public static final int next=0x7f040019;
+        public static final int no=0x7f040047;
         public static final int no_email_address=0x7f04002c;
         public static final int no_participant_error=0x7f040031;
         public static final int no_result=0x7f040041;
@@ -200,6 +201,7 @@ public final class R {
         public static final int togglePrivate=0x7f040012;
         public static final int togglePublic=0x7f040013;
         public static final int unknown=0x7f04003b;
+        public static final int yes=0x7f040046;
         public static final int your_email=0x7f04000e;
     }
     public static final class style {

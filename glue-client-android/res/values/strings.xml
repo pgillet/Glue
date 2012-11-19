@@ -70,5 +70,7 @@
     <string name="searching_for">Searching for</string>
     <string name="search">Search</string>
     <string name="title_activity_create_stream_summary">Create Stream</string>
+    <string name="yes">Yes</string>
+	<string name="no">No</string>
 
 </resources>

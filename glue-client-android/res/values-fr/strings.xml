@@ -70,5 +70,7 @@
 	<string name="searching_for">Recherche de</string>
 	<string name="search">Rechercher</string>
 	<string name="title_activity_create_stream_summary">Créer une Stream</string>
+	<string name="yes">Oui</string>
+	<string name="no">Non</string>
     
 </resources>

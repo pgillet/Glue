@@ -90,6 +90,10 @@ public class StreamContent {
 					R.drawable.holo_dark_device_access_accounts, null);
 		}
 
+		addItem(R.string.participation_request, 0,
+				stream.shouldRequestToParticipate() ? R.string.yes
+						: R.string.no);
+
 	}
 
 	private void addItem(int labelId, int drawableId, int resId) {
