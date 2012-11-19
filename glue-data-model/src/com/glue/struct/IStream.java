@@ -20,7 +20,7 @@ public interface IStream {
 	String getDescription();
 
 	/**
-	 * Tells whether this stream is public or private.
+	 * Tells whether this stream is public or private. Private by default.
 	 * 
 	 * <p>
 	 * Only participants and guests can watch a private stream.
@@ -31,7 +31,8 @@ public interface IStream {
 	boolean isPublic();
 
 	/**
-	 * Tells whether this stream is open or closed for contribution.
+	 * Tells whether this stream is open or closed for contribution. Open by
+	 * default.
 	 * 
 	 * <p>
 	 * Anyone can participate to an open stream, while only invited people can

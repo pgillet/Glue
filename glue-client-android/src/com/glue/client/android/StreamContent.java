@@ -73,8 +73,22 @@ public class StreamContent {
 						: R.drawable.holo_dark_social_group,
 				stream.isOpen() ? R.string.open : R.string.closed);
 
-		items.add(new StreamItem<Map<String, String>>(R.string.participants, 0,
-				stream.getInvitedParticipants()));
+		if (stream.getInvitedParticipants().isEmpty()) {
+			addItem(R.string.participants, 0, null);
+		} else {
+			items.add(new StreamItem<Map<String, String>>(
+					R.string.participants, 0, stream.getInvitedParticipants()));
+		}
+
+		String secretQuestion = stream.getSharedSecretQuestion();
+		if (secretQuestion != null && secretQuestion.length() > 0) {
+			addItem(R.string.shared_secret_question,
+					R.drawable.holo_dark_device_access_accounts, secretQuestion
+							+ " / " + stream.getSharedSecretAnswer());
+		} else {
+			addItem(R.string.shared_secret_question,
+					R.drawable.holo_dark_device_access_accounts, null);
+		}
 
 	}
 
@@ -83,6 +97,11 @@ public class StreamContent {
 	}
 
 	private void addItem(int labelId, int drawableId, String value) {
+
+		if (value == null || value.length() == 0) {
+			value = context.getString(R.string.none);
+		}
+
 		items.add(new StreamItem<String>(labelId, drawableId, value));
 	}
 

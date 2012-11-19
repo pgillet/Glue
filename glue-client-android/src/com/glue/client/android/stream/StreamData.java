@@ -1,5 +1,6 @@
 package com.glue.client.android.stream;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class StreamData implements IStream {
 
 	private List<String> guests;
 
-	private Map<String, String> invitedParticipants;
+	private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
 	private String sharedSecretQuestion;
 
