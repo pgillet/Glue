@@ -1,21 +1,27 @@
 package com.glue.client.android;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.glue.client.android.location.LocationActivity;
+import com.glue.client.android.location.LocationConstants;
 import com.glue.client.android.stream.StreamData;
 
-public class CreateStreamMainActivity extends Activity {
+public class CreateStreamMainActivity extends LocationActivity {
 
 	private TextView tv;
 	private TextView textViewTitle;
 	private TextView textViewDescription;
 	private ToggleButton toggleButtonPrivacy;
+	private Handler mHandler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,40 @@ public class CreateStreamMainActivity extends Activity {
 		textViewTitle = (TextView) findViewById(R.id.editText1);
 		textViewDescription = (TextView) findViewById(R.id.editText2);
 		toggleButtonPrivacy = (ToggleButton) findViewById(R.id.toggleButton1);
+		
+		// Silent mode
+		setGpsProviderAllowed(false);
+
+		// For best location accuracy and because the
+		// CreateStreamLocationActivity can be ignored, we start listening for
+		// location updates when users begin creating the stream.
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+
+				// The location may have be disabled just right when the handler
+				// received an update
+				if (isLocationEnabled()) {
+
+					StreamData data = StreamData.getInstance();
+
+					switch (msg.what) {
+					case LocationConstants.UPDATE_ADDRESS:
+						Address address = (Address) msg.obj;
+						data.setLatitude(address.getLatitude());
+						data.setLongitude(address.getLongitude());
+						data.setAddress(formatAddress(address));
+						break;
+
+					default:
+						Location location = (Location) msg.obj;
+						data.setLatitude(location.getLatitude());
+						data.setLongitude(location.getLongitude());
+						break;
+					}
+				}
+			}
+		};
 	}
 
 	@Override
@@ -48,7 +88,7 @@ public class CreateStreamMainActivity extends Activity {
 
 	public void onClickFinish(View view) {
 		collectStreamData();
-		
+
 		Intent intent = new Intent();
 		intent.setClassName(this,
 				"com.glue.client.android.CreateStreamSummaryActivity");
@@ -69,6 +109,11 @@ public class CreateStreamMainActivity extends Activity {
 		data.setTitle(textViewTitle.getText().toString());
 		data.setDescription(textViewDescription.getText().toString());
 		data.setPublic(toggleButtonPrivacy.isChecked());
+	}
+
+	@Override
+	public Handler getHandler() {
+		return mHandler;
 	}
 
 }

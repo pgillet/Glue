@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -52,13 +53,15 @@ public abstract class LocationActivity extends FragmentActivity {
 	private static final int TEN_SECONDS = 10000;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 
+	private boolean gpsProviderAllowed = true;
+
 	private final LocationListener listener = new LocationListener() {
 
 		@Override
 		public void onLocationChanged(Location location) {
 			// A new location update is received. Do something useful with it.
 			// Update the UI with the location update.
-			updateUILocation(location);
+			updateLocation(location);
 		}
 
 		@Override
@@ -94,6 +97,19 @@ public abstract class LocationActivity extends FragmentActivity {
 		Intent settingsIntent = new Intent(
 				Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		startActivity(settingsIntent);
+	}
+
+	/**
+	 * Format the first line of address (if available), city, and country name.
+	 * 
+	 * @param address
+	 * @return
+	 */
+	protected String formatAddress(Address address) {
+		String addressText = String.format("%s, %s, %s", address
+				.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+				address.getLocality(), address.getCountryName());
+		return addressText;
 	}
 
 	/**
@@ -169,6 +185,16 @@ public abstract class LocationActivity extends FragmentActivity {
 	}
 
 	/**
+	 * Tells whether the GPS provider is allowed or not for requesting location
+	 * updates. True by default.
+	 * 
+	 * @return true if allowed, false otherwise
+	 */
+	public boolean isGpsProviderAllowed() {
+		return gpsProviderAllowed;
+	}
+
+	/**
 	 * Tells whether the location is enabled or disabled.
 	 * 
 	 * @return true if enabled, false otherwise
@@ -219,8 +245,8 @@ public abstract class LocationActivity extends FragmentActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		if (isLocationEnabled()) {
+
+		if (isLocationEnabled() && isGpsProviderAllowed()) {
 
 			// This verification should be done during onStart() because the
 			// system calls this method when the user returns to the activity,
@@ -275,6 +301,14 @@ public abstract class LocationActivity extends FragmentActivity {
 	}
 
 	/**
+	 * @param gpsProviderAllowed
+	 *            the gpsProviderAllowed to set
+	 */
+	public void setGpsProviderAllowed(boolean gpsProviderAllowed) {
+		this.gpsProviderAllowed = gpsProviderAllowed;
+	}
+
+	/**
 	 * Enables (or disables) the location capabilities of this Activity.
 	 * 
 	 * @param b
@@ -305,6 +339,11 @@ public abstract class LocationActivity extends FragmentActivity {
 	 * providers are enabled and supported.
 	 */
 	protected void setup() {
+		// Get a fast fix with the last known location
+		Location lastKnownLocation = mLocationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		updateLocation(lastKnownLocation);
+
 		Location gpsLocation = null;
 		Location networkLocation = null;
 		mLocationManager.removeUpdates(listener);
@@ -318,7 +357,7 @@ public abstract class LocationActivity extends FragmentActivity {
 					LocationManager.GPS_PROVIDER, R.string.not_support_gps);
 			// Update the UI immediately if a location is obtained.
 			if (gpsLocation != null) {
-				updateUILocation(gpsLocation);
+				updateLocation(gpsLocation);
 			}
 		}
 
@@ -330,15 +369,15 @@ public abstract class LocationActivity extends FragmentActivity {
 		// and use the better one to update the UI. If only one provider
 		// returns a location, use it.
 		if (gpsLocation != null && networkLocation != null) {
-			updateUILocation(getBetterLocation(gpsLocation, networkLocation));
+			updateLocation(getBetterLocation(gpsLocation, networkLocation));
 		} else if (gpsLocation != null) {
-			updateUILocation(gpsLocation);
+			updateLocation(gpsLocation);
 		} else if (networkLocation != null) {
-			updateUILocation(networkLocation);
+			updateLocation(networkLocation);
 		}
 	}
 
-	private void updateUILocation(Location location) {
+	private void updateLocation(Location location) {
 		// We're sending the update to a handler which then updates the UI with
 		// the new location.
 		Message.obtain(getHandler(), LocationConstants.UPDATE_LATLNG, location)

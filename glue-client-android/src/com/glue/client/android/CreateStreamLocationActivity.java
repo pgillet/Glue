@@ -81,19 +81,6 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		}
 	}
 
-	/**
-	 * Format the first line of address (if available), city, and country name.
-	 * 
-	 * @param address
-	 * @return
-	 */
-	private String formatAddress(Address address) {
-		String addressText = String.format("%s, %s, %s", address
-				.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-				address.getLocality(), address.getCountryName());
-		return addressText;
-	}
-
 	@Override
 	public Handler getHandler() {
 		return mHandler;
