@@ -72,5 +72,7 @@
     <string name="title_activity_create_stream_summary">Create Stream</string>
     <string name="yes">Yes</string>
 	<string name="no">No</string>
+	<string name="start_date">Start date</string>
+	<string name="end_date">End date</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.glue.client.android.stream;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class StreamData implements IStream {
 
 	private boolean shouldRequestToParticipate;
 
-	private long startDate;
+	private long startDate = Calendar.getInstance().getTimeInMillis();
 
 	private long endDate;
 

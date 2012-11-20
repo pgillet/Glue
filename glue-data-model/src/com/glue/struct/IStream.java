@@ -82,14 +82,15 @@ public interface IStream {
 	boolean shouldRequestToParticipate();
 
 	/**
-	 * Returns the start date of this stream.
+	 * Returns the start date of this stream as UTC milliseconds from the epoch.
+	 * Should be the current date and time by default.
 	 * 
 	 * @return
 	 */
 	long getStartDate();
 
 	/**
-	 * Returns the end date of this stream.
+	 * Returns the end date of this stream as UTC milliseconds from the epoch.
 	 * 
 	 * @return
 	 */
