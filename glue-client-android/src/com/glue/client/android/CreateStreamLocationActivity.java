@@ -78,6 +78,11 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 				data.setLatitude(mLocation.getLatitude());
 				data.setLongitude(mLocation.getLongitude());
 			}
+		} else {
+			// Reset the location that has been set on CreateStreamMainActivity
+			data.setAddress(null);
+			data.setLatitude(0);
+			data.setLongitude(0);
 		}
 	}
 
@@ -126,7 +131,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	public void onClickFinish(View v) {
 		collectStreamData();
-		
+
 		Intent intent = new Intent();
 		intent.setClassName(this,
 				"com.glue.client.android.CreateStreamSummaryActivity");
