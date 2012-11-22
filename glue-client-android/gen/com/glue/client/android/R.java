@@ -208,6 +208,7 @@ public final class R {
         public static final int your_email=0x7f04000e;
     }
     public static final class style {
+        public static final int Accent=0x7f050001;
         public static final int AppTheme=0x7f050000;
     }
     public static final class styleable {

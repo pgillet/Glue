@@ -58,6 +58,13 @@ public class StreamItemAdapter extends ArrayAdapter<StreamItem<?>> {
 		}
 
 		textViewBottom.setText((String) item.getValue());
+
+		if (item.isEnabled()) {
+			textViewBottom.setTextAppearance(getContext(), R.style.Accent);
+		} else {
+			textViewBottom.setEnabled(false);
+		}
+
 		return view;
 	}
 

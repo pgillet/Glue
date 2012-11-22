@@ -15,14 +15,22 @@ public class StreamContent {
 	public static class StreamItem<T> {
 
 		private int drawableId;
-		private int labelId;
+		private boolean enabled;
 
+		private int labelId;
 		private T value;
 
 		public StreamItem(int labelId, int drawableId, T value) {
 			this.labelId = labelId;
 			this.drawableId = drawableId;
 			this.value = value;
+		}
+
+		public StreamItem(int labelId, int drawableId, T value, boolean enabled) {
+			this.labelId = labelId;
+			this.drawableId = drawableId;
+			this.value = value;
+			this.enabled = enabled;
 		}
 
 		/**
@@ -48,6 +56,13 @@ public class StreamContent {
 
 		public Class<T> getValueType() {
 			return (Class<T>) value.getClass();
+		}
+
+		/**
+		 * @return the enabled
+		 */
+		public boolean isEnabled() {
+			return enabled;
 		}
 
 	}
@@ -91,15 +106,15 @@ public class StreamContent {
 		}
 
 		// Shared secret question
+		StringBuilder secretQA = new StringBuilder();
 		String secretQuestion = stream.getSharedSecretQuestion();
 		if (secretQuestion != null && secretQuestion.length() > 0) {
-			addItem(R.string.shared_secret_question,
-					R.drawable.holo_dark_device_access_accounts, secretQuestion
-							+ " / " + stream.getSharedSecretAnswer());
-		} else {
-			addItem(R.string.shared_secret_question,
-					R.drawable.holo_dark_device_access_accounts, null);
+			secretQA.append(secretQuestion).append(" / ")
+					.append(stream.getSharedSecretAnswer());
 		}
+		addItem(R.string.shared_secret_question,
+				R.drawable.holo_dark_device_access_accounts,
+				secretQA.toString());
 
 		// Participation request
 		addItem(R.string.participation_request, 0,
@@ -119,17 +134,15 @@ public class StreamContent {
 				sb.toString());
 
 		// End date
+		sb = new StringBuilder();
 		if (stream.getEndDate() > 0) {
 			Calendar to = Calendar.getInstance();
 			to.setTimeInMillis(stream.getEndDate());
-			sb = new StringBuilder().append(DateFormat.format(datePattern, to))
-					.append(" ").append(DateFormat.format(timePattern, to));
-			addItem(R.string.end_date, R.drawable.holo_dark_device_access_time,
-					sb.toString());
-		} else {
-			addItem(R.string.end_date,
-					R.drawable.holo_dark_device_access_time, R.string.none);
+			sb.append(DateFormat.format(datePattern, to)).append(" ")
+					.append(DateFormat.format(timePattern, to));
 		}
+		addItem(R.string.end_date, R.drawable.holo_dark_device_access_time,
+				sb.toString());
 
 		// Location
 		String location = stream.getAddress();
@@ -139,8 +152,6 @@ public class StreamContent {
 
 			if (latitude != 0 && longitude != 0) {
 				location = "Lat: " + latitude + ", Long: " + longitude;
-			} else {
-				location = null;
 			}
 		}
 
@@ -155,11 +166,15 @@ public class StreamContent {
 
 	private void addItem(int labelId, int drawableId, String value) {
 
+		StreamItem<String> item = null;
+		boolean enabled = true;
 		if (value == null || value.length() == 0) {
+			enabled = false;
 			value = context.getString(R.string.none);
 		}
 
-		items.add(new StreamItem<String>(labelId, drawableId, value));
+		item = new StreamItem<String>(labelId, drawableId, value, enabled);
+		items.add(item);
 	}
 
 	/**
