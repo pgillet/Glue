@@ -1,5 +1,7 @@
 package com.glue.client.android;
 
+import java.util.Calendar;
+
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
@@ -18,15 +21,23 @@ import com.glue.struct.IStream;
 public class CreateStreamSummaryActivity extends FragmentActivity implements
 		StreamDetailListFragment.Callbacks {
 
-	private TextView output;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_stream_summary);
 
-		output = (TextView) findViewById(R.id.output);
-		Button b = (Button) findViewById(R.id.button1);
+		Button button = (Button) findViewById(R.id.button1);
+
+		Calendar rightNow = Calendar.getInstance();
+		Calendar other = Calendar.getInstance();
+		other.setTimeInMillis(StreamData.getInstance().getStartDate());
+
+		if (other.after(rightNow)) {
+			button.setText(R.string.save);
+			button.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					R.drawable.holo_light_content_save, 0);
+		}
+
 	}
 
 	@Override
@@ -83,7 +94,8 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements
 				dialog.dismiss();
 			}
 
-			CreateStreamSummaryActivity.this.output.setText(result);
+			Toast.makeText(CreateStreamSummaryActivity.this, result,
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
