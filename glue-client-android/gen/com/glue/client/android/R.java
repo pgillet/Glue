@@ -87,14 +87,15 @@ public final class R {
         public static final int layoutFrom=0x7f070004;
         public static final int layoutLocation=0x7f07000e;
         public static final int layoutTo=0x7f070009;
+        public static final int list_header_title=0x7f07003c;
         public static final int locationMapButton=0x7f070011;
         public static final int mapview=0x7f07002b;
-        public static final int menu_settings=0x7f07003d;
+        public static final int menu_settings=0x7f07003e;
         public static final int progressBar1=0x7f07000f;
         public static final int rootLayout=0x7f070000;
         public static final int scrollView=0x7f070001;
         public static final int searchLayout=0x7f07002c;
-        public static final int separator=0x7f07003c;
+        public static final int separator=0x7f07003d;
         public static final int textView1=0x7f070003;
         public static final int textView2=0x7f070008;
         public static final int textView3=0x7f07000d;
@@ -121,7 +122,8 @@ public final class R {
         public static final int fragment_item_detail=0x7f03000c;
         public static final int fragment_stream_item=0x7f03000d;
         public static final int fragment_stream_map_item=0x7f03000e;
-        public static final int separator=0x7f03000f;
+        public static final int list_header=0x7f03000f;
+        public static final int separator=0x7f030010;
     }
     public static final class menu {
         public static final int activity_create_stream_location=0x7f060000;
@@ -138,6 +140,7 @@ public final class R {
         public static final int cancel=0x7f040026;
         public static final int closed=0x7f04001f;
         public static final int closed_description=0x7f040020;
+        public static final int content=0x7f04004c;
         public static final int date_pattern=0x7f040033;
         public static final int description=0x7f040017;
         public static final int email_address_already_added=0x7f04002d;
@@ -151,6 +154,7 @@ public final class R {
         public static final int hello_world=0x7f040003;
         public static final int help=0x7f04002b;
         public static final int last_name=0x7f04000d;
+        public static final int localization=0x7f04004e;
         public static final int location=0x7f040037;
         public static final int login=0x7f040008;
         public static final int mail_address=0x7f040006;
@@ -170,6 +174,7 @@ public final class R {
         public static final int open_description=0x7f040021;
         public static final int or=0x7f04000a;
         public static final int participants=0x7f040023;
+        public static final int participation=0x7f04004d;
         public static final int participation_request=0x7f04002e;
         public static final int participation_request_text=0x7f04002f;
         public static final int participation_type=0x7f040022;

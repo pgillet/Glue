@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.glue.client.android.StreamContent.StreamItem;
+import com.glue.client.android.StreamDetailListFragment.StreamItem;
 import com.glue.client.android.view.FlowLayout;
 
 public class StreamItemAdapter extends ArrayAdapter<StreamItem<?>> {
@@ -49,7 +49,7 @@ public class StreamItemAdapter extends ArrayAdapter<StreamItem<?>> {
 		TextView textViewTop = (TextView) view.findViewById(R.id.item_label);
 		TextView textViewBottom = (TextView) view.findViewById(R.id.item_value);
 
-		textViewTop.setText(item.getLabelId());
+		textViewTop.setText(item.getTitleId());
 
 		int drawableId = item.getDrawableId();
 		if (drawableId != 0) {
@@ -76,7 +76,7 @@ public class StreamItemAdapter extends ArrayAdapter<StreamItem<?>> {
 		view = layoutInflater.inflate(R.layout.fragment_stream_map_item, null);
 
 		TextView textViewTop = (TextView) view.findViewById(R.id.item_label);
-		textViewTop.setText(item.getLabelId());
+		textViewTop.setText(item.getTitleId());
 		int drawableId = item.getDrawableId();
 		if (drawableId != 0) {
 			textViewTop.setCompoundDrawablesWithIntrinsicBounds(0, 0,

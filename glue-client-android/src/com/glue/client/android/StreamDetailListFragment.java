@@ -1,11 +1,18 @@
 package com.glue.client.android;
 
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ListView;
 
+import com.glue.client.android.widget.SeparatedListAdapter;
 import com.glue.struct.IStream;
 
 public class StreamDetailListFragment extends ListFragment {
@@ -15,6 +22,62 @@ public class StreamDetailListFragment extends ListFragment {
 		public IStream getStreamData();
 
 		public void onItemSelected(String id);
+	}
+
+	public static class StreamItem<T> {
+
+		private T caption;
+		private int drawableId;
+
+		private boolean enabled;
+		private int titleId;
+
+		public StreamItem(int titleId, int drawableId, T caption) {
+			this.titleId = titleId;
+			this.drawableId = drawableId;
+			this.caption = caption;
+		}
+
+		public StreamItem(int titleId, int drawableId, T caption,
+				boolean enabled) {
+			this.titleId = titleId;
+			this.drawableId = drawableId;
+			this.caption = caption;
+			this.enabled = enabled;
+		}
+
+		/**
+		 * @return the drawableId
+		 */
+		public int getDrawableId() {
+			return drawableId;
+		}
+
+		/**
+		 * @return the labelId
+		 */
+		public int getTitleId() {
+			return titleId;
+		}
+
+		/**
+		 * @return the value
+		 */
+		public T getValue() {
+			return caption;
+		}
+
+		public Class<T> getValueType() {
+			return (Class<T>) caption.getClass();
+		}
+
+		/**
+		 * @return the enabled
+		 */
+		public boolean isEnabled() {
+			return enabled;
+		}
+
 	}
 
 	private static Callbacks sDummyCallbacks = new Callbacks() {
@@ -27,14 +90,140 @@ public class StreamDetailListFragment extends ListFragment {
 		public void onItemSelected(String id) {
 		}
 	};
+
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
 	private Callbacks mCallbacks = sDummyCallbacks;
-	private StreamContent content;
+
+	private IStream stream;
 
 	public StreamDetailListFragment() {
+	}
+
+	private StreamItem<String> createItem(int labelId, int drawableId, int resId) {
+		return createItem(labelId, drawableId, getString(resId));
+	}
+
+	private StreamItem<String> createItem(int labelId, int drawableId,
+			String value) {
+
+		StreamItem<String> item = null;
+		boolean enabled = true;
+		if (value == null || value.length() == 0) {
+			enabled = false;
+			value = getString(R.string.none);
+		}
+
+		item = new StreamItem<String>(labelId, drawableId, value, enabled);
+
+		return item;
+	}
+
+	private List<StreamItem<?>> createSectionContent() {
+		List<StreamItem<?>> content = new LinkedList<StreamItem<?>>();
+
+		// Title
+		content.add(createItem(R.string.title, 0, stream.getTitle()));
+
+		// Description
+		content.add(createItem(R.string.description,
+				R.drawable.holo_dark_collections_labels,
+				stream.getDescription()));
+
+		// Privacy
+		StreamItem<String> privacyItem = createItem(
+				R.string.privacy,
+				stream.isPublic() ? R.drawable.holo_dark_device_access_not_secure
+						: R.drawable.holo_dark_device_access_secure,
+				stream.isPublic() ? R.string.togglePublic
+						: R.string.togglePrivate);
+		content.add(privacyItem);
+
+		return content;
+	}
+
+	private List<StreamItem<?>> createSectionLocation() {
+		List<StreamItem<?>> location = new LinkedList<StreamItem<?>>();
+
+		// Start date
+		Calendar from = Calendar.getInstance();
+		from.setTimeInMillis(stream.getStartDate());
+
+		String datePattern = getString(R.string.date_pattern);
+		String timePattern = getString(R.string.time_pattern);
+		StringBuilder sb = new StringBuilder()
+				.append(DateFormat.format(datePattern, from)).append(" ")
+				.append(DateFormat.format(timePattern, from));
+		location.add(createItem(R.string.start_date,
+				R.drawable.holo_dark_device_access_time, sb.toString()));
+
+		// End date
+		sb = new StringBuilder();
+		if (stream.getEndDate() > 0) {
+			Calendar to = Calendar.getInstance();
+			to.setTimeInMillis(stream.getEndDate());
+			sb.append(DateFormat.format(datePattern, to)).append(" ")
+					.append(DateFormat.format(timePattern, to));
+		}
+		location.add(createItem(R.string.end_date,
+				R.drawable.holo_dark_device_access_time, sb.toString()));
+
+		// Location
+		String loc = stream.getAddress();
+		if (loc == null) {
+			double latitude = stream.getLatitude();
+			double longitude = stream.getLongitude();
+
+			if (latitude != 0 && longitude != 0) {
+				loc = "Lat: " + latitude + ", Long: " + longitude;
+			}
+		}
+		location.add(createItem(R.string.location,
+				R.drawable.holo_dark_location_place, loc));
+		return location;
+	}
+
+	private List<StreamItem<?>> createSectionParticipation(IStream stream) {
+		List<StreamItem<?>> participation = new LinkedList<StreamItem<?>>();
+
+		// Participation type
+		StreamItem<String> typeItem = createItem(R.string.participation_type,
+				stream.isOpen() ? R.drawable.holo_dark_social_add_group
+						: R.drawable.holo_dark_social_group,
+				stream.isOpen() ? R.string.open : R.string.closed);
+		participation.add(typeItem);
+
+		// Participants
+		StreamItem<?> participantsItem = null;
+		if (stream.getInvitedParticipants().isEmpty()) {
+			participantsItem = createItem(R.string.participants, 0, null);
+		} else {
+			participantsItem = new StreamItem<Map<String, String>>(
+					R.string.participants, 0, stream.getInvitedParticipants());
+		}
+		participation.add(participantsItem);
+
+		// Shared secret question
+		StringBuilder secretQA = new StringBuilder();
+		String secretQuestion = stream.getSharedSecretQuestion();
+		if (secretQuestion != null && secretQuestion.length() > 0) {
+			secretQA.append(secretQuestion).append(" / ")
+					.append(stream.getSharedSecretAnswer());
+		}
+		participation.add(createItem(R.string.shared_secret_question,
+				R.drawable.holo_dark_device_access_accounts,
+				secretQA.toString()));
+
+		// Participation request
+		StreamItem<String> requestItem = createItem(
+				R.string.participation_request, 0,
+				stream.shouldRequestToParticipate() ? R.string.yes
+						: R.string.no);
+		participation.add(requestItem);
+
+		return participation;
 	}
 
 	@Override
@@ -52,8 +241,27 @@ public class StreamDetailListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		content = new StreamContent(getActivity(), mCallbacks.getStreamData());
-		setListAdapter(new StreamItemAdapter(getActivity(), content.getItems()));
+		stream = mCallbacks.getStreamData();
+
+		// create our list and custom adapter
+		SeparatedListAdapter adapter = new SeparatedListAdapter(getActivity());
+
+		// Section Content
+		List<StreamItem<?>> content = createSectionContent();
+		adapter.addSection(getString(R.string.content), new StreamItemAdapter(
+				getActivity(), content));
+
+		// Section Participation
+		List<StreamItem<?>> participation = createSectionParticipation(stream);
+		adapter.addSection(getString(R.string.participation),
+				new StreamItemAdapter(getActivity(), participation));
+
+		// Section Location
+		List<StreamItem<?>> location = createSectionLocation();
+		adapter.addSection(getString(R.string.localization),
+				new StreamItemAdapter(getActivity(), location));
+
+		setListAdapter(adapter);
 	}
 
 	@Override

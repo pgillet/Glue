@@ -76,5 +76,8 @@
 	<string name="end_date">Date de fin</string>
 	<string name="start">Démarrer</string>
 	<string name="save">Enregistrer</string>
+	<string name="content">Contenu</string>
+	<string name="participation">Participation</string>
+	<string name="localization">Localisation</string>
     
 </resources>
