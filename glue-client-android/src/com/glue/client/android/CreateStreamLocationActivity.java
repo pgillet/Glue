@@ -64,25 +64,28 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	private ToggleButton toggleLocation;
 
 	private void collectStreamData() {
+
 		StreamData data = StreamData.getInstance();
+
+		// Reset
+		data.setStartDate(0);
+		data.setEndDate(0);
+		data.setAddress(null);
+		data.setLatitude(0);
+		data.setLongitude(0);
+
+		// Populate
 		data.setStartDate(from.getTime().getTime());
 		if (checkBoxTo.isChecked()) {
 			data.setEndDate(to.getTime().getTime());
 		}
-		if (isLocationEnabled()) {
-			if (mAddress != null) {
-				data.setAddress(formatAddress(mAddress));
-				data.setLatitude(mAddress.getLatitude());
-				data.setLongitude(mAddress.getLongitude());
-			} else if (mLocation != null) {
-				data.setLatitude(mLocation.getLatitude());
-				data.setLongitude(mLocation.getLongitude());
-			}
-		} else {
-			// Reset the location that has been set on CreateStreamMainActivity
-			data.setAddress(null);
-			data.setLatitude(0);
-			data.setLongitude(0);
+		if (mAddress != null) {
+			data.setAddress(formatAddress(mAddress));
+			data.setLatitude(mAddress.getLatitude());
+			data.setLongitude(mAddress.getLongitude());
+		} else if (mLocation != null) {
+			data.setLatitude(mLocation.getLatitude());
+			data.setLongitude(mLocation.getLongitude());
 		}
 	}
 
@@ -160,6 +163,10 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 	}
 
 	public void onClickToggle(View v) {
+		// Reset
+		mLocation = null;
+		mAddress = null;
+		
 		// Switch state
 		setLocationEnabled(toggleLocation.isChecked());
 	}
