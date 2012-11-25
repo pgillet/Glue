@@ -30,7 +30,7 @@ public class LoginActivity extends Activity {
 	public void onClickLogin(View v) {
 		Intent intent = new Intent();
 		intent.setClassName("com.glue.client.android",
-				"com.glue.client.android.CreateStreamMainActivity");
+				"com.glue.client.android.MainActivity");
 		startActivity(intent);
 	}
 }

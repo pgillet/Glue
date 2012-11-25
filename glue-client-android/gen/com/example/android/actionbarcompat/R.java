@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.glue.client.android;
+package com.example.android.actionbarcompat;
 
 public final class R {
     public static final class attr {

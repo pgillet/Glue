@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_content_new"
+        android:icon="@drawable/holo_light_content_new"
+        android:showAsAction="always"
+        android:title="@string/menu_content_new"/>
+    <item
+        android:id="@+id/menu_content_import_export"
+        android:icon="@drawable/holo_light_content_import_export"
+        android:showAsAction="always"
+        android:title="@string/menu_content_import_export"/>
+    <item
+        android:id="@+id/menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/holo_light_action_search"
+        android:showAsAction="always"
+        android:title="@string/menu_search"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+
+</menu>

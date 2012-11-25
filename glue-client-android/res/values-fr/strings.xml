@@ -79,5 +79,9 @@
 	<string name="content">Contenu</string>
 	<string name="participation">Participation</string>
 	<string name="localization">Localisation</string>
+	<string name="title_activity_main">MainActivity</string>
+	<string name="menu_search">Search</string>
+    <string name="menu_content_new">Add</string>
+    <string name="menu_content_import_export">Import-Export</string>
     
 </resources>
