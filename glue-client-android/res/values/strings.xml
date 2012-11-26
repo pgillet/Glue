@@ -80,8 +80,10 @@
     <string name="participation">Participation</string>
     <string name="localization">Localization</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="menu_search">Rechercher</string>
-    <string name="menu_content_new">Ajouter</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_content_new">Add</string>
     <string name="menu_content_import_export">Import-Export</string>
+    <string name="app_label">Glue</string>
+    <string name="search_hint">Search</string>
 
 </resources>

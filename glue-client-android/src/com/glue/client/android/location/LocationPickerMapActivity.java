@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SearchRecentSuggestions;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -208,8 +210,7 @@ public class LocationPickerMapActivity extends MapActivity {
 			searching = true;
 			progressDialog = ProgressDialog.show(
 					LocationPickerMapActivity.this, null,
-					getString(R.string.searching_for) + ": " + tv.getText(),
-					true);
+					getString(R.string.searching_for) + ": " + query, true);
 		}
 	}
 
@@ -322,7 +323,7 @@ public class LocationPickerMapActivity extends MapActivity {
 				// Retry
 				doReverseGeocoding(item.getPointAsLocation());
 			}
-			
+
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			Address address = item.getAddress();
@@ -374,6 +375,8 @@ public class LocationPickerMapActivity extends MapActivity {
 
 	private AutoCompleteTextView tv;
 
+	private String query;
+
 	/**
 	 * Add a marker on the map view at the given address.
 	 * 
@@ -400,8 +403,8 @@ public class LocationPickerMapActivity extends MapActivity {
 
 		// Reset the text view
 		tv.setText(null);
-		tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.holo_light_action_search, 0,
-				0, 0);
+		tv.setCompoundDrawablesWithIntrinsicBounds(
+				R.drawable.holo_light_action_search, 0, 0, 0);
 
 		// Set enabled the OK button
 		buttonOK.setEnabled(true);
@@ -457,17 +460,11 @@ public class LocationPickerMapActivity extends MapActivity {
 		// TODO
 	}
 
-	public void onClickSearch(View v) {
-		CharSequence locationName = tv.getText();
-		if (locationName != null && locationName.length() > 0) {
-			doGeocoding(locationName.toString());
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location_picker_map);
+		handleIntent(getIntent());
 
 		tv = (AutoCompleteTextView) findViewById(R.id.editText1);
 		adapter = new AddressAdapter(this, R.layout.address_entry);
@@ -478,8 +475,7 @@ public class LocationPickerMapActivity extends MapActivity {
 
 			@Override
 			public void onClick(View v) {
-				tv.setCompoundDrawablesWithIntrinsicBounds(null, null, null,
-						null);
+				onSearchRequested();
 			}
 		});
 
@@ -556,6 +552,14 @@ public class LocationPickerMapActivity extends MapActivity {
 				case LocationConstants.UPDATE_ADDRESS:
 					Address address = (Address) msg.obj;
 					addMarker(address);
+
+					// Save the address for later suggestion
+					if (address.getMaxAddressLineIndex() > 0) {
+						saveRecentQuery(address.getAddressLine(0),
+								address.getLocality());
+					} else if (address.getLocality() != null) {
+						saveRecentQuery(address.getLocality(), null);
+					}
 					break;
 				case LocationConstants.ADDRESS_NOT_FOUND:
 					String text = (String) msg.obj;
@@ -586,5 +590,30 @@ public class LocationPickerMapActivity extends MapActivity {
 		super.onResume();
 		// Enable user's current location
 		myLocation.enableMyLocation();
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		setIntent(intent);
+		handleIntent(intent);
+	}
+
+	private void handleIntent(Intent intent) {
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			query = intent.getStringExtra(SearchManager.QUERY);
+			doGeocoding(query);
+		}
+	}
+
+	private void saveRecentQuery(String query, String line2) {
+		Intent intent = getIntent();
+
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			// String query = intent.getStringExtra(SearchManager.QUERY);
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
+					this, LocationSuggestionsProvider.AUTHORITY,
+					LocationSuggestionsProvider.MODE);
+			suggestions.saveRecentQuery(query, line2);
+		}
 	}
 }

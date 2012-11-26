@@ -83,5 +83,7 @@
 	<string name="menu_search">Search</string>
     <string name="menu_content_new">Add</string>
     <string name="menu_content_import_export">Import-Export</string>
+    <string name="app_label">Glue</string>
+    <string name="search_hint">Rechercher</string>
     
 </resources>
