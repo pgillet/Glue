@@ -1,4 +1,4 @@
-package com.glue.operations;
+package com.glue.api.operations;
 
 import java.util.Map;
 import java.util.Set;

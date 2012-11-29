@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.glue.struct.impl.StreamDTO;
+import com.glue.struct.impl.dto.StreamDTO;
 
 public class StreamDAO {
 
@@ -28,7 +28,7 @@ public class StreamDAO {
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			statement = connection.prepareStatement(DBUtilities.INSERT_NEW_STREAM, Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(INSERT_NEW_STREAM, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, stream.getTitle());
 			statement.setString(2, stream.getDescription());
 			statement.setBoolean(3, stream.isPublicc());

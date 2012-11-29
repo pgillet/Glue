@@ -19,7 +19,7 @@ import org.apache.http.util.EntityUtils;
 import com.glue.api.conf.Configuration;
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
-import com.glue.struct.impl.StreamDTO;
+import com.glue.struct.impl.dto.StreamDTO;
 import com.google.gson.Gson;
 
 public class GlueImpl implements Glue {

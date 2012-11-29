@@ -1,4 +1,4 @@
-package com.glue.struct.impl;
+package com.glue.struct.impl.dto;
 
 import java.io.Serializable;
 import java.util.Calendar;

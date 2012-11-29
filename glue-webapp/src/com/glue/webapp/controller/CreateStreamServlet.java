@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.glue.struct.impl.StreamDTO;
+import com.glue.struct.impl.dto.StreamDTO;
 import com.glue.webapp.db.StreamDAO;
 import com.google.gson.Gson;
 
