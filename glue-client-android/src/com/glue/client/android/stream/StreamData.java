@@ -1,9 +1,9 @@
 package com.glue.client.android.stream;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.glue.struct.IStream;
 
@@ -13,11 +13,11 @@ public class StreamData implements IStream {
 
 	private String description;
 
-	private boolean mPublic;
+	private boolean publicc;
 
 	private boolean open = true;
 
-	private List<String> guests;
+	private Set<String> guests;
 
 	private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
@@ -27,7 +27,7 @@ public class StreamData implements IStream {
 
 	private boolean shouldRequestToParticipate;
 
-	private long startDate = Calendar.getInstance().getTimeInMillis();
+	private long startDate = new Date().getTime();
 
 	private long endDate;
 
@@ -79,16 +79,16 @@ public class StreamData implements IStream {
 	/**
 	 * @return the mPublic
 	 */
-	public boolean isPublic() {
-		return mPublic;
+	public boolean isPublicc() {
+		return publicc;
 	}
 
 	/**
 	 * @param mPublic
 	 *            the mPublic to set
 	 */
-	public void setPublic(boolean mPublic) {
-		this.mPublic = mPublic;
+	public void setPublicc(boolean mPublic) {
+		this.publicc = mPublic;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class StreamData implements IStream {
 	/**
 	 * @return the guests
 	 */
-	public List<String> getGuests() {
+	public Set<String> getGuests() {
 		return guests;
 	}
 
@@ -117,7 +117,7 @@ public class StreamData implements IStream {
 	 * @param guests
 	 *            the guests to set
 	 */
-	public void setGuests(List<String> guests) {
+	public void setGuests(Set<String> guests) {
 		this.guests = guests;
 	}
 
@@ -169,7 +169,7 @@ public class StreamData implements IStream {
 	/**
 	 * @return the shouldRequestToParticipate
 	 */
-	public boolean shouldRequestToParticipate() {
+	public boolean isShouldRequestToParticipate() {
 		return shouldRequestToParticipate;
 	}
 

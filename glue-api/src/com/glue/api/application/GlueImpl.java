@@ -2,22 +2,25 @@ package com.glue.api.application;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 
 import com.glue.api.conf.Configuration;
-import com.glue.api.json.JSONObjectFactory;
-import com.glue.api.json.JSONObjectFactoryImpl;
-import com.glue.api.model.GlueException;
+import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
+import com.glue.struct.impl.StreamDTO;
+import com.google.gson.Gson;
 
 public class GlueImpl implements Glue {
 
@@ -27,20 +30,64 @@ public class GlueImpl implements Glue {
 
 	protected transient HttpClient http;
 
-	protected JSONObjectFactory factory;
-
 	GlueImpl(Configuration conf) {
 		this.conf = conf;
 		http = new DefaultHttpClient();
-		factory = new JSONObjectFactoryImpl();
 	}
 
-	private HttpResponse post(String url, ArrayList<NameValuePair> parameters) throws GlueException {
+	protected final void ensureAuthorizationEnabled() {
+		if (false) {
+			throw new IllegalStateException("Authentication credentials are missing.");
+		}
+	}
+
+	@Override
+	public IStream createStream(String title, String description, boolean publicc, boolean open, Set<String> guests,
+			Map<String, String> invitedParticipants, String sharedSecretQuestion, String sharedSecretAnswer,
+			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
+			String address) throws GlueException {
+
+		IStream result = null;
+
+		ensureAuthorizationEnabled();
+
+		// Create Stream DTO
+		StreamDTO aStream = new StreamDTO();
+		aStream.setTitle(title);
+		aStream.setDescription(description);
+		aStream.setPublicc(publicc);
+		aStream.setOpen(open);
+		aStream.setSharedSecretQuestion(sharedSecretQuestion);
+		aStream.setSharedSecretAnswer(sharedSecretAnswer);
+		aStream.setShouldRequestToParticipate(shouldRequestToParticipate);
+		aStream.setStartDate(startDate);
+		aStream.setEndDate(endDate);
+		aStream.setLatitude(latitude);
+		aStream.setLongitude(longitude);
+		aStream.setAddress(address);
+		aStream.setGuests(guests);
+		aStream.setInvitedParticipants(invitedParticipants);
+
+		// JSON
+		Gson gson = new Gson();
+		String gsonStream = gson.toJson(aStream);
+
+		// Send it
+		HttpConnectionParams.setConnectionTimeout(http.getParams(), 10000); // Timeout
+																			// limit
 		HttpResponse response = null;
-		HttpPost httppost = new HttpPost(url);
 		try {
-			httppost.setEntity(new UrlEncodedFormEntity(parameters));
-			response = http.execute(httppost);
+			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateStream");
+			StringEntity entity = new StringEntity(gsonStream);
+			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+			post.setEntity(entity);
+			response = http.execute(post);
+			if (response.getStatusLine().getStatusCode() == 200) {
+				gsonStream = EntityUtils.toString(response.getEntity());
+				if (gsonStream != null) {
+					result = gson.fromJson(gsonStream, StreamDTO.class);
+				}
+			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,22 +98,7 @@ public class GlueImpl implements Glue {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return response;
-	}
+		return result;
 
-	protected final void ensureAuthorizationEnabled() {
-		if (false) {
-			throw new IllegalStateException("Authentication credentials are missing.");
-		}
 	}
-
-	@Override
-	public IStream createStream(String title) throws GlueException {
-		ensureAuthorizationEnabled();
-		ArrayList<NameValuePair> donnees = new ArrayList<NameValuePair>();
-		donnees.add(new BasicNameValuePair("title", title));
-		HttpResponse response = post(conf.getBaseUrl() + "streams/create.php", donnees);
-		return factory.createStream(response);
-	}
-
 }

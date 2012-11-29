@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.actionbarcompat.ActionBarActivity;
-import com.example.android.actionbarcompat.R;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -37,14 +36,12 @@ public class MainActivity extends ActionBarActivity {
 
 		case R.id.menu_content_new:
 			Intent intent = new Intent();
-			intent.setClassName("com.glue.client.android",
-					"com.glue.client.android.CreateStreamMainActivity");
+			intent.setClassName("com.glue.client.android", "com.glue.client.android.CreateStreamMainActivity");
 			startActivity(intent);
 			break;
 
 		case R.id.menu_content_import_export:
-			Toast.makeText(this, "Tapped Import-Export", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Tapped Import-Export", Toast.LENGTH_SHORT).show();
 			break;
 
 		case R.id.menu_search:

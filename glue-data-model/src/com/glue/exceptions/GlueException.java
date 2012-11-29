@@ -1,4 +1,4 @@
-package com.glue.api.model;
+package com.glue.exceptions;
 
 public class GlueException extends Exception {
 

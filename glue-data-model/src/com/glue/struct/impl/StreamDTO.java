@@ -1,5 +1,6 @@
 package com.glue.struct.impl;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +8,11 @@ import java.util.Set;
 
 import com.glue.struct.IStream;
 
-public class Stream implements IStream {
+public class StreamDTO implements IStream, Serializable {
+
+	private static final long serialVersionUID = -7751127081320950633L;
+
+	private long id;
 
 	private String title;
 
@@ -38,6 +43,21 @@ public class Stream implements IStream {
 	private String address;
 
 	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
 	 * @return the title
 	 */
 	public String getTitle() {
@@ -65,36 +85,6 @@ public class Stream implements IStream {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the mPublic
-	 */
-	public boolean isPublicc() {
-		return publicc;
-	}
-
-	/**
-	 * @param mPublic
-	 *            the mPublic to set
-	 */
-	public void setPublicc(boolean publicc) {
-		this.publicc = publicc;
-	}
-
-	/**
-	 * @return the open
-	 */
-	public boolean isOpen() {
-		return open;
-	}
-
-	/**
-	 * @param open
-	 *            the open to set
-	 */
-	public void setOpen(boolean open) {
-		this.open = open;
 	}
 
 	/**
@@ -155,21 +145,6 @@ public class Stream implements IStream {
 	 */
 	public void setSharedSecretAnswer(String sharedSecretAnswer) {
 		this.sharedSecretAnswer = sharedSecretAnswer;
-	}
-
-	/**
-	 * @return the shouldRequestToParticipate
-	 */
-	public boolean isShouldRequestToParticipate() {
-		return shouldRequestToParticipate;
-	}
-
-	/**
-	 * @param shouldRequestToParticipate
-	 *            the shouldRequestToParticipate to set
-	 */
-	public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
-		this.shouldRequestToParticipate = shouldRequestToParticipate;
 	}
 
 	/**
@@ -245,6 +220,30 @@ public class Stream implements IStream {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public boolean isPublicc() {
+		return publicc;
+	}
+
+	public void setPublicc(boolean publicc) {
+		this.publicc = publicc;
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+	public boolean isShouldRequestToParticipate() {
+		return shouldRequestToParticipate;
+	}
+
+	public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
+		this.shouldRequestToParticipate = shouldRequestToParticipate;
 	}
 
 }

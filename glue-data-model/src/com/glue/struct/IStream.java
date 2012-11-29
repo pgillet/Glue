@@ -1,7 +1,7 @@
 package com.glue.struct;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IStream {
 
@@ -28,7 +28,7 @@ public interface IStream {
 	 * 
 	 * @return true if public, false otherwise
 	 */
-	boolean isPublic();
+	boolean isPublicc();
 
 	/**
 	 * Tells whether this stream is open or closed for contribution. Open by
@@ -44,11 +44,11 @@ public interface IStream {
 	boolean isOpen();
 
 	/**
-	 * Returns a list of the email addresses of this stream's guests.
+	 * Returns a set of the email addresses of this stream's guests.
 	 * 
 	 * @return a List of String, or an empty list if none.
 	 */
-	List<String> getGuests();
+	Set<String> getGuests();
 
 	/**
 	 * Returns a map that maps the email addresses of the persons invited to
@@ -79,18 +79,18 @@ public interface IStream {
 	 * @return true if users users must request the administrator to
 	 *         participate, false otherwise
 	 */
-	boolean shouldRequestToParticipate();
+	boolean isShouldRequestToParticipate();
 
 	/**
-	 * Returns the start date of this stream as UTC milliseconds from the epoch.
-	 * Should be the current date and time by default.
+	 * Returns the start date of this stream. Should be the current date and
+	 * time by default.
 	 * 
 	 * @return
 	 */
 	long getStartDate();
 
 	/**
-	 * Returns the end date of this stream as UTC milliseconds from the epoch.
+	 * Returns the end date of this stream.
 	 * 
 	 * @return
 	 */

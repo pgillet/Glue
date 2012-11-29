@@ -32,7 +32,7 @@ public class CreateStreamMainActivity extends LocationActivity {
 		textViewTitle = (TextView) findViewById(R.id.editText1);
 		textViewDescription = (TextView) findViewById(R.id.editText2);
 		toggleButtonPrivacy = (ToggleButton) findViewById(R.id.toggleButton1);
-		
+
 		// Silent mode
 		setGpsProviderAllowed(false);
 
@@ -90,8 +90,7 @@ public class CreateStreamMainActivity extends LocationActivity {
 		collectStreamData();
 
 		Intent intent = new Intent();
-		intent.setClassName(this,
-				"com.glue.client.android.CreateStreamSummaryActivity");
+		intent.setClassName(this, "com.glue.client.android.CreateStreamSummaryActivity");
 		startActivity(intent);
 	}
 
@@ -99,8 +98,7 @@ public class CreateStreamMainActivity extends LocationActivity {
 		collectStreamData();
 
 		Intent intent = new Intent();
-		intent.setClassName("com.glue.client.android",
-				"com.glue.client.android.CreateStreamUserActivity");
+		intent.setClassName("com.glue.client.android", "com.glue.client.android.CreateStreamUserActivity");
 		startActivity(intent);
 	}
 
@@ -108,7 +106,7 @@ public class CreateStreamMainActivity extends LocationActivity {
 		StreamData data = StreamData.getInstance();
 		data.setTitle(textViewTitle.getText().toString());
 		data.setDescription(textViewDescription.getText().toString());
-		data.setPublic(toggleButtonPrivacy.isChecked());
+		data.setPublicc(toggleButtonPrivacy.isChecked());
 	}
 
 	@Override

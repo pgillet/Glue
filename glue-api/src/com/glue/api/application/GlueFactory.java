@@ -1,6 +1,6 @@
 package com.glue.api.application;
 
-import com.glue.api.conf.ConfigurationImpl;
+import com.glue.api.conf.ConfigurationDebugImpl;
 
 /**
  * A factory class for Glue.
@@ -11,7 +11,7 @@ public final class GlueFactory implements java.io.Serializable {
 
 	private static final long serialVersionUID = -4031763609960119795L;
 
-	private static final Glue SINGLETON = new GlueImpl(new ConfigurationImpl());
+	private static final Glue SINGLETON = new GlueImpl(new ConfigurationDebugImpl());
 
 	/**
 	 * Creates a GlueFactory.

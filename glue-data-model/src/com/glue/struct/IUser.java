@@ -1,11 +1,11 @@
-package com.glue.api.model;
+package com.glue.struct;
 
 /**
  * An interface representing user.
  * 
  */
 
-public interface User extends Comparable<User>, java.io.Serializable {
+public interface IUser extends Comparable<IUser>, java.io.Serializable {
 
 	/**
 	 * Returns the name of the user.

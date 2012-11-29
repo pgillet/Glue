@@ -9,17 +9,15 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
-import com.glue.api.model.GlueException;
 import com.glue.client.android.stream.StreamData;
+import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
 
-public class CreateStreamSummaryActivity extends FragmentActivity implements
-		StreamDetailListFragment.Callbacks {
+public class CreateStreamSummaryActivity extends FragmentActivity implements StreamDetailListFragment.Callbacks {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +32,7 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements
 
 		if (other.after(rightNow)) {
 			button.setText(R.string.save);
-			button.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-					R.drawable.holo_light_content_save, 0);
+			button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.holo_light_content_save, 0);
 		}
 
 	}
@@ -53,8 +50,7 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements
 
 	// AsyncTask
 	private class CreateStreamTask extends AsyncTask<String, Void, String> {
-		private final ProgressDialog dialog = new ProgressDialog(
-				CreateStreamSummaryActivity.this);
+		private final ProgressDialog dialog = new ProgressDialog(CreateStreamSummaryActivity.this);
 		private Glue glue = new GlueFactory().getInstance();
 
 		public CreateStreamTask() {
@@ -94,8 +90,7 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements
 				dialog.dismiss();
 			}
 
-			Toast.makeText(CreateStreamSummaryActivity.this, result,
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(CreateStreamSummaryActivity.this, result, Toast.LENGTH_LONG).show();
 		}
 	}
 

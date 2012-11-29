@@ -28,8 +28,7 @@ import com.glue.client.android.location.LocationConstants;
 import com.glue.client.android.stream.StreamData;
 import com.glue.client.android.utils.Utils;
 
-public class CreateStreamLocationActivity extends LocationActivity implements
-		TimeDialogListener {
+public class CreateStreamLocationActivity extends LocationActivity implements TimeDialogListener {
 
 	private static final String DATE_PICKER = "datePicker";
 	private static final int DEFAULT_STREAM_LENGTH = 2;
@@ -99,11 +98,9 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 			if (resultCode == RESULT_OK) {
 				// A location was picked
 
-				Address address = data
-						.getParcelableExtra(LocationConstants.ADDRESS);
+				Address address = data.getParcelableExtra(LocationConstants.ADDRESS);
 				if (address == null) {
-					Location location = data
-							.getParcelableExtra(LocationConstants.LOCATION);
+					Location location = data.getParcelableExtra(LocationConstants.LOCATION);
 					doReverseGeocoding(location);
 				} else {
 					updateAddress(address);
@@ -136,8 +133,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		collectStreamData();
 
 		Intent intent = new Intent();
-		intent.setClassName(this,
-				"com.glue.client.android.CreateStreamSummaryActivity");
+		intent.setClassName(this, "com.glue.client.android.CreateStreamSummaryActivity");
 		startActivity(intent);
 	}
 
@@ -153,8 +149,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		super.setLocationEnabled(false);
 
 		Intent intent = new Intent();
-		intent.setClassName(this,
-				"com.glue.client.android.location.LocationPickerMapActivity");
+		intent.setClassName(this, "com.glue.client.android.location.LocationPickerMapActivity");
 		startActivityForResult(intent, PICK_LOCATION_REQUEST);
 	}
 
@@ -166,7 +161,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 		// Reset
 		mLocation = null;
 		mAddress = null;
-		
+
 		// Switch state
 		setLocationEnabled(toggleLocation.isChecked());
 	}
@@ -234,8 +229,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 						if (!isGeocoderAvailable()
 						/* || !isReverseGeocodingEnabled() */) {
 							Toast.makeText(CreateStreamLocationActivity.this,
-									getString(R.string.address_not_available),
-									Toast.LENGTH_SHORT).show();
+									getString(R.string.address_not_available), Toast.LENGTH_SHORT).show();
 						}
 						break;
 
@@ -243,8 +237,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 						Location loc = (Location) msg.obj;
 						updateLocation(loc);
 
-						Toast.makeText(CreateStreamLocationActivity.this,
-								getString(R.string.address_not_available),
+						Toast.makeText(CreateStreamLocationActivity.this, getString(R.string.address_not_available),
 								Toast.LENGTH_SHORT).show();
 						break;
 
@@ -328,8 +321,7 @@ public class CreateStreamLocationActivity extends LocationActivity implements
 
 	private void updateLocation(Location location) {
 		mLocation = location;
-		String text = "Lat: " + location.getLatitude() + ", Long: "
-				+ location.getLongitude();
+		String text = "Lat: " + location.getLatitude() + ", Long: " + location.getLongitude();
 		updateAddressTextView(text);
 	}
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <!-- JDBC datasource -->
+    <Resource name="jdbc/gluedb" auth="Container"
+        type="javax.sql.DataSource" 
+        username="glue" 
+        password="glue"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/gluedb"
+        validationQuery="select 1"
+        maxActive="10" 
+        maxIdle="4" />
+</Context>
