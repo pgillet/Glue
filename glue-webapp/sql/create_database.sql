@@ -55,7 +55,6 @@ CREATE TABLE INVITED (
 			name VARCHAR(50) DEFAULT NULL,
 			email VARCHAR(50) NOT NULL,
             stream_id BIGINT NOT NULL,
-            guest_only BOOL NOT NULL,
             PRIMARY KEY (id),
             FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
