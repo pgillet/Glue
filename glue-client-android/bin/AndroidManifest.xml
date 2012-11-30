@@ -4,16 +4,30 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="15" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!--
+         Fine access to location requires this permission.
+         This permission implies access coarse location.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo.Light" >
+        <uses-library android:name="com.google.android.maps" />
+
+        <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
+        <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
+        <!-- android:label="@string/title_activity_login" -->
         <activity
-            android:name=".ItemListActivity"
-            android:label="@string/title_item_list" >
+            android:name=".LoginActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,11 +35,65 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ItemListActivity"
+            android:label="@string/title_item_list" >
+        </activity>
+        <activity
             android:name=".ItemDetailActivity"
             android:label="@string/title_item_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ItemListActivity" />
+        </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".CreateStreamMainActivity"
+            android:label="@string/title_activity_create_stream_main"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".CreateStreamUserActivity"
+            android:label="@string/title_activity_create_stream_user"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".CreateStreamLocationActivity"
+            android:label="@string/title_activity_create_stream_location" >
+        </activity>
+        
+        <provider android:name=".location.LocationSuggestionsProvider"
+              android:authorities="com.glue.client.android.location.LocationSuggestionsProvider" />
+        
+        <activity
+            android:name=".location.LocationPickerMapActivity"
+            android:label="@string/title_activity_location_picker_map"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".CreateStreamSummaryActivity"
+            android:label="@string/title_activity_create_stream_summary" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
