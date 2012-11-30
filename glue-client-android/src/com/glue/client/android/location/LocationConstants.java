@@ -9,5 +9,8 @@ public class LocationConstants {
 
 	public static final String LOCATION = "location";
 	public static final String ADDRESS = "address";
+	
+	public static final String LAT = "lat";
+	public static final String LONG = "long";
 
 }

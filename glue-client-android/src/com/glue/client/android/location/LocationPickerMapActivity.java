@@ -8,6 +8,7 @@ import java.util.Locale;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -539,6 +540,15 @@ public class LocationPickerMapActivity extends MapActivity {
 				if (!isSearching() && !itemizedOverlay.hasOverlay()) {
 					mc.animateTo(myLocation.getMyLocation());
 					mc.setZoom(ZOOM_LEVEL);
+
+					ContentProviderClient client = getContentResolver()
+							.acquireContentProviderClient(
+									"com.glue.client.android.location.LocationSuggestionsProvider");
+					LocationSuggestionsProvider provider = (LocationSuggestionsProvider) client
+							.getLocalContentProvider();
+					GeoPoint p = myLocation.getMyLocation();
+					provider.setMyLocation(p.getLatitudeE6() / 1E6,
+							p.getLongitudeE6() / 1E6);
 				}
 			}
 		});
@@ -616,4 +626,15 @@ public class LocationPickerMapActivity extends MapActivity {
 			suggestions.saveRecentQuery(query, line2);
 		}
 	}
+
+	/**
+	 * TODO: Clearing the Suggestion Data
+	 */
+	private void clearHistory() {
+		SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+				LocationSuggestionsProvider.AUTHORITY,
+				LocationSuggestionsProvider.MODE);
+		suggestions.clearHistory();
+	}
+
 }
