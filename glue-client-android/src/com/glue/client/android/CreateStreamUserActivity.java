@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,10 +17,13 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -38,61 +44,100 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		OnItemClickListener, RemoveParticipantDialog.NoticeDialogListener,
 		EmailPickerDialog.NoticeDialogListener {
 
-	private static final String PICK_EMAIL = "pick_email";
-	private static final String REMOVE_PARTICIPANT = "remove_participant";
+	private static final String INVALID_ADDRESS = "invalid_address";
+
+	public class InvalidAddressDialogFragment extends DialogFragment {
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			// Use the Builder class for convenient dialog construction
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle(R.string.incorrect_address)
+					.setMessage(R.string.invalid_email_address)
+					.setPositiveButton(R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// Does nothing!
+								}
+							});
+			// Create the AlertDialog object and return it
+			return builder.create();
+		}
+	}
+
 	private static final String PARTICIPANTS = "participants";
 	static final int PICK_CONTACT_REQUEST = 0;
+	private static final String PICK_EMAIL = "pick_email";
+	private static final String REMOVE_PARTICIPANT = "remove_participant";
+	private CheckBox checkBoxRequest;
+
 	private FlowLayout contactList;
-	private Bundle participants = new Bundle();
 
-	private TextView tv;
-
+	private TextView editTextSecretAnswer;
+	private TextView editTextSecretQuestion;
 	private boolean mShowInvisible;
-	private AutoCompleteTextView textView;
-	private ViewGroup vg;
+	private Bundle participants = new Bundle();
 	/**
 	 * The participation type, open or closed. Open by default.
 	 */
 	private boolean participationType = true;
-	private TextView editTextSecretQuestion;
-	private TextView editTextSecretAnswer;
-	private CheckBox checkBoxRequest;
+	private AutoCompleteTextView textView;
+	private TextView tv;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_create_stream_user);
+	private ViewGroup vg;
 
-		tv = (TextView) findViewById(R.id.textView1);
-		contactList = (FlowLayout) findViewById(R.id.contactList);
-		vg = (ViewGroup) findViewById(R.id.LinearLayout1);
-		participationType = ((ToggleButton) findViewById(R.id.toggleButton1))
-				.isChecked();
+	/**
+	 * Adds a button with the given contact name above the auto-complete text
+	 * view, and with the associated email address.
+	 * 
+	 * @param emailAddress
+	 * @param name
+	 */
+	private void addContact(final String emailAddress, final String name) {
 
-		if (savedInstanceState != null) {
-			Bundle participants = savedInstanceState.getBundle(PARTICIPANTS);
-
-			Set<String> emailAddresses = participants.keySet();
-			for (String emailAddress : emailAddresses) {
-				String name = participants.getString(emailAddress);
-				addContact(emailAddress, name);
-			}
+		if (participants.containsKey(emailAddress)) {
+			// Email address already added
+			Toast.makeText(this, R.string.email_address_already_added,
+					Toast.LENGTH_SHORT).show();
+			return;
 		}
 
-		textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_contacts);
-		populateContactList();
+		participants.putString(emailAddress, name);
 
-		textView.setOnItemClickListener(this);
+		Button button = new Button(this, null, android.R.attr.buttonStyleSmall);
+		button.setText(name != null ? name : emailAddress);
+		button.setId(emailAddress.hashCode());
 
-		editTextSecretQuestion = (TextView) findViewById(R.id.editText1);
-		editTextSecretAnswer = (TextView) findViewById(R.id.editText2);
-		checkBoxRequest = (CheckBox) findViewById(R.id.checkBox1);
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				DialogFragment newFragment = RemoveParticipantDialog
+						.newInstance(emailAddress, name);
+				newFragment.show(getSupportFragmentManager(),
+						REMOVE_PARTICIPANT);
+			}
+		});
+
+		contactList.addView(button);
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putBundle(PARTICIPANTS, participants);
+	private void collectStreamData() {
+		StreamData data = StreamData.getInstance();
+		data.setOpen(participationType);
+
+		// Convert the Bundle to a Map
+		Map<String, String> participantsAsMap = new HashMap<String, String>();
+		for (String key : participants.keySet()) {
+			participantsAsMap.put(key, participants.getString(key));
+		}
+		data.setInvitedParticipants(participantsAsMap);
+
+		data.setSharedSecretQuestion(editTextSecretQuestion.getText()
+				.toString());
+		data.setSharedSecretAnswer(editTextSecretAnswer.getText().toString());
+		data.setShouldRequestToParticipate(checkBoxRequest.isChecked());
 	}
 
 	/**
@@ -123,70 +168,12 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 				selectionArgs, sortOrder);
 	}
 
-	/**
-	 * Populate the contact list based on account currently selected in the
-	 * account spinner.
-	 */
-	private void populateContactList() {
-		// Build adapter with contact entries
-		Cursor cursor = getContacts(null);
-		String[] fields = new String[] { Data.DISPLAY_NAME, Email.ADDRESS };
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.contact_entry, cursor, fields, new int[] {
-						R.id.contactEntryDisplayName,
-						R.id.contactEntryEmailAddress });
-
-		adapter.setCursorToStringConverter(new CursorToStringConverter() {
-
-			@Override
-			public String convertToString(android.database.Cursor cursor) {
-				// Get the label for this row out of the "state" column
-				final int columnIndex = cursor
-						.getColumnIndexOrThrow(Data.DISPLAY_NAME);
-				final String str = cursor.getString(columnIndex);
-				return str;
-			}
-		});
-
-		adapter.setFilterQueryProvider(new FilterQueryProvider() {
-
-			@Override
-			public Cursor runQuery(CharSequence constraint) {
-				return getContacts(constraint.toString());
-			}
-		});
-
-		textView.setAdapter(adapter);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_create_stream_user, menu);
-		return true;
-	}
-
-	public void onClickToggle(View view) {
-		ToggleButton toggle = (ToggleButton) view;
-		participationType = toggle.isChecked();
-
-		// Set the right icon according to the type of participation
-		if (participationType) {
-			tv.setText(R.string.open_description);
-		} else {
-			tv.setText(R.string.closed_description);
-		}
-
-		// Set the enable state of some views according to the type of
-		// participation
-		Utils.setEnabled(participationType, vg, R.id.textView2, R.id.textView3,
-				R.id.contactList, R.id.layout07, R.id.layout02);
-	}
-
-	public void onClickAdd(View view) {
-		// Create an intent to "pick" a contact, as defined by the content
-		// provider URI
-		Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-		startActivityForResult(intent, PICK_CONTACT_REQUEST);
+	private boolean isValidEmail(String target) {
+		// if (target == null) {
+		// return false;
+		// } else {
+		return Patterns.EMAIL_ADDRESS.matcher(target).matches();
+		// }
 	}
 
 	@Override
@@ -245,41 +232,139 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 		}
 	}
 
-	/**
-	 * Adds a button with the given contact name above the auto-complete text
-	 * view, and with the associated email address.
-	 * 
-	 * @param emailAddress
-	 * @param name
-	 */
-	private void addContact(final String emailAddress, final String name) {
+	public void onClickAdd(View view) {
+		// Create an intent to "pick" a contact, as defined by the content
+		// provider URI
+		Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+		startActivityForResult(intent, PICK_CONTACT_REQUEST);
+	}
 
-		if (participants.containsKey(emailAddress)) {
-			// Email address already added
-			Toast.makeText(this, R.string.email_address_already_added,
+	public void onClickFinish(View view) {
+		collectStreamData();
+
+		Intent intent = new Intent();
+		intent.setClassName(this,
+				"com.glue.client.android.CreateStreamSummaryActivity");
+		startActivity(intent);
+	}
+
+	public void onClickHelp(View view) {
+		// TODO
+	}
+
+	public void onClickNext(View view) {
+		if (!participationType && participants.isEmpty()) {
+			// Participation type is closed and no participant
+			Toast.makeText(this, R.string.no_participant_error,
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		participants.putString(emailAddress, name);
+		collectStreamData();
 
-		Button button = new Button(this, null, android.R.attr.buttonStyleSmall);
-		button.setText(name);
-		button.setId(emailAddress.hashCode());
+		Intent intent = new Intent();
+		intent.setClassName("com.glue.client.android",
+				"com.glue.client.android.CreateStreamLocationActivity");
+		startActivity(intent);
+	}
 
-		button.setOnClickListener(new OnClickListener() {
+	public void onClickToggle(View view) {
+		ToggleButton toggle = (ToggleButton) view;
+		participationType = toggle.isChecked();
 
+		// Set the right icon according to the type of participation
+		if (participationType) {
+			tv.setText(R.string.open_description);
+		} else {
+			tv.setText(R.string.closed_description);
+		}
+
+		// Set the enable state of some views according to the type of
+		// participation
+		Utils.setEnabled(participationType, vg, R.id.textView2, R.id.textView3,
+				R.id.contactList, R.id.layout07, R.id.layout02);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_create_stream_user);
+
+		tv = (TextView) findViewById(R.id.textView1);
+
+		contactList = (FlowLayout) findViewById(R.id.contactList);
+		vg = (ViewGroup) findViewById(R.id.LinearLayout1);
+		participationType = ((ToggleButton) findViewById(R.id.toggleButton1))
+				.isChecked();
+
+		if (savedInstanceState != null) {
+			Bundle participants = savedInstanceState.getBundle(PARTICIPANTS);
+
+			Set<String> emailAddresses = participants.keySet();
+			for (String emailAddress : emailAddresses) {
+				String name = participants.getString(emailAddress);
+				addContact(emailAddress, name);
+			}
+		}
+
+		textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_contacts);
+		populateContactList();
+
+		textView.setOnItemClickListener(this);
+
+		textView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
-			public void onClick(View v) {
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					String str = v.getText().toString();
+					str = str.trim();
 
-				DialogFragment newFragment = RemoveParticipantDialog
-						.newInstance(emailAddress, name);
-				newFragment.show(getSupportFragmentManager(),
-						REMOVE_PARTICIPANT);
+					if (isValidEmail(str)) {
+						addContact(str, null);
+					} else {
+						DialogFragment newFragment = new InvalidAddressDialogFragment();
+						newFragment.show(getSupportFragmentManager(),
+								INVALID_ADDRESS);
+
+					}
+
+					// Reset the text view
+					v.setText("");
+					return true;
+				}
+				return false;
 			}
 		});
 
-		contactList.addView(button);
+		editTextSecretQuestion = (TextView) findViewById(R.id.editText1);
+		editTextSecretAnswer = (TextView) findViewById(R.id.editText2);
+		checkBoxRequest = (CheckBox) findViewById(R.id.checkBox1);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_create_stream_user, menu);
+		return true;
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// Nothing to do
+	}
+
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		RemoveParticipantDialog f = (RemoveParticipantDialog) dialog;
+		int id = f.getEmailAddress().hashCode();
+
+		for (int i = 0; i < contactList.getChildCount(); i++) {
+			View view = contactList.getChildAt(i);
+			if (id == view.getId()) {
+				contactList.removeView(view);
+				participants.remove(f.getEmailAddress());
+			}
+		}
 	}
 
 	@Override
@@ -299,74 +384,51 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
-		RemoveParticipantDialog f = (RemoveParticipantDialog) dialog;
-		int id = f.getEmailAddress().hashCode();
-
-		for (int i = 0; i < contactList.getChildCount(); i++) {
-			View view = contactList.getChildAt(i);
-			if (id == view.getId()) {
-				contactList.removeView(view);
-				participants.remove(f.getEmailAddress());
-			}
-		}
-	}
-
-	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
-		// Nothing to do
-	}
-
-	public void onClickHelp(View view) {
-		// TODO
-	}
-
-	private void collectStreamData() {
-		StreamData data = StreamData.getInstance();
-		data.setOpen(participationType);
-
-		// Convert the Bundle to a Map
-		Map<String, String> participantsAsMap = new HashMap<String, String>();
-		for (String key : participants.keySet()) {
-			participantsAsMap.put(key, participants.getString(key));
-		}
-		data.setInvitedParticipants(participantsAsMap);
-
-		data.setSharedSecretQuestion(editTextSecretQuestion.getText()
-				.toString());
-		data.setSharedSecretAnswer(editTextSecretAnswer.getText().toString());
-		data.setShouldRequestToParticipate(checkBoxRequest.isChecked());
-	}
-
-	public void onClickFinish(View view) {
-		collectStreamData();
-
-		Intent intent = new Intent();
-		intent.setClassName(this,
-				"com.glue.client.android.CreateStreamSummaryActivity");
-		startActivity(intent);
-	}
-
-	public void onClickNext(View view) {
-		if (!participationType && participants.isEmpty()) {
-			// Participation type is closed and no participant
-			Toast.makeText(this, R.string.no_participant_error,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		collectStreamData();
-
-		Intent intent = new Intent();
-		intent.setClassName("com.glue.client.android",
-				"com.glue.client.android.CreateStreamLocationActivity");
-		startActivity(intent);
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBundle(PARTICIPANTS, participants);
 	}
 
 	@Override
 	public void onSelectedItem(DialogFragment dialog) {
 		EmailPickerDialog f = (EmailPickerDialog) dialog;
 		addContact(f.getSelectedItem(), f.getDisplayName());
+	}
+
+	/**
+	 * Populate the contact list based on account currently selected in the
+	 * account spinner.
+	 */
+	private void populateContactList() {
+		// Build adapter with contact entries
+		Cursor cursor = getContacts(null);
+		String[] fields = new String[] { Data.DISPLAY_NAME, Email.ADDRESS };
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.contact_entry, cursor, fields, new int[] {
+						R.id.contactEntryDisplayName,
+						R.id.contactEntryEmailAddress });
+
+		adapter.setCursorToStringConverter(new CursorToStringConverter() {
+
+			@Override
+			public String convertToString(android.database.Cursor cursor) {
+				// Get the label for this row out of the "state" column
+				final int columnIndex = cursor
+						.getColumnIndexOrThrow(Data.DISPLAY_NAME);
+				final String str = cursor.getString(columnIndex);
+				return str;
+			}
+		});
+
+		adapter.setFilterQueryProvider(new FilterQueryProvider() {
+
+			@Override
+			public Cursor runQuery(CharSequence constraint) {
+				return getContacts(constraint.toString());
+			}
+		});
+
+		textView.setAdapter(adapter);
 	}
 
 }

@@ -72,7 +72,10 @@ public class RemoveParticipantDialog extends DialogFragment {
 		this.emailAddress = args[0];
 		this.name = args[1];
 
-		builder.setMessage(name + " (" + emailAddress + ")")
+		String msg = name != null ? (name + " (" + emailAddress + ")")
+				: emailAddress;
+
+		builder.setMessage(msg)
 				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {

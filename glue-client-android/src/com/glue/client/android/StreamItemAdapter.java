@@ -90,7 +90,8 @@ public class StreamItemAdapter extends ArrayAdapter<StreamItem<?>> {
 		for (Entry<String, String> entry : m.entrySet()) {
 			Button button = new Button(getContext(), null,
 					android.R.attr.buttonStyleSmall);
-			button.setText(entry.getValue());
+			button.setText(entry.getValue() != null ? entry.getValue() : entry
+					.getKey());
 			button.setId(entry.getKey().hashCode());
 
 			layoutBottom.addView(button);

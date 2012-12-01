@@ -55,7 +55,7 @@
 	<string name="time_pattern">kk:mm</string>
 	<string name="from">De</string>
 	<string name="to">A</string>
-	<string name="location">Emplacement</string>
+	<string name="location">Lieu</string>
 	<string name="gps_disabled">GPS désactivé</string>
     <string name="enable_gps_dialog">Afficher les paramètres de localisation?</string>
     <string name="ok">OK</string>
@@ -85,5 +85,7 @@
     <string name="menu_content_import_export">Import-Export</string>
     <string name="app_label">Glue</string>
     <string name="search_hint">Rechercher</string>
+    <string name="incorrect_address">Addresse incorrecte</string>
+    <string name="invalid_email_address">Adresse e-mail ou nom non valide</string>
     
 </resources>
