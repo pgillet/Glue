@@ -16,6 +16,8 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.glue.client.android.R;
+
 public class LocationSuggestionsProvider extends
 		SearchRecentSuggestionsProvider {
 	private class DynamicGeocodingTask extends
@@ -94,12 +96,43 @@ public class LocationSuggestionsProvider extends
 		setupSuggestions(AUTHORITY, MODE);
 	}
 
+	/**
+	 * Adds the SearchManager.SUGGEST_COLUMN_ICON_1 column to the cursor
+	 * returned by default by
+	 * {@link SearchRecentSuggestionsProvider#query(Uri, String[], String, String[], String)}
+	 * with a drawable resource, so that all suggestions will be provided with
+	 * an icon-plus-text format with the drawable icon on the left side.
+	 * 
+	 * @param cursor
+	 * @return
+	 */
+	private Cursor iconifyCursor(Cursor cursor) {
+
+		final int count = cursor.getColumnCount();
+		String[] columnNames = new String[count + 1];
+		System.arraycopy(cursor.getColumnNames(), 0, columnNames, 0, count);
+		columnNames[count] = SearchManager.SUGGEST_COLUMN_ICON_1;
+
+		MatrixCursor result = new MatrixCursor(columnNames);
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+			Object[] columnValues = new Object[] { cursor.getString(0),
+					cursor.getString(1), cursor.getString(2),
+					cursor.getString(3), cursor.getLong(4),
+					R.drawable.holo_light_device_access_time, };
+
+			result.addRow(columnValues);
+		}
+
+		return result;
+	}
+
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 
-		Cursor defaultCursor = super.query(uri, projection, selection,
-				selectionArgs, sortOrder);
+		Cursor defaultCursor = iconifyCursor(super.query(uri, projection,
+				selection, selectionArgs, sortOrder));
 
 		int code = matcher.match(uri);
 		switch (code) {
@@ -116,8 +149,13 @@ public class LocationSuggestionsProvider extends
 								.getAddressLine(0) : "";
 						String text2 = address.getLocality();
 
-						cursor.addRow(new Object[] { null, text1, text2,
-								text1 + " " + text2, 0 });
+						cursor.addRow(new Object[] {
+								null,
+								text1,
+								text2,
+								text1 + " " + text2,
+								0,
+								R.drawable.holo_light_device_access_location_found, });
 					}
 				}
 
