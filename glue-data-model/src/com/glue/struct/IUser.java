@@ -5,13 +5,34 @@ package com.glue.struct;
  * 
  */
 
-public interface IUser extends Comparable<IUser>, java.io.Serializable {
+public interface IUser {
 
 	/**
-	 * Returns the name of the user.
+	 * Returns the first name of the user.
 	 * 
-	 * @return the name of the user
+	 * @return the first name of the user
 	 */
-	String getName();
+	String getFirstName();
+
+	/**
+	 * Returns the last name of the user.
+	 * 
+	 * @return the last name of the user
+	 */
+	String getLastName();
+
+	/**
+	 * Returns the user email.
+	 * 
+	 * @return the
+	 */
+	String getMail();
+
+	/**
+	 * Returns the user password.
+	 * 
+	 * @return the
+	 */
+	String getPassword();
 
 }
