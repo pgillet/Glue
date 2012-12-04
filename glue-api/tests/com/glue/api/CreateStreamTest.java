@@ -21,8 +21,7 @@ public class CreateStreamTest {
 		// Create a stream
 		try {
 			IStream myFirstStream = glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 décembre", true,
-					true, null, null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378,
-					null);
+					true, null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 			System.out.println(myFirstStream.getTitle());
 		} catch (GlueException e) {
 			// TODO Auto-generated catch block

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.glue.struct.IStream;
 
@@ -21,8 +20,6 @@ public class StreamDTO implements IStream, Serializable {
 	private boolean publicc;
 
 	private boolean open = true;
-
-	private Set<String> guests;
 
 	private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
@@ -85,21 +82,6 @@ public class StreamDTO implements IStream, Serializable {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the guests
-	 */
-	public Set<String> getGuests() {
-		return guests;
-	}
-
-	/**
-	 * @param guests
-	 *            the guests to set
-	 */
-	public void setGuests(Set<String> guests) {
-		this.guests = guests;
 	}
 
 	/**

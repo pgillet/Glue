@@ -3,7 +3,6 @@ package com.glue.api.application;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -42,7 +41,7 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IStream createStream(String title, String description, boolean publicc, boolean open, Set<String> guests,
+	public IStream createStream(String title, String description, boolean publicc, boolean open,
 			Map<String, String> invitedParticipants, String sharedSecretQuestion, String sharedSecretAnswer,
 			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
 			String address) throws GlueException {
@@ -65,7 +64,6 @@ public class GlueImpl implements Glue {
 		aStream.setLatitude(latitude);
 		aStream.setLongitude(longitude);
 		aStream.setAddress(address);
-		aStream.setGuests(guests);
 		aStream.setInvitedParticipants(invitedParticipants);
 
 		// JSON

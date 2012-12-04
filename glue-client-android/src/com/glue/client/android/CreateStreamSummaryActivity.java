@@ -73,8 +73,8 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements Str
 
 			// Create a stream
 			try {
-				IStream myFirstStream = glue.createStream(args[0], null, true, true, null, null, null, null, false, 0,
-						0, 0, 0, null);
+				IStream myFirstStream = glue.createStream(args[0], null, true, true, null, null, null, false, 0, 0, 0,
+						0, null);
 				result = myFirstStream.getTitle();
 			} catch (GlueException e) {
 				// TODO Auto-generated catch block

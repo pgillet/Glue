@@ -3,7 +3,6 @@ package com.glue.struct.impl;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.glue.struct.IStream;
 
@@ -16,8 +15,6 @@ public class Stream implements IStream {
 	private boolean publicc;
 
 	private boolean open = true;
-
-	private Set<String> guests;
 
 	private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
@@ -95,21 +92,6 @@ public class Stream implements IStream {
 	 */
 	public void setOpen(boolean open) {
 		this.open = open;
-	}
-
-	/**
-	 * @return the guests
-	 */
-	public Set<String> getGuests() {
-		return guests;
-	}
-
-	/**
-	 * @param guests
-	 *            the guests to set
-	 */
-	public void setGuests(Set<String> guests) {
-		this.guests = guests;
 	}
 
 	/**

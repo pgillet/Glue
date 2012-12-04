@@ -1,7 +1,6 @@
 package com.glue.struct;
 
 import java.util.Map;
-import java.util.Set;
 
 public interface IStream {
 
@@ -42,13 +41,6 @@ public interface IStream {
 	 * @return true if open, false otherwise
 	 */
 	boolean isOpen();
-
-	/**
-	 * Returns a set of the email addresses of this stream's guests.
-	 * 
-	 * @return a List of String, or an empty list if none.
-	 */
-	Set<String> getGuests();
 
 	/**
 	 * Returns a map that maps the email addresses of the persons invited to
