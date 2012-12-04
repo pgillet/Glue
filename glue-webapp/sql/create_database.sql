@@ -42,9 +42,19 @@ CREATE TABLE STREAM (
 CREATE TABLE TAG (
              id BIGINT NOT NULL AUTO_INCREMENT,
              tag VARCHAR(50) NOT NULL,
-             stream_id BIGINT NOT NULL,
              PRIMARY KEY (id),
              INDEX (tag),
+             UNIQUE(tag)
+             );
+
+-- TAG table
+CREATE TABLE STREAM_TAG (
+             id BIGINT NOT NULL AUTO_INCREMENT,
+             tag_id BIGINT NOT NULL,
+             stream_id BIGINT NOT NULL,
+             PRIMARY KEY (id),
+             FOREIGN KEY (tag_id) REFERENCES TAG(id)
+                     ON DELETE CASCADE,
              FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
              );
