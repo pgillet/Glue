@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.glue.struct.impl.dto.InvitedParticipantDTO;
 import com.glue.struct.impl.dto.StreamDTO;
+import com.glue.webapp.db.InvitedParticipantDAO;
 import com.glue.webapp.db.StreamDAO;
 import com.google.gson.Gson;
 
@@ -62,7 +65,24 @@ public class CreateStreamServlet extends HttpServlet {
 			StreamDAO streamDAO = new StreamDAO(connection);
 			streamDAO.create(aStream);
 
-			// Create
+			// Store invited participants
+			InvitedParticipantDAO ipDAO = new InvitedParticipantDAO(connection);
+			Map<String, String> ipList = aStream.getInvitedParticipants();
+			if (ipList != null) {
+				InvitedParticipantDTO ip = new InvitedParticipantDTO();
+				for (Map.Entry<String, String> entry : ipList.entrySet()) {
+					ip.setMail(entry.getKey());
+					ip.setName(entry.getValue());
+					ip.setStreamId(aStream.getId());
+					ipDAO.create(ip);
+				}
+			}
+
+			// Store tags
+			// TODO
+
+			// Set user as an administrator participant
+			// TODO
 
 			// End of transaction
 			connection.commit();

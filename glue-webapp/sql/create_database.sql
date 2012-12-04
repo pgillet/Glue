@@ -43,7 +43,6 @@ CREATE TABLE TAG (
              id BIGINT NOT NULL AUTO_INCREMENT,
              tag VARCHAR(50) NOT NULL,
              PRIMARY KEY (id),
-             INDEX (tag),
              UNIQUE(tag)
              );
 
@@ -66,6 +65,7 @@ CREATE TABLE INVITED (
 			email VARCHAR(50) NOT NULL,
             stream_id BIGINT NOT NULL,
             PRIMARY KEY (id),
+            UNIQUE(email, stream_id),
             FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
 			);
@@ -77,6 +77,7 @@ CREATE TABLE PARTICIPANT (
 			stream_id BIGINT NOT NULL,
 			admin BOOL NOT NULL,
 			PRIMARY KEY (id),
+			UNIQUE(user_id, stream_id),
 			FOREIGN KEY (user_id) REFERENCES GLUE_USER(id),
             FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
