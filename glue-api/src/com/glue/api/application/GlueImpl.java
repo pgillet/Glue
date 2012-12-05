@@ -46,10 +46,6 @@ public class GlueImpl implements Glue {
 			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
 			String address) throws GlueException {
 
-		IStream result = null;
-
-		ensureAuthorizationEnabled();
-
 		// Create Stream DTO
 		StreamDTO aStream = new StreamDTO();
 		aStream.setTitle(title);
@@ -65,17 +61,33 @@ public class GlueImpl implements Glue {
 		aStream.setLongitude(longitude);
 		aStream.setAddress(address);
 		aStream.setInvitedParticipants(invitedParticipants);
+		return createOrUpdateStream(aStream);
+	}
+
+	@Override
+	public IStream createStream(StreamDTO stream) throws GlueException {
+		return createOrUpdateStream(stream);
+	}
+
+	@Override
+	public IStream updateStream(StreamDTO stream) throws GlueException {
+		return createOrUpdateStream(stream);
+	}
+
+	private IStream createOrUpdateStream(StreamDTO stream) {
+
+		IStream result = null;
 
 		// JSON
 		Gson gson = new Gson();
-		String gsonStream = gson.toJson(aStream);
+		String gsonStream = gson.toJson(stream);
 
 		// Send it
 		HttpConnectionParams.setConnectionTimeout(http.getParams(), 10000); // Timeout
 																			// limit
 		HttpResponse response = null;
 		try {
-			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateStream");
+			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateOrUpdateStream");
 			StringEntity entity = new StringEntity(gsonStream);
 			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 			post.setEntity(entity);
@@ -97,6 +109,6 @@ public class GlueImpl implements Glue {
 			e.printStackTrace();
 		}
 		return result;
-
 	}
+
 }
