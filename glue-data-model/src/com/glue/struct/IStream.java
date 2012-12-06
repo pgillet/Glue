@@ -1,8 +1,13 @@
 package com.glue.struct;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface IStream {
+
+	long getId();
+
+	void setId(long id);
 
 	/**
 	 * Returns the title of this stream.
@@ -11,12 +16,7 @@ public interface IStream {
 	 */
 	String getTitle();
 
-	/**
-	 * Returns the tags of this stream as a String.
-	 * 
-	 * @return a String
-	 */
-	String getDescription();
+	void setTitle(String title);
 
 	/**
 	 * Tells whether this stream is public or private. Private by default.
@@ -28,6 +28,8 @@ public interface IStream {
 	 * @return true if public, false otherwise
 	 */
 	boolean isPublicc();
+
+	void setPublicc(boolean publicc);
 
 	/**
 	 * Tells whether this stream is open or closed for contribution. Open by
@@ -42,6 +44,17 @@ public interface IStream {
 	 */
 	boolean isOpen();
 
+	void setOpen(boolean open);
+
+	/**
+	 * Returns a a set of tags.
+	 * 
+	 * @return a Set of tags.
+	 */
+	Set<String> getTags();
+
+	void setTags(Set<String> tags);
+
 	/**
 	 * Returns a map that maps the email addresses of the persons invited to
 	 * participate to this stream to their names.
@@ -50,6 +63,8 @@ public interface IStream {
 	 */
 	Map<String, String> getInvitedParticipants();
 
+	void setInvitedParticipants(Map<String, String> ip);
+
 	/**
 	 * Returns the shared secret question.
 	 * 
@@ -57,12 +72,16 @@ public interface IStream {
 	 */
 	String getSharedSecretQuestion();
 
+	void setSharedSecretQuestion(String question);
+
 	/**
 	 * Returns the shared secret answer.
 	 * 
 	 * @return a String, or null if none is set
 	 */
 	String getSharedSecretAnswer();
+
+	void setSharedSecretAnswer(String answer);
 
 	/**
 	 * Tells whether or not users must request the administrator of this stream
@@ -73,6 +92,8 @@ public interface IStream {
 	 */
 	boolean isShouldRequestToParticipate();
 
+	void setShouldRequestToParticipate(boolean request);
+
 	/**
 	 * Returns the start date of this stream. Should be the current date and
 	 * time by default.
@@ -81,12 +102,16 @@ public interface IStream {
 	 */
 	long getStartDate();
 
+	void setStartDate(long date);
+
 	/**
 	 * Returns the end date of this stream.
 	 * 
 	 * @return
 	 */
 	long getEndDate();
+
+	void setEndDate(long date);
 
 	/**
 	 * Returns the latitude of this stream.
@@ -95,6 +120,8 @@ public interface IStream {
 	 */
 	double getLatitude();
 
+	void setLatitude(double latitude);
+
 	/**
 	 * Returns the longitude of this stream.
 	 * 
@@ -102,10 +129,14 @@ public interface IStream {
 	 */
 	double getLongitude();
 
+	void setLongitude(double longitude);
+
 	/**
 	 * Returns a string describing the location of this stream.
 	 * 
 	 * @return a String, or null if none is set
 	 */
 	String getAddress();
+
+	void setAddress(String adress);
 }

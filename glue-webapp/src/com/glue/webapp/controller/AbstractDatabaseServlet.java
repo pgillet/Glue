@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.google.gson.Gson;
+
 /**
  * Root database servlet.
  */
@@ -21,6 +23,7 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	@Resource(name = "jdbc/gluedb")
 	DataSource dataSource;
 	Connection connection;
+	Gson gson = new Gson();
 
 	protected abstract T getGlueObjectFromRequest(HttpServletRequest request) throws IOException;
 
@@ -49,6 +52,7 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
+					e.printStackTrace();
 					System.out.print("Transaction is being rolled back");
 					connection.rollback();
 				} catch (SQLException excep) {

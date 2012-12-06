@@ -1,10 +1,10 @@
-package com.glue.struct.impl.dto;
+package com.glue.struct.impl;
 
 import java.io.Serializable;
 
 import com.glue.struct.IInvitedParticipant;
 
-public class InvitedParticipantDTO implements IInvitedParticipant, Serializable {
+public class InvitedParticipant implements IInvitedParticipant, Serializable {
 
 	private static final long serialVersionUID = -6228892883604245041L;
 

@@ -7,12 +7,18 @@ package com.glue.struct;
 
 public interface IUser {
 
+	long getId();
+
+	void setId(long id);
+
 	/**
 	 * Returns the first name of the user.
 	 * 
 	 * @return the first name of the user
 	 */
 	String getFirstName();
+
+	void setFirstName(String firstName);
 
 	/**
 	 * Returns the last name of the user.
@@ -21,6 +27,8 @@ public interface IUser {
 	 */
 	String getLastName();
 
+	void setLastName(String lastName);
+
 	/**
 	 * Returns the user email.
 	 * 
@@ -28,11 +36,15 @@ public interface IUser {
 	 */
 	String getMail();
 
+	void setMail(String mail);
+
 	/**
 	 * Returns the user password.
 	 * 
 	 * @return the
 	 */
 	String getPassword();
+
+	void setPassword(String password);
 
 }

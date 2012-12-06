@@ -9,15 +9,15 @@ import com.glue.struct.IStream;
 
 public class StreamData implements IStream {
 
-	private String title;
+	private long id;
 
-	private String description;
+	private String title;
 
 	private boolean publicc;
 
 	private boolean open = true;
 
-	private Set<String> guests;
+	private Set<String> tags;
 
 	private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
@@ -62,21 +62,6 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
 	 * @return the mPublic
 	 */
 	public boolean isPublicc() {
@@ -107,18 +92,18 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @return the guests
+	 * @return the tags
 	 */
-	public Set<String> getGuests() {
-		return guests;
+	public Set<String> getTags() {
+		return tags;
 	}
 
 	/**
 	 * @param guests
 	 *            the guests to set
 	 */
-	public void setGuests(Set<String> guests) {
-		this.guests = guests;
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
 	}
 
 	/**
@@ -254,6 +239,16 @@ public class StreamData implements IStream {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	@Override
+	public long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

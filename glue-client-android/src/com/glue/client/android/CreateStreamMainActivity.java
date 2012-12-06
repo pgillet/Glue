@@ -105,7 +105,9 @@ public class CreateStreamMainActivity extends LocationActivity {
 	private void collectStreamData() {
 		StreamData data = StreamData.getInstance();
 		data.setTitle(textViewTitle.getText().toString());
-		data.setDescription(textViewDescription.getText().toString());
+
+		// TODO manage tags ...
+		// data.setDescription(textViewDescription.getText().toString());
 		data.setPublicc(toggleButtonPrivacy.isChecked());
 	}
 

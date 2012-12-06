@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.glue.struct.impl.dto.InvitedParticipantDTO;
+import com.glue.struct.impl.InvitedParticipant;
 
 /**
  * DAO for User operations.
@@ -26,6 +26,7 @@ public class InvitedParticipantDAO {
 	// No SQL exception if a duplicate has to be inserted.
 	public static final String INSERT_NEW_IP = "INSERT IGNORE INTO INVITED(name, email, stream_id) VALUES (?,?,?)";
 	public static final String SELECT_IP = "SELECT INVITED(id, name, email, stream_id) WHERE email=? and stream_id=?";
+	public static final String DELETE_ALL_IP = "DELETE FROM INVITED WHERE stream_id=?";
 
 	Connection connection = null;
 	PreparedStatement statement = null;
@@ -34,7 +35,7 @@ public class InvitedParticipantDAO {
 		this.connection = connection;
 	}
 
-	public void create(InvitedParticipantDTO ip) throws SQLException {
+	public void create(InvitedParticipant ip) throws SQLException {
 
 		statement = connection.prepareStatement(INSERT_NEW_IP, Statement.RETURN_GENERATED_KEYS);
 		statement.setString(1, ip.getName());
@@ -51,9 +52,9 @@ public class InvitedParticipantDAO {
 		ip.setId(id);
 	}
 
-	public InvitedParticipantDTO select(String mail, Long streamId) throws SQLException {
+	public InvitedParticipant select(String mail, Long streamId) throws SQLException {
 
-		InvitedParticipantDTO ip = new InvitedParticipantDTO();
+		InvitedParticipant ip = new InvitedParticipant();
 
 		statement = connection.prepareStatement(SELECT_IP, Statement.RETURN_GENERATED_KEYS);
 
@@ -66,5 +67,11 @@ public class InvitedParticipantDAO {
 			ip.setStreamId(result.getLong(COLUMN_STREAM_ID));
 		}
 		return ip;
+	}
+
+	public void deleteAll(long streamId) throws SQLException {
+		statement = connection.prepareStatement(DELETE_ALL_IP);
+		statement.setLong(1, streamId);
+		statement.executeUpdate();
 	}
 }

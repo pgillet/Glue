@@ -18,7 +18,9 @@ import org.apache.http.util.EntityUtils;
 import com.glue.api.conf.Configuration;
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
-import com.glue.struct.impl.dto.StreamDTO;
+import com.glue.struct.IUser;
+import com.glue.struct.impl.Stream;
+import com.glue.struct.impl.User;
 import com.google.gson.Gson;
 
 public class GlueImpl implements Glue {
@@ -47,7 +49,7 @@ public class GlueImpl implements Glue {
 			String address) throws GlueException {
 
 		// Create Stream DTO
-		StreamDTO aStream = new StreamDTO();
+		Stream aStream = new Stream();
 		aStream.setTitle(title);
 		aStream.setDescription(description);
 		aStream.setPublicc(publicc);
@@ -65,16 +67,16 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IStream createStream(StreamDTO stream) throws GlueException {
+	public IStream createStream(IStream stream) throws GlueException {
 		return createOrUpdateStream(stream);
 	}
 
 	@Override
-	public IStream updateStream(StreamDTO stream) throws GlueException {
+	public IStream updateStream(IStream stream) throws GlueException {
 		return createOrUpdateStream(stream);
 	}
 
-	private IStream createOrUpdateStream(StreamDTO stream) {
+	private IStream createOrUpdateStream(IStream stream) {
 
 		IStream result = null;
 
@@ -95,7 +97,7 @@ public class GlueImpl implements Glue {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				gsonStream = EntityUtils.toString(response.getEntity());
 				if (gsonStream != null) {
-					result = gson.fromJson(gsonStream, StreamDTO.class);
+					result = gson.fromJson(gsonStream, Stream.class);
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -111,4 +113,60 @@ public class GlueImpl implements Glue {
 		return result;
 	}
 
+	@Override
+	public IUser createUser(IUser user) throws GlueException {
+		return createOrUpdateUser(user);
+	}
+
+	@Override
+	public IUser createUser(String firstName, String lastName, String email, String password) throws GlueException {
+		// Create User DTO
+		IUser user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setMail(email);
+		user.setPassword(password);
+		return createOrUpdateUser(user);
+	}
+
+	@Override
+	public IUser updateUser(IUser user) throws GlueException {
+		return createOrUpdateUser(user);
+	}
+
+	private IUser createOrUpdateUser(IUser user) {
+		IUser result = null;
+
+		// JSON
+		Gson gson = new Gson();
+		String gsonStream = gson.toJson(user);
+
+		// Send it
+		HttpConnectionParams.setConnectionTimeout(http.getParams(), 10000); // Timeout
+																			// limit
+		HttpResponse response = null;
+		try {
+			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateOrUpdateUser");
+			StringEntity entity = new StringEntity(gsonStream);
+			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+			post.setEntity(entity);
+			response = http.execute(post);
+			if (response.getStatusLine().getStatusCode() == 200) {
+				gsonStream = EntityUtils.toString(response.getEntity());
+				if (gsonStream != null) {
+					result = gson.fromJson(gsonStream, User.class);
+				}
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

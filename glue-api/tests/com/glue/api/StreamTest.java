@@ -12,12 +12,13 @@ import org.junit.Test;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.impl.dto.StreamDTO;
+import com.glue.struct.IStream;
+import com.glue.struct.impl.Stream;
 
 public class StreamTest {
 
 	Glue glue;
-	StreamDTO aStream;
+	IStream aStream;
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,8 +28,8 @@ public class StreamTest {
 	@Test
 	public void createAnEmptyStream() {
 		try {
-			aStream = (StreamDTO) glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 décembre", true,
-					true, null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
+			aStream = glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 décembre", true, true, null,
+					null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}
@@ -37,11 +38,11 @@ public class StreamTest {
 	@Test
 	public void createAndUpdate() {
 		try {
-			aStream = (StreamDTO) glue.createStream("Stream", null, true, true, null, null, null, false,
+			aStream = (Stream) glue.createStream("Stream", null, true, true, null, null, null, false,
 					new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
-			((StreamDTO) aStream).setDescription("Update desc");
-			((StreamDTO) aStream).setSharedSecretQuestion("Favorite bannd?");
-			aStream = (StreamDTO) glue.updateStream(aStream);
+			((Stream) aStream).setDescription("Update desc");
+			((Stream) aStream).setSharedSecretQuestion("Favorite bannd?");
+			aStream = (Stream) glue.updateStream(aStream);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}
@@ -53,8 +54,8 @@ public class StreamTest {
 			Map<String, String> ipList = new HashMap<String, String>();
 			ipList.put("greg@glue.com", "Name");
 			ipList.put("pascal@glue.com", "Name");
-			aStream = (StreamDTO) glue.createStream("Concert Cypress Hill", null, true, true, ipList, null, null,
-					false, new Date().getTime(), 0, 10.255, 15.378, null);
+			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, ipList, null, null, false,
+					new Date().getTime(), 0, 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}
