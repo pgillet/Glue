@@ -237,7 +237,7 @@ public class Stream implements IStream, Serializable {
 	}
 
 	public void setTags(Set<String> tags) {
-		tags = this.tags;
+		this.tags = tags;
 	}
 
 }

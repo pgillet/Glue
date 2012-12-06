@@ -4,7 +4,9 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +31,7 @@ public class StreamTest {
 	public void createAnEmptyStream() {
 		try {
 			aStream = glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 décembre", true, true, null,
-					null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
+					null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}
@@ -38,7 +40,7 @@ public class StreamTest {
 	@Test
 	public void createAndUpdate() {
 		try {
-			aStream = (Stream) glue.createStream("Stream", null, true, true, null, null, null, false,
+			aStream = (Stream) glue.createStream("Stream", null, true, true, null, null, null, null, false,
 					new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 			((Stream) aStream).setDescription("Update desc");
 			((Stream) aStream).setSharedSecretQuestion("Favorite bannd?");
@@ -54,8 +56,21 @@ public class StreamTest {
 			Map<String, String> ipList = new HashMap<String, String>();
 			ipList.put("greg@glue.com", "Name");
 			ipList.put("pascal@glue.com", "Name");
-			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, ipList, null, null, false,
-					new Date().getTime(), 0, 10.255, 15.378, null);
+			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, null, ipList, null, null,
+					false, new Date().getTime(), 0, 10.255, 15.378, null);
+		} catch (GlueException e) {
+			fail("Exception during stream creation");
+		}
+	}
+
+	@Test
+	public void createStreamWithTags() {
+		try {
+			Set<String> tags = new HashSet<String>();
+			tags.add("Concert");
+			tags.add("Bikini");
+			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, tags, null, null, null,
+					false, new Date().getTime(), 0, 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}
