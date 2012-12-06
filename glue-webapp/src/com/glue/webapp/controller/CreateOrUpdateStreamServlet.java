@@ -26,6 +26,9 @@ public class CreateOrUpdateStreamServlet extends AbstractStreamServlet {
 			streamDAO.update(aStream);
 		} else {
 			streamDAO.create(aStream);
+
+			// Set user as administrator
+			streamDAO.joinAsAdmin(aStream.getId(), getCurrentUser().getId());
 		}
 
 	}

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.glue.struct.IStream;
+import com.glue.struct.IUser;
 import com.glue.struct.impl.Stream;
 import com.glue.webapp.utilities.GSonHelper;
 import com.google.gson.Gson;
@@ -33,5 +34,10 @@ public abstract class AbstractStreamServlet extends AbstractDatabaseServlet<IStr
 	protected void sendResponse(HttpServletResponse response, IStream myObject) throws IOException {
 		PrintWriter writer = response.getWriter();
 		writer.write(gson.toJson(myObject));
+	}
+
+	@Override
+	protected boolean isUserAuthorized(IUser user) {
+		return true;
 	}
 }

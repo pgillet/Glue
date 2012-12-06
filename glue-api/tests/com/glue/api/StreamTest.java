@@ -76,4 +76,15 @@ public class StreamTest {
 		}
 	}
 
+	@Test
+	public void testJoinStream() {
+		try {
+			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, null, null, null, null,
+					false, new Date().getTime(), 0, 10.255, 15.378, null);
+			glue.joinStream(aStream);
+		} catch (GlueException e) {
+			fail("Exception during stream creation");
+		}
+	}
+
 }

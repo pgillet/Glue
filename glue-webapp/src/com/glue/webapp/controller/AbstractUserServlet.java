@@ -34,4 +34,9 @@ public abstract class AbstractUserServlet extends AbstractDatabaseServlet<IUser>
 		PrintWriter writer = response.getWriter();
 		writer.write(gson.toJson(user));
 	}
+
+	@Override
+	protected boolean isUserAuthorized(IUser user) {
+		return true;
+	}
 }

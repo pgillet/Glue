@@ -21,6 +21,7 @@ import com.glue.struct.impl.Stream;
 public class StreamDAO {
 
 	public static final String COLUMN_ID = "id";
+	public static final String COLUMN_STREAM_ID = "stream_id";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_PUBLIC = "public";
 	public static final String COLUMN_OPEN = "open";
@@ -37,6 +38,8 @@ public class StreamDAO {
 			+ "secret_question, secret_answer, request_to_participate, start_date, end_date, "
 			+ "latitude, longitude, address) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
+	public static final String INSERT_NEW_PARTICPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
+
 	public static final String UPDATE_STREAM = "UPDATE stream SET title=?, public=?, open=?, "
 			+ "secret_question=?, secret_answer=?, request_to_participate=?, start_date=?, end_date=?, "
 			+ "latitude=?, longitude=?, address=? WHERE id=?";
@@ -44,6 +47,8 @@ public class StreamDAO {
 	public static final String SELECT_STREAM = "SELECT * from stream WHERE id=?";
 
 	public static final String DELETE_STREAM = "DELETE FROM stream WHERE id=?";
+
+	public static final String DELETE_PARTICIPANT = "DELETE FROM stream WHERE stream_id=? and user_id=?";
 
 	Connection connection = null;
 	PreparedStatement statement = null;
@@ -81,8 +86,6 @@ public class StreamDAO {
 
 		// Tags
 		updateTags(aStream);
-
-		// TODO set as administrator
 	}
 
 	public void update(IStream aStream) throws SQLException {
@@ -109,7 +112,7 @@ public class StreamDAO {
 	}
 
 	public void delete(long streamId) throws SQLException {
-		statement = connection.prepareStatement(DELETE_STREAM, Statement.RETURN_GENERATED_KEYS);
+		statement = connection.prepareStatement(DELETE_STREAM);
 		statement.setLong(1, streamId);
 		statement.executeUpdate();
 	}
@@ -172,5 +175,28 @@ public class StreamDAO {
 			}
 		}
 
+	}
+
+	public void join(long streamId, long userId) throws SQLException {
+		createParticipant(streamId, userId, false);
+	}
+
+	public void joinAsAdmin(long streamId, long userId) throws SQLException {
+		createParticipant(streamId, userId, true);
+	}
+
+	private void createParticipant(long streamId, long userId, boolean admin) throws SQLException {
+		statement = connection.prepareStatement(INSERT_NEW_PARTICPANT, Statement.RETURN_GENERATED_KEYS);
+		statement.setLong(1, userId);
+		statement.setLong(2, streamId);
+		statement.setBoolean(3, admin);
+		statement.executeUpdate();
+	}
+
+	public void quit(long streamId, long userId) throws SQLException {
+		statement = connection.prepareStatement(DELETE_STREAM);
+		statement.setLong(1, streamId);
+		statement.setLong(2, userId);
+		statement.executeUpdate();
 	}
 }

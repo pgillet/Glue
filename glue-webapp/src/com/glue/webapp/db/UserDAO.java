@@ -29,6 +29,8 @@ public class UserDAO {
 
 	public static final String SELECT_USER = "SELECT * from GLUE_USER WHERE id=?";
 
+	public static final String SELECT_MAIL_USER = "SELECT * from GLUE_USER WHERE email=?";
+
 	public static final String DELETE_USER = "DELETE FROM GLUE_USER WHERE id=?";
 
 	Connection connection = null;
@@ -70,6 +72,22 @@ public class UserDAO {
 		User result = null;
 		statement = connection.prepareStatement(SELECT_USER, Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, userId);
+		ResultSet res = statement.executeQuery();
+		if (res.next()) {
+			result = new User();
+			result.setId(res.getLong(COLUMN_ID));
+			result.setFirstName(res.getString(COLUMN_FIRST_NAME));
+			result.setLastName(res.getString(COLUMN_LAST_NAME));
+			result.setMail(res.getString(COLUMN_MAIL));
+			result.setPassword(res.getString(COLUMN_PWD));
+		}
+		return result;
+	}
+
+	public IUser search(String mail) throws SQLException {
+		User result = null;
+		statement = connection.prepareStatement(SELECT_MAIL_USER);
+		statement.setString(1, mail);
 		ResultSet res = statement.executeQuery();
 		if (res.next()) {
 			result = new User();

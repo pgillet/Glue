@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.glue.struct.IUser;
+import com.glue.webapp.db.UserDAO;
 import com.google.gson.Gson;
 
 /**
@@ -23,6 +25,7 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	@Resource(name = "jdbc/gluedb")
 	DataSource dataSource;
 	Connection connection;
+	IUser currentUser;
 	Gson gson = new Gson();
 
 	protected abstract T getGlueObjectFromRequest(HttpServletRequest request) throws IOException;
@@ -43,12 +46,22 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 		try {
 			// Get a database connection
 			connection = dataSource.getConnection();
-			connection.setAutoCommit(false);
 
-			// Execute Operation
-			doOperation(myObject);
+			currentUser = retrieveUser(request, connection);
+			if (isUserAuthorized(currentUser)) {
 
-			connection.commit();
+				connection.setAutoCommit(false);
+
+				// Execute Operation
+				doOperation(myObject);
+
+				connection.commit();
+			}
+			// User not authorized
+			else {
+
+			}
+
 		} catch (SQLException e) {
 			if (connection != null) {
 				try {
@@ -68,6 +81,23 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 		}
 
 		sendResponse(response, myObject);
-
 	}
+
+	protected boolean isUserAuthorized(IUser user) {
+		return false;
+	}
+
+	// TO be implemented
+	private IUser retrieveUser(HttpServletRequest request, Connection connection) throws SQLException {
+
+		// Pour le moment je cherche un user en dur ...
+		UserDAO userDAO = new UserDAO(connection);
+		IUser user = userDAO.search("gregoire.denis@glue.com");
+		return user;
+	}
+
+	protected IUser getCurrentUser() {
+		return currentUser;
+	}
+
 }

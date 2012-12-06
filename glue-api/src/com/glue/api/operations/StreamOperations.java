@@ -17,4 +17,8 @@ public interface StreamOperations {
 
 	IStream updateStream(IStream stream) throws GlueException;
 
+	void joinStream(long streamID);
+
+	void joinStream(IStream stream);
+
 }

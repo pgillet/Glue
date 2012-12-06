@@ -1,20 +1,10 @@
 package com.glue.api.application;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 
 import com.glue.api.conf.Configuration;
 import com.glue.exceptions.GlueException;
@@ -22,7 +12,6 @@ import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.User;
-import com.google.gson.Gson;
 
 public class GlueImpl implements Glue {
 
@@ -79,40 +68,7 @@ public class GlueImpl implements Glue {
 	}
 
 	private IStream createOrUpdateStream(IStream stream) {
-
-		IStream result = null;
-
-		// JSON
-		Gson gson = new Gson();
-		String gsonStream = gson.toJson(stream);
-
-		// Send it
-		HttpConnectionParams.setConnectionTimeout(http.getParams(), 10000); // Timeout
-																			// limit
-		HttpResponse response = null;
-		try {
-			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateOrUpdateStream");
-			StringEntity entity = new StringEntity(gsonStream);
-			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-			post.setEntity(entity);
-			response = http.execute(post);
-			if (response.getStatusLine().getStatusCode() == 200) {
-				gsonStream = EntityUtils.toString(response.getEntity());
-				if (gsonStream != null) {
-					result = gson.fromJson(gsonStream, Stream.class);
-				}
-			}
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return result;
+		return HttpHelper.sendGlueObject(http, conf, stream, Stream.class, "CreateOrUpdateStream");
 	}
 
 	@Override
@@ -137,38 +93,18 @@ public class GlueImpl implements Glue {
 	}
 
 	private IUser createOrUpdateUser(IUser user) {
-		IUser result = null;
+		return HttpHelper.sendGlueObject(http, conf, user, User.class, "CreateOrUpdateUser");
+	}
 
-		// JSON
-		Gson gson = new Gson();
-		String gsonStream = gson.toJson(user);
+	@Override
+	public void joinStream(long streamID) {
+		IStream stream = new Stream();
+		stream.setId(streamID);
+		joinStream(stream);
+	}
 
-		// Send it
-		HttpConnectionParams.setConnectionTimeout(http.getParams(), 10000); // Timeout
-																			// limit
-		HttpResponse response = null;
-		try {
-			HttpPost post = new HttpPost(conf.getBaseUrl() + "CreateOrUpdateUser");
-			StringEntity entity = new StringEntity(gsonStream);
-			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-			post.setEntity(entity);
-			response = http.execute(post);
-			if (response.getStatusLine().getStatusCode() == 200) {
-				gsonStream = EntityUtils.toString(response.getEntity());
-				if (gsonStream != null) {
-					result = gson.fromJson(gsonStream, User.class);
-				}
-			}
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return result;
+	@Override
+	public void joinStream(IStream stream) {
+		HttpHelper.sendGlueObject(http, conf, stream, Stream.class, "JoinStream");
 	}
 }
