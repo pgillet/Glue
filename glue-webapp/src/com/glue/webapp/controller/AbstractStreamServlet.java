@@ -27,7 +27,7 @@ public abstract class AbstractStreamServlet extends AbstractDatabaseServlet<IStr
 	}
 
 	@Override
-	protected Stream getGlueObjectFromRequest(HttpServletRequest request) throws IOException {
+	protected IStream getObjectFromRequest(HttpServletRequest request) throws IOException {
 		return GSonHelper.getGsonObjectFromRequest(request, Stream.class);
 	}
 

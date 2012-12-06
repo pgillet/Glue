@@ -3,6 +3,7 @@ package com.glue.webapp.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 
 import com.glue.struct.IMedia;
@@ -13,6 +14,7 @@ import com.glue.webapp.repository.RepositoryManager;
  * Create media servlet.
  */
 @WebServlet("/CreateMedia")
+@MultipartConfig
 public class CreateMediaServlet extends AbstractMediaServlet {
 
 	private static final long serialVersionUID = -36455345605937845L;
@@ -27,11 +29,8 @@ public class CreateMediaServlet extends AbstractMediaServlet {
 
 		// Create associated file
 		try {
-			if (!RepositoryManager.createMedia(media)) {
+			RepositoryManager.createMedia(media, streamPart);
 
-				// Exception?
-				System.out.println("Media Not OK");
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.sql.DataSource;
 
 import com.glue.struct.IUser;
@@ -26,9 +27,10 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	DataSource dataSource;
 	Connection connection;
 	IUser currentUser;
+	Part streamPart;
 	Gson gson = new Gson();
 
-	protected abstract T getGlueObjectFromRequest(HttpServletRequest request) throws IOException;
+	protected abstract T getObjectFromRequest(HttpServletRequest request) throws IOException;
 
 	protected abstract void doOperation(T myObject) throws SQLException;
 
@@ -41,7 +43,8 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
-		T myObject = getGlueObjectFromRequest(request);
+		T myObject = getObjectFromRequest(request);
+		streamPart = getStreamPartFromRequest(request);
 
 		try {
 			// Get a database connection
@@ -85,6 +88,10 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 
 	protected boolean isUserAuthorized(T myObject, Connection connection) throws SQLException {
 		return false;
+	}
+
+	protected Part getStreamPartFromRequest(HttpServletRequest request) throws IOException {
+		return null;
 	}
 
 	// TO be implemented

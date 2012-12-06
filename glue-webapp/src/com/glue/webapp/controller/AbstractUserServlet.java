@@ -27,7 +27,7 @@ public abstract class AbstractUserServlet extends AbstractDatabaseServlet<IUser>
 	}
 
 	@Override
-	protected IUser getGlueObjectFromRequest(HttpServletRequest request) throws IOException {
+	protected IUser getObjectFromRequest(HttpServletRequest request) throws IOException {
 		return GSonHelper.getGsonObjectFromRequest(request, User.class);
 	}
 

@@ -3,6 +3,8 @@ package com.glue.webapp.repository;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.Part;
+
 import com.glue.struct.IMedia;
 
 public class RepositoryManager {
@@ -14,9 +16,9 @@ public class RepositoryManager {
 		return file.mkdirs();
 	}
 
-	public static boolean createMedia(IMedia media) throws IOException {
-		File file = new File(GLUE_ROOT + media.getStreamId(), media.getId() + "." + media.getExtension());
-		return file.createNewFile();
+	public static void createMedia(IMedia media, Part mediaPart) throws IOException {
+		System.out.println(GLUE_ROOT + media.getStreamId() + File.separator + media.getId() + "."
+				+ media.getExtension());
+		mediaPart.write(GLUE_ROOT + media.getStreamId() + File.separator + media.getId() + "." + media.getExtension());
 	}
-
 }

@@ -1,5 +1,6 @@
 package com.glue.api.application;
 
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -112,7 +113,7 @@ public class GlueImpl implements Glue {
 
 	@Override
 	public IMedia createMedia(long streamId, String caption, String extension, String mimeType, double latitude,
-			double longitude, long startDate) throws GlueException {
+			double longitude, long startDate, InputStream input) throws GlueException {
 		IMedia media = new Media();
 		media.setStreamId(streamId);
 		media.setCaption(caption);
@@ -121,11 +122,11 @@ public class GlueImpl implements Glue {
 		media.setLatitude(latitude);
 		media.setLongitude(longitude);
 		media.setStartDate(startDate);
-		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia");
+		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia", input);
 	}
 
 	@Override
-	public IMedia createMedia(IMedia media) throws GlueException {
-		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia");
+	public IMedia createMedia(IMedia media, InputStream input) throws GlueException {
+		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia", input);
 	}
 }

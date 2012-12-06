@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import com.glue.struct.IMedia;
 import com.glue.struct.impl.Media;
@@ -27,9 +28,14 @@ public abstract class AbstractMediaServlet extends AbstractDatabaseServlet<IMedi
 		super();
 	}
 
+	protected IMedia getObjectFromRequest(HttpServletRequest request) throws IOException {
+
+		return GSonHelper.getGsonObjectFromMultiPartRequest(request, Media.class);
+	}
+
 	@Override
-	protected IMedia getGlueObjectFromRequest(HttpServletRequest request) throws IOException {
-		return GSonHelper.getGsonObjectFromRequest(request, Media.class);
+	protected Part getStreamPartFromRequest(HttpServletRequest request) throws IOException {
+		return GSonHelper.getStreamPartFromMultiPartRequest(request);
 	}
 
 	@Override
