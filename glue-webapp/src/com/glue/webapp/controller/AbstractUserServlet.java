@@ -2,6 +2,8 @@ package com.glue.webapp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +14,7 @@ import com.glue.webapp.utilities.GSonHelper;
 import com.google.gson.Gson;
 
 /**
- * Root stream servlet.
+ * Root user servlet.
  */
 public abstract class AbstractUserServlet extends AbstractDatabaseServlet<IUser> {
 
@@ -36,7 +38,7 @@ public abstract class AbstractUserServlet extends AbstractDatabaseServlet<IUser>
 	}
 
 	@Override
-	protected boolean isUserAuthorized(IUser user) {
+	protected boolean isUserAuthorized(IUser media, Connection connection) throws SQLException {
 		return true;
 	}
 }

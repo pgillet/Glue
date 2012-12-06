@@ -48,7 +48,7 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 			connection = dataSource.getConnection();
 
 			currentUser = retrieveUser(request, connection);
-			if (isUserAuthorized(currentUser)) {
+			if (isUserAuthorized(myObject, connection)) {
 
 				connection.setAutoCommit(false);
 
@@ -83,7 +83,7 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 		sendResponse(response, myObject);
 	}
 
-	protected boolean isUserAuthorized(IUser user) {
+	protected boolean isUserAuthorized(T myObject, Connection connection) throws SQLException {
 		return false;
 	}
 

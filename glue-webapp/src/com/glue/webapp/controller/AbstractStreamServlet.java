@@ -2,12 +2,13 @@ package com.glue.webapp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.glue.struct.IStream;
-import com.glue.struct.IUser;
 import com.glue.struct.impl.Stream;
 import com.glue.webapp.utilities.GSonHelper;
 import com.google.gson.Gson;
@@ -37,7 +38,7 @@ public abstract class AbstractStreamServlet extends AbstractDatabaseServlet<IStr
 	}
 
 	@Override
-	protected boolean isUserAuthorized(IUser user) {
+	protected boolean isUserAuthorized(IStream stream, Connection connection) throws SQLException {
 		return true;
 	}
 }

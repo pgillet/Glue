@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 
 import com.glue.struct.IStream;
 import com.glue.webapp.db.StreamDAO;
+import com.glue.webapp.repository.RepositoryManager;
 
 /**
  * CreateStream servlet.
@@ -29,6 +30,13 @@ public class CreateOrUpdateStreamServlet extends AbstractStreamServlet {
 
 			// Set user as administrator
 			streamDAO.joinAsAdmin(aStream.getId(), getCurrentUser().getId());
+
+			// Create associated directory
+			if (!RepositoryManager.createStream(aStream.getId())) {
+
+				// Exception?
+				System.out.println("Not OK");
+			}
 		}
 
 	}

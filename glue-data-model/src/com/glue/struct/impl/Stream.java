@@ -42,6 +42,9 @@ public class Stream implements IStream, Serializable {
 
 	private Set<String> tags;
 
+	public Stream() {
+	}
+
 	/**
 	 * @return the id
 	 */

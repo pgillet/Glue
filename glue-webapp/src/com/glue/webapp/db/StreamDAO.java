@@ -46,6 +46,10 @@ public class StreamDAO {
 
 	public static final String SELECT_STREAM = "SELECT * from stream WHERE id=?";
 
+	public static final String SELECT_PARTICIPANT = "SELECT * from PARTICIPANT WHERE user_id=? and stream_id=?";
+
+	public static final String SELECT_ADMIN = "SELECT * from PARTICIPANT WHERE user_id=? and stream_id=? and admin=true";
+
 	public static final String DELETE_STREAM = "DELETE FROM stream WHERE id=?";
 
 	public static final String DELETE_PARTICIPANT = "DELETE FROM stream WHERE stream_id=? and user_id=?";
@@ -199,4 +203,21 @@ public class StreamDAO {
 		statement.setLong(2, userId);
 		statement.executeUpdate();
 	}
+
+	public boolean isPartipant(long userId, long streamId) throws SQLException {
+		statement = connection.prepareStatement(SELECT_PARTICIPANT);
+		statement.setLong(1, userId);
+		statement.setLong(2, streamId);
+		ResultSet result = statement.executeQuery();
+		return result.next();
+	}
+
+	public boolean isAdministrator(long userId, long streamId) throws SQLException {
+		statement = connection.prepareStatement(SELECT_ADMIN);
+		statement.setLong(1, userId);
+		statement.setLong(2, streamId);
+		ResultSet result = statement.executeQuery();
+		return result.next();
+	}
+
 }

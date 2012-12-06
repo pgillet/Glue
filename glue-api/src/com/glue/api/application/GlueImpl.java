@@ -8,8 +8,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.glue.api.conf.Configuration;
 import com.glue.exceptions.GlueException;
+import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
+import com.glue.struct.impl.Media;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.User;
 
@@ -106,5 +108,24 @@ public class GlueImpl implements Glue {
 	@Override
 	public void joinStream(IStream stream) {
 		HttpHelper.sendGlueObject(http, conf, stream, Stream.class, "JoinStream");
+	}
+
+	@Override
+	public IMedia createMedia(long streamId, String caption, String extension, String mimeType, double latitude,
+			double longitude, long startDate) throws GlueException {
+		IMedia media = new Media();
+		media.setStreamId(streamId);
+		media.setCaption(caption);
+		media.setExtension(extension);
+		media.setMimeType(mimeType);
+		media.setLatitude(latitude);
+		media.setLongitude(longitude);
+		media.setStartDate(startDate);
+		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia");
+	}
+
+	@Override
+	public IMedia createMedia(IMedia media) throws GlueException {
+		return HttpHelper.sendGlueObject(http, conf, media, Media.class, "CreateMedia");
 	}
 }
