@@ -45,11 +45,11 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements Str
 
 	public void onClickStart(View v) {
 		IStream data = StreamData.getInstance();
-		(new CreateStreamTask()).execute(new String[] { data.getTitle() });
+		(new CreateStreamTask()).execute(data);
 	}
 
 	// AsyncTask
-	private class CreateStreamTask extends AsyncTask<String, Void, String> {
+	private class CreateStreamTask extends AsyncTask<IStream, Void, String> {
 		private final ProgressDialog dialog = new ProgressDialog(CreateStreamSummaryActivity.this);
 		private Glue glue = new GlueFactory().getInstance();
 
@@ -66,16 +66,15 @@ public class CreateStreamSummaryActivity extends FragmentActivity implements Str
 
 		// automatically done on worker thread (separate from UI thread)
 		@Override
-		protected String doInBackground(final String... args) {
+		protected String doInBackground(final IStream... streams) {
 			String result = null;
 
 			// Connect ...
 
 			// Create a stream
 			try {
-				IStream myFirstStream = glue.createStream(args[0], null, true, true, null, null, null, null, false, 0,
-						0, 0, 0, null);
-				result = myFirstStream.getTitle();
+				IStream myFirstStream = glue.createStream(streams[0]);
+				result = Long.toString(myFirstStream.getId());
 			} catch (GlueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

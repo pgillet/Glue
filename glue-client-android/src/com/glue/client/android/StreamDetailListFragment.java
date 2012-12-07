@@ -126,7 +126,7 @@ public class StreamDetailListFragment extends ListFragment {
 
 		// Description
 		// TODO tag management ...
-		content.add(createItem(R.string.description, R.drawable.holo_dark_collections_labels, stream.getDescription()));
+		content.add(createItem(R.string.description, R.drawable.holo_dark_collections_labels, "test"));
 
 		// Privacy
 		StreamItem<String> privacyItem = createItem(R.string.privacy,
