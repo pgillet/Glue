@@ -10,4 +10,8 @@ public interface UserOperations {
 
 	IUser updateUser(IUser user) throws GlueException;
 
+	void login(String username, String password) throws GlueException;
+
+	void logout() throws GlueException;
+
 }

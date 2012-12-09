@@ -3,6 +3,9 @@
     <wb-module deploy-name="glue-webapp">
         <wb-resource deploy-path="/" source-path="/web" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="glue-data-model.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/glue-data-model/glue-data-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="glue-webapp"/>
         <property name="java-output-path" value="/glue-webapp/build/classes"/>
     </wb-module>

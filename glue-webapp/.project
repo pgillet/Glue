@@ -3,6 +3,7 @@
 	<name>glue-webapp</name>
 	<comment></comment>
 	<projects>
+		<project>glue-data-model</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

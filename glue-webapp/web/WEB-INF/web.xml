@@ -15,4 +15,30 @@
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
+  
+  <!-- Tell the server to use BASIC authentication. -->
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+  
+  <filter>
+      <filter-name>AuthFilter</filter-name>
+      <filter-class>com.glue.webapp.servlet.AuthFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+      <filter-name>AuthFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <servlet>
+      <servlet-name>Echo</servlet-name>
+      <servlet-class>com.glue.webapp.servlet.EchoServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+      <servlet-name>Echo</servlet-name>
+      <url-pattern>/user/login</url-pattern>
+  </servlet-mapping>
+
 </web-app>
