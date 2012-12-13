@@ -30,7 +30,8 @@ public class StreamTest {
 	@Test
 	public void createAnEmptyStream() {
 		try {
-			aStream = glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 décembre", true, true, null,
+			aStream = glue.createStream("Concert Nirvana",
+					"Concert au bikini, lundi 9 decembre", true, true, null,
 					null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
