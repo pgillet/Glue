@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -32,6 +34,8 @@ import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.User;
 
 public class GlueImpl implements Glue {
+
+	private Log log = LogFactory.getLog(GlueImpl.class);
 
 	private static final String USER_LOGIN = "user/login";
 
@@ -186,17 +190,16 @@ public class GlueImpl implements Glue {
 			URL loginURL = new URL(baseURL, USER_LOGIN);
 			HttpGet httpget = new HttpGet(loginURL.toExternalForm());
 
-			System.out
-					.println("executing request: " + httpget.getRequestLine());
-			System.out.println("to target: " + targetHost);
+			log.info("executing request: " + httpget.getRequestLine()
+					+ " to target: " + targetHost);
 
 			// for (int i = 0; i < 3; i++) {
 			HttpResponse response = httpclient.execute(targetHost, httpget,
 					localcontext);
 			HttpEntity entity = response.getEntity();
 
-			System.out.println("----------------------------------------");
-			System.out.println(response.getStatusLine());
+			log.info("----------------------------------------");
+			log.info(response.getStatusLine());
 
 			int status = response.getStatusLine().getStatusCode();
 			if (status != HttpStatus.SC_OK) {
@@ -204,7 +207,7 @@ public class GlueImpl implements Glue {
 			}
 
 			if (entity != null) {
-				System.out.println("Response content length: "
+				log.info("Response content length: "
 						+ entity.getContentLength());
 			}
 
