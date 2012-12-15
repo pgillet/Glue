@@ -86,7 +86,7 @@ public class LoginActivity extends Activity {
 			}
 
 			if (result != null) {
-				Toast.makeText(LoginActivity.this, "Login failed",
+				Toast.makeText(LoginActivity.this, result,
 						Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(LoginActivity.this, "Logged in",

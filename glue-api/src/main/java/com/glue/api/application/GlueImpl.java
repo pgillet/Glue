@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -36,6 +37,9 @@ import com.glue.struct.impl.User;
 public class GlueImpl implements Glue {
 
 	private Log log = LogFactory.getLog(GlueImpl.class);
+
+	private static ResourceBundle messages = ResourceBundle
+			.getBundle("messages");
 
 	private static final String USER_LOGIN = "user/login";
 
@@ -203,7 +207,8 @@ public class GlueImpl implements Glue {
 
 			int status = response.getStatusLine().getStatusCode();
 			if (status != HttpStatus.SC_OK) {
-				throw new GlueException("Login failed");
+				String msg = messages.getString("login.failed");
+				throw new GlueException(msg);
 			}
 
 			if (entity != null) {
