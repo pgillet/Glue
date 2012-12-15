@@ -42,9 +42,8 @@
 			<version>r7</version>
 		</dependency>
 
-		<!-- TODO: Although they appear in the classpath, we need to re-declare 
-			the following transitive dependencies to be sure that they will be packaged 
-			in the final apk !? -->
+		<!-- Adds explicitly a dependency to httpclient 4.2.1 to force its use 
+			instead of httpclient 4.0.1 from com.google.android:android -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

@@ -164,8 +164,8 @@ public class GlueImpl implements Glue {
 		try {
 			URL baseURL = new URL(Configuration.getBaseUrl());
 
-			HttpHost targetHost = new HttpHost(baseURL.getHost(), baseURL.getPort(),
-					baseURL.getProtocol());
+			HttpHost targetHost = new HttpHost(baseURL.getHost(),
+					baseURL.getPort(), baseURL.getProtocol());
 
 			httpclient.getCredentialsProvider().setCredentials(
 					new AuthScope(targetHost.getHostName(),
@@ -207,7 +207,14 @@ public class GlueImpl implements Glue {
 				System.out.println("Response content length: "
 						+ entity.getContentLength());
 			}
+
 			// EntityUtils.consume(entity);
+			if (entity != null && entity.isStreaming()) {
+				InputStream instream = entity.getContent();
+				if (instream != null) {
+					instream.close();
+				}
+			}
 			// }
 
 		} catch (ClientProtocolException e) {

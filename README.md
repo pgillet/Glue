@@ -6,5 +6,6 @@ Glue
 * Install Maven Android connector: http://marketplace.eclipse.org/content/android-configurator-m2e (Update Site: http://rgladwell.github.com/m2e-android/updates/)
 * Install Maven WTP connector: http://marketplace.eclipse.org/node/441371 (Update Site: http://download.eclipse.org/m2e-wtp/releases/)
 * Set ANDROID_HOME env variable
-* Install Maven Android SDK Deployer: https://github.com/mosabua/maven-android-sdk-deployer
+* Install Maven Android SDK Deployer to deploy the android artifacts from your Android SDK to your Maven repository: https://github.com/mosabua/maven-android-sdk-deployer
+
 
