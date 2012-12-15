@@ -2,6 +2,7 @@ package com.glue.api.application;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,14 +33,13 @@ import com.glue.struct.impl.User;
 
 public class GlueImpl implements Glue {
 
-	private static final long serialVersionUID = -8571499192744671742L;
+	private static final String USER_LOGIN = "user/login";
 
-	private Configuration conf;
+	private static final long serialVersionUID = -8571499192744671742L;
 
 	protected transient HttpClient http;
 
-	GlueImpl(Configuration conf) {
-		this.conf = conf;
+	GlueImpl() {
 		http = new DefaultHttpClient();
 	}
 
@@ -89,7 +89,7 @@ public class GlueImpl implements Glue {
 	}
 
 	private IStream createOrUpdateStream(IStream stream) {
-		return HttpHelper.sendGlueObject(http, conf, stream, Stream.class,
+		return HttpHelper.sendGlueObject(http, stream, Stream.class,
 				"CreateOrUpdateStream");
 	}
 
@@ -116,7 +116,7 @@ public class GlueImpl implements Glue {
 	}
 
 	private IUser createOrUpdateUser(IUser user) {
-		return HttpHelper.sendGlueObject(http, conf, user, User.class,
+		return HttpHelper.sendGlueObject(http, user, User.class,
 				"CreateOrUpdateUser");
 	}
 
@@ -129,8 +129,7 @@ public class GlueImpl implements Glue {
 
 	@Override
 	public void joinStream(IStream stream) {
-		HttpHelper.sendGlueObject(http, conf, stream, Stream.class,
-				"JoinStream");
+		HttpHelper.sendGlueObject(http, stream, Stream.class, "JoinStream");
 	}
 
 	@Override
@@ -145,14 +144,14 @@ public class GlueImpl implements Glue {
 		media.setLatitude(latitude);
 		media.setLongitude(longitude);
 		media.setStartDate(startDate);
-		return HttpHelper.sendGlueObject(http, conf, media, Media.class,
+		return HttpHelper.sendGlueObject(http, media, Media.class,
 				"CreateMedia", input);
 	}
 
 	@Override
 	public IMedia createMedia(IMedia media, InputStream input)
 			throws GlueException {
-		return HttpHelper.sendGlueObject(http, conf, media, Media.class,
+		return HttpHelper.sendGlueObject(http, media, Media.class,
 				"CreateMedia", input);
 	}
 
@@ -160,11 +159,14 @@ public class GlueImpl implements Glue {
 	 * Authenticate preemptively using BASIC scheme.
 	 */
 	public void login(String username, String password) throws GlueException {
-		// HttpHost targetHost = new HttpHost("localhost", 80, "http");
-		HttpHost targetHost = new HttpHost("192.168.1.21", 8080, "http");
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
+			URL baseURL = new URL(Configuration.getBaseUrl());
+
+			HttpHost targetHost = new HttpHost(baseURL.getHost(), baseURL.getPort(),
+					baseURL.getProtocol());
+
 			httpclient.getCredentialsProvider().setCredentials(
 					new AuthScope(targetHost.getHostName(),
 							targetHost.getPort()),
@@ -181,30 +183,31 @@ public class GlueImpl implements Glue {
 			BasicHttpContext localcontext = new BasicHttpContext();
 			localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
 
-			HttpGet httpget = new HttpGet(conf.getBaseUrl() + "/user/login");
+			URL loginURL = new URL(baseURL, USER_LOGIN);
+			HttpGet httpget = new HttpGet(loginURL.toExternalForm());
 
 			System.out
 					.println("executing request: " + httpget.getRequestLine());
 			System.out.println("to target: " + targetHost);
 
 			// for (int i = 0; i < 3; i++) {
-				HttpResponse response = httpclient.execute(targetHost, httpget,
-						localcontext);
-				HttpEntity entity = response.getEntity();
+			HttpResponse response = httpclient.execute(targetHost, httpget,
+					localcontext);
+			HttpEntity entity = response.getEntity();
 
-				System.out.println("----------------------------------------");
-				System.out.println(response.getStatusLine());
+			System.out.println("----------------------------------------");
+			System.out.println(response.getStatusLine());
 
 			int status = response.getStatusLine().getStatusCode();
 			if (status != HttpStatus.SC_OK) {
 				throw new GlueException("Login failed");
 			}
 
-				if (entity != null) {
-					System.out.println("Response content length: "
-							+ entity.getContentLength());
-				}
-				// EntityUtils.consume(entity);
+			if (entity != null) {
+				System.out.println("Response content length: "
+						+ entity.getContentLength());
+			}
+			// EntityUtils.consume(entity);
 			// }
 
 		} catch (ClientProtocolException e) {

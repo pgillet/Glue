@@ -42,6 +42,15 @@
 			<version>r7</version>
 		</dependency>
 
+		<!-- TODO: Although they appear in the classpath, we need to re-declare 
+			the following transitive dependencies to be sure that they will be packaged 
+			in the final apk !? -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.1</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

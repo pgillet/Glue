@@ -24,7 +24,8 @@ import com.google.gson.Gson;
 
 public class HttpHelper {
 
-	protected static <T> T sendGlueObject(HttpClient http, Configuration conf, T glueObject, Type objectType, String url) {
+	protected static <T> T sendGlueObject(HttpClient http, T glueObject,
+			Type objectType, String url) {
 		T result = null;
 
 		// JSON
@@ -36,9 +37,10 @@ public class HttpHelper {
 																			// limit
 		HttpResponse response = null;
 		try {
-			HttpPost post = new HttpPost(conf.getBaseUrl() + url);
+			HttpPost post = new HttpPost(Configuration.getBaseUrl() + url);
 			StringEntity entity = new StringEntity(gsonStream);
-			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,
+					"application/json"));
 			post.setEntity(entity);
 			response = http.execute(post);
 			if (response.getStatusLine().getStatusCode() == 200) {
@@ -60,8 +62,8 @@ public class HttpHelper {
 		return result;
 	}
 
-	protected static <T> T sendGlueObject(HttpClient http, Configuration conf, T glueObject, Type objectType,
-			String url, InputStream input) {
+	protected static <T> T sendGlueObject(HttpClient http, T glueObject,
+			Type objectType, String url, InputStream input) {
 		T result = null;
 
 		// JSON
@@ -76,10 +78,12 @@ public class HttpHelper {
 
 		HttpResponse response = null;
 		try {
-			HttpPost post = new HttpPost(conf.getBaseUrl() + url);
-			FormBodyPart jsonPart = new FormBodyPart("json", new StringBody(gsonStream));
+			HttpPost post = new HttpPost(Configuration.getBaseUrl() + url);
+			FormBodyPart jsonPart = new FormBodyPart("json", new StringBody(
+					gsonStream));
 			multipartEntity.addPart(jsonPart);
-			FormBodyPart filePart = new FormBodyPart("file", new InputStreamBody(input, "jsonFile"));
+			FormBodyPart filePart = new FormBodyPart("file",
+					new InputStreamBody(input, "jsonFile"));
 			multipartEntity.addPart(filePart);
 			post.setEntity(multipartEntity);
 			response = http.execute(post);
