@@ -42,12 +42,12 @@
 			<version>r7</version>
 		</dependency>
 
-		<!-- Adds explicitly a dependency to httpclient 4.2.1 to force its use 
+		<!-- Adds explicitly a dependency to httpclient 4.2.2 to force its use 
 			instead of httpclient 4.0.1 from com.google.android:android -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.2.1</version>
+			<version>4.2.2</version>
 		</dependency>
 
 	</dependencies>
