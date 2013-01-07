@@ -15,6 +15,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -22,17 +24,26 @@
         android:theme="@android:style/Theme.Holo.Light" >
         <uses-library android:name="com.google.android.maps" />
 
-        <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
-        <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
-        <!-- android:label="@string/title_activity_login" -->
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar" >
+        <!-- The authenticator service -->
+        <service
+            android:name=".authenticator.AuthenticationService"
+            android:exported="true" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <activity
+            android:name=".authenticator.AuthenticatorActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
+
+            <!--
+                No intent-filter here! This activity is only ever launched by
+                someone who explicitly knows the class name
+            -->
         </activity>
         <activity
             android:name=".ItemListActivity"
@@ -64,10 +75,11 @@
             android:name=".CreateStreamLocationActivity"
             android:label="@string/title_activity_create_stream_location" >
         </activity>
-        
-        <provider android:name=".location.LocationSuggestionsProvider"
-              android:authorities="com.glue.client.android.location.LocationSuggestionsProvider" />
-        
+
+        <provider
+            android:name=".location.LocationSuggestionsProvider"
+            android:authorities="com.glue.client.android.location.LocationSuggestionsProvider" />
+
         <activity
             android:name=".location.LocationPickerMapActivity"
             android:label="@string/title_activity_location_picker_map"
@@ -85,9 +97,11 @@
             android:name=".CreateStreamSummaryActivity"
             android:label="@string/title_activity_create_stream_summary" >
         </activity>
+        <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
+        <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
+        <!-- android:label="@string/title_activity_main" -->
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

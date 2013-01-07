@@ -1,5 +1,7 @@
 package com.glue.client.android;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,12 +9,24 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.actionbarcompat.ActionBarActivity;
+import com.glue.client.android.authenticator.AuthenticatorActivity;
+import com.glue.client.android.authenticator.Constants;
 
 public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Check if a Glue account has been added
+		AccountManager am = AccountManager.get(this);
+		Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+		if (accounts.length == 0) {
+			final Intent intent = new Intent(this, AuthenticatorActivity.class);
+			startActivity(intent);
+			return;
+		}
+
 		setContentView(R.layout.activity_main);
 		setTitle(R.string.app_name);
 	}
@@ -36,12 +50,14 @@ public class MainActivity extends ActionBarActivity {
 
 		case R.id.menu_content_new:
 			Intent intent = new Intent();
-			intent.setClassName("com.glue.client.android", "com.glue.client.android.CreateStreamMainActivity");
+			intent.setClassName("com.glue.client.android",
+					"com.glue.client.android.CreateStreamMainActivity");
 			startActivity(intent);
 			break;
 
 		case R.id.menu_content_import_export:
-			Toast.makeText(this, "Tapped Import-Export", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Tapped Import-Export", Toast.LENGTH_SHORT)
+					.show();
 			break;
 
 		case R.id.menu_search:
