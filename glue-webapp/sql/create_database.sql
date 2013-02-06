@@ -35,6 +35,7 @@ CREATE TABLE STREAM (
              latitude DECIMAL(10,8),
              longitude DECIMAL(10,8),
              address VARCHAR(255),
+             thumb_path VARCHAR(255),
              PRIMARY KEY (id)
              );
              
@@ -103,7 +104,7 @@ CREATE TABLE MEDIA (
 			
 -- VIEWS
 CREATE OR REPLACE VIEW STREAM_VIEW AS
-  SELECT STREAM.id, title, public, open, count(*) as nb_of_participant
+  SELECT STREAM.id, title, public, open, thumb_path, count(*) as nb_of_participant
   FROM STREAM
   INNER JOIN PARTICIPANT
   ON STREAM.id = PARTICIPANT.stream_id

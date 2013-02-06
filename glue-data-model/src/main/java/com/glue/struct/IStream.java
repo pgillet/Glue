@@ -148,4 +148,13 @@ public interface IStream {
 	int getNumberOfParticipant();
 
 	void setNumberOfParticipant(int nbOfParticipant);
+
+	/**
+	 * Returns the path to the thumbnail of the stream
+	 * 
+	 * @return the path of the thumbnail
+	 */
+	String getThumbPath();
+
+	void setThumbPath(String path);
 }

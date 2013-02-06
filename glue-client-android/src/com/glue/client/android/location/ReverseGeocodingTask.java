@@ -39,26 +39,24 @@ class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
 		try {
 			// Call the synchronous getFromLocation() method by passing in
 			// the lat/long values.
-			addresses = geocoder.getFromLocation(loc.getLatitude(),
-					loc.getLongitude(), 1);
+			if (loc != null) {
+				addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			// Update UI field with the exception.
 			// Message.obtain(getHandler(), UPDATE_ADDRESS, e.toString())
 			// .sendToTarget();
 
-			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc)
-					.sendToTarget();
+			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc).sendToTarget();
 		}
 		if (addresses != null && addresses.size() > 0) {
 			Address address = addresses.get(0);
 
 			// Update the UI via a message handler.
-			Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS, address)
-					.sendToTarget();
+			Message.obtain(mHandler, LocationConstants.UPDATE_ADDRESS, address).sendToTarget();
 		} else {
-			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc)
-					.sendToTarget();
+			Message.obtain(mHandler, LocationConstants.ADDRESS_NOT_FOUND, loc).sendToTarget();
 		}
 		return null;
 	}

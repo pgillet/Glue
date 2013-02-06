@@ -44,6 +44,8 @@ public class Stream implements IStream, Serializable {
 
 	private int numberOfParticipant;
 
+	private String thumbPath;
+
 	public Stream() {
 	}
 
@@ -253,6 +255,16 @@ public class Stream implements IStream, Serializable {
 	@Override
 	public void setNumberOfParticipant(int nbOfParticipant) {
 		this.numberOfParticipant = nbOfParticipant;
+	}
+
+	@Override
+	public String getThumbPath() {
+		return thumbPath;
+	}
+
+	@Override
+	public void setThumbPath(String path) {
+		this.thumbPath = path;
 	}
 
 }

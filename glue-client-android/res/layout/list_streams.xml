@@ -1,24 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+<RelativeLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" >
+
+       <ImageView
+           android:id="@+id/listImage"
+           android:layout_width="80dp"
+           android:layout_height="80dp"
+           android:layout_alignParentLeft="true"
+           android:layout_margin="10dp"
+           android:background="#ffcccccc" />
+    
+       <TextView
+          android:id="@+id/listTitle"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignTop="@+id/listImage"
+          android:layout_toRightOf="@+id/listImage"
+          android:text="A List item title"
+          android:textSize="16sp"
+          android:textStyle="bold" />
  
-    <!-- Product id (pid) - will be HIDDEN - used to pass to other activity -->
-    <TextView
-        android:id="@+id/stream_id"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+       <ImageView
+           android:id="@+id/participantImage"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/listTitle"
+           android:layout_marginTop="7dp"
+           android:layout_toRightOf="@+id/listImage"
+           android:src="@drawable/holo_dark_social_group" />
+
+       <TextView
+           android:id="@+id/nbOfParticipant"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toRightOf="@+id/listImage"
+           android:layout_marginLeft="11dp"
+           android:layout_below="@+id/participantImage"
+           android:text="0"
+           android:textSize="12sp"
+           android:textStyle="bold"/>
+
+       <ImageView
+           android:id="@+id/publicImage"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:layout_alignTop="@+id/listImage"
+           android:layout_marginRight="10dp"
+           android:src="@drawable/holo_light_device_access_secure" />
  
-    <!-- Name Label -->
-    <TextView
-        android:id="@+id/stream_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dip"
-        android:paddingLeft="6dip"
-        android:textSize="17dip"
-        android:textStyle="bold" />
- 
-</LinearLayout>
+</RelativeLayout>

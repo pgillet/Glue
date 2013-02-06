@@ -39,6 +39,8 @@ public class StreamData implements IStream {
 
 	private int nbOfParticipant;
 
+	private String thumbPath;
+
 	private static StreamData instance = new StreamData();
 
 	private StreamData() {
@@ -261,6 +263,16 @@ public class StreamData implements IStream {
 	@Override
 	public void setNumberOfParticipant(int nbOfParticipant) {
 		this.nbOfParticipant = nbOfParticipant;
+	}
+
+	@Override
+	public String getThumbPath() {
+		return thumbPath;
+	}
+
+	@Override
+	public void setThumbPath(String path) {
+		this.thumbPath = path;
 	}
 
 }

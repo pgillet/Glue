@@ -36,10 +36,11 @@ public class StreamDAO {
 	public static final String COLUMN_LONGITUDE = "longitude";
 	public static final String COLUMN_ADRESS = "address";
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
+	public static final String COLUMN_THUMB_PATH = "thumb_path";
 
 	public static final String INSERT_NEW_STREAM = "INSERT INTO stream(title, public, open, "
 			+ "secret_question, secret_answer, request_to_participate, start_date, end_date, "
-			+ "latitude, longitude, address) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+			+ "latitude, longitude, address, thumb_path) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	public static final String INSERT_NEW_PARTICPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
 
@@ -80,6 +81,7 @@ public class StreamDAO {
 		statement.setDouble(9, aStream.getLatitude());
 		statement.setDouble(10, aStream.getLongitude());
 		statement.setString(11, aStream.getAddress());
+		statement.setString(12, "/Thumbnail/empty.gif");
 		statement.executeUpdate();
 
 		// Get the generated id
@@ -145,6 +147,7 @@ public class StreamDAO {
 			result.setLatitude(res.getDouble(COLUMN_LATITUDE));
 			result.setLongitude(res.getDouble(COLUMN_LONGITUDE));
 			result.setAddress(res.getString(COLUMN_ADRESS));
+			result.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 		}
 		return result;
 	}
@@ -236,6 +239,7 @@ public class StreamDAO {
 			aStream.setTitle(res.getString(COLUMN_TITLE));
 			aStream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
 			aStream.setOpen(res.getBoolean(COLUMN_OPEN));
+			aStream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 			aStream.setNumberOfParticipant(res.getInt(COLUMN_NB_OF_PARTICIPANT));
 			result.add(aStream);
 		}

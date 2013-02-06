@@ -59,8 +59,10 @@ public class CreateStreamMainActivity extends LocationActivity {
 
 					default:
 						Location location = (Location) msg.obj;
-						data.setLatitude(location.getLatitude());
-						data.setLongitude(location.getLongitude());
+						if (location != null) {
+							data.setLatitude(location.getLatitude());
+							data.setLongitude(location.getLongitude());
+						}
 						break;
 					}
 				}

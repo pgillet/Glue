@@ -1,5 +1,6 @@
 package com.glue.client.android.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -7,25 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.glue.api.conf.Configuration;
 import com.glue.client.android.R;
+import com.glue.client.android.util.ImageDownloader;
 import com.glue.struct.IStream;
 
 public class StreamAdapter extends BaseAdapter {
 
-	Context context;
-	List<IStream> streams;
 	private LayoutInflater inflater;
-	private int resource;
+	private List<IStream> streams = new ArrayList<IStream>();
+	private final ImageDownloader imageDownloader = new ImageDownloader();
 
-	public StreamAdapter(Context context, int resource, List<IStream> streams) {
-		this.context = context;
-		this.streams = streams;
-		this.resource = resource;
-		inflater = LayoutInflater.from(context);
-
+	public StreamAdapter(Context context) {
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -49,22 +48,35 @@ public class StreamAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		// Create a new view
-		convertView = (LinearLayout) inflater.inflate(resource, null);
+		RelativeLayout itemView;
 
-		// Get my stream
-		IStream stream = streams.get(position);
+		if (convertView == null) {
+			itemView = (RelativeLayout) inflater.inflate(R.layout.list_streams, parent, false);
+		} else {
+			itemView = (RelativeLayout) convertView;
+		}
 
-		// TxtView ID
-		TextView txtId = (TextView) convertView.findViewById(R.id.stream_id);
-		txtId.setText(Long.toString(stream.getId()));
+		ImageView imageView = (ImageView) itemView.findViewById(R.id.listImage);
+		ImageView publicView = (ImageView) itemView.findViewById(R.id.publicImage);
+		TextView titleText = (TextView) itemView.findViewById(R.id.listTitle);
+		TextView nbOfParticipantText = (TextView) itemView.findViewById(R.id.nbOfParticipant);
 
-		// TxtView Title
-		TextView txtTitle = (TextView) convertView.findViewById(R.id.stream_title);
-		txtTitle.setText(stream.getTitle());
+		String imageUrl = streams.get(position).getThumbPath();
+		imageDownloader.download(Configuration.getBaseUrl() + imageUrl, imageView);
+		titleText.setText(streams.get(position).getTitle());
+		nbOfParticipantText.setText(Long.toString(streams.get(position).getNumberOfParticipant()));
 
-		return convertView;
+		if (streams.get(position).isPublicc()) {
+			publicView.setImageResource(R.drawable.holo_dark_device_access_not_secure);
+		} else {
+			publicView.setImageResource(R.drawable.holo_dark_device_access_secure);
+		}
+		return itemView;
+	}
 
+	public void updateStreams(List<IStream> streams) {
+		this.streams = streams;
+		notifyDataSetChanged();
 	}
 
 }

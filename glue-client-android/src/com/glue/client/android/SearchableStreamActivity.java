@@ -13,9 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
@@ -24,15 +22,15 @@ import com.glue.struct.IStream;
 
 public class SearchableStreamActivity extends ListActivity {
 
-	/** The tag used to log to adb console. */
 	private static final String TAG = "SearchableStreamActivity";
-
-	private List<IStream> streams;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_searchable_stream);
+
+		StreamAdapter adapter = new StreamAdapter(this);
+		setListAdapter(adapter);
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -40,7 +38,7 @@ public class SearchableStreamActivity extends ListActivity {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 
 			// Loading products in Background Thread
-			new SearchStreamsTask(query).execute();
+			new SearchStreamsTask(query, adapter).execute();
 		}
 
 		// Get listview
@@ -53,7 +51,8 @@ public class SearchableStreamActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				// Getting values from selected ListItem
-				Long streamId = Long.getLong(((TextView) view.findViewById(R.id.stream_id)).getText().toString());
+				// Long streamId = Long.getLong(((TextView)
+				// view.findViewById(R.id.stream_id)).getText().toString());
 
 				// Starting new intent
 				Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -78,13 +77,15 @@ public class SearchableStreamActivity extends ListActivity {
 	/**
 	 * Background Async Task to search for Streams
 	 * */
-	class SearchStreamsTask extends AsyncTask<Void, String, String> {
+	class SearchStreamsTask extends AsyncTask<Void, Void, List<IStream>> {
+		private final StreamAdapter adapter;
 		private final ProgressDialog dialog = new ProgressDialog(SearchableStreamActivity.this);
 		private final String query;
 		private Glue glue = new GlueFactory().getInstance();
 
-		public SearchStreamsTask(String query) {
+		public SearchStreamsTask(String query, StreamAdapter adapter) {
 			this.query = query;
+			this.adapter = adapter;
 		}
 
 		// Before starting background thread Show Progress Dialog
@@ -98,37 +99,26 @@ public class SearchableStreamActivity extends ListActivity {
 		}
 
 		// Retrieving Streams
-		protected String doInBackground(Void... params) {
+		protected List<IStream> doInBackground(Void... params) {
+			List<IStream> result = null;
 			try {
 				// Search for streams
-				streams = glue.searchStreams(query);
+				result = glue.searchStreams(query);
 
 			} catch (Exception ex) {
 				Log.e(TAG, "SearchStreamsTask.doInBackground");
 				Log.i(TAG, ex.toString());
 				return null;
 			}
-			return null;
+			return result;
 		}
 
 		// After completing background task dismiss the progress dialog
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(List<IStream> streams) {
 
 			// dismiss the dialog after getting all products
 			dialog.dismiss();
-
-			// updating UI from Background Thread
-			runOnUiThread(new Runnable() {
-				public void run() {
-
-					ListAdapter adapter = new StreamAdapter(SearchableStreamActivity.this, R.layout.list_streams,
-							streams);
-
-					// Updating view
-					setListAdapter(adapter);
-				}
-			});
-
+			adapter.updateStreams(streams);
 		}
 
 	}
