@@ -1,5 +1,6 @@
 package com.glue.api.operations;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public interface StreamOperations {
 	IStream createStream(IStream stream) throws GlueException;
 
 	IStream updateStream(IStream stream) throws GlueException;
+
+	List<IStream> searchStreams(String query) throws GlueException;
 
 	void joinStream(long streamID);
 

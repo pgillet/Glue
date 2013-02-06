@@ -139,4 +139,13 @@ public interface IStream {
 	String getAddress();
 
 	void setAddress(String adress);
+
+	/**
+	 * Returns the number of participant of this stream.
+	 * 
+	 * @return the number of participant
+	 */
+	int getNumberOfParticipant();
+
+	void setNumberOfParticipant(int nbOfParticipant);
 }

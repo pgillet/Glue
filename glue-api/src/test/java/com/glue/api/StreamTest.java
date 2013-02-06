@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,8 +31,7 @@ public class StreamTest {
 	@Test
 	public void createAnEmptyStream() {
 		try {
-			aStream = glue.createStream("Concert Nirvana",
-					"Concert au bikini, lundi 9 decembre", true, true, null,
+			aStream = glue.createStream("Concert Nirvana", "Concert au bikini, lundi 9 decembre", true, true, null,
 					null, null, null, false, new Date().getTime(), new Date().getTime(), 10.255, 15.378, null);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
@@ -83,6 +83,16 @@ public class StreamTest {
 			aStream = (Stream) glue.createStream("Concert Cypress Hill", null, true, true, null, null, null, null,
 					false, new Date().getTime(), 0, 10.255, 15.378, null);
 			glue.joinStream(aStream);
+		} catch (GlueException e) {
+			fail("Exception during stream creation");
+		}
+	}
+
+	@Test
+	public void testSearchStream() {
+		try {
+			List<IStream> result = glue.searchStreams("Test");
+			System.out.println(result);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		}

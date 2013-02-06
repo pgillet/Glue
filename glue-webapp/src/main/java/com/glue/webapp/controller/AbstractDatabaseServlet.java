@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import javax.sql.DataSource;
 
 import com.glue.struct.IUser;
@@ -19,7 +18,7 @@ import com.google.gson.Gson;
 /**
  * Root database servlet.
  */
-public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
+public abstract class AbstractDatabaseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 7672287885973304292L;
 
@@ -27,14 +26,14 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	DataSource dataSource;
 	Connection connection;
 	IUser currentUser;
-	Part streamPart;
-	Gson gson = new Gson();
 
-	protected abstract T getObjectFromRequest(HttpServletRequest request) throws IOException;
+	protected final Gson gson = new Gson();
 
-	protected abstract void doOperation(T myObject) throws SQLException;
+	protected abstract void retrieveDatasFromRequest(HttpServletRequest request) throws IOException;
 
-	protected abstract void sendResponse(HttpServletResponse response, T myObject) throws IOException;
+	protected abstract void doOperation() throws SQLException;
+
+	protected abstract void sendResponse(HttpServletResponse response) throws IOException;
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -43,20 +42,19 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
-		T myObject = getObjectFromRequest(request);
-		streamPart = getStreamPartFromRequest(request);
+		retrieveDatasFromRequest(request);
 
 		try {
 			// Get a database connection
 			connection = dataSource.getConnection();
 
 			currentUser = retrieveUser(request, connection);
-			if (isUserAuthorized(myObject, connection)) {
+			if (isUserAuthorized(connection)) {
 
 				connection.setAutoCommit(false);
 
 				// Execute Operation
-				doOperation(myObject);
+				doOperation();
 
 				connection.commit();
 			}
@@ -83,15 +81,11 @@ public abstract class AbstractDatabaseServlet<T> extends HttpServlet {
 			}
 		}
 
-		sendResponse(response, myObject);
+		sendResponse(response);
 	}
 
-	protected boolean isUserAuthorized(T myObject, Connection connection) throws SQLException {
+	protected boolean isUserAuthorized(Connection connection) throws SQLException {
 		return false;
-	}
-
-	protected Part getStreamPartFromRequest(HttpServletRequest request) throws IOException {
-		return null;
 	}
 
 	// TO be implemented

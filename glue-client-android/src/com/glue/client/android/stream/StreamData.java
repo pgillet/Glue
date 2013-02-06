@@ -37,6 +37,8 @@ public class StreamData implements IStream {
 
 	private String address;
 
+	private int nbOfParticipant;
+
 	private static StreamData instance = new StreamData();
 
 	private StreamData() {
@@ -249,6 +251,16 @@ public class StreamData implements IStream {
 	@Override
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	@Override
+	public int getNumberOfParticipant() {
+		return nbOfParticipant;
+	}
+
+	@Override
+	public void setNumberOfParticipant(int nbOfParticipant) {
+		this.nbOfParticipant = nbOfParticipant;
 	}
 
 }

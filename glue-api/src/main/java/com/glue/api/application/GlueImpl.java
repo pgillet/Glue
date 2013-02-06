@@ -3,6 +3,7 @@ package com.glue.api.application;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -26,20 +27,19 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 
 import com.glue.api.conf.Configuration;
+import com.glue.api.operations.StreamOperations;
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.impl.Media;
-import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.User;
 
 public class GlueImpl implements Glue {
 
 	private Log log = LogFactory.getLog(GlueImpl.class);
 
-	private static ResourceBundle messages = ResourceBundle
-			.getBundle("messages");
+	private static ResourceBundle messages = ResourceBundle.getBundle("messages");
 
 	private static final String USER_LOGIN = "user/login";
 
@@ -47,58 +47,17 @@ public class GlueImpl implements Glue {
 
 	protected transient HttpClient http;
 
+	private StreamOperations streamOperations;
+
 	GlueImpl() {
 		http = new DefaultHttpClient();
+		streamOperations = new StreamOperationsImpl(http);
 	}
 
 	protected final void ensureAuthorizationEnabled() {
 		if (false) {
-			throw new IllegalStateException(
-					"Authentication credentials are missing.");
+			throw new IllegalStateException("Authentication credentials are missing.");
 		}
-	}
-
-	@Override
-	public IStream createStream(String title, String description,
-			boolean publicc, boolean open, Set<String> tags,
-			Map<String, String> invitedParticipants,
-			String sharedSecretQuestion, String sharedSecretAnswer,
-			boolean shouldRequestToParticipate, long startDate, long endDate,
-			double latitude, double longitude, String address)
-			throws GlueException {
-
-		// Create Stream DTO
-		Stream aStream = new Stream();
-		aStream.setTitle(title);
-		aStream.setDescription(description);
-		aStream.setPublicc(publicc);
-		aStream.setOpen(open);
-		aStream.setSharedSecretQuestion(sharedSecretQuestion);
-		aStream.setSharedSecretAnswer(sharedSecretAnswer);
-		aStream.setShouldRequestToParticipate(shouldRequestToParticipate);
-		aStream.setStartDate(startDate);
-		aStream.setEndDate(endDate);
-		aStream.setLatitude(latitude);
-		aStream.setLongitude(longitude);
-		aStream.setAddress(address);
-		aStream.setInvitedParticipants(invitedParticipants);
-		aStream.setTags(tags);
-		return createOrUpdateStream(aStream);
-	}
-
-	@Override
-	public IStream createStream(IStream stream) throws GlueException {
-		return createOrUpdateStream(stream);
-	}
-
-	@Override
-	public IStream updateStream(IStream stream) throws GlueException {
-		return createOrUpdateStream(stream);
-	}
-
-	private IStream createOrUpdateStream(IStream stream) {
-		return HttpHelper.sendGlueObject(http, stream, Stream.class,
-				"CreateOrUpdateStream");
 	}
 
 	@Override
@@ -107,8 +66,7 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IUser createUser(String firstName, String lastName, String email,
-			String password) throws GlueException {
+	public IUser createUser(String firstName, String lastName, String email, String password) throws GlueException {
 		// Create User DTO
 		IUser user = new User();
 		user.setFirstName(firstName);
@@ -124,26 +82,12 @@ public class GlueImpl implements Glue {
 	}
 
 	private IUser createOrUpdateUser(IUser user) {
-		return HttpHelper.sendGlueObject(http, user, User.class,
-				"CreateOrUpdateUser");
+		return HttpHelper.sendGlueObject(http, user, User.class, "CreateOrUpdateUser");
 	}
 
 	@Override
-	public void joinStream(long streamID) {
-		IStream stream = new Stream();
-		stream.setId(streamID);
-		joinStream(stream);
-	}
-
-	@Override
-	public void joinStream(IStream stream) {
-		HttpHelper.sendGlueObject(http, stream, Stream.class, "JoinStream");
-	}
-
-	@Override
-	public IMedia createMedia(long streamId, String caption, String extension,
-			String mimeType, double latitude, double longitude, long startDate,
-			InputStream input) throws GlueException {
+	public IMedia createMedia(long streamId, String caption, String extension, String mimeType, double latitude,
+			double longitude, long startDate, InputStream input) throws GlueException {
 		IMedia media = new Media();
 		media.setStreamId(streamId);
 		media.setCaption(caption);
@@ -152,15 +96,12 @@ public class GlueImpl implements Glue {
 		media.setLatitude(latitude);
 		media.setLongitude(longitude);
 		media.setStartDate(startDate);
-		return HttpHelper.sendGlueObject(http, media, Media.class,
-				"CreateMedia", input);
+		return HttpHelper.sendGlueObject(http, media, Media.class, "CreateMedia", input);
 	}
 
 	@Override
-	public IMedia createMedia(IMedia media, InputStream input)
-			throws GlueException {
-		return HttpHelper.sendGlueObject(http, media, Media.class,
-				"CreateMedia", input);
+	public IMedia createMedia(IMedia media, InputStream input) throws GlueException {
+		return HttpHelper.sendGlueObject(http, media, Media.class, "CreateMedia", input);
 	}
 
 	/**
@@ -172,12 +113,10 @@ public class GlueImpl implements Glue {
 		try {
 			URL baseURL = new URL(Configuration.getBaseUrl());
 
-			HttpHost targetHost = new HttpHost(baseURL.getHost(),
-					baseURL.getPort(), baseURL.getProtocol());
+			HttpHost targetHost = new HttpHost(baseURL.getHost(), baseURL.getPort(), baseURL.getProtocol());
 
 			httpclient.getCredentialsProvider().setCredentials(
-					new AuthScope(targetHost.getHostName(),
-							targetHost.getPort()),
+					new AuthScope(targetHost.getHostName(), targetHost.getPort()),
 					new UsernamePasswordCredentials(username, password));
 
 			// Create AuthCache instance
@@ -194,12 +133,10 @@ public class GlueImpl implements Glue {
 			URL loginURL = new URL(baseURL, USER_LOGIN);
 			HttpGet httpget = new HttpGet(loginURL.toExternalForm());
 
-			log.info("executing request: " + httpget.getRequestLine()
-					+ " to target: " + targetHost);
+			log.info("executing request: " + httpget.getRequestLine() + " to target: " + targetHost);
 
 			// for (int i = 0; i < 3; i++) {
-			HttpResponse response = httpclient.execute(targetHost, httpget,
-					localcontext);
+			HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
 			HttpEntity entity = response.getEntity();
 
 			log.info("----------------------------------------");
@@ -212,8 +149,7 @@ public class GlueImpl implements Glue {
 			}
 
 			if (entity != null) {
-				log.info("Response content length: "
-						+ entity.getContentLength());
+				log.info("Response content length: " + entity.getContentLength());
 			}
 
 			// EntityUtils.consume(entity);
@@ -240,6 +176,43 @@ public class GlueImpl implements Glue {
 	@Override
 	public void logout() throws GlueException {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public IStream createStream(String title, String description, boolean publicc, boolean open, Set<String> tags,
+			Map<String, String> invitedParticipants, String sharedSecretQuestion, String sharedSecretAnswer,
+			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
+			String address) throws GlueException {
+		return streamOperations.createStream(title, description, publicc, open, tags, invitedParticipants,
+				sharedSecretQuestion, sharedSecretAnswer, shouldRequestToParticipate, startDate, endDate, latitude,
+				longitude, address);
+	}
+
+	@Override
+	public IStream createStream(IStream stream) throws GlueException {
+		return streamOperations.createStream(stream);
+	}
+
+	@Override
+	public IStream updateStream(IStream stream) throws GlueException {
+		return streamOperations.updateStream(stream);
+	}
+
+	@Override
+	public List<IStream> searchStreams(String query) throws GlueException {
+		return streamOperations.searchStreams(query);
+	}
+
+	@Override
+	public void joinStream(long streamID) {
+		streamOperations.joinStream(streamID);
+
+	}
+
+	@Override
+	public void joinStream(IStream stream) {
+		streamOperations.joinStream(stream);
 
 	}
 }

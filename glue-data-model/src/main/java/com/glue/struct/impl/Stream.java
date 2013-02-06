@@ -42,6 +42,8 @@ public class Stream implements IStream, Serializable {
 
 	private Set<String> tags;
 
+	private int numberOfParticipant;
+
 	public Stream() {
 	}
 
@@ -241,6 +243,16 @@ public class Stream implements IStream, Serializable {
 
 	public void setTags(Set<String> tags) {
 		this.tags = tags;
+	}
+
+	@Override
+	public int getNumberOfParticipant() {
+		return numberOfParticipant;
+	}
+
+	@Override
+	public void setNumberOfParticipant(int nbOfParticipant) {
+		this.numberOfParticipant = nbOfParticipant;
 	}
 
 }

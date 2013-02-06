@@ -100,3 +100,11 @@ CREATE TABLE MEDIA (
 			FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
 			);
+			
+-- VIEWS
+CREATE OR REPLACE VIEW STREAM_VIEW AS
+  SELECT STREAM.id, title, public, open, count(*) as nb_of_participant
+  FROM STREAM
+  INNER JOIN PARTICIPANT
+  ON STREAM.id = PARTICIPANT.stream_id
+  GROUP BY PARTICIPANT.stream_id;

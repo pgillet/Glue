@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ public class StreamDAO {
 	public static final String COLUMN_LATITUDE = "latitude";
 	public static final String COLUMN_LONGITUDE = "longitude";
 	public static final String COLUMN_ADRESS = "address";
+	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 
 	public static final String INSERT_NEW_STREAM = "INSERT INTO stream(title, public, open, "
 			+ "secret_question, secret_answer, request_to_participate, start_date, end_date, "
@@ -45,6 +48,8 @@ public class StreamDAO {
 			+ "latitude=?, longitude=?, address=? WHERE id=?";
 
 	public static final String SELECT_STREAM = "SELECT * from stream WHERE id=?";
+
+	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
 	public static final String SELECT_PARTICIPANT = "SELECT * from PARTICIPANT WHERE user_id=? and stream_id=?";
 
@@ -220,4 +225,20 @@ public class StreamDAO {
 		return result.next();
 	}
 
+	public List<IStream> search(String query) throws SQLException {
+		List<IStream> result = new ArrayList<IStream>();
+		statement = connection.prepareStatement(SELECT_STREAM_VIEW);
+		ResultSet res = statement.executeQuery();
+		Stream aStream;
+		while (res.next()) {
+			aStream = new Stream();
+			aStream.setId(res.getLong(COLUMN_ID));
+			aStream.setTitle(res.getString(COLUMN_TITLE));
+			aStream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
+			aStream.setOpen(res.getBoolean(COLUMN_OPEN));
+			aStream.setNumberOfParticipant(res.getInt(COLUMN_NB_OF_PARTICIPANT));
+			result.add(aStream);
+		}
+		return result;
+	}
 }

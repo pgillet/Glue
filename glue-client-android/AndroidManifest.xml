@@ -97,6 +97,16 @@
             android:name=".CreateStreamSummaryActivity"
             android:label="@string/title_activity_create_stream_summary" >
         </activity>
+        
+        <activity android:name=".SearchableStreamActivity" android:label="@string/title_activity_searchable_stream">
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+        <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable_stream"/>
+    </activity>
+        
+        
         <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
         <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
         <!-- android:label="@string/title_activity_main" -->
@@ -108,6 +118,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+       		<meta-data android:name="android.app.default_searchable"
+                   android:value=".SearchableStreamActivity" />
         </activity>
     </application>
 

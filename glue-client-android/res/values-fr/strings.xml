@@ -92,5 +92,6 @@
     <string name="login_activity_loginfail_text_pwonly">Vous avez saisi le mauvais mot de passe ou votre compte a été modifié. Saisissez à nouveau votre mot de passe.</string>
     <string name="login_activity_loginfail_text_pwmissing">Tapez le mot de passe de ce compte.</string>
     <string name="login_activity_newaccount_text">Connectez-vous à votre compte Glue.</string>
+    <string name="search_stream_hit">Rechercher des streams</string>
 
 </resources>
