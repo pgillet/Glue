@@ -28,6 +28,8 @@ public class UserDAO {
 			+ "passwd=? WHERE id=?";
 
 	public static final String SELECT_USER = "SELECT * from GLUE_USER WHERE id=?";
+	
+	public static final String AUTH_USER = "SELECT * FROM GLUE_USER WHERE email=? AND passwd=?";
 
 	public static final String SELECT_MAIL_USER = "SELECT * from GLUE_USER WHERE email=?";
 
@@ -88,6 +90,23 @@ public class UserDAO {
 		User result = null;
 		statement = connection.prepareStatement(SELECT_MAIL_USER);
 		statement.setString(1, mail);
+		ResultSet res = statement.executeQuery();
+		if (res.next()) {
+			result = new User();
+			result.setId(res.getLong(COLUMN_ID));
+			result.setFirstName(res.getString(COLUMN_FIRST_NAME));
+			result.setLastName(res.getString(COLUMN_LAST_NAME));
+			result.setMail(res.getString(COLUMN_MAIL));
+			result.setPassword(res.getString(COLUMN_PWD));
+		}
+		return result;
+	}
+	
+	public IUser authenticate(String mail, String passwd) throws SQLException {
+		User result = null;
+		PreparedStatement statement = connection.prepareStatement(AUTH_USER);
+		statement.setString(1, mail);
+		statement.setString(2, passwd);
 		ResultSet res = statement.executeQuery();
 		if (res.next()) {
 			result = new User();

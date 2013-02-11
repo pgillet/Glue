@@ -3,6 +3,7 @@ package com.glue.webapp.servlet;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -25,6 +27,9 @@ public class AuthFilter implements Filter {
 	private static final String AUTHORIZATION = "Authorization";
 
 	private FilterConfig filterConfig;
+	
+	@Resource(name = "jdbc/gluedb")
+	private DataSource dataSource;
 
 	@Override
 	public void destroy() {
@@ -46,7 +51,8 @@ public class AuthFilter implements Filter {
 			System.out.println(headerName + "=" + header);
 		}
 
-		HttpServletRequest request = new MyHttpServletRequest(request0);
+		MyHttpServletRequest request = new MyHttpServletRequest(request0);
+		request.setDataSource(getDataSource());
 
 		try {
 
@@ -79,7 +85,7 @@ public class AuthFilter implements Filter {
 					}
 				}
 
-				if (user != null && password != null) {
+				if (user != null && password != null) {					
 					request.login(user, password);
 				}
 			}
@@ -117,5 +123,19 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
+	}
+
+	/**
+	 * @return the dataSource
+	 */
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+
+	/**
+	 * @param dataSource the dataSource to set
+	 */
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 }

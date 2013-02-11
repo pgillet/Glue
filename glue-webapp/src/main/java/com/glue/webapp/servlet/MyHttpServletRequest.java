@@ -1,11 +1,17 @@
 package com.glue.webapp.servlet;
 
 import java.security.Principal;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
+import com.glue.struct.IUser;
+import com.glue.webapp.db.DAOManager;
+import com.glue.webapp.db.UserDAO;
 
 class MyHttpServletRequest extends HttpServletRequestWrapper {
 
@@ -18,6 +24,8 @@ class MyHttpServletRequest extends HttpServletRequestWrapper {
 	protected boolean cache = true;
 
 	Principal principal;
+
+	private DataSource dataSource;
 
 	public MyHttpServletRequest(HttpServletRequest request) {
 		super(request);
@@ -52,9 +60,17 @@ class MyHttpServletRequest extends HttpServletRequestWrapper {
 			throw new ServletException("Already authenticated");
 		}
 
-		// High security: username must be equal to password.
-		if (username.length() > 0 && username.equals(password)) {
-			Principal p = new SimplePrincipal(username);
+		IUser user = null;
+		try {
+			UserDAO userDAO = DAOManager.getInstance(getDataSource())
+					.getUserDAO();
+			user = userDAO.authenticate(username, password);
+		} catch (SQLException e) {
+			throw new ServletException(e);
+		}
+
+		if (user != null) {
+			Principal p = new SimplePrincipal(user.getMail());
 			register(p);
 		} else {
 			throw new ServletException("Authentication failed");
@@ -80,6 +96,21 @@ class MyHttpServletRequest extends HttpServletRequestWrapper {
 				// calling removeAttribute()
 			}
 		}
+	}
+
+	/**
+	 * @return the dataSource
+	 */
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+
+	/**
+	 * @param dataSource
+	 *            the dataSource to set
+	 */
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 
 }
