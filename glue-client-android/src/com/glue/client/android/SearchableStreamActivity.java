@@ -23,6 +23,7 @@ import com.glue.struct.IStream;
 public class SearchableStreamActivity extends ListActivity {
 
 	private static final String TAG = "SearchableStreamActivity";
+	public static final String PARAM_STREAM_ID = "streamId";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,17 +52,11 @@ public class SearchableStreamActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				// Getting values from selected ListItem
-				// Long streamId = Long.getLong(((TextView)
-				// view.findViewById(R.id.stream_id)).getText().toString());
+				Long streamId = ((IStream) view.getTag()).getId();
 
-				// Starting new intent
-				Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-				// sending pid to next activity
-				// in.putExtra(TAG_PID, pid);
-
-				// starting new activity and expecting some response back
-				// startActivityForResult(in, 100);
+				// Starting new intent with stream ID
+				Intent intent = new Intent(getApplicationContext(), StreamDetailActivity.class);
+				intent.putExtra(PARAM_STREAM_ID, streamId);
 				startActivity(intent);
 			}
 		});

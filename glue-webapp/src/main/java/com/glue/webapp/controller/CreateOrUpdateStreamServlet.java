@@ -41,7 +41,7 @@ public class CreateOrUpdateStreamServlet extends AbstractDatabaseServlet {
 			streamDAO.joinAsAdmin(stream.getId(), getCurrentUser().getId());
 
 			// Create associated directory
-			if (!RepositoryManager.createStream(stream.getId())) {
+			if (!RepositoryManager.createStream(stream.getId(), getServletContext().getRealPath("/Streams"))) {
 
 				// Exception?
 				System.out.println("Not OK");

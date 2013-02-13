@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.glue.client.android"
     android:versionCode="1"
@@ -17,6 +18,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -26,7 +31,7 @@
 
         <!-- The authenticator service -->
         <service
-            android:name=".authenticator.AuthenticationService"
+            android:name="com.glue.client.android.authenticator.AuthenticationService"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -36,8 +41,9 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+
         <activity
-            android:name=".authenticator.AuthenticatorActivity"
+            android:name="com.glue.client.android.authenticator.AuthenticatorActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
 
             <!--
@@ -46,42 +52,42 @@
             -->
         </activity>
         <activity
-            android:name=".ItemListActivity"
+            android:name="com.glue.client.android.ItemListActivity"
             android:label="@string/title_item_list" >
         </activity>
         <activity
-            android:name=".ItemDetailActivity"
+            android:name="com.glue.client.android.ItemDetailActivity"
             android:label="@string/title_item_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ItemListActivity" />
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name="com.glue.client.android.SignUpActivity"
             android:label="@string/title_activity_sign_up"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
         <activity
-            android:name=".CreateStreamMainActivity"
+            android:name="com.glue.client.android.CreateStreamMainActivity"
             android:label="@string/title_activity_create_stream_main"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".CreateStreamUserActivity"
+            android:name="com.glue.client.android.CreateStreamUserActivity"
             android:label="@string/title_activity_create_stream_user"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".CreateStreamLocationActivity"
+            android:name="com.glue.client.android.CreateStreamLocationActivity"
             android:label="@string/title_activity_create_stream_location" >
         </activity>
 
         <provider
-            android:name=".location.LocationSuggestionsProvider"
+            android:name="com.glue.client.android.location.LocationSuggestionsProvider"
             android:authorities="com.glue.client.android.location.LocationSuggestionsProvider" />
 
         <activity
-            android:name=".location.LocationPickerMapActivity"
+            android:name="com.glue.client.android.location.LocationPickerMapActivity"
             android:label="@string/title_activity_location_picker_map"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar" >
@@ -94,24 +100,26 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".CreateStreamSummaryActivity"
+            android:name="com.glue.client.android.CreateStreamSummaryActivity"
             android:label="@string/title_activity_create_stream_summary" >
         </activity>
-        
-        <activity android:name=".SearchableStreamActivity" android:label="@string/title_activity_searchable_stream">
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-        <meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable_stream"/>
-    </activity>
-        
-        
+        <activity
+            android:name="com.glue.client.android.SearchableStreamActivity"
+            android:label="@string/title_activity_searchable_stream" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable_stream" />
+        </activity>
+
         <!-- Remove the android:label attribute from the main activity, so as to display the good application name -->
         <!-- See http://stackoverflow.com/questions/7199940/android-app-name-not-being-displayed -->
         <!-- android:label="@string/title_activity_main" -->
         <activity
-            android:name=".MainActivity"
+            android:name="com.glue.client.android.MainActivity"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -119,9 +127,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- enable the search dialog to send searches to SearchableActivity -->
-       		<meta-data android:name="android.app.default_searchable"
-                   android:value=".SearchableStreamActivity" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchableStreamActivity" />
         </activity>
+        <activity
+            android:name="com.glue.client.android.StreamDetailActivity"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <service
+            android:name="com.glue.client.android.service.CreateMediaIntentService"
+            android:enabled="true" />
     </application>
 
 </manifest>

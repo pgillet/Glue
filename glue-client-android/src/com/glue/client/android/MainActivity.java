@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		setContentView(R.layout.activity_main);
 		setTitle(R.string.app_name);
+
 	}
 
 	@Override

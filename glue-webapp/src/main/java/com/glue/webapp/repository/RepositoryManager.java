@@ -9,16 +9,15 @@ import com.glue.struct.IMedia;
 
 public class RepositoryManager {
 
-	private static final String GLUE_ROOT = "C:\\Glue_Stream\\";
-
-	public static boolean createStream(long streamId) {
-		File file = new File(GLUE_ROOT + streamId);
+	public static boolean createStream(long streamId, String path) {
+		File file = new File(path + File.separator + streamId);
 		return file.mkdirs();
 	}
 
-	public static void createMedia(IMedia media, Part mediaPart) throws IOException {
-		System.out.println(GLUE_ROOT + media.getStreamId() + File.separator + media.getId() + "."
+	public static void createMedia(IMedia media, Part mediaPart, String path) throws IOException {
+		System.out.println(path + File.separator + media.getStreamId() + File.separator + media.getId() + "."
 				+ media.getExtension());
-		mediaPart.write(GLUE_ROOT + media.getStreamId() + File.separator + media.getId() + "." + media.getExtension());
+		mediaPart.write(path + File.separator + media.getStreamId() + File.separator + media.getId() + "."
+				+ media.getExtension());
 	}
 }

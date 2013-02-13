@@ -1,7 +1,7 @@
 package com.glue.api.application;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.InputStreamBody;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
@@ -66,7 +66,7 @@ public class HttpHelper {
 		return result;
 	}
 
-	protected static <T> T sendGlueObject(HttpClient http, T glueObject, Type objectType, String url, InputStream input) {
+	protected static <T> T sendGlueObject(HttpClient http, T glueObject, Type objectType, String url, File file) {
 
 		T result = null;
 
@@ -85,8 +85,11 @@ public class HttpHelper {
 			HttpPost post = new HttpPost(Configuration.getBaseUrl() + url);
 			FormBodyPart jsonPart = new FormBodyPart("json", new StringBody(gsonStream));
 			multipartEntity.addPart(jsonPart);
-			FormBodyPart filePart = new FormBodyPart("file", new InputStreamBody(input, "jsonFile"));
-			multipartEntity.addPart(filePart);
+			if (file != null) {
+				FileBody fileBody = new FileBody(file);
+				multipartEntity.addPart("file", fileBody);
+				// multipartEntity.addPart(filePart);
+			}
 			post.setEntity(multipartEntity);
 			response = http.execute(post);
 			if (response.getStatusLine().getStatusCode() == 200) {
@@ -94,6 +97,8 @@ public class HttpHelper {
 				if (gsonStream != null) {
 					result = gson.fromJson(gsonStream, objectType);
 				}
+			} else {
+				System.out.println("FUCK!!!");
 			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

@@ -97,5 +97,9 @@
     <string name="login_activity_loginfail_text_pwmissing">Type the password for this account.</string>
     <string name="login_activity_newaccount_text">Sign in to your Glue account. </string>
     <string name="title_activity_searchable_stream">SearchableStreamActivity</string>
+    <string name="title_activity_stream_detail">StreamDetailActivity</string>
+    <string name="menu_content_edit">Add text</string>
+    <string name="menu_device_access_camera">Add photo</string>
+    <string name="menu_device_access_mic">Add sound</string>
 
 </resources>

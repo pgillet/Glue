@@ -71,6 +71,8 @@ public class StreamAdapter extends BaseAdapter {
 		} else {
 			publicView.setImageResource(R.drawable.holo_dark_device_access_secure);
 		}
+
+		itemView.setTag(streams.get(position));
 		return itemView;
 	}
 

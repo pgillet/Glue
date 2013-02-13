@@ -8,31 +8,31 @@ public class Media implements IMedia, Serializable {
 
 	private static final long serialVersionUID = 8398408650348533491L;
 
-	long id;
+	Long id;
 	String caption;
 	String extension;
 	String mimeType;
-	double latitude;
-	double longitude;
-	long startDate;
-	long streamId;
+	Double latitude;
+	Double longitude;
+	Long startDate;
+	Long streamId;
 
 	public Media() {
 	}
 
-	public long getStreamId() {
+	public Long getStreamId() {
 		return streamId;
 	}
 
-	public void setStreamId(long streamId) {
+	public void setStreamId(Long streamId) {
 		this.streamId = streamId;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -60,27 +60,27 @@ public class Media implements IMedia, Serializable {
 		this.mimeType = mimeType;
 	}
 
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(double latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(double longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public long getStartDate() {
+	public Long getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(long startDate) {
+	public void setStartDate(Long startDate) {
 		this.startDate = startDate;
 	}
 

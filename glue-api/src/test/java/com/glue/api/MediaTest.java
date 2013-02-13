@@ -36,8 +36,9 @@ public class MediaTest {
 			IStream stream = glue.createStream("Concert", null, true, true, null, null, null, null, false,
 					new Date().getTime(), 0, 10.255, 15.378, null);
 
-			media = glue.createMedia(stream.getId(), "caption", "jpg", "Picture", 10.255, 15.378, new Date().getTime(),
-					is);
+			// media = glue.createMedia(stream.getId(), "caption", "jpg",
+			// "Picture", 10.255, 15.378, new Date().getTime(),
+			// is);
 		} catch (GlueException e) {
 			fail("Exception during stream creation");
 		} catch (FileNotFoundException e) {

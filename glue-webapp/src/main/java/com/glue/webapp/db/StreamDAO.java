@@ -81,7 +81,7 @@ public class StreamDAO {
 		statement.setDouble(9, aStream.getLatitude());
 		statement.setDouble(10, aStream.getLongitude());
 		statement.setString(11, aStream.getAddress());
-		statement.setString(12, "/Thumbnail/empty.gif");
+		statement.setString(12, "/Images/empty.gif");
 		statement.executeUpdate();
 
 		// Get the generated id

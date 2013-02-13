@@ -1,15 +1,15 @@
 package com.glue.api.operations;
 
-import java.io.InputStream;
+import java.io.File;
 
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IMedia;
 
 public interface MediaOperations {
 
-	IMedia createMedia(long streamId, String caption, String extension, String mimeType, double latitude,
-			double longitude, long startDate, InputStream input) throws GlueException;
+	IMedia createMedia(Long streamId, String caption, String extension, String mimeType, Double latitude,
+			Double longitude, Long startDate, File file) throws GlueException;
 
-	IMedia createMedia(IMedia media, InputStream input) throws GlueException;
+	IMedia createMedia(IMedia media, File file) throws GlueException;
 
 }

@@ -2,13 +2,13 @@ package com.glue.struct;
 
 public interface IMedia {
 
-	long getId();
+	Long getId();
 
-	void setId(long id);
+	void setId(Long id);
 
-	long getStreamId();
+	Long getStreamId();
 
-	void setStreamId(long streamId);
+	void setStreamId(Long streamId);
 
 	String getExtension();
 
@@ -22,16 +22,16 @@ public interface IMedia {
 
 	void setCaption(String caption);
 
-	double getLatitude();
+	Double getLatitude();
 
-	void setLatitude(double latitude);
+	void setLatitude(Double latitude);
 
-	double getLongitude();
+	Double getLongitude();
 
-	void setLongitude(double longitude);
+	void setLongitude(Double longitude);
 
-	long getStartDate();
+	Long getStartDate();
 
-	void setStartDate(long date);
+	void setStartDate(Long date);
 
 }

@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_content_edit"
+        android:icon="@drawable/holo_light_content_edit"
+        android:showAsAction="always"
+        android:title="@string/menu_content_edit"/>
+    
+    <item
+        android:id="@+id/menu_device_access_camera"
+        android:icon="@drawable/holo_light_device_access_camera"
+        android:showAsAction="always"
+        android:title="@string/menu_device_access_camera"/>
+        
+     <item
+        android:id="@+id/menu_device_access_mic"
+        android:icon="@drawable/holo_light_device_access_mic"
+        android:showAsAction="always"
+        android:title="@string/menu_device_access_mic"/>
+    
+    
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+</menu>

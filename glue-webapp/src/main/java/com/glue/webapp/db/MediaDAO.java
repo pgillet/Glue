@@ -49,12 +49,33 @@ public class MediaDAO {
 		statement = connection.prepareStatement(INSERT_NEW_MEDIA, Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, media.getStreamId());
 		statement.setLong(2, user.getId());
-		statement.setString(3, media.getExtension());
+		if (media.getExtension() != null) {
+			statement.setString(3, media.getExtension());
+		} else {
+			statement.setNull(3, java.sql.Types.VARCHAR);
+		}
 		statement.setString(4, media.getMimeType());
-		statement.setString(5, media.getCaption());
-		statement.setDouble(6, media.getLatitude());
-		statement.setDouble(7, media.getLongitude());
-		statement.setLong(8, media.getStartDate());
+		if (media.getCaption() != null) {
+			statement.setString(5, media.getCaption());
+		} else {
+			statement.setNull(5, java.sql.Types.VARCHAR);
+		}
+		if (media.getLatitude() != null) {
+			statement.setDouble(6, media.getLatitude());
+		} else {
+			statement.setNull(6, java.sql.Types.DECIMAL);
+		}
+		if (media.getLongitude() != null) {
+			statement.setDouble(7, media.getLongitude());
+		} else {
+			statement.setNull(7, java.sql.Types.DECIMAL);
+		}
+		if (media.getStartDate() != null) {
+			statement.setLong(8, media.getStartDate());
+		} else {
+			statement.setNull(8, java.sql.Types.BIGINT);
+		}
+
 		statement.executeUpdate();
 
 		// Get the generated id
