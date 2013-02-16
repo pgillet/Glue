@@ -101,5 +101,10 @@
     <string name="menu_content_edit">Add text</string>
     <string name="menu_device_access_camera">Add photo</string>
     <string name="menu_device_access_mic">Add sound</string>
+    <string name="create_account">Create an account</string>
+    <string name="legal_terms">By clicking the submit button below, you confirm that you have read and agreed to our <a href='http://www.glue.com/legal/terms'>Terms and Conditions</a></string>
+    <string name="required_field">You must fill in this field</string>
+    <string name="email_address_type_field">Your email address must be in the form example@example.com</string>
+    <string name="signing_up">Signing up...</string>
 
 </resources>

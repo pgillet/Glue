@@ -4,133 +4,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="10dp" >
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/first_name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView2"
+            android:layout_marginBottom="30dp"
+            android:text="@string/create_account"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/first_name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:ems="10"
+            android:hint="@string/first_name"
             android:inputType="textPersonName" >
 
             <requestFocus />
         </EditText>
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/editText1"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/last_name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/last_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView3"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:ems="10"
+            android:hint="@string/last_name"
             android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/editText2"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/your_email"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/mail_address_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView4"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:ems="10"
+            android:hint="@string/mail_address"
             android:inputType="textEmailAddress" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/editText3"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/re_enter_email_"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/password_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView5"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:ems="10"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/new_password"
+            android:inputType="textPassword" />
 
         <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/editText4"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/new_password"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/legal_terms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView6"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:inputType="text" />
+            android:text="@string/legal_terms"
+            android:layout_marginBottom="30dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button
             android:id="@+id/button1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editText5"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
+            android:onClick="onClickSignUp"
             android:text="@string/sign_up" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>
