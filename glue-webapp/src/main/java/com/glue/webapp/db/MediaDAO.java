@@ -18,7 +18,7 @@ import com.glue.struct.impl.Media;
  * @author Greg
  * 
  */
-public class MediaDAO {
+public class MediaDAO extends AbstractDAO {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_STREAM_ID = "stream_id";
@@ -40,13 +40,13 @@ public class MediaDAO {
 	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public MediaDAO(Connection connection) {
-		this.connection = connection;
+	protected MediaDAO() {
 	}
 
 	public void create(IMedia media, IUser user) throws SQLException {
 
-		statement = connection.prepareStatement(INSERT_NEW_MEDIA, Statement.RETURN_GENERATED_KEYS);
+		statement = connection.prepareStatement(INSERT_NEW_MEDIA,
+				Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, media.getStreamId());
 		statement.setLong(2, user.getId());
 		if (media.getExtension() != null) {
@@ -95,7 +95,8 @@ public class MediaDAO {
 
 	public Set<IMedia> search(long streamId) throws SQLException {
 		Set<IMedia> result = new HashSet<IMedia>();
-		statement = connection.prepareStatement(SELECT_MEDIAS_STREAM, Statement.RETURN_GENERATED_KEYS);
+		statement = connection.prepareStatement(SELECT_MEDIAS_STREAM,
+				Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, streamId);
 		ResultSet res = statement.executeQuery();
 		IMedia media = null;

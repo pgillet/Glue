@@ -13,6 +13,10 @@ public class DAOManager {
 
 	protected UserDAO userDAO;
 
+	protected StreamDAO streamDAO;
+
+	protected MediaDAO mediaDAO;
+
 	// One instance per thread
 	private static final ThreadLocal<DAOManager> localInstance = new ThreadLocal<DAOManager>() {
 		protected DAOManager initialValue() {
@@ -39,7 +43,7 @@ public class DAOManager {
 	}
 
 	protected Connection getConnection() throws SQLException {
-		if (this.connection == null /* || this.connection.isClosed() */) {
+		if (this.connection == null || this.connection.isClosed()) {
 			this.connection = dataSource.getConnection();
 		}
 
@@ -48,10 +52,29 @@ public class DAOManager {
 
 	public UserDAO getUserDAO() throws SQLException {
 		if (userDAO == null) {
-			userDAO = new UserDAO(getConnection());
+			userDAO = new UserDAO();
 		}
+		userDAO.setConnection(getConnection());
 
 		return userDAO;
+	}
+
+	public StreamDAO getStreamDAO() throws SQLException {
+		if (streamDAO == null) {
+			streamDAO = new StreamDAO();
+		}
+		streamDAO.setConnection(getConnection());
+
+		return streamDAO;
+	}
+
+	public MediaDAO getMediaDAO() throws SQLException {
+		if (mediaDAO == null) {
+			mediaDAO = new MediaDAO();
+		}
+		mediaDAO.setConnection(getConnection());
+
+		return mediaDAO;
 	}
 
 	public Object transaction(DAOCommand command) throws SQLException {
@@ -68,15 +91,50 @@ public class DAOManager {
 			throw e; // or wrap it before rethrowing it
 		} finally {
 			connection.setAutoCommit(true);
+			closeConnection();
+		}
+	}
+
+	/**
+	 * Executes the given command, and closes the current connection. This is
+	 * equivalent to the following code snippet: <code>
+	 * DAOManager manager = DAOManager.getInstance(dataSource);  
+	 * SomeDAO dao = manager.getSomeDAO();
+	 * dao.doSomeOperation();
+	 * manager.closeConnection();
+	 * </code>
+	 * 
+	 * @param command
+	 * @return
+	 * @throws SQLException
+	 */
+	public Object executeAndClose(DAOCommand command) throws SQLException {
+		try {
+			return command.execute(this);
+		} finally {
+			connection.close();
+		}
+	}
+
+	public void closeConnection() throws SQLException {
+		if (connection != null) {
+			connection.close();
+		}
+	}
+
+	public void closeConnectionQuietly() {
+		try {
+			closeConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
 		try {
-			if (connection != null) {
-				connection.close();
-			}
+			closeConnection();
 		} finally {
 			super.finalize();
 		}

@@ -72,7 +72,7 @@ public class GlueImpl implements Glue {
 		IUser user = new User();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setMail(email);
+		user.setMailAddress(email);
 		user.setPassword(password);
 		return createOrUpdateUser(user);
 	}

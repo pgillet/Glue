@@ -20,7 +20,7 @@ import com.glue.struct.impl.Stream;
  * @author Greg
  * 
  */
-public class StreamDAO {
+public class StreamDAO extends AbstractDAO {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_STREAM_ID = "stream_id";
@@ -63,8 +63,7 @@ public class StreamDAO {
 	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public StreamDAO(Connection connection) {
-		this.connection = connection;
+	protected StreamDAO() {
 	}
 
 	public void create(IStream aStream) throws SQLException {
@@ -212,7 +211,7 @@ public class StreamDAO {
 		statement.executeUpdate();
 	}
 
-	public boolean isPartipant(long userId, long streamId) throws SQLException {
+	public boolean isParticipant(long userId, long streamId) throws SQLException {
 		statement = connection.prepareStatement(SELECT_PARTICIPANT);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);

@@ -2,7 +2,6 @@ package com.glue.webapp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.servlet.annotation.WebServlet;
@@ -11,8 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.glue.struct.IStream;
 import com.glue.struct.impl.Stream;
+import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
+import com.glue.webapp.servlet.GlueRole;
+import com.glue.webapp.servlet.UserPrincipal;
 import com.glue.webapp.utilities.GSonHelper;
+
+
 
 /**
  * CreateStream servlet.
@@ -24,28 +28,34 @@ public class JoinStreamServlet extends AbstractDatabaseServlet {
 	private IStream stream;
 
 	@Override
-	protected void doOperation() throws SQLException {
+	protected void doOperation(HttpServletRequest request,
+			HttpServletResponse response, DAOManager manager)
+			throws SQLException {
 
 		// Create or update Stream
-		StreamDAO streamDAO = new StreamDAO(connection);
+		StreamDAO streamDAO = manager.getStreamDAO();
+		
+		UserPrincipal principal = (UserPrincipal) request.getUserPrincipal();
 
 		// Join
-		streamDAO.join(stream.getId(), getCurrentUser().getId());
+		streamDAO.join(stream.getId(), principal.getId());
 	}
 
 	@Override
-	protected void retrieveDatasFromRequest(HttpServletRequest request) throws IOException {
+	protected void retrieveDatasFromRequest(HttpServletRequest request)
+			throws IOException {
 		stream = GSonHelper.getGsonObjectFromRequest(request, Stream.class);
 	}
 
 	@Override
-	protected void sendResponse(HttpServletResponse response) throws IOException {
+	protected void sendResponse(HttpServletResponse response)
+			throws IOException {
 		PrintWriter writer = response.getWriter();
 		writer.write(gson.toJson(stream));
 	}
 
 	@Override
-	protected boolean isUserAuthorized(Connection connection) throws SQLException {
-		return true;
+	protected boolean isUserAuthorized(HttpServletRequest request) {
+		return request.isUserInRole(GlueRole.REGISTERED_USER.toString());
 	}
 }

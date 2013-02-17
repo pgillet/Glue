@@ -34,9 +34,9 @@ public interface IUser {
 	 * 
 	 * @return the
 	 */
-	String getMail();
+	String getMailAddress();
 
-	void setMail(String mail);
+	void setMailAddress(String mail);
 
 	/**
 	 * Returns the user password.

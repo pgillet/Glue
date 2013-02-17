@@ -42,11 +42,11 @@ public class User implements IUser, Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getMail() {
+	public String getMailAddress() {
 		return mail;
 	}
 
-	public void setMail(String mail) {
+	public void setMailAddress(String mail) {
 		this.mail = mail;
 	}
 

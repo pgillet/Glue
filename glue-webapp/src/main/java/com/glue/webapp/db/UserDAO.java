@@ -15,7 +15,7 @@ import com.glue.struct.impl.User;
  * @author Greg
  * 
  */
-public class UserDAO {
+public class UserDAO extends AbstractDAO {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_FIRST_NAME = "first_name";
@@ -38,8 +38,7 @@ public class UserDAO {
 	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public UserDAO(Connection connection) {
-		this.connection = connection;
+	public UserDAO() {
 	}
 
 	public void create(IUser user) throws SQLException {
@@ -47,7 +46,7 @@ public class UserDAO {
 		statement = connection.prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS);
 		statement.setString(1, user.getFirstName());
 		statement.setString(2, user.getLastName());
-		statement.setString(3, user.getMail());
+		statement.setString(3, user.getMailAddress());
 		statement.setString(4, user.getPassword());
 		statement.executeUpdate();
 
@@ -65,7 +64,7 @@ public class UserDAO {
 		statement.setLong(5, user.getId());
 		statement.setString(1, user.getFirstName());
 		statement.setString(2, user.getLastName());
-		statement.setString(3, user.getMail());
+		statement.setString(3, user.getMailAddress());
 		statement.setString(4, user.getPassword());
 		statement.executeUpdate();
 	}
@@ -80,7 +79,7 @@ public class UserDAO {
 			result.setId(res.getLong(COLUMN_ID));
 			result.setFirstName(res.getString(COLUMN_FIRST_NAME));
 			result.setLastName(res.getString(COLUMN_LAST_NAME));
-			result.setMail(res.getString(COLUMN_MAIL));
+			result.setMailAddress(res.getString(COLUMN_MAIL));
 			result.setPassword(res.getString(COLUMN_PWD));
 		}
 		return result;
@@ -96,7 +95,7 @@ public class UserDAO {
 			result.setId(res.getLong(COLUMN_ID));
 			result.setFirstName(res.getString(COLUMN_FIRST_NAME));
 			result.setLastName(res.getString(COLUMN_LAST_NAME));
-			result.setMail(res.getString(COLUMN_MAIL));
+			result.setMailAddress(res.getString(COLUMN_MAIL));
 			result.setPassword(res.getString(COLUMN_PWD));
 		}
 		return result;
@@ -113,10 +112,26 @@ public class UserDAO {
 			result.setId(res.getLong(COLUMN_ID));
 			result.setFirstName(res.getString(COLUMN_FIRST_NAME));
 			result.setLastName(res.getString(COLUMN_LAST_NAME));
-			result.setMail(res.getString(COLUMN_MAIL));
+			result.setMailAddress(res.getString(COLUMN_MAIL));
 			result.setPassword(res.getString(COLUMN_PWD));
 		}
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.glue.webapp.db.IDAO#getConnection()
+	 */
+	@Override
+	public Connection getConnection() {
+		return connection;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.glue.webapp.db.IDAO#setConnection(java.sql.Connection)
+	 */
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 }

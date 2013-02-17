@@ -1,7 +1,6 @@
 package com.glue.webapp.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
@@ -12,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import com.glue.struct.IUser;
-import com.glue.webapp.db.UserDAO;
+import com.glue.webapp.db.DAOCommand;
+import com.glue.webapp.db.DAOManager;
 import com.google.gson.Gson;
 
 /**
@@ -24,59 +24,43 @@ public abstract class AbstractDatabaseServlet extends HttpServlet {
 
 	@Resource(name = "jdbc/gluedb")
 	DataSource dataSource;
-	Connection connection;
 	IUser currentUser;
 
 	protected final Gson gson = new Gson();
 
-	protected abstract void retrieveDatasFromRequest(HttpServletRequest request) throws IOException;
+	protected abstract void retrieveDatasFromRequest(HttpServletRequest request)
+			throws IOException;
 
-	protected abstract void doOperation() throws SQLException;
+	protected abstract void doOperation(HttpServletRequest request,
+			HttpServletResponse response, DAOManager manager)
+			throws SQLException;
 
-	protected abstract void sendResponse(HttpServletResponse response) throws IOException;
+	protected abstract void sendResponse(HttpServletResponse response)
+			throws IOException;
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+	protected void doPost(final HttpServletRequest request,
+			final HttpServletResponse response) throws ServletException,
 			IOException {
 
 		retrieveDatasFromRequest(request);
 
-		try {
-			// Get a database connection
-			connection = dataSource.getConnection();
+		if (isUserAuthorized(request)) {
 
-			currentUser = retrieveUser(request, connection);
-			if (isUserAuthorized(connection)) {
-
-				connection.setAutoCommit(false);
-
-				// Execute Operation
-				doOperation();
-
-				connection.commit();
-			}
-			// User not authorized
-			else {
-
-			}
-
-		} catch (SQLException e) {
-			if (connection != null) {
-				try {
-					e.printStackTrace();
-					System.out.print("Transaction is being rolled back");
-					connection.rollback();
-				} catch (SQLException excep) {
-					excep.printStackTrace();
-				}
-			}
-		} finally {
+			DAOManager manager = DAOManager.getInstance(dataSource);
 			try {
-				connection.setAutoCommit(true);
+				manager.transaction(new DAOCommand() {
+					public Object execute(DAOManager manager)
+							throws SQLException {
+						doOperation(request, response, manager);
+						return null;
+					}
+				});
 			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -84,21 +68,8 @@ public abstract class AbstractDatabaseServlet extends HttpServlet {
 		sendResponse(response);
 	}
 
-	protected boolean isUserAuthorized(Connection connection) throws SQLException {
+	protected boolean isUserAuthorized(HttpServletRequest request) {
 		return false;
-	}
-
-	// TO be implemented
-	private IUser retrieveUser(HttpServletRequest request, Connection connection) throws SQLException {
-
-		// Pour le moment je cherche un user en dur ...
-		UserDAO userDAO = new UserDAO(connection);
-		IUser user = userDAO.search("gregoire.denis@glue.com");
-		return user;
-	}
-
-	protected IUser getCurrentUser() {
-		return currentUser;
 	}
 
 }

@@ -2,7 +2,6 @@ package com.glue.webapp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.glue.struct.IStream;
+import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
+import com.glue.webapp.servlet.GlueRole;
 
 /**
  * SearchStream servlet.
@@ -36,15 +37,15 @@ public class SearchStreamServlet extends AbstractDatabaseServlet {
 	}
 
 	@Override
-	protected boolean isUserAuthorized(Connection connection) throws SQLException {
-		return true;
+	protected boolean isUserAuthorized(HttpServletRequest request) {
+		return request.isUserInRole(GlueRole.REGISTERED_USER.toString());
 	}
 
 	@Override
-	protected void doOperation() throws SQLException {
+	protected void doOperation(HttpServletRequest request, HttpServletResponse response, DAOManager manager) throws SQLException {
 
 		// Create or update Stream
-		StreamDAO streamDAO = new StreamDAO(connection);
+		StreamDAO streamDAO = manager.getStreamDAO();
 
 		// Search
 		streams = streamDAO.search(query);

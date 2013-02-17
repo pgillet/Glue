@@ -2,7 +2,6 @@ package com.glue.webapp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -13,9 +12,11 @@ import javax.servlet.http.Part;
 
 import com.glue.struct.IMedia;
 import com.glue.struct.impl.Media;
+import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.MediaDAO;
-import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.repository.RepositoryManager;
+import com.glue.webapp.servlet.GlueRole;
+import com.glue.webapp.servlet.UserPrincipal;
 import com.glue.webapp.utilities.GSonHelper;
 
 /**
@@ -31,17 +32,22 @@ public class CreateMediaServlet extends AbstractDatabaseServlet {
 	private Part streamPart;
 
 	@Override
-	protected void doOperation() throws SQLException {
+	protected void doOperation(HttpServletRequest request,
+			HttpServletResponse response, DAOManager manager)
+			throws SQLException {
 
 		// Create a media
-		MediaDAO mediaDAO = new MediaDAO(connection);
+		MediaDAO mediaDAO = manager.getMediaDAO();
 
-		mediaDAO.create(media, getCurrentUser());
+		UserPrincipal principal = (UserPrincipal) request.getUserPrincipal();
+
+		mediaDAO.create(media, principal);
 
 		// Create associated file
 		try {
 			if (streamPart != null) {
-				RepositoryManager.createMedia(media, streamPart, getServletContext().getRealPath("/Streams"));
+				RepositoryManager.createMedia(media, streamPart,
+						getServletContext().getRealPath("/Streams"));
 			}
 
 		} catch (IOException e) {
@@ -50,22 +56,22 @@ public class CreateMediaServlet extends AbstractDatabaseServlet {
 		}
 	}
 
-	protected void retrieveDatasFromRequest(HttpServletRequest request) throws IOException {
-		media = GSonHelper.getGsonObjectFromMultiPartRequest(request, Media.class);
+	protected void retrieveDatasFromRequest(HttpServletRequest request)
+			throws IOException {
+		media = GSonHelper.getGsonObjectFromMultiPartRequest(request,
+				Media.class);
 		streamPart = GSonHelper.getStreamPartFromMultiPartRequest(request);
 	}
 
 	@Override
-	protected void sendResponse(HttpServletResponse response) throws IOException {
+	protected void sendResponse(HttpServletResponse response)
+			throws IOException {
 		PrintWriter writer = response.getWriter();
 		writer.write(gson.toJson(media));
 	}
 
 	@Override
-	protected boolean isUserAuthorized(Connection connection) throws SQLException {
-
-		// Authorized if user is a participant of the stream
-		StreamDAO streamDAO = new StreamDAO(connection);
-		return streamDAO.isPartipant(getCurrentUser().getId(), media.getStreamId());
+	protected boolean isUserAuthorized(HttpServletRequest request) {
+		return request.isUserInRole(GlueRole.STREAM_PARTICIPANT.toString());
 	}
 }
