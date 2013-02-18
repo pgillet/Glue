@@ -1,4 +1,4 @@
-package com.glue.webapp.servlet;
+package com.glue.webapp.auth;
 
 import java.security.Principal;
 

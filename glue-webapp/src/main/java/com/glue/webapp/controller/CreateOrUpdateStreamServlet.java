@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.glue.struct.IStream;
 import com.glue.struct.impl.Stream;
+import com.glue.webapp.auth.GlueRole;
+import com.glue.webapp.auth.UserPrincipal;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.repository.RepositoryManager;
-import com.glue.webapp.servlet.GlueRole;
-import com.glue.webapp.servlet.UserPrincipal;
 import com.glue.webapp.utilities.GSonHelper;
 
 /**

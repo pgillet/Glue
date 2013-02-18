@@ -12,11 +12,11 @@ import javax.servlet.http.Part;
 
 import com.glue.struct.IMedia;
 import com.glue.struct.impl.Media;
+import com.glue.webapp.auth.GlueRole;
+import com.glue.webapp.auth.UserPrincipal;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.MediaDAO;
 import com.glue.webapp.repository.RepositoryManager;
-import com.glue.webapp.servlet.GlueRole;
-import com.glue.webapp.servlet.UserPrincipal;
 import com.glue.webapp.utilities.GSonHelper;
 
 /**
