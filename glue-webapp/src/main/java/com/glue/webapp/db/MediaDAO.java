@@ -1,6 +1,5 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +36,6 @@ public class MediaDAO extends AbstractDAO {
 
 	public static final String DELETE_MEDIA = "DELETE FROM MEDIA WHERE id=?";
 
-	Connection connection = null;
 	PreparedStatement statement = null;
 
 	protected MediaDAO() {

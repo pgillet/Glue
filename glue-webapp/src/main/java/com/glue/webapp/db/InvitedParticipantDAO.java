@@ -1,6 +1,5 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ import com.glue.struct.impl.InvitedParticipant;
  * @author Greg
  * 
  */
-public class InvitedParticipantDAO {
+public class InvitedParticipantDAO extends AbstractDAO {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_NAME = "name";
@@ -28,11 +27,9 @@ public class InvitedParticipantDAO {
 	public static final String SELECT_IP = "SELECT INVITED(id, name, email, stream_id) WHERE email=? and stream_id=?";
 	public static final String DELETE_ALL_IP = "DELETE FROM INVITED WHERE stream_id=?";
 
-	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public InvitedParticipantDAO(Connection connection) {
-		this.connection = connection;
+	protected InvitedParticipantDAO() {
 	}
 
 	public void create(InvitedParticipant ip) throws SQLException {

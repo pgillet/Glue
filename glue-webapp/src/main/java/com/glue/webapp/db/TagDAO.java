@@ -1,6 +1,5 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +11,7 @@ import java.sql.Statement;
  * @author Greg
  * 
  */
-public class TagDAO {
+public class TagDAO extends AbstractDAO {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_NAME = "name";
@@ -24,11 +23,9 @@ public class TagDAO {
 	public static final String INSERT_NEW_STREAM_TAG = "INSERT IGNORE INTO STREAM_TAG(tag_id,stream_id) VALUES (?,?)";
 	public static final String DELETE_ALL_STREAM_TAG = "DELETE FROM STREAM_TAG WHERE stream_id=?";
 
-	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public TagDAO(Connection connection) {
-		this.connection = connection;
+	protected TagDAO() {
 	}
 
 	public void create(String aTag, long streamId) throws SQLException {

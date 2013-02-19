@@ -1,6 +1,5 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,10 +34,9 @@ public class UserDAO extends AbstractDAO {
 
 	public static final String DELETE_USER = "DELETE FROM GLUE_USER WHERE id=?";
 
-	Connection connection = null;
 	PreparedStatement statement = null;
 
-	public UserDAO() {
+	protected UserDAO() {
 	}
 
 	public void create(IUser user) throws SQLException {
@@ -116,22 +114,6 @@ public class UserDAO extends AbstractDAO {
 			result.setPassword(res.getString(COLUMN_PWD));
 		}
 		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.glue.webapp.db.IDAO#getConnection()
-	 */
-	@Override
-	public Connection getConnection() {
-		return connection;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.glue.webapp.db.IDAO#setConnection(java.sql.Connection)
-	 */
-	@Override
-	public void setConnection(Connection connection) {
-		this.connection = connection;
 	}
 
 }

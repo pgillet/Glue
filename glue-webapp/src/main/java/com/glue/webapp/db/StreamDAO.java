@@ -1,6 +1,5 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,7 +59,6 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String DELETE_PARTICIPANT = "DELETE FROM stream WHERE stream_id=? and user_id=?";
 
-	Connection connection = null;
 	PreparedStatement statement = null;
 
 	protected StreamDAO() {
@@ -153,7 +151,10 @@ public class StreamDAO extends AbstractDAO {
 
 	private void updateInvitedParticipant(IStream aStream) throws SQLException {
 		// Store invited participants
-		InvitedParticipantDAO ipDAO = new InvitedParticipantDAO(connection);
+		// TODO: A DAO should not call another DAO internally. 
+		// The code below should be extracted in top level service class
+		InvitedParticipantDAO ipDAO = new InvitedParticipantDAO();
+		ipDAO.setConnection(connection);
 
 		// Delete previous invited participant ...
 		ipDAO.deleteAll(aStream.getId());
@@ -173,7 +174,10 @@ public class StreamDAO extends AbstractDAO {
 
 	private void updateTags(IStream aStream) throws SQLException {
 		// Store invited participants
-		TagDAO tagDAO = new TagDAO(connection);
+		// TODO: A DAO should not call another DAO internally. 
+		// The code below should be extracted in top level service class
+		TagDAO tagDAO = new TagDAO();
+		tagDAO.setConnection(connection);
 
 		// Delete previous invited participant ...
 		tagDAO.deleteAll(aStream.getId());
