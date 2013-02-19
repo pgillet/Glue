@@ -10,14 +10,28 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.commons.codec.binary.Base64;
 
+/**
+ * A filter for user authentication. The filter is mapped to all paths, except
+ * for those specified in the "excludes" initialization parameter (comma separated list of URL patterns).
+ * 
+ * @author pgillet
+ * 
+ */
+@WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
+		@WebInitParam(name = "form-login-page", value = "/login.jsp"),
+		@WebInitParam(name = "excludes", value = "/CreateOrUpdateUser") })
 public class AuthFilter implements Filter {
 
+	private static final String REGEX = "\\s*,\\s*";
+	private static final String EXCLUDES = "excludes";
 	private static final String APACHE_HTTP_CLIENT = "Apache-HttpClient";
 	private static final String USER_AGENT = "user-agent";
 	private static final String FORM_LOGIN_PAGE = "form-login-page";
@@ -27,7 +41,7 @@ public class AuthFilter implements Filter {
 	private static final String AUTHORIZATION = "Authorization";
 
 	private FilterConfig filterConfig;
-	
+
 	@Resource(name = "jdbc/gluedb")
 	private DataSource dataSource;
 
@@ -39,6 +53,12 @@ public class AuthFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest,
 			ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
+
+		String path = ((HttpServletRequest) servletRequest).getServletPath();
+		if (excludeFromFilter(path)) {
+			chain.doFilter(servletRequest, servletResponse);
+			return;
+		}
 
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request0 = (HttpServletRequest) servletRequest;
@@ -85,7 +105,7 @@ public class AuthFilter implements Filter {
 					}
 				}
 
-				if (user != null && password != null) {					
+				if (user != null && password != null) {
 					request.login(user, password);
 				}
 			}
@@ -133,9 +153,24 @@ public class AuthFilter implements Filter {
 	}
 
 	/**
-	 * @param dataSource the dataSource to set
+	 * @param dataSource
+	 *            the dataSource to set
 	 */
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	private boolean excludeFromFilter(String path) {
+
+		String initParam = filterConfig.getInitParameter(EXCLUDES);
+		String[] excludes = initParam.split(REGEX);
+
+		for (String exclude : excludes) {
+			if (path.startsWith(exclude)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
