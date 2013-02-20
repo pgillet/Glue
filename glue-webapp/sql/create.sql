@@ -1,7 +1,3 @@
--- Drop database and user
-DROP database gluedb;
-DROP USER 'glue'@'localhost';
-
 -- Database and user
 CREATE database gluedb;
 CREATE USER 'glue'@'localhost' IDENTIFIED BY 'glue';
