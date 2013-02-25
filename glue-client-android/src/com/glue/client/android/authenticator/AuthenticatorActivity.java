@@ -60,7 +60,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 	private AccountManager mAccountManager;
 
 	/** Keep track of the login task so can cancel it if requested */
-	private UserLoginTask mAuthTask = null;
+	protected UserLoginTask mAuthTask = null;
 
 	/** Keep track of the progress dialog so we can dismiss it */
 	private ProgressDialog mProgressDialog = null;
@@ -77,16 +77,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
 	private TextView mMessage;
 
-	private String mPassword;
+	protected String mPassword;
 
-	private EditText mPasswordEdit;
+	protected EditText mPasswordEdit;
 
 	/** Was the original caller asking for an entirely new account? */
 	protected boolean mRequestNewAccount = false;
 
-	private String mUsername;
+	protected String mUsername;
 
-	private EditText mUsernameEdit;
+	protected EditText mUsernameEdit;
 
 	/**
 	 * {@inheritDoc}
@@ -160,7 +160,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 			// the user login attempt.
 			showProgress();
 			mAuthTask = new UserLoginTask();
-			mAuthTask.execute();
+			mAuthTask.execute(mUsername, mPassword);
 		}
 	}
 
@@ -288,7 +288,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 	/**
 	 * Shows the progress UI for a lengthy operation.
 	 */
-	private void showProgress() {
+	protected void showProgress() {
 		showDialog(0);
 	}
 
@@ -306,16 +306,18 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 	 * Represents an asynchronous task used to authenticate a user against the
 	 * SampleSync Service
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, String> {
+	public class UserLoginTask extends AsyncTask<String, Void, String> {
+		
+		protected Exception ex;
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(String... params) {
 			// We do the actual work of authenticating the user
 			// in the NetworkUtilities class.
 			try {
 				// TODO: Glue#login() should return an auth token
 				Glue glue = new GlueFactory().getInstance();
-				glue.login(mUsername, mPassword);
+				glue.login(params[0], params[1]);
 				final String authToken = "Dummy";
 				return authToken;
 				// End TODO
@@ -324,6 +326,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 				Log.e(TAG,
 						"UserLoginTask.doInBackground: failed to authenticate");
 				Log.i(TAG, ex.toString());
+				this.ex = ex;
 				return null;
 			}
 		}
