@@ -19,12 +19,10 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 
 import com.glue.api.conf.Configuration;
@@ -46,19 +44,12 @@ public class GlueImpl implements Glue {
 
 	private static final long serialVersionUID = -8571499192744671742L;
 
-	protected transient HttpClient http;
+	protected GlueClientContext ctx = new GlueClientContext();
 
 	private StreamOperations streamOperations;
 
 	GlueImpl() {
-		http = new DefaultHttpClient();
-		streamOperations = new StreamOperationsImpl(http);
-	}
-
-	protected final void ensureAuthorizationEnabled() {
-		if (false) {
-			throw new IllegalStateException("Authentication credentials are missing.");
-		}
+		streamOperations = new StreamOperationsImpl(ctx);
 	}
 
 	@Override
@@ -83,7 +74,7 @@ public class GlueImpl implements Glue {
 	}
 
 	private IUser createOrUpdateUser(IUser user) {
-		return HttpHelper.sendGlueObject(http, user, User.class, "CreateOrUpdateUser");
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class, "CreateOrUpdateUser");
 	}
 
 	@Override
@@ -97,12 +88,12 @@ public class GlueImpl implements Glue {
 		media.setLatitude(latitude);
 		media.setLongitude(longitude);
 		media.setStartDate(startDate);
-		return HttpHelper.sendGlueObject(http, media, Media.class, "CreateMedia", file);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media, Media.class, "CreateMedia", file);
 	}
 
 	@Override
 	public IMedia createMedia(IMedia media, File file) throws GlueException {
-		return HttpHelper.sendGlueObject(http, media, Media.class, "CreateMedia", file);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media, Media.class, "CreateMedia", file);
 	}
 
 	/**
@@ -110,13 +101,12 @@ public class GlueImpl implements Glue {
 	 */
 	public void login(String username, String password) throws GlueException {
 
-		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
 			URL baseURL = new URL(Configuration.getBaseUrl());
 
 			HttpHost targetHost = new HttpHost(baseURL.getHost(), baseURL.getPort(), baseURL.getProtocol());
 
-			httpclient.getCredentialsProvider().setCredentials(
+			ctx.getHttpClient().getCredentialsProvider().setCredentials(
 					new AuthScope(targetHost.getHostName(), targetHost.getPort()),
 					new UsernamePasswordCredentials(username, password));
 
@@ -137,7 +127,7 @@ public class GlueImpl implements Glue {
 			log.info("executing request: " + httpget.getRequestLine() + " to target: " + targetHost);
 
 			// for (int i = 0; i < 3; i++) {
-			HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
+			HttpResponse response = ctx.getHttpClient().execute(targetHost, httpget, localcontext);
 			HttpEntity entity = response.getEntity();
 
 			log.info("----------------------------------------");
@@ -166,11 +156,6 @@ public class GlueImpl implements Glue {
 			throw new GlueException(e);
 		} catch (IOException e) {
 			throw new GlueException(e);
-		} finally {
-			// When HttpClient instance is no longer needed,
-			// shut down the connection manager to ensure
-			// immediate deallocation of all system resources
-			httpclient.getConnectionManager().shutdown();
 		}
 	}
 

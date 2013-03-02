@@ -37,9 +37,9 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 	public static final String COLUMN_THUMB_PATH = "thumb_path";
 
-	public static final String INSERT_NEW_STREAM = "INSERT INTO stream(title, public, open, "
-			+ "secret_question, secret_answer, request_to_participate, start_date, end_date, "
-			+ "latitude, longitude, address, thumb_path) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	public static final String INSERT_NEW_STREAM = "INSERT INTO STREAM(TITLE, PUBLIC, OPEN, "
+			+ "SECRET_QUESTION, SECRET_ANSWER, REQUEST_TO_PARTICIPATE, START_DATE, END_DATE, "
+			+ "LATITUDE, LONGITUDE, ADDRESS, THUMB_PATH) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	public static final String INSERT_NEW_PARTICPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
 
@@ -47,7 +47,7 @@ public class StreamDAO extends AbstractDAO {
 			+ "secret_question=?, secret_answer=?, request_to_participate=?, start_date=?, end_date=?, "
 			+ "latitude=?, longitude=?, address=? WHERE id=?";
 
-	public static final String SELECT_STREAM = "SELECT * from stream WHERE id=?";
+	public static final String SELECT_STREAM = "SELECT * FROM STREAM WHERE ID=?";
 
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
@@ -127,7 +127,7 @@ public class StreamDAO extends AbstractDAO {
 
 	public IStream search(long streamId) throws SQLException {
 		Stream result = null;
-		statement = connection.prepareStatement(SELECT_STREAM, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement statement = connection.prepareStatement(SELECT_STREAM, Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, streamId);
 		ResultSet res = statement.executeQuery();
 		if (res.next()) {

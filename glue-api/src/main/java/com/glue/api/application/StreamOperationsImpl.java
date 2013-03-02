@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.client.HttpClient;
-
 import com.glue.api.operations.StreamOperations;
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
@@ -19,11 +17,12 @@ public class StreamOperationsImpl implements StreamOperations {
 	private static final String CREATE_OR_UPDATE_STREAM = "CreateOrUpdateStream";
 	private static final String JOIN_STREAM = "JoinStream";
 	private static final String SEARCH_STREAM = "SearchStream";
-	private HttpClient http;
 	private final Gson gson = new Gson();
+	
+	private GlueClientContext ctx;
 
-	public StreamOperationsImpl(HttpClient http) {
-		this.http = http;
+	public StreamOperationsImpl(GlueClientContext ctx) {
+		this.ctx = ctx;
 	}
 
 	@Override
@@ -70,18 +69,18 @@ public class StreamOperationsImpl implements StreamOperations {
 
 	@Override
 	public void joinStream(IStream stream) {
-		HttpHelper.sendGlueObject(http, stream, Stream.class, JOIN_STREAM);
+		HttpHelper.sendGlueObject(ctx.getHttpClient(), stream, Stream.class, JOIN_STREAM);
 	}
 
 	private IStream createOrUpdateStream(IStream stream) {
-		return HttpHelper.sendGlueObject(http, stream, Stream.class, CREATE_OR_UPDATE_STREAM);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), stream, Stream.class, CREATE_OR_UPDATE_STREAM);
 	}
 
 	@Override
 	public List<IStream> searchStreams(String query) throws GlueException {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("query", "query");
-		String response = HttpHelper.send(http, params, SEARCH_STREAM);
+		String response = HttpHelper.send(ctx.getHttpClient(), params, SEARCH_STREAM);
 		return gson.fromJson(response, new TypeToken<List<Stream>>() {
 		}.getType());
 	}

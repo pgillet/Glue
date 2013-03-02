@@ -48,4 +48,35 @@
 
 	</dependencies>
 
+	<build>
+		<plugins>
+
+			<!-- Use maven-shade-plugin to include a private copy of Apache HttpClient 
+				library to avoid a runtime dependency conflict with Android which includes 
+				an older version of that library. TODO: it works only when packaging, so 
+				it won't work when launching the Android app from Eclipse. For now, backward 
+				compatibility is ensured with the library included in Android. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>org.apache.http</pattern>
+									<shadedPattern>com.glue.inject.internal.http</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
