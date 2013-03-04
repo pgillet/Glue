@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.actionbarcompat.ActionBarActivity;
+import com.glue.api.application.GlueFactory;
 import com.glue.client.android.authenticator.AuthenticatorActivity;
 import com.glue.client.android.authenticator.Constants;
 
@@ -26,6 +27,12 @@ public class MainActivity extends ActionBarActivity {
 			startActivity(intent);
 			return;
 		}
+		// Register credentials
+		Account account = accounts[0];
+		GlueFactory factory = new GlueFactory();
+		factory.getInstance().registerCredentials(account.name,
+				am.getPassword(account));
+		
 		setContentView(R.layout.activity_main);
 		setTitle(R.string.app_name);
 

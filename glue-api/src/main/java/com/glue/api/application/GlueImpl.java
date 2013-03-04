@@ -3,6 +3,7 @@ package com.glue.api.application;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -200,5 +201,24 @@ public class GlueImpl implements Glue {
 	public void joinStream(IStream stream) {
 		streamOperations.joinStream(stream);
 
+	}
+
+	@Override
+	public void registerCredentials(String username, String password) {
+		try {
+			URL baseURL = new URL(Configuration.getBaseUrl());
+
+			HttpHost targetHost = new HttpHost(baseURL.getHost(),
+					baseURL.getPort(), baseURL.getProtocol());
+
+			ctx.getHttpClient()
+					.getCredentialsProvider()
+					.setCredentials(
+							new AuthScope(targetHost.getHostName(),
+									targetHost.getPort()),
+							new UsernamePasswordCredentials(username, password));
+		} catch (MalformedURLException e) {
+			// Should never be here
+		}
 	}
 }

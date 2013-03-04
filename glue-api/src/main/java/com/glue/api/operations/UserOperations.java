@@ -14,4 +14,14 @@ public interface UserOperations {
 
 	void logout() throws GlueException;
 
+	/**
+	 * Registers the given user name / password pair that will be used to
+	 * establish user identity when processing the authentication challenge sent
+	 * by the target server in response to a request for a protected resource.
+	 * 
+	 * @param username the user name
+	 * @param password the password
+	 */
+	void registerCredentials(String username, String password);
+
 }
