@@ -25,8 +25,16 @@ public class SignUpActivity extends AuthenticatorActivity {
 			try {
 				Glue glue = new GlueFactory().getInstance();
 				glue.createUser(params[0], params[1], params[2], params[3]);
+				
+				// There is no need to log in as we just created the user
+				// identity on the target server.
+				// We just register the user credentials for subsequent requests
+				// instead.
+				glue.registerCredentials(params[2], params[3]);
+				final String authToken = "Dummy";
+				return authToken;
 
-				return super.doInBackground(params[2], params[3]);
+				// return super.doInBackground(params[2], params[3]);
 			} catch (Exception ex) {
 				Log.e(TAG, "UserSignUpTask.doInBackground: failed to register");
 				Log.i(TAG, ex.toString());
