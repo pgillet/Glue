@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A filter for user authentication. The filter is mapped to all paths, except
@@ -29,6 +31,8 @@ import org.apache.commons.codec.binary.Base64;
 		@WebInitParam(name = "form-login-page", value = "/login.jsp"),
 		@WebInitParam(name = "excludes", value = "/CreateOrUpdateUser") })
 public class AuthFilter implements Filter {
+	
+	static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
 
 	private static final String REGEX = "\\s*,\\s*";
 	private static final String EXCLUDES = "excludes";
@@ -68,7 +72,7 @@ public class AuthFilter implements Filter {
 			String headerName = (String) myenum.nextElement();
 			String header = request0.getHeader(headerName);
 
-			System.out.println(headerName + "=" + header);
+			LOG.debug(headerName + "=" + header);
 		}
 
 		MyHttpServletRequest request = new MyHttpServletRequest(request0);

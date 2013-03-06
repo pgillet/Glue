@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IStream;
 import com.glue.struct.impl.Stream;
 import com.glue.webapp.auth.GlueRole;
@@ -21,7 +24,10 @@ import com.glue.webapp.utilities.GSonHelper;
  * CreateStream servlet.
  */
 @WebServlet("/CreateOrUpdateStream")
+//@ServletSecurity(@HttpConstraint(rolesAllowed = {"REGISTERED_USER"}))
 public class CreateOrUpdateStreamServlet extends AbstractDatabaseServlet {
+	
+	static final Logger LOG = LoggerFactory.getLogger(CreateOrUpdateStreamServlet.class);
 
 	private static final long serialVersionUID = -6187252800404277228L;
 
@@ -52,7 +58,7 @@ public class CreateOrUpdateStreamServlet extends AbstractDatabaseServlet {
 					getServletContext().getRealPath("/Streams"))) {
 
 				// Exception?
-				System.out.println("Not OK");
+				LOG.error("Not OK");
 			}
 		}
 
