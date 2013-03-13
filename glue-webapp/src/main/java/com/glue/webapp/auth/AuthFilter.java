@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.annotation.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -22,16 +23,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A filter for user authentication. The filter is mapped to all paths, except
- * for those specified in the "excludes" initialization parameter (comma separated list of URL patterns).
+ * for those specified in the "excludes" initialization parameter (comma
+ * separated list of URL patterns).
  * 
  * @author pgillet
  * 
  */
 @WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
-		@WebInitParam(name = "form-login-page", value = "/login.jsp"),
+		@WebInitParam(name = "form-login-page", value = "/main.xhtml"),
 		@WebInitParam(name = "excludes", value = "/CreateOrUpdateUser") })
 public class AuthFilter implements Filter {
-	
+
 	static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
 
 	private static final String REGEX = "\\s*,\\s*";
@@ -39,12 +41,11 @@ public class AuthFilter implements Filter {
 	private static final String APACHE_HTTP_CLIENT = "Apache-HttpClient";
 	private static final String USER_AGENT = "user-agent";
 	private static final String FORM_LOGIN_PAGE = "form-login-page";
-	private static final String PASSWD = "password";
-	private static final String USERNAME = "username";
 	private static final String BASIC = "Basic ";
 	private static final String AUTHORIZATION = "Authorization";
 
 	private FilterConfig filterConfig;
+	private String[] excluded;
 
 	@Resource(name = "jdbc/gluedb")
 	private DataSource dataSource;
@@ -58,54 +59,52 @@ public class AuthFilter implements Filter {
 			ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
 
+		HttpServletRequest request0 = (HttpServletRequest) servletRequest;
+		MyHttpServletRequest request = new MyHttpServletRequest(request0);
+		request.setDataSource(getDataSource());
+
 		String path = ((HttpServletRequest) servletRequest).getServletPath();
 		if (excludeFromFilter(path)) {
-			chain.doFilter(servletRequest, servletResponse);
+			chain.doFilter(request, servletResponse);
 			return;
 		}
 
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		HttpServletRequest request0 = (HttpServletRequest) servletRequest;
 
-		Enumeration<String> myenum = request0.getHeaderNames();
-		while (myenum.hasMoreElements()) {
-			String headerName = (String) myenum.nextElement();
-			String header = request0.getHeader(headerName);
+		if (LOG.isDebugEnabled()) {
+			Enumeration<String> myenum = request0.getHeaderNames();
+			while (myenum.hasMoreElements()) {
+				String headerName = (String) myenum.nextElement();
+				String header = request0.getHeader(headerName);
 
-			LOG.debug(headerName + "=" + header);
+				LOG.debug(headerName + "=" + header);
+			}
 		}
-
-		MyHttpServletRequest request = new MyHttpServletRequest(request0);
-		request.setDataSource(getDataSource());
 
 		try {
 
 			// If the user is not authenticated
 			if (request.getUserPrincipal() == null) {
 
-				// Try form-based authentication
-				String user = request.getParameter(USERNAME);
-				String password = request.getParameter(PASSWD);
+				String user = null;
+				String password = null;
 
-				if (user == null && password == null) {
-
-					// Try Basic authentication
-					String authorization = request.getHeader(AUTHORIZATION);
-					if (authorization != null) {
-						// Authorization headers looks like "Basic blahblah",
-						// where blahblah is the base64 encoded username and
-						// password. We want the part after "Basic ".
-						final String prefix = BASIC;
-						String userInfo = authorization.substring(
-								prefix.length()).trim();
-						String nameAndPassword = new String(
-								Base64.decodeBase64(userInfo));
-						// Decoded part looks like "username:password".
-						int index = nameAndPassword.indexOf(":");
-						if (index != -1) {
-							user = nameAndPassword.substring(0, index);
-							password = nameAndPassword.substring(index + 1);
-						}
+				// Try Basic authentication
+				String authorization = request.getHeader(AUTHORIZATION);
+				if (authorization != null) {
+					// Authorization headers looks like "Basic blahblah",
+					// where blahblah is the base64 encoded username and
+					// password. We want the part after "Basic ".
+					final String prefix = BASIC;
+					String userInfo = authorization.substring(prefix.length())
+							.trim();
+					String nameAndPassword = new String(
+							Base64.decodeBase64(userInfo));
+					// Decoded part looks like "username:password".
+					int index = nameAndPassword.indexOf(":");
+					if (index != -1) {
+						user = nameAndPassword.substring(0, index);
+						password = nameAndPassword.substring(index + 1);
 					}
 				}
 
@@ -147,6 +146,24 @@ public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
+
+		// Exclusions
+		String formLoginPage = filterConfig.getInitParameter(FORM_LOGIN_PAGE);
+
+		final String[] internalExcludes = new String[] {
+				ResourceHandler.RESOURCE_IDENTIFIER, formLoginPage, };
+
+		String initParam = filterConfig.getInitParameter(EXCLUDES);
+		String[] userSpecifiedExcludes = (initParam != null) ? initParam
+				.split(REGEX) : new String[0];
+
+		this.excluded = new String[internalExcludes.length
+				+ userSpecifiedExcludes.length];
+
+		System.arraycopy(internalExcludes, 0, this.excluded, 0,
+				internalExcludes.length);
+		System.arraycopy(userSpecifiedExcludes, 0, this.excluded,
+				internalExcludes.length, userSpecifiedExcludes.length);
 	}
 
 	/**
@@ -165,12 +182,8 @@ public class AuthFilter implements Filter {
 	}
 
 	private boolean excludeFromFilter(String path) {
-
-		String initParam = filterConfig.getInitParameter(EXCLUDES);
-		String[] excludes = initParam.split(REGEX);
-
-		for (String exclude : excludes) {
-			if (path.startsWith(exclude)) {
+		for (String exclude : this.excluded) {
+			if (path.startsWith(exclude)) { // equals?
 				return true;
 			}
 		}
