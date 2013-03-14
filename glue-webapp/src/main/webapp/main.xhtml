@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
@@ -12,6 +13,13 @@
 	<!-- <link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen" /> -->
 	<h:outputStylesheet library="css" name="bootstrap.min.css"
 		media="screen" />
+
+	<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
 
 </h:head>
 <h:body>
@@ -41,14 +49,33 @@
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
 					</ul>
-					<h:form styleClass="navbar-form pull-right">
-						<h:inputText styleClass="span2" value="#{loginBean.username}"
-							required="true" />
-						<h:inputSecret styleClass="span2" value="#{loginBean.password}"
-							required="true" />
-						<h:commandButton id="submit" styleClass="btn" value="Sign in"
-							action="#{loginBean.login}" />
-					</h:form>
+
+					<div class="pull-right">
+						<c:choose>
+							<c:when test="${!empty request.remoteUser}">
+								<div class="btn-group">
+									<a class="btn btn-inverse dropdown-toggle"
+										data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+										class="caret"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li><a href="#">Settings</a></li>
+										<li><a href="#">Logout</a></li>
+									</ul>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<h:form styleClass="navbar-form">
+									<h:inputText styleClass="span2" value="#{loginBean.username}"
+										required="true" />
+									<h:inputSecret styleClass="span2" value="#{loginBean.password}"
+										required="true" />
+									<h:commandButton id="submit" styleClass="btn" value="Sign in"
+										action="#{loginBean.login}" />
+								</h:form>
+							</c:otherwise>
+						</c:choose>
+					</div>
 				</div>
 				<!--/.nav-collapse -->
 			</div>
