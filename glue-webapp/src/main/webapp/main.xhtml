@@ -36,12 +36,11 @@ body {
 				</button>
 				<a class="brand" href="#">Glue</a>
 
-
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
 						<li><a href="#about">About</a></li>
-						<li><a href="#contact">Contact</a></li>
+						<!-- <li><a href="#contact">Contact</a></li> -->
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">Dropdown <b class="caret"></b></a>
 							<ul class="dropdown-menu">
@@ -53,7 +52,6 @@ body {
 								<li><a href="#">Separated link</a></li>
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
-						<li><a href="#"><i class="icon-flag"></i></a></li>
 					</ul>
 
 					<h:form styleClass="navbar-form pull-left">
@@ -65,32 +63,31 @@ body {
 						</div>
 					</h:form>
 
-					<div class="pull-right">
-						<h:form styleClass="navbar-form">
+					<h:form styleClass="navbar-form">
+						<ul class="nav pull-right">
 							<c:choose>
 								<c:when test="${!empty request.remoteUser}">
-									<div class="btn-group">
-										<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-											#{request.remoteUser} <span class="caret"></span>
-										</a>
+									<li><a href="#"><i class="icon-flag"></i></a></li>
+									<li class="dropdown"><a class="dropdown-toggle"
+										data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+											class="caret"></span>
+									</a>
 										<ul class="dropdown-menu">
 											<li><a href="#"><i class="icon-cog"></i> Settings</a></li>
 											<li><h:commandLink action="#{loginBean.logout}"
 													value="Logout" /></li>
-										</ul>
-									</div>
+										</ul></li>
 								</c:when>
 								<c:otherwise>
-									<h:inputText styleClass="span2" value="#{loginBean.username}"
-										required="true" />
-									<h:inputSecret styleClass="span2" value="#{loginBean.password}"
-										required="true" />
-									<h:commandButton id="submit" styleClass="btn" value="Sign in"
-										action="#{loginBean.login}" />
+									<li><h:inputText styleClass="span2"
+											value="#{loginBean.username}" required="true" /> <h:inputSecret
+											styleClass="span2" value="#{loginBean.password}"
+											required="true" /> <h:commandButton id="submit"
+											styleClass="btn" value="Sign in" action="#{loginBean.login}" /></li>
 								</c:otherwise>
 							</c:choose>
-						</h:form>
-					</div>
+						</ul>
+					</h:form>
 				</div>
 				<!--/.nav-collapse -->
 			</div>
