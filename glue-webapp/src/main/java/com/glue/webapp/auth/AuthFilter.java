@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 		@WebInitParam(name = "excludes", value = "/CreateOrUpdateUser") })
 public class AuthFilter implements Filter {
 
+	private static final String RESOURCES = "/resources";
+
 	static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
 
 	private static final String REGEX = "\\s*,\\s*";
@@ -151,7 +153,7 @@ public class AuthFilter implements Filter {
 		String formLoginPage = filterConfig.getInitParameter(FORM_LOGIN_PAGE);
 
 		final String[] internalExcludes = new String[] {
-				ResourceHandler.RESOURCE_IDENTIFIER, formLoginPage, };
+				ResourceHandler.RESOURCE_IDENTIFIER, RESOURCES, formLoginPage, };
 
 		String initParam = filterConfig.getInitParameter(EXCLUDES);
 		String[] userSpecifiedExcludes = (initParam != null) ? initParam

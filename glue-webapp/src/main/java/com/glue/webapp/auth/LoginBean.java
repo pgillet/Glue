@@ -56,7 +56,7 @@ public class LoginBean {
 		return "main";
 	}
 
-	public void logout() {
+	public String logout() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		HttpServletRequest request = (HttpServletRequest) context
@@ -67,5 +67,7 @@ public class LoginBean {
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Logout failed."));
 		}
+		
+		return "main";
 	}
 }

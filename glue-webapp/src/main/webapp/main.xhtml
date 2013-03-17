@@ -11,7 +11,10 @@
 	<!-- Bootstrap -->
 
 	<!-- <link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen" /> -->
+	<!-- <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" /> -->
 	<h:outputStylesheet library="css" name="bootstrap.min.css"
+		media="screen" />
+	<h:outputStylesheet library="css" name="bootstrap-responsive.min.css"
 		media="screen" />
 
 	<style type="text/css">
@@ -23,7 +26,7 @@ body {
 
 </h:head>
 <h:body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
 				<button type="button" class="btn btn-navbar" data-toggle="collapse"
@@ -32,6 +35,8 @@ body {
 						class="icon-bar"></span>
 				</button>
 				<a class="brand" href="#">Glue</a>
+
+
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
@@ -48,33 +53,43 @@ body {
 								<li><a href="#">Separated link</a></li>
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
+						<li><a href="#"><i class="icon-flag"></i></a></li>
 					</ul>
 
+					<h:form styleClass="navbar-form pull-left">
+						<div class="controls">
+							<div class="input-append" style="margin-bottom: 0;">
+								<h:inputText styleClass="span3" placeholder="Search" />
+								<span class="add-on"><i class="icon-search"></i></span>
+							</div>
+						</div>
+					</h:form>
+
 					<div class="pull-right">
-						<c:choose>
-							<c:when test="${!empty request.remoteUser}">
-								<div class="btn-group">
-									<a class="btn btn-inverse dropdown-toggle"
-										data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-										class="caret"></span>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a href="#">Settings</a></li>
-										<li><a href="#">Logout</a></li>
-									</ul>
-								</div>
-							</c:when>
-							<c:otherwise>
-								<h:form styleClass="navbar-form">
+						<h:form styleClass="navbar-form">
+							<c:choose>
+								<c:when test="${!empty request.remoteUser}">
+									<div class="btn-group">
+										<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+											#{request.remoteUser} <span class="caret"></span>
+										</a>
+										<ul class="dropdown-menu">
+											<li><a href="#"><i class="icon-cog"></i> Settings</a></li>
+											<li><h:commandLink action="#{loginBean.logout}"
+													value="Logout" /></li>
+										</ul>
+									</div>
+								</c:when>
+								<c:otherwise>
 									<h:inputText styleClass="span2" value="#{loginBean.username}"
 										required="true" />
 									<h:inputSecret styleClass="span2" value="#{loginBean.password}"
 										required="true" />
 									<h:commandButton id="submit" styleClass="btn" value="Sign in"
 										action="#{loginBean.login}" />
-								</h:form>
-							</c:otherwise>
-						</c:choose>
+								</c:otherwise>
+							</c:choose>
+						</h:form>
 					</div>
 				</div>
 				<!--/.nav-collapse -->
