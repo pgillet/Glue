@@ -67,7 +67,7 @@ body {
 						</div>
 					</h:form>
 
-					<h:form styleClass="navbar-form">
+					<h:form styleClass="navbar-form form-inline">
 						<ul class="nav pull-right">
 							<c:choose>
 								<c:when test="${!empty request.remoteUser}">
@@ -77,20 +77,26 @@ body {
 											class="caret"></span>
 									</a>
 										<ul class="dropdown-menu">
-											<li><a href="#"><i class="icon-cog"></i> Settings</a></li>
+											<li><a href="#"><i class="icon-cog"></i>&nbsp;<h:outputText
+														value="#{bundle.account_settings}" /></a></li>
 											<li><h:commandLink action="#{loginBean.logout}">
-													<i class="icon-off"></i>&nbsp;<h:outputText value="Logout" />
+													<i class="icon-off"></i>&nbsp;<h:outputText
+														value="#{bundle.logout}" />
 												</h:commandLink></li>
 										</ul></li>
 								</c:when>
 								<c:otherwise>
-									<li><h:inputText styleClass="span2"
+									<li><h:inputText styleClass="input-small"
 											value="#{loginBean.username}" required="true"
-											p:placeholder="#{bundle.mail_address}" /> <h:inputSecret
-											styleClass="span2" value="#{loginBean.password}"
-											required="true" p:placeholder="#{bundle.password}" /> <h:commandButton
-											id="submit" styleClass="btn" value="Sign in"
-											action="#{loginBean.login}" /></li>
+											p:placeholder="#{bundle.mail_address}" />&nbsp;<h:inputSecret
+											styleClass="input-small" value="#{loginBean.password}"
+											required="true" p:placeholder="#{bundle.password}" />&nbsp;<h:selectBooleanCheckbox
+											id="remember" />&nbsp;<h:outputLabel styleClass="checkbox"
+											value="#{bundle.remember_me}" for="remember" />&nbsp;<h:commandButton
+											id="submit" styleClass="btn btn-small btn-primary"
+											value="#{bundle.sign_in}" action="#{loginBean.login}" />&nbsp;<h:commandButton
+											styleClass="btn btn-small" value="#{bundle.sign_up}"
+											action="#" /></li>
 								</c:otherwise>
 							</c:choose>
 						</ul>
