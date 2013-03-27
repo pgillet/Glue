@@ -1,189 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://java.sun.com/jsf/passthrough">
-<f:view locale="fr" />
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Glue</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<!-- Bootstrap -->
-
-	<!-- <link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen" /> -->
-	<!-- <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" /> -->
-	<h:outputStylesheet library="css" name="bootstrap.min.css"
-		media="screen" />
-	<h:outputStylesheet library="css" name="bootstrap-responsive.min.css"
-		media="screen" />
-
-	<style type="text/css">
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
-</style>
-
-</h:head>
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<button type="button" class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="brand" href="#">Glue</a>
+	<ui:composition template="./template.xhtml">
+		<ui:define name="content">
 
-				<div class="nav-collapse collapse">
-					<ul class="nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#about">About</a></li>
-						<!-- <li><a href="#contact">Contact</a></li> -->
-						<li class="dropdown"><a href="#" class="dropdown-toggle"
-							data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else here</a></li>
-								<li class="divider"></li>
-								<li class="nav-header">Nav header</li>
-								<li><a href="#">Separated link</a></li>
-								<li><a href="#">One more separated link</a></li>
-							</ul></li>
-					</ul>
+			<!-- Main hero unit for a primary marketing message or call to action -->
+			<div class="hero-unit">
+				<h1>Hello, world!</h1>
+				<p>This is a template for a simple marketing or informational
+					website. It includes a large callout called the hero unit and three
+					supporting pieces of content. Use it as a starting point to create
+					something more unique.</p>
+				<p>
+					<a href="#" class="btn btn-primary btn-large">Learn more
+						&raquo;</a>
+				</p>
+			</div>
 
-					<h:form styleClass="navbar-form pull-left">
-						<div class="controls">
-							<div class="input-append" style="margin-bottom: 0;">
-								<h:inputText styleClass="span3" p:placeholder="#{bundle.search}" />
-								<h:commandLink styleClass="add-on" action="#">
-									<i class="icon-search"></i>
-								</h:commandLink>
-							</div>
-						</div>
-					</h:form>
-
-					<h:form styleClass="navbar-form form-inline">
-						<ul class="nav pull-right">
-							<c:choose>
-								<c:when test="${!empty request.remoteUser}">
-									<li><a href="#"><i class="icon-envelope"></i></a></li>
-									<li class="dropdown"><a class="dropdown-toggle"
-										data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-											class="caret"></span>
-									</a>
-										<ul class="dropdown-menu">
-											<li><a href="#"><i class="icon-cog"></i>&nbsp;<h:outputText
-														value="#{bundle.account_settings}" /></a></li>
-											<li><h:commandLink action="#{loginBean.logout}">
-													<i class="icon-off"></i>&nbsp;<h:outputText
-														value="#{bundle.logout}" />
-												</h:commandLink></li>
-										</ul></li>
-								</c:when>
-								<c:otherwise>
-									<li><h:inputText styleClass="input-small"
-											value="#{loginBean.username}" required="true"
-											p:placeholder="#{bundle.mail_address}" />&nbsp;<h:inputSecret
-											styleClass="input-small" value="#{loginBean.password}"
-											required="true" p:placeholder="#{bundle.password}" />&nbsp;<h:selectBooleanCheckbox
-											id="remember" />&nbsp;<h:outputLabel styleClass="checkbox"
-											value="#{bundle.remember_me}" for="remember" />&nbsp;<h:commandButton
-											id="submit" styleClass="btn btn-small btn-primary"
-											value="#{bundle.sign_in}" action="#{loginBean.login}" /></li>
-									<!-- Button to trigger sign up modal -->
-									<li><a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</h:form>
+			<!-- Example row of columns -->
+			<div class="row">
+				<div class="span4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce
+						dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
+						ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+						magna mollis euismod. Donec sed odio dui.</p>
+					<p>
+						<a class="btn" href="#">View details &raquo;</a>
+					</p>
 				</div>
-				<!--/.nav-collapse -->
+				<div class="span4">
+					<h2>Heading</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce
+						dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
+						ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+						magna mollis euismod. Donec sed odio dui.</p>
+					<p>
+						<a class="btn" href="#">View details &raquo;</a>
+					</p>
+				</div>
+				<div class="span4">
+					<h2>Heading</h2>
+					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis
+						in, egestas eget quam. Vestibulum id ligula porta felis euismod
+						semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+						condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+					<p>
+						<a class="btn" href="#">View details &raquo;</a>
+					</p>
+				</div>
 			</div>
-		</div>
-	</div>
 
-	<div class="container">
-
-		<!-- Main hero unit for a primary marketing message or call to action -->
-		<div class="hero-unit">
-			<h1>Hello, world!</h1>
-			<p>This is a template for a simple marketing or informational
-				website. It includes a large callout called the hero unit and three
-				supporting pieces of content. Use it as a starting point to create
-				something more unique.</p>
-			<p>
-				<a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a>
-			</p>
-		</div>
-
-		<!-- Example row of columns -->
-		<div class="row">
-			<div class="span4">
-				<h2>Heading</h2>
-				<p>Donec id elit non mi porta gravida at eget metus. Fusce
-					dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-					ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-					magna mollis euismod. Donec sed odio dui.</p>
-				<p>
-					<a class="btn" href="#">View details &raquo;</a>
-				</p>
-			</div>
-			<div class="span4">
-				<h2>Heading</h2>
-				<p>Donec id elit non mi porta gravida at eget metus. Fusce
-					dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-					ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-					magna mollis euismod. Donec sed odio dui.</p>
-				<p>
-					<a class="btn" href="#">View details &raquo;</a>
-				</p>
-			</div>
-			<div class="span4">
-				<h2>Heading</h2>
-				<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in,
-					egestas eget quam. Vestibulum id ligula porta felis euismod semper.
-					Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-					nibh, ut fermentum massa justo sit amet risus.</p>
-				<p>
-					<a class="btn" href="#">View details &raquo;</a>
-				</p>
-			</div>
-		</div>
-
-		<hr />
-
-		<footer>
-		<p>&copy; Glue 2013</p>
-		</footer>
-	</div>
-	<!-- /container -->
-
-	<!-- modal -->
-	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"
-				aria-hidden="true">×</button>
-			<h3 id="myModalLabel">Modal header</h3>
-		</div>
-		<div class="modal-body">
-			<p>One fine body…</p>
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
-		</div>
-	</div>
-	<!-- /modal -->
-
-	<h:outputScript library="js" name="jquery.js" />
-	<h:outputScript library="js" name="bootstrap.min.js" />
-	<!-- <script src="http://code.jquery.com/jquery.js"></script> -->
-	<!-- <script src="js/bootstrap.min.js"></script> -->
+		</ui:define>
+	</ui:composition>
 </h:body>
 </html>
