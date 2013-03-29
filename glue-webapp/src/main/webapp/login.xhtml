@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://java.sun.com/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition template="./template.xhtml">
+		<ui:define name="content">
+
+			<div class="container">
+				<h:form styleClass="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="inputEmail"><h:outputText
+								value="#{bundle.mail_address}" /></label>
+						<div class="controls">
+							<h:inputText id="inputEmail" value="#{loginBean.username}"
+								required="true" p:placeholder="#{bundle.mail_address}" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputPassword"><h:outputText
+								value="#{bundle.password}" /></label>
+						<div class="controls">
+							<h:inputSecret id="inputPassword" value="#{loginBean.password}"
+								required="true" p:placeholder="#{bundle.password}" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<h:selectBooleanCheckbox id="remember" />
+							<h:outputLabel styleClass="checkbox"
+								value="#{bundle.remember_me}" for="remember" />
+							<h:commandButton id="submit"
+								styleClass="btn btn-small btn-primary" value="#{bundle.sign_in}"
+								action="#{loginBean.login}" />
+						</div>
+					</div>
+				</h:form>
+			</div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

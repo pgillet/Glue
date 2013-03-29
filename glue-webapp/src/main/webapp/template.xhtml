@@ -68,40 +68,38 @@ body {
 						</div>
 					</h:form>
 
-					<h:form styleClass="navbar-form form-inline">
-						<ul class="nav pull-right">
-							<c:choose>
-								<c:when test="${!empty request.remoteUser}">
-									<li><a href="#"><i class="icon-envelope"></i></a></li>
-									<li class="dropdown"><a class="dropdown-toggle"
-										data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-											class="caret"></span>
-									</a>
-										<ul class="dropdown-menu">
-											<li><a href="#"><i class="icon-cog"></i>&nbsp;<h:outputText
-														value="#{bundle.account_settings}" /></a></li>
-											<li><h:commandLink action="#{loginBean.logout}">
-													<i class="icon-off"></i>&nbsp;<h:outputText
-														value="#{bundle.logout}" />
-												</h:commandLink></li>
-										</ul></li>
-								</c:when>
-								<c:otherwise>
-									<li><h:inputText styleClass="input-small"
-											value="#{loginBean.username}" required="true"
-											p:placeholder="#{bundle.mail_address}" />&nbsp;<h:inputSecret
-											styleClass="input-small" value="#{loginBean.password}"
-											required="true" p:placeholder="#{bundle.password}" />&nbsp;<h:selectBooleanCheckbox
-											id="remember" />&nbsp;<h:outputLabel styleClass="checkbox"
-											value="#{bundle.remember_me}" for="remember" />&nbsp;<h:commandButton
-											id="submit" styleClass="btn btn-small btn-primary"
-											value="#{bundle.sign_in}" action="#{loginBean.login}" /></li>
-									<!-- Button to trigger sign up modal -->
-									<li><a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</h:form>
+
+					<div class="pull-right">
+						<c:choose>
+							<c:when test="${!empty request.remoteUser}">
+								<h:form styleClass="navbar-form">
+									<ul class="nav">
+										<li><a href="#"><i class="icon-envelope"></i></a></li>
+										<li class="dropdown"><a class="dropdown-toggle"
+											data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+												class="caret"></span>
+										</a>
+											<ul class="dropdown-menu">
+												<li><a href="#"><i class="icon-cog"></i>&nbsp;<h:outputText
+															value="#{bundle.account_settings}" /></a></li>
+												<li><h:commandLink action="#{loginBean.logout}">
+														<i class="icon-off"></i>&nbsp;<h:outputText
+															value="#{bundle.logout}" />
+													</h:commandLink></li>
+											</ul></li>
+									</ul>
+								</h:form>
+							</c:when>
+							<c:otherwise>
+								<h:link styleClass="btn btn-primary" value="#{bundle.sign_in}"
+									outcome="login" />
+								<h:link styleClass="btn btn-success" value="#{bundle.sign_up}"
+									outcome="main" />
+								<!-- Button to trigger sign up modal -->
+								<!-- <a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a> -->
+							</c:otherwise>
+						</c:choose>
+					</div>
 				</div>
 				<!--/.nav-collapse -->
 			</div>
