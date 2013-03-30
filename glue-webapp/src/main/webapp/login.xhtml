@@ -8,35 +8,40 @@
 	<ui:composition template="./template.xhtml">
 		<ui:define name="content">
 
-			<div class="container">
-				<h:form styleClass="form-horizontal">
-					<div class="control-group">
-						<label class="control-label" for="inputEmail"><h:outputText
-								value="#{bundle.mail_address}" /></label>
-						<div class="controls">
-							<h:inputText id="inputEmail" value="#{loginBean.username}"
-								required="true" p:placeholder="#{bundle.mail_address}" />
+			<legend><h:outputText value="#{bundle.sign_in}"/></legend>
+			<div class="row">
+				<div class="span4">
+					<img src="resources/img/snail.svg"/>
+				</div> 
+				<div class="span4">
+					<h:form styleClass="form-horizontal">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail"><h:outputText
+									value="#{bundle.mail_address}" /></label>
+							<div class="controls">
+								<h:inputText id="inputEmail" value="#{loginBean.username}"
+									required="true" p:placeholder="#{bundle.mail_address}" />
+							</div>
 						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputPassword"><h:outputText
-								value="#{bundle.password}" /></label>
-						<div class="controls">
-							<h:inputSecret id="inputPassword" value="#{loginBean.password}"
-								required="true" p:placeholder="#{bundle.password}" />
+						<div class="control-group">
+							<label class="control-label" for="inputPassword"><h:outputText
+									value="#{bundle.password}" /></label>
+							<div class="controls">
+								<h:inputSecret id="inputPassword" value="#{loginBean.password}"
+									required="true" p:placeholder="#{bundle.password}" />
+							</div>
 						</div>
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<h:selectBooleanCheckbox id="remember" />
-							<h:outputLabel styleClass="checkbox"
-								value="#{bundle.remember_me}" for="remember" />
-							<h:commandButton id="submit"
-								styleClass="btn btn-small btn-primary" value="#{bundle.sign_in}"
-								action="#{loginBean.login}" />
+						<div class="control-group">
+							<div class="controls">
+								<label class="checkbox"><h:selectBooleanCheckbox
+										id="remember" /> <h:outputText value="#{bundle.remember_me}" /></label>
+								<h:commandButton id="submit"
+									styleClass="btn btn-small btn-primary"
+									value="#{bundle.sign_in}" action="#{loginBean.login}" />
+							</div>
 						</div>
-					</div>
-				</h:form>
+					</h:form>
+				</div>
 			</div>
 
 		</ui:define>
