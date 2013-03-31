@@ -11,7 +11,7 @@
 		<ui:define name="content">
 
 			<legend>
-				<h:outputText value="#{bundle.sign_in}" />
+				<h:outputText value="#{bundle.sign_up}" />
 			</legend>
 			<div class="row">
 				<div class="span4">
@@ -29,6 +29,15 @@
 									<h:messages layout="table" />
 								</div>
 							</c:if>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputUsername"><h:outputText
+									value="#{bundle.username}" /></label>
+							<div class="controls">
+								<h:inputText id="inputUsername" label="#{bundle.username}"
+									value="#{loginBean.username}" required="true"
+									p:placeholder="#{bundle.full_name}" />
+							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="inputEmail"><h:outputText
@@ -49,12 +58,20 @@
 							</div>
 						</div>
 						<div class="control-group">
+							<label class="control-label" for="confirmPassword"><h:outputText
+									value="#{bundle.confirm_password}" /></label>
 							<div class="controls">
-								<label class="checkbox"><h:selectBooleanCheckbox
-										id="remember" /> <h:outputText value="#{bundle.remember_me}" /></label>
+								<h:inputSecret id="confirmPassword"
+									label="#{bundle.password}"
+									value="#{loginBean.password}" required="true"
+									p:placeholder="#{bundle.password}" />
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls">
 								<h:commandButton id="submit"
-									styleClass="btn btn-large btn-primary"
-									value="#{bundle.sign_in}" action="#{loginBean.login}" />
+									styleClass="btn btn-large btn-success"
+									value="#{bundle.sign_up}" action="#{loginBean.register}" />
 							</div>
 						</div>
 					</h:form>

@@ -67,7 +67,11 @@ public class LoginBean {
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Logout failed."));
 		}
-		
+
+		return "main";
+	}
+
+	public String register() {
 		return "main";
 	}
 }
