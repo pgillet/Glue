@@ -27,6 +27,10 @@
 		</plugins>
 	</build>
 
+	<properties>
+		<jersey.version>1.17</jersey.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -72,12 +76,19 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>1.17</version>
+			<version>${jersey.version}</version>
 		</dependency>
+		<!-- JSON support -->
+		<!-- Use GsonMessageBodyHandler instead -->
+		<!-- <dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
-			<version>1.17</version>
+			<version>${jersey.version}</version>
 		</dependency>
 	</dependencies>
 

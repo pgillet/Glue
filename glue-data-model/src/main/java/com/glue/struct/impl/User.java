@@ -14,7 +14,7 @@ public class User implements IUser, Serializable {
 
 	private String lastName;
 
-	private String mail;
+	private String mailAddress;
 
 	private String password;
 
@@ -43,11 +43,11 @@ public class User implements IUser, Serializable {
 	}
 
 	public String getMailAddress() {
-		return mail;
+		return mailAddress;
 	}
 
-	public void setMailAddress(String mail) {
-		this.mail = mail;
+	public void setMailAddress(String mailAddress) {
+		this.mailAddress = mailAddress;
 	}
 
 	public String getPassword() {
