@@ -35,7 +35,7 @@
 									value="#{bundle.username}" /></label>
 							<div class="controls">
 								<h:inputText id="inputUsername" label="#{bundle.username}"
-									value="#{loginBean.username}" required="true"
+									value="#{userBean.username}" required="true"
 									p:placeholder="#{bundle.full_name}" />
 							</div>
 						</div>
@@ -44,7 +44,7 @@
 									value="#{bundle.mail_address}" /></label>
 							<div class="controls">
 								<h:inputText id="inputEmail" label="#{bundle.mail_address}"
-									value="#{loginBean.username}" required="true"
+									value="#{userBean.mailAddress}" required="true"
 									p:placeholder="#{bundle.mail_address}" />
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 									value="#{bundle.password}" /></label>
 							<div class="controls">
 								<h:inputSecret id="inputPassword" label="#{bundle.password}"
-									value="#{loginBean.password}" required="true"
+									value="#{userBean.password}" required="true"
 									p:placeholder="#{bundle.password}" />
 							</div>
 						</div>
@@ -63,7 +63,7 @@
 							<div class="controls">
 								<h:inputSecret id="confirmPassword"
 									label="#{bundle.password}"
-									value="#{loginBean.password}" required="true"
+									value="#{userBean.password}" required="true"
 									p:placeholder="#{bundle.password}" />
 							</div>
 						</div>
@@ -71,7 +71,7 @@
 							<div class="controls">
 								<h:commandButton id="submit"
 									styleClass="btn btn-large btn-success"
-									value="#{bundle.sign_up}" action="#{loginBean.register}" />
+									value="#{bundle.sign_up}" action="#{userBean.register}" />
 							</div>
 						</div>
 					</h:form>
