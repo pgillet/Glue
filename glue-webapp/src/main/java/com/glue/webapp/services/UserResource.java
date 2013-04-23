@@ -2,9 +2,7 @@ package com.glue.webapp.services;
 
 import java.sql.SQLException;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,14 +17,7 @@ import com.glue.webapp.db.UserDAO;
 @Path("/user")
 public class UserResource {
 
-	// @Resource(name = "jdbc/gluedb")
-	DataSource dataSource;
-
-	public UserResource() throws NamingException {
-		// Obtain Connection
-		InitialContext initialContext = new InitialContext();
-		dataSource = (DataSource) initialContext
-				.lookup("java:comp/env/jdbc/gluedb");
+	public UserResource() {
 	}
 
 	// CRUD
@@ -36,8 +27,8 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User createUser(User user) {
 
-		DAOManager manager = DAOManager.getInstance(dataSource);
 		try {
+			DAOManager manager = DAOManager.getInstance();
 			UserDAO userDAO = manager.getUserDAO();
 
 			// I'm looking for an existing user
@@ -47,6 +38,9 @@ public class UserResource {
 				userDAO.create(user);
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

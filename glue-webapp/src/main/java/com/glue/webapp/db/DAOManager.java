@@ -3,6 +3,9 @@ package com.glue.webapp.db;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class DAOManager {
@@ -32,6 +35,23 @@ public class DAOManager {
 	public static DAOManager getInstance(DataSource dataSource) {
 		DAOManager daoManager = localInstance.get();
 		daoManager.setDataSource(dataSource);
+
+		return daoManager;
+	}
+
+	/**
+	 * Returns a unique instance of DAOManager per thread.
+	 * 
+	 * @return
+	 * @throws NamingException
+	 */
+	public static DAOManager getInstance() throws NamingException {
+		DAOManager daoManager = localInstance.get();
+
+		Context initContext = new InitialContext();
+		Context envContext = (Context) initContext.lookup("java:/comp/env");
+		DataSource ds = (DataSource) envContext.lookup("jdbc/gluedb");
+		daoManager.setDataSource(ds);
 
 		return daoManager;
 	}

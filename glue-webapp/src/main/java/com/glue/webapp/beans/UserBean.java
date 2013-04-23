@@ -16,11 +16,11 @@ public class UserBean {
 	private String password;
 
 	private UserResource userResource;
-	
-	@ManagedProperty(value="#{loginBean}")
+
+	@ManagedProperty(value = "#{loginBean}")
 	private LoginBean loginBean;
- 
-	//must povide the setter method
+
+	// must provide the setter method
 	public void setLoginBean(LoginBean loginBean) {
 		this.loginBean = loginBean;
 	}
@@ -31,7 +31,7 @@ public class UserBean {
 	 * @return
 	 * @throws NamingException
 	 */
-	protected UserResource getUserResource() throws NamingException {
+	protected UserResource getUserResource() {
 		if (userResource == null) {
 			userResource = new UserResource();
 		}
@@ -86,37 +86,26 @@ public class UserBean {
 
 	public String register() {
 
-		try {
-			userResource = getUserResource();
+		User user = new User();
 
-			User user = new User();
-
-			String firstName = null;
-			String lastName = "";
-			int index = username.trim().indexOf(" ");
-			if (index != -1) {
-				firstName = username.substring(0, index);
-				lastName = username.substring(index + 1);
-			}
-			
-			
-			user.setFirstName(firstName);
-			user.setLastName(lastName);
-			user.setMailAddress(mailAddress);
-			user.setPassword(password);
-
-			userResource.createUser(user);
-			
-			loginBean.setUsername(mailAddress);
-			loginBean.setPassword(password);
-			
-			return loginBean.login();
-
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String firstName = null;
+		String lastName = "";
+		int index = username.trim().indexOf(" ");
+		if (index != -1) {
+			firstName = username.substring(0, index);
+			lastName = username.substring(index + 1);
 		}
 
-		return null;
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setMailAddress(mailAddress);
+		user.setPassword(password);
+
+		getUserResource().createUser(user);
+
+		loginBean.setUsername(mailAddress);
+		loginBean.setPassword(password);
+
+		return loginBean.login();
 	}
 }
