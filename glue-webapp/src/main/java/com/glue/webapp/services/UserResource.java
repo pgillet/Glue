@@ -3,8 +3,10 @@ package com.glue.webapp.services;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -18,7 +20,6 @@ import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.UserController;
 
-//@Path("/users/{username}")
 @Path("/user")
 public class UserResource {
 
@@ -52,15 +53,19 @@ public class UserResource {
 		}
 
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-		URI userUri = ub.path(user.getMailAddress()).build();
+		URI userUri = ub.path(String.valueOf(user.getId())).build();
 
 		return Response.created(userUri).entity(user).build();
 	}
 
-	// @GET
-	// // @Produces("application/json")
-	// @Produces("text/plain")
-	// public String getUser(@PathParam("username") String userName) {
-	// return userName;
-	// }
+	@GET @Path("/{userid}")
+	@Produces("application/json")
+	public User getUser(@PathParam("userid") String userId) {
+		try {
+			return (User) userController.getUser(userId);
+		} catch (InternalServerException e) {
+			throw new WebApplicationException(
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

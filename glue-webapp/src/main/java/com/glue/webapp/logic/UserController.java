@@ -28,4 +28,21 @@ public class UserController {
 			throw new InternalServerException(e);
 		}
 	}
+
+	public IUser getUser(String userId) throws InternalServerException {
+		IUser user = null;
+
+		try {
+			DAOManager manager = DAOManager.getInstance();
+			UserDAO userDAO = manager.getUserDAO();
+
+			user = userDAO.search(Long.valueOf(userId));
+		} catch (NamingException e) {
+			throw new InternalServerException(e);
+		} catch (SQLException e) {
+			throw new InternalServerException(e);
+		}
+
+		return user;
+	}
 }
