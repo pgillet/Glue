@@ -1,51 +1,60 @@
 package com.glue.webapp.services;
 
-import java.sql.SQLException;
+import java.net.URI;
 
-import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.glue.struct.impl.User;
-import com.glue.webapp.db.DAOManager;
-import com.glue.webapp.db.UserDAO;
+import com.glue.webapp.logic.AlreadyExistsException;
+import com.glue.webapp.logic.InternalServerException;
+import com.glue.webapp.logic.UserController;
 
 //@Path("/users/{username}")
 @Path("/user")
 public class UserResource {
 
+	@Context
+	UriInfo uriInfo;
+
+	// TODO: should probably use Dependency Injection here!
+	UserController userController = new UserController();
+
 	public UserResource() {
 	}
 
-	// CRUD
+	// CRUD: POST for creating a new resource, PUT for creating or updating
 
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser(User user) {
+	public Response createUser(User user) {
 
 		try {
-			DAOManager manager = DAOManager.getInstance();
-			UserDAO userDAO = manager.getUserDAO();
-
-			// I'm looking for an existing user
-			if (userDAO.search(user.getId()) != null) {
-				userDAO.update(user);
-			} else {
-				userDAO.create(user);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			userController.createUser(user);
+		} catch (InternalServerException e) {
+			throw new WebApplicationException(
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} catch (AlreadyExistsException e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.CONFLICT).entity(e.getMessage())
+					/*
+					 * .type(MediaType. TEXT_PLAIN)
+					 */.build());
 		}
 
-		return user;
+		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+		URI userUri = ub.path(user.getMailAddress()).build();
+
+		return Response.created(userUri).entity(user).build();
 	}
 
 	// @GET

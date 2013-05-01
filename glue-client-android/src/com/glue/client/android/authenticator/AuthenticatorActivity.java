@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
@@ -232,9 +233,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 		boolean success = ((authToken != null) && (authToken.length() > 0));
 		Log.i(TAG, "onAuthenticationResult(" + success + ")");
 
-		// Our task is complete, so clear it out
-		mAuthTask = null;
-
 		// Hide the progress dialog
 		hideProgress();
 
@@ -246,7 +244,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 			}
 		} else {
 			Log.e(TAG, "onAuthenticationResult: failed to authenticate");
-			if (mRequestNewAccount) {
+			
+			Exception ex = mAuthTask.getException();
+			if(ex != null){
+				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+			} else if (mRequestNewAccount) {
 				// "Please enter a valid username/password.
 				mMessage.setText(getText(R.string.login_activity_loginfail_text_both));
 			} else {
@@ -256,6 +258,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 				mMessage.setText(getText(R.string.login_activity_loginfail_text_pwonly));
 			}
 		}
+		
+		// Our task is complete, so clear it out
+		mAuthTask = null;
 	}
 
 	public void onAuthenticationCancel() {
@@ -309,6 +314,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 	public class UserLoginTask extends AsyncTask<String, Void, String> {
 		
 		protected Exception ex;
+
+		/**
+		 * @return the ex
+		 */
+		public Exception getException() {
+			return ex;
+		}
+
+		/**
+		 * @param ex the ex to set
+		 */
+		public void setException(Exception ex) {
+			this.ex = ex;
+		}
 
 		@Override
 		protected String doInBackground(String... params) {

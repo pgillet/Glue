@@ -1,12 +1,15 @@
 package com.glue.webapp.beans;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.naming.NamingException;
+import javax.faces.context.FacesContext;
 
 import com.glue.struct.impl.User;
 import com.glue.webapp.auth.LoginBean;
-import com.glue.webapp.services.UserResource;
+import com.glue.webapp.logic.AlreadyExistsException;
+import com.glue.webapp.logic.InternalServerException;
+import com.glue.webapp.logic.UserController;
 
 @ManagedBean
 public class UserBean {
@@ -15,7 +18,8 @@ public class UserBean {
 	private String mailAddress;
 	private String password;
 
-	private UserResource userResource;
+	// TODO: should probably use Dependency Injection here!
+	UserController userController = new UserController();
 
 	@ManagedProperty(value = "#{loginBean}")
 	private LoginBean loginBean;
@@ -23,20 +27,6 @@ public class UserBean {
 	// must provide the setter method
 	public void setLoginBean(LoginBean loginBean) {
 		this.loginBean = loginBean;
-	}
-
-	/**
-	 * TODO: shoud probably use DI
-	 * 
-	 * @return
-	 * @throws NamingException
-	 */
-	protected UserResource getUserResource() {
-		if (userResource == null) {
-			userResource = new UserResource();
-		}
-
-		return userResource;
 	}
 
 	/**
@@ -86,6 +76,8 @@ public class UserBean {
 
 	public String register() {
 
+		FacesContext context = FacesContext.getCurrentInstance();
+
 		User user = new User();
 
 		String firstName = null;
@@ -101,11 +93,19 @@ public class UserBean {
 		user.setMailAddress(mailAddress);
 		user.setPassword(password);
 
-		getUserResource().createUser(user);
+		try {
+			userController.createUser(user);
 
-		loginBean.setUsername(mailAddress);
-		loginBean.setPassword(password);
+			loginBean.setUsername(mailAddress);
+			loginBean.setPassword(password);
 
-		return loginBean.login();
+			return loginBean.login();
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(e.getMessage()));
+		} catch (AlreadyExistsException e) {
+			context.addMessage(null, new FacesMessage(e.getMessage()));
+		}
+
+		return "register";
 	}
 }

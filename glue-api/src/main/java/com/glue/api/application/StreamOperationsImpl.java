@@ -61,18 +61,18 @@ public class StreamOperationsImpl implements StreamOperations {
 	}
 
 	@Override
-	public void joinStream(long streamID) {
+	public void joinStream(long streamID) throws GlueException {
 		IStream stream = new Stream();
 		stream.setId(streamID);
 		joinStream(stream);
 	}
 
 	@Override
-	public void joinStream(IStream stream) {
+	public void joinStream(IStream stream) throws GlueException {
 		HttpHelper.sendGlueObject(ctx.getHttpClient(), stream, Stream.class, JOIN_STREAM);
 	}
 
-	private IStream createOrUpdateStream(IStream stream) {
+	private IStream createOrUpdateStream(IStream stream) throws GlueException {
 		return HttpHelper.sendGlueObject(ctx.getHttpClient(), stream, Stream.class, CREATE_OR_UPDATE_STREAM);
 	}
 

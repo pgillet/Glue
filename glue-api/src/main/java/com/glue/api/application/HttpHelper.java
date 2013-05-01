@@ -26,11 +26,12 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.glue.api.conf.Configuration;
+import com.glue.exceptions.GlueException;
 import com.google.gson.Gson;
 
 public class HttpHelper {
 
-	protected static <T> T sendGlueObject(HttpClient http, T glueObject, Type objectType, String url) {
+	protected static <T> T sendGlueObject(HttpClient http, T glueObject, Type objectType, String url) throws GlueException {
 		T result = null;
 
 		// JSON
@@ -47,11 +48,16 @@ public class HttpHelper {
 			entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 			post.setEntity(entity);
 			response = http.execute(post);
-			if (response.getStatusLine().getStatusCode() == 200) {
+			
+			// Successful 2xx
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (Integer.toString(statusCode).startsWith("2")) {
 				gsonStream = EntityUtils.toString(response.getEntity());
 				if (gsonStream != null) {
 					result = gson.fromJson(gsonStream, objectType);
 				}
+			} else {
+				throw new GlueException("Something went wrong!");
 			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

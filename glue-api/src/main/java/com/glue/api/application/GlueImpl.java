@@ -74,7 +74,7 @@ public class GlueImpl implements Glue {
 		return createOrUpdateUser(user);
 	}
 
-	private IUser createOrUpdateUser(IUser user) {
+	private IUser createOrUpdateUser(IUser user) throws GlueException {
 		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class, "services/user");
 	}
 
@@ -192,13 +192,13 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public void joinStream(long streamID) {
+	public void joinStream(long streamID) throws GlueException {
 		streamOperations.joinStream(streamID);
 
 	}
 
 	@Override
-	public void joinStream(IStream stream) {
+	public void joinStream(IStream stream) throws GlueException {
 		streamOperations.joinStream(stream);
 
 	}

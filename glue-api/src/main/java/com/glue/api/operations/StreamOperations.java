@@ -20,8 +20,8 @@ public interface StreamOperations {
 
 	List<IStream> searchStreams(String query) throws GlueException;
 
-	void joinStream(long streamID);
+	void joinStream(long streamID) throws GlueException;
 
-	void joinStream(IStream stream);
+	void joinStream(IStream stream) throws GlueException;
 
 }
