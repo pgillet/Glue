@@ -11,18 +11,43 @@ import org.slf4j.LoggerFactory;
 import com.glue.struct.IMedia;
 
 public class RepositoryManager {
-	
+
 	static final Logger LOG = LoggerFactory.getLogger(RepositoryManager.class);
 
-	public static boolean createStream(long streamId, String path) {
-		File file = new File(path + File.separator + streamId);
+	public static final String STREAMS = "/streams";
+
+	private static String Root;
+
+	/**
+	 * @return the root
+	 */
+	public static String getRoot() {
+		return Root;
+	}
+
+	/**
+	 * @param root
+	 *            the root to set
+	 */
+	public static void setRoot(String root) {
+		File f = new File(root, STREAMS);
+		Root = f.getPath();
+	}
+
+	public static boolean createStream(long streamId) {
+		File file = new File(Root, Long.toString(streamId));
 		return file.mkdirs();
 	}
 
-	public static void createMedia(IMedia media, Part mediaPart, String path) throws IOException {
-		LOG.info(path + File.separator + media.getStreamId() + File.separator + media.getId() + "."
-				+ media.getExtension());
-		mediaPart.write(path + File.separator + media.getStreamId() + File.separator + media.getId() + "."
-				+ media.getExtension());
+	public static void createMedia(IMedia media, Part mediaPart)
+			throws IOException {
+
+		File streamDirectory = new File(Root,
+				Long.toString(media.getStreamId()));
+		File mediaFile = new File(streamDirectory, Long.toString(media.getId())
+				+ "." + media.getExtension());
+
+		LOG.info("Writing media file part to: " + mediaFile.getPath());
+		mediaPart.write(mediaFile.getPath());
 	}
 }

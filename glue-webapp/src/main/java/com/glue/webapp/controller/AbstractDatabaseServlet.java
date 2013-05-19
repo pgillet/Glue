@@ -59,7 +59,7 @@ public abstract class AbstractDatabaseServlet extends HttpServlet {
 						return null;
 					}
 				});
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

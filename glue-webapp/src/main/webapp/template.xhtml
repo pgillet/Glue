@@ -41,8 +41,12 @@ body {
 
 				<div class="nav-collapse collapse">
 					<ul class="nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#about">About</a></li>
+						<li>
+							<!-- class="active" --> <h:link value="#{bundle.home}"
+								outcome="main" />
+						</li>
+						<li><a href="#about"><h:outputText
+									value="#{bundle.about}" /></a></li>
 						<!-- <li><a href="#contact">Contact</a></li> -->
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">Dropdown <b class="caret"></b></a>
@@ -54,13 +58,20 @@ body {
 								<li class="nav-header">Nav header</li>
 								<li><a href="#">Separated link</a></li>
 								<li><a href="#">One more separated link</a></li>
+								<c:if test="${!empty request.remoteUser}">
+									<li><h:link outcome="/stream/create">
+											<i class="icon-plus-sign"></i>&nbsp;<h:outputText
+												value="#{bundle.create_stream}" />
+										</h:link></li>
+								</c:if>
 							</ul></li>
 					</ul>
 
 					<h:form styleClass="navbar-form pull-left">
 						<div class="controls">
 							<div class="input-append" style="margin-bottom: 0;">
-								<h:inputText styleClass="span3" p:placeholder="#{bundle.search}" />
+								<h:inputText id="appendedInputButton" styleClass="span3"
+									p:placeholder="#{bundle.search}" />
 								<h:commandLink styleClass="add-on" action="#">
 									<i class="icon-search"></i>
 								</h:commandLink>

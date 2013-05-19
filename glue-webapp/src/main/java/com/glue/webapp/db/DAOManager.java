@@ -97,16 +97,16 @@ public class DAOManager {
 		return mediaDAO;
 	}
 
-	public Object transaction(DAOCommand command) throws SQLException {
+	public <T> T transaction(DAOCommand<T> command) throws Exception {
 		try {
 			Connection connection = getConnection();
 			connection.setAutoCommit(false);
 
-			Object returnValue = command.execute(this);
+			T returnValue = command.execute(this);
 
 			connection.commit();
 			return returnValue;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			connection.rollback();
 			throw e; // or wrap it before rethrowing it
 		} finally {
@@ -128,7 +128,7 @@ public class DAOManager {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Object executeAndClose(DAOCommand command) throws SQLException {
+	public <T> T executeAndClose(DAOCommand<T> command) throws Exception {
 		try {
 			return command.execute(this);
 		} finally {

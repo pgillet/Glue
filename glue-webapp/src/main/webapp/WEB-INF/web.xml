@@ -34,5 +34,10 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
+	<listener>
+		<display-name>GlueContext</display-name>
+		<listener-class>com.glue.webapp.GlueContext</listener-class>
+	</listener>
+
 </web-app>
 

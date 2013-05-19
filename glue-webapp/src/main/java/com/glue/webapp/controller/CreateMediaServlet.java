@@ -46,8 +46,7 @@ public class CreateMediaServlet extends AbstractDatabaseServlet {
 		// Create associated file
 		try {
 			if (streamPart != null) {
-				RepositoryManager.createMedia(media, streamPart,
-						getServletContext().getRealPath("/Streams"));
+				RepositoryManager.createMedia(media, streamPart);
 			}
 
 		} catch (IOException e) {

@@ -17,7 +17,6 @@ import com.glue.webapp.auth.GlueRole;
 import com.glue.webapp.auth.UserPrincipal;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
-import com.glue.webapp.repository.RepositoryManager;
 import com.glue.webapp.utilities.GSonHelper;
 
 /**
@@ -54,12 +53,12 @@ public class CreateOrUpdateStreamServlet extends AbstractDatabaseServlet {
 			streamDAO.joinAsAdmin(stream.getId(), principal.getId());
 
 			// Create associated directory
-			if (!RepositoryManager.createStream(stream.getId(),
-					getServletContext().getRealPath("/Streams"))) {
-
-				// Exception?
-				LOG.error("Not OK");
-			}
+//			if (!RepositoryManager.createStream(stream.getId(),
+//					getServletContext().getRealPath("/Streams"))) {
+//
+//				// Exception?
+//				LOG.error("Not OK");
+//			}
 		}
 
 	}
