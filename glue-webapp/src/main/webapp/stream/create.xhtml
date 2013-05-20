@@ -63,11 +63,17 @@
 							<div class="controls form-inline">
 								<h:selectOneRadio id="inputPrivacy"
 									value="#{streamBean.publicc}">
+									<!-- TODO: should find another mean to add blank spaces between labels -->
 									<f:selectItem id="itemPrivacy1"
-										itemLabel="#{bundle.stream_public}" itemValue="true" />
+										itemLabel="&nbsp;#{bundle.stream_public}&nbsp;"
+										itemValue="true" />
 									<f:selectItem id="itemPrivacy2"
-										itemLabel="#{bundle.stream_private}" itemValue="false" />
+										itemLabel="&nbsp;#{bundle.stream_private}&nbsp;"
+										itemValue="false" />
 								</h:selectOneRadio>
+								<small><a href="#"> <h:outputText
+											value="#{bundle.stream_privacy_info_link}" />
+								</a></small>
 							</div>
 						</div>
 					</div>
@@ -83,10 +89,14 @@
 								<h:selectOneRadio id="inputParticipationType"
 									value="#{streamBean.open}">
 									<f:selectItem id="itemParticpationType1"
-										itemLabel="#{bundle.stream_open}" itemValue="true" />
+										itemLabel="&nbsp;#{bundle.stream_open}&nbsp;" itemValue="true" />
 									<f:selectItem id="itemParticpationType2"
-										itemLabel="#{bundle.stream_closed}" itemValue="false" />
+										itemLabel="&nbsp;#{bundle.stream_closed}&nbsp;"
+										itemValue="false" />
 								</h:selectOneRadio>
+								<small><a href="#"> <h:outputText
+											value="#{bundle.stream_participation_type_info_link}" />
+								</a></small>
 							</div>
 						</div>
 						<div class="control-group">
