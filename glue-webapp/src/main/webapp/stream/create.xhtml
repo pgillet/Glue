@@ -26,22 +26,19 @@
 						</div>
 					</c:if>
 				</div>
-				<div class="control-group">
-					<div class="controls">
-						<h:commandButton id="submit" styleClass="btn btn-success"
-							value="#{bundle.stream_create}" action="#{streamBean.create}" />
-					</div>
-				</div>
 				<div class="row">
 					<div class="span6">
 						<div class="control-group">
 							<label class="control-label" for="inputTitle"><h:outputText
 									value="#{bundle.stream_title}" /></label>
-							<div class="controls">
+							<div class="controls form-inline">
 								<h:inputText id="inputTitle" styleClass="input-xlarge"
 									style="font-size: large;" label="#{bundle.stream_title}"
 									value="#{streamBean.title}" required="true"
 									p:placeholder="#{bundle.stream_event_title}" />
+								&nbsp;
+								<h:commandButton id="submit" styleClass="btn btn-success"
+									value="#{bundle.stream_create}" action="#{streamBean.create}" />
 							</div>
 						</div>
 						<div class="control-group">
