@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="" basedir="." name="Glue">
 
+    <property name="resources.dir" value="resources" />
+    <property name="testdatas.dir" value="resources/testdatas" />
+    <property name="webapp.dir" value="src/main/webapp" />
+    <property name="webapp.streams.dir" value="${webapp.dir}/Streams" />
     <property name="sql.driver" value="com.mysql.jdbc.Driver" />
 	<property name="sql.url" value="jdbc:mysql://localhost/" />
 	<property name="sql.user" value="root" />
@@ -35,6 +39,8 @@
 			<localRepository refid="local.repository" />
 		</artifact:dependencies>
 
+		<echo>${web.dir}</echo>
+		
 	</target>
 
 	<!-- Drop glue database -->
@@ -55,4 +61,25 @@
 
 	<!-- Restart from an empty database -->
 	<target name="db_install" depends="mvn-init,db-delete,db-create" />
+	
+	<!-- Populate database -->
+	<target name="db-mass-populate" depends="mvn-init">
+		<sql classpathref="compile.classpath" driver="${sql.driver}" url="${sql.url}" userid="${sql.user}"
+			password="${sql.pass}">
+			<transaction src="sql/datas.sql" />
+		</sql>
+	</target>
+	
+	<!--  Deploy test files to webapp -->
+	<target name="testdatas-mass-deploy">
+	  	<unzip src="${testdatas.dir}/streams_mass.zip" dest="${webapp.streams.dir}" />
+	</target>
+	
+	<!--  Remove test files from webapp -->
+	<target name="testdatas-delete">
+	    <delete includeemptydirs="true">
+    		<fileset dir="${webapp.streams.dir}" includes="**/*"/>
+  		</delete>
+	</target>
+	
 </project>

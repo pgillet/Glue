@@ -20,7 +20,7 @@ CREATE TABLE GLUE_USER (
 -- Stream table
 CREATE TABLE STREAM (
              id BIGINT NOT NULL AUTO_INCREMENT,
-             title VARCHAR(50) NOT NULL,
+             title VARCHAR(200) NOT NULL,
              public BOOL NOT NULL,
              open BOOL NOT NULL,
              secret_question VARCHAR(100),
