@@ -36,7 +36,8 @@
 							<div class="controls">
 								<h:inputText id="inputUsername" label="#{bundle.username}"
 									value="#{userBean.username}" required="true"
-									p:placeholder="#{bundle.full_name}" />
+									p:placeholder="#{bundle.full_name}"  p:data-toggle="popover"
+									p:data-content="#{bundle.full_name_tooltip}" />
 							</div>
 						</div>
 						<div class="control-group">
@@ -61,8 +62,7 @@
 							<label class="control-label" for="confirmPassword"><h:outputText
 									value="#{bundle.confirm_password}" /></label>
 							<div class="controls">
-								<h:inputSecret id="confirmPassword"
-									label="#{bundle.password}"
+								<h:inputSecret id="confirmPassword" label="#{bundle.password}"
 									value="#{userBean.password}" required="true"
 									p:placeholder="#{bundle.password}" />
 							</div>

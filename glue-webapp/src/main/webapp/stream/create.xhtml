@@ -4,7 +4,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://java.sun.com/jsf/passthrough"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="../template.xhtml">
@@ -155,34 +155,42 @@
 				<div class="row">
 					<div class="span8">
 						<div class="control-group">
-							<label class="control-label"><i class="icon-time" /></label>
+							<label class="control-label" for="inputStartDate"><h:outputText
+									value="#{bundle.stream_dates}" />&nbsp;<i
+								class="icon-calendar"></i></label>
 							<div class="controls">
-								<h:inputText id="inputStartDate" styleClass="input-small"
+								<h:inputText id="inputStartDate"
+									styleClass="input-small form_date"
 									label="#{bundle.stream_start_date}"
-									value="#{streamBean.startDate}">
-									<f:convertDateTime for="inputStartDate" type="date"
-										dateStyle="short" />
+									value="#{streamBean.startDate}"
+									p:data-date-format="#{bundle.date_format_js}"> <!-- p:data-date-language="en" -->
+									<f:convertDateTime for="inputStartDate"
+										pattern="#{bundle.date_format_jsf}" />
 								</h:inputText>
 								&nbsp;
 								<h:inputText id="inputStartHour" styleClass="input-mini"
 									label="#{bundle.stream_start_date}"
-									value="#{streamBean.startDate}">
-									<f:convertDateTime for="inputStartHour" type="time"
-										timeStyle="short" />
+									value="#{streamBean.startDate}"
+									data-format="#{bundle.time_format}">
+									<f:convertDateTime for="inputStartHour"
+										pattern="#{bundle.time_format}" />
 								</h:inputText>
 								&nbsp;
 								<h:outputText value="#{bundle.stream_to}" />
 								&nbsp;
-								<h:inputText id="inputEndDate" styleClass="input-small"
-									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}">
-									<f:convertDateTime for="inputEndDate" type="date"
-										dateStyle="short" />
+								<h:inputText id="inputEndDate"
+									styleClass="input-small form_date"
+									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}"
+									p:data-date-format="#{bundle.date_format_js}">
+									<f:convertDateTime for="inputEndDate"
+										pattern="#{bundle.date_format_jsf}" />
 								</h:inputText>
 								&nbsp;
 								<h:inputText id="inputEndHour" styleClass="input-mini"
-									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}">
-									<f:convertDateTime for="inputEndHour" type="time"
-										timeStyle="short" />
+									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}"
+									data-format="#{bundle.time_format}">
+									<f:convertDateTime for="inputEndHour"
+										pattern="#{bundle.time_format}" />
 								</h:inputText>
 							</div>
 						</div>
