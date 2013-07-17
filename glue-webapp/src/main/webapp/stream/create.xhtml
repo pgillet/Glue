@@ -163,18 +163,20 @@
 									styleClass="input-small form_date"
 									label="#{bundle.stream_start_date}"
 									value="#{streamBean.startDate}"
-									p:data-date-format="#{bundle.date_format_js}"> <!-- p:data-date-language="en" -->
+									p:data-date-format="#{bundle.date_format_js}">
+									<!-- p:data-date-language="en" -->
 									<f:convertDateTime for="inputStartDate"
 										pattern="#{bundle.date_format_jsf}" />
 								</h:inputText>
 								&nbsp;
-								<h:inputText id="inputStartHour" styleClass="input-mini"
+								<h:selectOneMenu id="inputStartHour" styleClass="input-small"
 									label="#{bundle.stream_start_date}"
-									value="#{streamBean.startDate}"
-									data-format="#{bundle.time_format}">
+									value="#{streamBean.startDate}">
+									<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
+										itemLabel="#{entry.value}" itemValue="#{entry.key}" />
 									<f:convertDateTime for="inputStartHour"
 										pattern="#{bundle.time_format}" />
-								</h:inputText>
+								</h:selectOneMenu>
 								&nbsp;
 								<h:outputText value="#{bundle.stream_to}" />
 								&nbsp;
@@ -186,12 +188,13 @@
 										pattern="#{bundle.date_format_jsf}" />
 								</h:inputText>
 								&nbsp;
-								<h:inputText id="inputEndHour" styleClass="input-mini"
-									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}"
-									data-format="#{bundle.time_format}">
+								<h:selectOneMenu id="inputEndHour" styleClass="input-small"
+									label="#{bundle.stream_end_date}" value="#{streamBean.endDate}">
+									<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
+										itemLabel="#{entry.value}" itemValue="#{entry.key}" />
 									<f:convertDateTime for="inputEndHour"
 										pattern="#{bundle.time_format}" />
-								</h:inputText>
+								</h:selectOneMenu>
 							</div>
 						</div>
 						<div class="control-group">
