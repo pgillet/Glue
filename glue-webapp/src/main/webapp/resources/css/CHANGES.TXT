@@ -1,5 +1,1 @@
-- background-image: url("../img/glyphicons-halflings.png");
-+ background-image: url("../resources/img/glyphicons-halflings.png");
-
-- background-image: url("../img/glyphicons-halflings-white.png");
-+ background-image: url("../resources/img/glyphicons-halflings-white.png");
+replace all occurences of "../fonts" by "../resources/fonts"

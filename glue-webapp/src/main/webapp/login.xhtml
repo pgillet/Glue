@@ -14,14 +14,14 @@
 				<h:outputText value="#{bundle.sign_in}" />
 			</legend>
 			<div class="row">
-				<div class="span4 hidden-phone">
+				<div class="col-lg-4 visible-lg">
 					<img src="resources/img/snail.svg" />
 				</div>
-				<div class="span4">
+				<div class="col-lg-8">
 					<h:form styleClass="form-horizontal">
-						<div class="control-group">
+						<div class="form-group">
 							<c:if test="#{not empty facesContext.messageList}">
-								<div class="span4 alert alert-error">
+								<div class="col-lg-6 alert alert-danger">
 									<button type="button" class="close" data-dismiss="alert">&times;</button>
 									<h4>
 										<h:outputText value="#{bundle.error}" />
@@ -30,30 +30,34 @@
 								</div>
 							</c:if>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputEmail"><h:outputText
-									value="#{bundle.mail_address}" /></label>
-							<div class="controls">
-								<h:inputText id="inputEmail" label="#{bundle.mail_address}"
-									value="#{loginBean.username}" required="true"
-									p:placeholder="#{bundle.mail_address}" />
+						<div class="form-group">
+							<div class="col-lg-2">
+								<label class="control-label" for="inputEmail"><h:outputText
+										value="#{bundle.mail_address}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputText id="inputEmail" styleClass="form-control"
+									label="#{bundle.mail_address}" value="#{loginBean.username}"
+									required="true" p:placeholder="#{bundle.mail_address}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputPassword"><h:outputText
-									value="#{bundle.password}" /></label>
-							<div class="controls">
-								<h:inputSecret id="inputPassword" label="#{bundle.password}"
-									value="#{loginBean.password}" required="true"
-									p:placeholder="#{bundle.password}" />
+						<div class="form-group">
+							<div class="col-lg-2">
+								<label class="control-label" for="inputPassword"><h:outputText
+										value="#{bundle.password}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputSecret id="inputPassword" styleClass="form-control"
+									label="#{bundle.password}" value="#{loginBean.password}"
+									required="true" p:placeholder="#{bundle.password}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<div class="controls">
+						<div class="form-group">
+							<div class="col-lg-2" />
+							<div class="col-lg-3">
 								<label class="checkbox"><h:selectBooleanCheckbox
 										id="remember" /> <h:outputText value="#{bundle.remember_me}" /></label>
-								<h:commandButton id="submit"
-									styleClass="btn btn-large btn-primary"
+								<h:commandButton id="submit" styleClass="btn btn-primary"
 									value="#{bundle.sign_in}" action="#{loginBean.login}" />
 							</div>
 						</div>

@@ -49,6 +49,11 @@
 			<version>2.2.0</version>
 		</dependency>
 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-data-model</artifactId>
 		</dependency>
@@ -80,11 +85,8 @@
 		</dependency>
 		<!-- JSON support -->
 		<!-- Use GsonMessageBodyHandler instead -->
-		<!-- <dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>${jersey.version}</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.sun.jersey</groupId> <artifactId>jersey-json</artifactId> 
+			<version>${jersey.version}</version> </dependency> -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>

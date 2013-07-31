@@ -14,14 +14,14 @@
 				<h:outputText value="#{bundle.sign_up}" />
 			</legend>
 			<div class="row">
-				<div class="span4 hidden-phone">
+				<div class="col-lg-4 visible-lg">
 					<img src="resources/img/snail.svg" />
 				</div>
-				<div class="span4">
+				<div class="col-lg-8">
 					<h:form styleClass="form-horizontal">
-						<div class="control-group">
+						<div class="form-group">
 							<c:if test="#{not empty facesContext.messageList}">
-								<div class="span4 alert alert-error">
+								<div class="col-lg-6 alert alert-danger">
 									<button type="button" class="close" data-dismiss="alert">&times;</button>
 									<h4>
 										<h:outputText value="#{bundle.error}" />
@@ -30,52 +30,62 @@
 								</div>
 							</c:if>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputUsername"><h:outputText
-									value="#{bundle.username}" /></label>
-							<div class="controls">
-								<h:inputText id="inputUsername" label="#{bundle.username}"
-									value="#{userBean.username}" required="true"
-									p:placeholder="#{bundle.full_name}"  p:data-toggle="popover"
+						<div class="form-group">
+							<div class="col-lg-3">
+								<label class="control-label" for="inputUsername"><h:outputText
+										value="#{bundle.username}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputText id="inputUsername" styleClass="form-control"
+									label="#{bundle.username}" value="#{userBean.username}"
+									required="true" p:placeholder="#{bundle.full_name}"
+									p:data-toggle="popover"
 									p:data-content="#{bundle.full_name_tooltip}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputEmail"><h:outputText
-									value="#{bundle.mail_address}" /></label>
-							<div class="controls">
-								<h:inputText id="inputEmail" label="#{bundle.mail_address}"
-									value="#{userBean.mailAddress}" required="true"
-									p:placeholder="#{bundle.mail_address}" />
+						<div class="form-group">
+							<div class="col-lg-3">
+								<label class="control-label" for="inputEmail"><h:outputText
+										value="#{bundle.mail_address}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputText id="inputEmail" styleClass="form-control"
+									label="#{bundle.mail_address}" value="#{userBean.mailAddress}"
+									required="true" p:placeholder="#{bundle.mail_address}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputPassword"><h:outputText
-									value="#{bundle.password}" /></label>
-							<div class="controls">
-								<h:inputSecret id="inputPassword" label="#{bundle.password}"
-									value="#{userBean.password}" required="true"
-									p:placeholder="#{bundle.password}" />
+						<div class="form-group">
+							<div class="col-lg-3">
+								<label class="control-label" for="inputPassword"><h:outputText
+										value="#{bundle.password}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputSecret id="inputPassword" styleClass="form-control"
+									label="#{bundle.password}" value="#{userBean.password}"
+									required="true" p:placeholder="#{bundle.password}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="confirmPassword"><h:outputText
-									value="#{bundle.confirm_password}" /></label>
-							<div class="controls">
-								<h:inputSecret id="confirmPassword" label="#{bundle.password}"
-									value="#{userBean.password}" required="true"
-									p:placeholder="#{bundle.password}" />
+						<div class="form-group">
+							<div class="col-lg-3">
+								<label class="control-label" for="confirmPassword"><h:outputText
+										value="#{bundle.confirm_password}" /></label>
+							</div>
+							<div class="col-lg-4">
+								<h:inputSecret id="confirmPassword" styleClass="form-control"
+									label="#{bundle.password}" value="#{userBean.password}"
+									required="true" p:placeholder="#{bundle.password}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<div class="controls">
-								<h:commandButton id="submit"
-									styleClass="btn btn-large btn-success"
+						<div class="form-group">
+							<div class="col-lg-3" />
+							<div class="col-lg-4">
+								<h:commandButton id="submit" styleClass="btn btn-success"
 									value="#{bundle.sign_up}" action="#{userBean.register}" />
 							</div>
 						</div>
 					</h:form>
 				</div>
+
 			</div>
 
 		</ui:define>
