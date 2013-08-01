@@ -10,12 +10,16 @@
 	<ui:composition template="./template.xhtml">
 		<ui:define name="content">
 
-			<legend>
-				<h:outputText value="#{bundle.sign_in}" />
-			</legend>
+			<div class="row">
+				<div class="col-lg-12">
+					<legend>
+						<h:outputText value="#{bundle.sign_in}" />
+					</legend>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-lg-4 visible-lg">
-					<img src="resources/img/snail.svg" />
+					<h:graphicImage name="snail.svg" library="img" />
 				</div>
 				<div class="col-lg-8">
 					<h:form styleClass="form-horizontal">
@@ -53,8 +57,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="col-lg-2" />
-							<div class="col-lg-3">
+							<div class="col-lg-4 col-offset-2">
 								<label class="checkbox"><h:selectBooleanCheckbox
 										id="remember" /> <h:outputText value="#{bundle.remember_me}" /></label>
 								<h:commandButton id="submit" styleClass="btn btn-primary"

@@ -32,58 +32,44 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a class="navbar-brand" href="#">Glue</a>
+			<h:link class="navbar-brand pull-left" outcome="main">Glue</h:link>
+
+			<h:form styleClass="navbar-form col-8 col-lg-4">
+				<div class="input-group ">
+					<h:inputText styleClass="form-control"
+						p:placeholder="#{bundle.search}" />
+					<span class="input-group-addon"><h:commandLink action="#">
+							<span class="glyphicon glyphicon-search"></span>
+						</h:commandLink> </span>
+				</div>
+			</h:form>
 
 			<div class="nav-collapse collapse navbar-responsive-collapse">
-				<ul class="nav navbar-nav">
-					<li>
-						<!-- class="active" --> <h:link value="#{bundle.home}"
-							outcome="main" />
-					</li>
-					<li><a href="#about"><h:outputText value="#{bundle.about}" /></a></li>
-					<li><a href="#contact">Contact</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-							<c:if test="${!empty request.remoteUser}">
-								<li><h:link outcome="/stream/create">
-										<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<h:outputText
-											value="#{bundle.create_stream}" />
-									</h:link></li>
-							</c:if>
-						</ul></li>
-				</ul>
-				<h:form styleClass="navbar-form pull-left col-lg-4">
-					<div class="input-group ">
-						<h:inputText styleClass="form-control"
-							p:placeholder="#{bundle.search}" />
-						<span class="input-group-addon"><h:commandLink action="#">
-								<span class="glyphicon glyphicon-search"></span>
-							</h:commandLink> </span>
-					</div>
-				</h:form>
+				<h:form>
+					<ul class="nav navbar-nav pull-right">
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown"><h:outputText
+									value="#{bundle.dashboard}" />&nbsp;<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li class="divider"></li>
+								<li class="dropdown-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+								<c:if test="${!empty request.remoteUser}">
+									<li><h:link outcome="/stream/create">
+											<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<h:outputText
+												value="#{bundle.create_stream}" />
+										</h:link></li>
+								</c:if>
+							</ul></li>
 
-				<h:form styleClass="navbar-form pull-right">
-					<h:selectOneMenu styleClass="form-control input-small"
-						value="#{language.localeCode}" onchange="submit()"
-						valueChangeListener="#{language.countryLocaleCodeChanged}">
-						<f:selectItems value="#{language.countries}" />
-					</h:selectOneMenu>
-				</h:form>
+						<c:choose>
+							<c:when test="${!empty request.remoteUser}">
 
-				<c:choose>
-					<c:when test="${!empty request.remoteUser}">
-						<h:form>
-							<ul class="nav navbar-nav pull-right">
-								<li><a href="#"><span
-										class="glyphicon glyphicon-envelope"></span></a></li>
+								<li><a href="#"><span class="badge">42</span></a></li>
 								<li class="dropdown"><a class="dropdown-toggle"
 									data-toggle="dropdown" href="#"> #{request.remoteUser} <span
 										class="caret"></span>
@@ -96,19 +82,23 @@
 													value="#{bundle.logout}" />
 											</h:commandLink></li>
 									</ul></li>
-							</ul>
-						</h:form>
-					</c:when>
-					<c:otherwise>
-						<ul class="nav navbar-nav pull-right">
-							<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
-							<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
-						</ul>
-						<!-- Button to trigger sign up modal -->
-						<!-- <a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a> -->
+							</c:when>
+							<c:otherwise>
+								<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
+								<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
+								<!-- Button to trigger sign up modal -->
+								<!-- <a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a> -->
 
-					</c:otherwise>
-				</c:choose>
+							</c:otherwise>
+						</c:choose>
+						<li><h:selectOneMenu
+								styleClass="navbar-btn form-control input-small"
+								value="#{language.localeCode}" onchange="submit()"
+								valueChangeListener="#{language.countryLocaleCodeChanged}">
+								<f:selectItems value="#{language.countries}" />
+							</h:selectOneMenu></li>
+					</ul>
+				</h:form>
 			</div>
 			<!--/.nav-collapse -->
 		</div>
@@ -116,10 +106,20 @@
 
 	<div id="content" class="container">
 		<ui:insert name="content">Main Content</ui:insert>
-		<hr />
-		<footer>
-		<p>&copy; Glue 2013</p>
-		</footer>
+		<div class="row">
+			<div class="col-lg-12">
+				<hr />
+				<footer>
+				<ul class="nav navbar-nav">
+					<li class="disabled"><a href="#">&copy; Glue 2013</a></li>
+					<li><a href="#about"><h:outputText value="#{bundle.about}" /></a></li>
+					<li><a href="#blog">Blog</a></li>
+					<li><a href="#contact">Contact</a></li>
+					<li><a href="#contact"><h:outputText value="#{bundle.developers}" /></a></li>
+				</ul>
+				</footer>
+			</div>
+		</div>
 	</div>
 	<!-- /container -->
 

@@ -15,6 +15,10 @@ import javax.faces.event.ValueChangeEvent;
 @SessionScoped
 public class LanguageBean implements Serializable {
 
+	private static final String FRANÇAIS = "Français";
+
+	private static final String ENGLISH = "English";
+
 	private static final long serialVersionUID = 1L;
 
 	private String localeCode;
@@ -24,8 +28,8 @@ public class LanguageBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		countries = new LinkedHashMap<String, Object>();
-		countries.put("English", Locale.ENGLISH); // label, value
-		countries.put("Français", Locale.FRENCH);
+		countries.put(ENGLISH, Locale.ENGLISH); // label, value
+		countries.put(FRANÇAIS, Locale.FRENCH);
 
 		Locale locale = FacesContext.getCurrentInstance().getViewRoot()
 				.getLocale();
@@ -61,7 +65,10 @@ public class LanguageBean implements Serializable {
 	// value change event listener
 	public void countryLocaleCodeChanged(ValueChangeEvent e) {
 
-		String newLocaleValue = e.getNewValue().toString();
+		String newLocaleValue = ENGLISH;
+		if (e != null) {
+			newLocaleValue = e.getNewValue().toString();
+		}
 
 		// loop country map to compare the locale code
 		for (Map.Entry<String, Object> entry : countries.entrySet()) {

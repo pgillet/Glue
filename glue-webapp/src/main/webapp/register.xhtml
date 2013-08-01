@@ -10,12 +10,16 @@
 	<ui:composition template="./template.xhtml">
 		<ui:define name="content">
 
-			<legend>
-				<h:outputText value="#{bundle.sign_up}" />
-			</legend>
+			<div class="row">
+				<div class="col-lg-12">
+					<legend>
+						<h:outputText value="#{bundle.sign_up}" />
+					</legend>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-lg-4 visible-lg">
-					<img src="resources/img/snail.svg" />
+					<h:graphicImage name="snail.svg" library="img" />
 				</div>
 				<div class="col-lg-8">
 					<h:form styleClass="form-horizontal">
@@ -77,8 +81,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="col-lg-3" />
-							<div class="col-lg-4">
+							<div class="col-lg-4 col-offset-3">
 								<h:commandButton id="submit" styleClass="btn btn-success"
 									value="#{bundle.sign_up}" action="#{userBean.register}" />
 							</div>
