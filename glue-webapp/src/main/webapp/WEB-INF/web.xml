@@ -39,5 +39,10 @@
 		<listener-class>com.glue.webapp.GlueContext</listener-class>
 	</listener>
 
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/login.xhtml</location>
+	</error-page>
+
 </web-app>
 

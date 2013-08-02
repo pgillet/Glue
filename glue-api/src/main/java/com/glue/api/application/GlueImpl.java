@@ -75,7 +75,7 @@ public class GlueImpl implements Glue {
 	}
 
 	private IUser createOrUpdateUser(IUser user) throws GlueException {
-		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class, "services/user");
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class, "services/users");
 	}
 
 	@Override

@@ -35,6 +35,24 @@ public class UserController {
 		}
 	}
 
+	public void updateUser(IUser user) throws InternalServerException {
+		DAOManager manager = null;
+
+		try {
+			manager = DAOManager.getInstance();
+			UserDAO userDAO = manager.getUserDAO();
+			userDAO.update(user);
+		} catch (NamingException e) {
+			throw new InternalServerException(e);
+		} catch (SQLException e) {
+			throw new InternalServerException(e);
+		} finally {
+			if (manager != null) {
+				manager.closeConnectionQuietly();
+			}
+		}
+	}
+
 	public IUser getUser(String userId) throws InternalServerException {
 		IUser user = null;
 		DAOManager manager = null;

@@ -20,7 +20,7 @@ import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.UserController;
 
-@Path("/user")
+@Path("/users")
 public class UserResource {
 
 	@Context
@@ -31,8 +31,6 @@ public class UserResource {
 
 	public UserResource() {
 	}
-
-	// CRUD: POST for creating a new resource, PUT for creating or updating
 
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -55,17 +53,39 @@ public class UserResource {
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 		URI userUri = ub.path(String.valueOf(user.getId())).build();
 
-		return Response.created(userUri).entity(user).build();
+		return Response.created(userUri)/* .entity(user) */.build();
 	}
 
-	@GET @Path("/{userid}")
-	@Produces("application/json")
+	@POST
+	@Path("/{userid}")
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateUser(@PathParam("userid") String userId, User user) {
+		try {
+			user.setId(Long.valueOf(userId));
+			userController.updateUser(user);
+		} catch (InternalServerException e) {
+			throw new WebApplicationException(
+					Response.Status.INTERNAL_SERVER_ERROR);
+		}
+
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("/{userid}")
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public User getUser(@PathParam("userid") String userId) {
 		try {
-			return (User) userController.getUser(userId);
+			User user = (User) userController.getUser(userId);
+			// Password obfuscation
+			user.setPassword("***"); // TODO: should be hidden ahead ?
+
+			return user;
 		} catch (InternalServerException e) {
 			throw new WebApplicationException(
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }
