@@ -1,6 +1,8 @@
 package com.glue.webapp.logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.NamingException;
 
@@ -13,7 +15,7 @@ public class UserController {
 	public void createUser(IUser user) throws InternalServerException,
 			AlreadyExistsException {
 		DAOManager manager = null;
-		
+
 		try {
 			manager = DAOManager.getInstance();
 			UserDAO userDAO = manager.getUserDAO();
@@ -56,7 +58,7 @@ public class UserController {
 	public IUser getUser(String userId) throws InternalServerException {
 		IUser user = null;
 		DAOManager manager = null;
-		
+
 		try {
 			manager = DAOManager.getInstance();
 			UserDAO userDAO = manager.getUserDAO();
@@ -74,4 +76,42 @@ public class UserController {
 
 		return user;
 	}
+
+	/**
+	 * Returns a list of users from the given email addresses. A registered user
+	 * might not exist for every address.
+	 * 
+	 * @param mailingList
+	 * @return
+	 * @throws InternalServerException
+	 */
+	public List<IUser> getUsers(String[] addresses)
+			throws InternalServerException {
+		List<IUser> users = new ArrayList<IUser>();
+		DAOManager manager = null;
+
+		try {
+			manager = DAOManager.getInstance();
+			UserDAO userDAO = manager.getUserDAO();
+
+			for (String address : addresses) {
+				IUser user = userDAO.search(address);
+				if (user != null) {
+					// Registered user
+					users.add(user);
+				}
+			}
+		} catch (NamingException e) {
+			throw new InternalServerException(e);
+		} catch (SQLException e) {
+			throw new InternalServerException(e);
+		} finally {
+			if (manager != null) {
+				manager.closeConnectionQuietly();
+			}
+		}
+
+		return users;
+	}
+
 }

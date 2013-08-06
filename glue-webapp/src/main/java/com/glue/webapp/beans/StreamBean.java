@@ -2,12 +2,27 @@ package com.glue.webapp.beans;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import com.glue.struct.IUser;
+import com.glue.struct.impl.Stream;
+import com.glue.webapp.logic.InternalServerException;
+import com.glue.webapp.logic.StreamController;
+import com.glue.webapp.logic.UserController;
 
 @ManagedBean
 public class StreamBean /* implements IStream */{
+
+	// TODO: should probably use Dependency Injection here!
+	StreamController streamController = new StreamController();
+	UserController userController = new UserController();
 
 	private String title;
 
@@ -306,6 +321,45 @@ public class StreamBean /* implements IStream */{
 	}
 
 	public String create() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletRequest request = (HttpServletRequest) context
+				.getExternalContext().getRequest();
+
+		IUser authenticatedUser = (IUser) request.getUserPrincipal();
+
+		Stream stream = new Stream();
+		stream.setAddress(address);
+		stream.setDescription(description);
+		stream.setEndDate(endDate.getTime());
+		stream.setLatitude(latitude);
+		stream.setLongitude(longitude);
+		stream.setOpen(open);
+		stream.setPublicc(publicc);
+		stream.setSharedSecretAnswer(sharedSecretAnswer);
+		stream.setSharedSecretQuestion(sharedSecretQuestion);
+		stream.setShouldRequestToParticipate(shouldRequestToParticipate);
+		stream.setStartDate(startDate.getTime());
+		stream.setTags(tags);
+		stream.setThumbPath(thumbPath);
+		stream.setTitle(title);
+
+		try {
+			String[] addresses = invitedParticipants.split("\\s+,\\s+");
+			// List<IUser> users = userController.getUsers(addresses);
+			Map<String, String> m = new LinkedHashMap<String, String>();
+			// For now, we cannot know the name associated to a mail address
+			// unless we integrate contact API from various mail services.
+			for (String address : addresses) {
+				m.put(address, null);
+			}
+			stream.setInvitedParticipants(m);
+
+			streamController.createStream(stream, authenticatedUser);
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(e.getMessage()));
+		}
+
 		return "main";
 	}
 
