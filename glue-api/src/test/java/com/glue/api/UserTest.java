@@ -23,9 +23,9 @@ public class UserTest {
 	@Test
 	public void createUser1() {
 		try {
-			user = glue.createUser("Greg", "Denis", "gregoire.denis@glue.com", "mypassword");
+			user = glue.createUser("Greg", "gregoire.denis@glue.com", "mypassword");
 			assertTrue(user.getId() != 0);
-			user.setFirstName("Gregouze");
+			user.setName("Gregouze");
 			user = glue.updateUser(user);
 		} catch (Exception e) {
 			fail("Exception during stream creation");

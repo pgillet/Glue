@@ -6,7 +6,7 @@ import com.glue.struct.IUser;
 public interface UserOperations {
 	IUser createUser(IUser user) throws GlueException;
 
-	IUser createUser(String firstName, String lastName, String email, String password) throws GlueException;
+	IUser createUser(String name, String email, String password) throws GlueException;
 
 	IUser updateUser(IUser user) throws GlueException;
 

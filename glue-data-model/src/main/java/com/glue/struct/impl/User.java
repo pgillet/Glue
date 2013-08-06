@@ -14,13 +14,11 @@ public class User implements IUser, Serializable {
 
 	private long id;
 
-	private String firstName;
-
-	private String lastName;
+	private String name;
 
 	private String mailAddress;
 
-	private String password;
+	private transient String password;
 
 	@XmlElement
 	public long getId() {
@@ -32,21 +30,12 @@ public class User implements IUser, Serializable {
 	}
 
 	@XmlElement
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	@XmlElement
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@XmlElement

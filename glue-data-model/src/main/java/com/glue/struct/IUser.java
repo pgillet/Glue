@@ -12,22 +12,13 @@ public interface IUser {
 	void setId(long id);
 
 	/**
-	 * Returns the first name of the user.
+	 * Returns the user's name.
 	 * 
-	 * @return the first name of the user
+	 * @return the user's name
 	 */
-	String getFirstName();
+	String getName();
 
-	void setFirstName(String firstName);
-
-	/**
-	 * Returns the last name of the user.
-	 * 
-	 * @return the last name of the user
-	 */
-	String getLastName();
-
-	void setLastName(String lastName);
+	void setName(String name);
 
 	/**
 	 * Returns the user email.

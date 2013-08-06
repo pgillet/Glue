@@ -9,8 +9,7 @@ USE gluedb;
 -- User table
 CREATE TABLE GLUE_USER (
 			id BIGINT NOT NULL AUTO_INCREMENT,
-			first_name VARCHAR(50) NOT NULL,
-			last_name VARCHAR(50) NOT NULL,
+			name VARCHAR(50) NOT NULL,
             email VARCHAR(50) NOT NULL,
             passwd VARCHAR(50) NOT NULL,
             PRIMARY KEY (id),

@@ -14,7 +14,7 @@ import com.glue.webapp.logic.UserController;
 @ManagedBean
 public class UserBean {
 
-	private String username;
+	private String name;
 	private String mailAddress;
 	private String password;
 
@@ -30,18 +30,18 @@ public class UserBean {
 	}
 
 	/**
-	 * @return the username
+	 * @return the name
 	 */
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param username
-	 *            the username to set
+	 * @param name
+	 *            the name to set
 	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -80,16 +80,7 @@ public class UserBean {
 
 		User user = new User();
 
-		String firstName = null;
-		String lastName = "";
-		int index = username.trim().indexOf(" ");
-		if (index != -1) {
-			firstName = username.substring(0, index);
-			lastName = username.substring(index + 1);
-		}
-
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
+		user.setName(name);
 		user.setMailAddress(mailAddress);
 		user.setPassword(password);
 

@@ -63,6 +63,7 @@ public class UserResource {
 	public Response updateUser(@PathParam("userid") String userId, User user) {
 		try {
 			user.setId(Long.valueOf(userId));
+			// TODO: should encrypt password
 			userController.updateUser(user);
 		} catch (InternalServerException e) {
 			throw new WebApplicationException(

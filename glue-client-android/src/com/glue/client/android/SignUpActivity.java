@@ -24,13 +24,13 @@ public class SignUpActivity extends AuthenticatorActivity {
 
 			try {
 				Glue glue = new GlueFactory().getInstance();
-				glue.createUser(params[0], params[1], params[2], params[3]);
+				glue.createUser(params[0], params[1], params[2]);
 				
 				// There is no need to log in as we just created the user
 				// identity on the target server.
 				// We just register the user credentials for subsequent requests
 				// instead.
-				glue.registerCredentials(params[2], params[3]);
+				glue.registerCredentials(params[1], params[2]);
 				final String authToken = "Dummy";
 				return authToken;
 
@@ -47,9 +47,7 @@ public class SignUpActivity extends AuthenticatorActivity {
 	/** The tag used to log to adb console. */
 	private static final String TAG = "SignUpActivity";
 
-	private EditText mFirstNameEdit;
-
-	private EditText mLastNameEdit;
+	private EditText mNameEdit;
 
 	@Override
 	public void finish() {
@@ -60,20 +58,14 @@ public class SignUpActivity extends AuthenticatorActivity {
 	}
 
 	public void onClickSignUp(View view) {
-		String firstName = mFirstNameEdit.getText().toString();
-		String lastName = mLastNameEdit.getText().toString();
+		String name = mNameEdit.getText().toString();
 		mUsername = mUsernameEdit.getText().toString();
 		mPassword = mPasswordEdit.getText().toString();
 
 		// Form validation
-		if (TextUtils.isEmpty(firstName)) {
+		if (TextUtils.isEmpty(name)) {
 			final CharSequence msg = getText(R.string.required_field);
-			mFirstNameEdit.setError(msg);
-			return;
-		}
-		if (TextUtils.isEmpty(lastName)) {
-			final CharSequence msg = getText(R.string.required_field);
-			mLastNameEdit.setError(msg);
+			mNameEdit.setError(msg);
 			return;
 		}
 		if (!Patterns.EMAIL_ADDRESS.matcher(mUsername).matches()) {
@@ -91,7 +83,7 @@ public class SignUpActivity extends AuthenticatorActivity {
 		// the user login attempt.
 		showProgress();
 		mAuthTask = new UserSignUpTask();
-		mAuthTask.execute(firstName, lastName, mUsername, mPassword);
+		mAuthTask.execute(name, mUsername, mPassword);
 	}
 
 	@Override
@@ -99,8 +91,7 @@ public class SignUpActivity extends AuthenticatorActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_up);
 
-		mFirstNameEdit = (EditText) findViewById(R.id.first_name_edit);
-		mLastNameEdit = (EditText) findViewById(R.id.last_name_edit);
+		mNameEdit = (EditText) findViewById(R.id.name_edit);
 		mUsernameEdit = (EditText) findViewById(R.id.mail_address_edit);
 		mPasswordEdit = (EditText) findViewById(R.id.password_edit);
 

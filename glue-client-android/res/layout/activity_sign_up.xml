@@ -21,27 +21,17 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/first_name_edit"
+            android:id="@+id/name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:ems="10"
-            android:hint="@string/first_name"
+            android:hint="@string/name"
             android:inputType="textPersonName" >
 
             <requestFocus />
         </EditText>
-
-        <EditText
-            android:id="@+id/last_name_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:hint="@string/last_name"
-            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/mail_address_edit"

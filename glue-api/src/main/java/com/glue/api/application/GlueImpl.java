@@ -59,11 +59,10 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IUser createUser(String firstName, String lastName, String email, String password) throws GlueException {
+	public IUser createUser(String name, String email, String password) throws GlueException {
 		// Create User DTO
 		IUser user = new User();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
+		user.setName(name);
 		user.setMailAddress(email);
 		user.setPassword(password);
 		return createOrUpdateUser(user);

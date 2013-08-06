@@ -13,8 +13,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="or">or</string>
     <string name="title_activity_sign_up">Sign Up</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="name">Full Name</string>
     <string name="your_email">Your Email</string>
     <string name="re_enter_email_">Re-enter Email</string>
     <string name="new_password">New Password</string>
