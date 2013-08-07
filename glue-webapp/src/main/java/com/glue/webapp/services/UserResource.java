@@ -12,9 +12,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.glue.struct.IUser;
 import com.glue.struct.impl.User;
 import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;
@@ -22,6 +25,9 @@ import com.glue.webapp.logic.UserController;
 
 @Path("/users")
 public class UserResource {
+
+	@Context
+	SecurityContext securityContext;
 
 	@Context
 	UriInfo uriInfo;
@@ -40,10 +46,10 @@ public class UserResource {
 		try {
 			userController.createUser(user);
 		} catch (InternalServerException e) {
-			throw new WebApplicationException(
+			throw new WebApplicationException(e,
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} catch (AlreadyExistsException e) {
-			throw new WebApplicationException(Response
+			throw new WebApplicationException(e, Response
 					.status(Response.Status.CONFLICT).entity(e.getMessage())
 					/*
 					 * .type(MediaType. TEXT_PLAIN)
@@ -61,21 +67,30 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUser(@PathParam("userid") String userId, User user) {
-		try {
-			user.setId(Long.valueOf(userId));
-			// TODO: should encrypt password
-			userController.updateUser(user);
-		} catch (InternalServerException e) {
-			throw new WebApplicationException(
-					Response.Status.INTERNAL_SERVER_ERROR);
+
+		IUser authenticatedUser = (IUser) securityContext.getUserPrincipal();
+
+		if (authenticatedUser != null
+				&& userId.equals(Long.toString(authenticatedUser.getId()))) {
+
+			try {
+				user.setId(Long.valueOf(userId));
+				// TODO: should encrypt password
+				userController.updateUser(user);
+
+				return Response.ok().build();
+			} catch (InternalServerException e) {
+				throw new WebApplicationException(e,
+						Response.Status.INTERNAL_SERVER_ERROR);
+			}
 		}
 
-		return Response.ok().build();
+		return Response.status(Status.FORBIDDEN).build();
 	}
 
 	@GET
 	@Path("/{userid}")
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public User getUser(@PathParam("userid") String userId) {
 		try {
 			User user = (User) userController.getUser(userId);
@@ -84,7 +99,7 @@ public class UserResource {
 
 			return user;
 		} catch (InternalServerException e) {
-			throw new WebApplicationException(
+			throw new WebApplicationException(e,
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}
 	}

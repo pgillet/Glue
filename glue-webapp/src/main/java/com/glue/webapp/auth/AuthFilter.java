@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 @WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
 		@WebInitParam(name = "form-login-page", value = "/login.xhtml"),
-		@WebInitParam(name = "excludes", value = "/services, /main.xhtml, /register.xhtml, /CreateOrUpdateUser") })
+		@WebInitParam(name = "excludes", value = "/main.xhtml, /register.xhtml") })
 public class AuthFilter implements Filter {
 
 	private static final String RESOURCES = "/resources";
@@ -135,14 +135,16 @@ public class AuthFilter implements Filter {
 		// and Basic authentication for mobile devices using the Glue API
 		// TODO: may use a specific custom parameter to make the diff instead of
 		// the user-agent string
-		String userAgent = request.getHeader(USER_AGENT);
-		if (userAgent != null && userAgent.indexOf(APACHE_HTTP_CLIENT) != -1) {
-			response.setHeader("WWW-Authenticate", "BASIC realm=\"Glue-App\"");
-		}
+		// String userAgent = request.getHeader(USER_AGENT);
+		// if (userAgent != null && userAgent.indexOf(APACHE_HTTP_CLIENT) != -1)
+		// {
+		response.setHeader("WWW-Authenticate", "BASIC realm=\"Glue-App\"");
+		// }
 
-		String formLoginPage = filterConfig.getInitParameter(FORM_LOGIN_PAGE);
-		filterConfig.getServletContext().getRequestDispatcher(formLoginPage)
-				.forward(request, response);
+		// String formLoginPage =
+		// filterConfig.getInitParameter(FORM_LOGIN_PAGE);
+		// filterConfig.getServletContext().getRequestDispatcher(formLoginPage)
+		// .forward(request, response);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package com.glue.struct.impl;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.glue.struct.IUser;
@@ -20,7 +19,6 @@ public class User implements IUser, Serializable {
 
 	private transient String password;
 
-	@XmlElement
 	public long getId() {
 		return id;
 	}
@@ -29,7 +27,6 @@ public class User implements IUser, Serializable {
 		this.id = id;
 	}
 
-	@XmlElement
 	public String getName() {
 		return name;
 	}
@@ -38,7 +35,6 @@ public class User implements IUser, Serializable {
 		this.name = name;
 	}
 
-	@XmlElement
 	public String getMailAddress() {
 		return mailAddress;
 	}
@@ -47,7 +43,7 @@ public class User implements IUser, Serializable {
 		this.mailAddress = mailAddress;
 	}
 
-	// @XmlElement
+	//@XmlTransient
 	public String getPassword() {
 		return password;
 	}
