@@ -41,7 +41,8 @@
 								<h:inputText id="inputUsername" styleClass="form-control"
 									label="#{bundle.username}" value="#{userBean.name}"
 									required="true" p:placeholder="#{bundle.full_name}"
-									p:data-toggle="popover"
+									p:data-container="body" p:data-toggle="popover"
+									p:data-placement="right"
 									p:data-content="#{bundle.full_name_tooltip}" />
 							</div>
 						</div>
