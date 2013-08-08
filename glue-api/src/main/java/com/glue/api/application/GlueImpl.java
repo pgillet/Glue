@@ -37,9 +37,12 @@ import com.glue.struct.impl.User;
 
 public class GlueImpl implements Glue {
 
+	private static final String URI_PATH_USERS = "services/users/";
+
 	private Log log = LogFactory.getLog(GlueImpl.class);
 
-	private static ResourceBundle messages = ResourceBundle.getBundle("messages");
+	private static ResourceBundle messages = ResourceBundle
+			.getBundle("messages");
 
 	private static final String USER_LOGIN = "user/login";
 
@@ -54,32 +57,30 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IUser createUser(IUser user) throws GlueException {
-		return createOrUpdateUser(user);
-	}
-
-	@Override
-	public IUser createUser(String name, String email, String password) throws GlueException {
+	public IUser createUser(String name, String email, String password)
+			throws GlueException {
 		// Create User DTO
 		IUser user = new User();
 		user.setName(name);
 		user.setMailAddress(email);
 		user.setPassword(password);
-		return createOrUpdateUser(user);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class,
+				URI_PATH_USERS);
 	}
 
 	@Override
-	public IUser updateUser(IUser user) throws GlueException {
-		return createOrUpdateUser(user);
-	}
-
-	private IUser createOrUpdateUser(IUser user) throws GlueException {
-		return HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class, "services/users");
+	/**
+	 * Requires to be authenticated.
+	 */
+	public void updateUser(IUser user) throws GlueException {
+		HttpHelper.sendGlueObject(ctx.getHttpClient(), user, User.class,
+				URI_PATH_USERS + user.getId());
 	}
 
 	@Override
-	public IMedia createMedia(Long streamId, String caption, String extension, String mimeType, Double latitude,
-			Double longitude, Long startDate, File file) throws GlueException {
+	public IMedia createMedia(Long streamId, String caption, String extension,
+			String mimeType, Double latitude, Double longitude, Long startDate,
+			File file) throws GlueException {
 		IMedia media = new Media();
 		media.setStreamId(streamId);
 		media.setCaption(caption);
@@ -88,12 +89,14 @@ public class GlueImpl implements Glue {
 		media.setLatitude(latitude);
 		media.setLongitude(longitude);
 		media.setStartDate(startDate);
-		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media, Media.class, "CreateMedia", file);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media,
+				Media.class, "CreateMedia", file);
 	}
 
 	@Override
 	public IMedia createMedia(IMedia media, File file) throws GlueException {
-		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media, Media.class, "CreateMedia", file);
+		return HttpHelper.sendGlueObject(ctx.getHttpClient(), media,
+				Media.class, "CreateMedia", file);
 	}
 
 	/**
@@ -104,11 +107,15 @@ public class GlueImpl implements Glue {
 		try {
 			URL baseURL = new URL(Configuration.getBaseUrl());
 
-			HttpHost targetHost = new HttpHost(baseURL.getHost(), baseURL.getPort(), baseURL.getProtocol());
+			HttpHost targetHost = new HttpHost(baseURL.getHost(),
+					baseURL.getPort(), baseURL.getProtocol());
 
-			ctx.getHttpClient().getCredentialsProvider().setCredentials(
-					new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-					new UsernamePasswordCredentials(username, password));
+			ctx.getHttpClient()
+					.getCredentialsProvider()
+					.setCredentials(
+							new AuthScope(targetHost.getHostName(),
+									targetHost.getPort()),
+							new UsernamePasswordCredentials(username, password));
 
 			// Create AuthCache instance
 			AuthCache authCache = new BasicAuthCache();
@@ -124,10 +131,12 @@ public class GlueImpl implements Glue {
 			URL loginURL = new URL(baseURL, USER_LOGIN);
 			HttpGet httpget = new HttpGet(loginURL.toExternalForm());
 
-			log.info("executing request: " + httpget.getRequestLine() + " to target: " + targetHost);
+			log.info("executing request: " + httpget.getRequestLine()
+					+ " to target: " + targetHost);
 
 			// for (int i = 0; i < 3; i++) {
-			HttpResponse response = ctx.getHttpClient().execute(targetHost, httpget, localcontext);
+			HttpResponse response = ctx.getHttpClient().execute(targetHost,
+					httpget, localcontext);
 			HttpEntity entity = response.getEntity();
 
 			log.info("----------------------------------------");
@@ -140,7 +149,8 @@ public class GlueImpl implements Glue {
 			}
 
 			if (entity != null) {
-				log.info("Response content length: " + entity.getContentLength());
+				log.info("Response content length: "
+						+ entity.getContentLength());
 			}
 
 			// EntityUtils.consume(entity);
@@ -166,13 +176,17 @@ public class GlueImpl implements Glue {
 	}
 
 	@Override
-	public IStream createStream(String title, String description, boolean publicc, boolean open, Set<String> tags,
-			Map<String, String> invitedParticipants, String sharedSecretQuestion, String sharedSecretAnswer,
-			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
-			String address) throws GlueException {
-		return streamOperations.createStream(title, description, publicc, open, tags, invitedParticipants,
-				sharedSecretQuestion, sharedSecretAnswer, shouldRequestToParticipate, startDate, endDate, latitude,
-				longitude, address);
+	public IStream createStream(String title, String description,
+			boolean publicc, boolean open, Set<String> tags,
+			Map<String, String> invitedParticipants,
+			String sharedSecretQuestion, String sharedSecretAnswer,
+			boolean shouldRequestToParticipate, long startDate, long endDate,
+			double latitude, double longitude, String address)
+			throws GlueException {
+		return streamOperations.createStream(title, description, publicc, open,
+				tags, invitedParticipants, sharedSecretQuestion,
+				sharedSecretAnswer, shouldRequestToParticipate, startDate,
+				endDate, latitude, longitude, address);
 	}
 
 	@Override

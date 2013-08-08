@@ -59,7 +59,7 @@ public class UserResource {
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 		URI userUri = ub.path(String.valueOf(user.getId())).build();
 
-		return Response.created(userUri)/* .entity(user) */.build();
+		return Response.created(userUri).entity(user).build();
 	}
 
 	@POST

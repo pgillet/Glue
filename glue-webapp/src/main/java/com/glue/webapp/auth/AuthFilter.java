@@ -40,8 +40,6 @@ public class AuthFilter implements Filter {
 
 	private static final String REGEX = "\\s*,\\s*";
 	private static final String EXCLUDES = "excludes";
-	private static final String APACHE_HTTP_CLIENT = "Apache-HttpClient";
-	private static final String USER_AGENT = "user-agent";
 	private static final String FORM_LOGIN_PAGE = "form-login-page";
 	private static final String BASIC = "Basic ";
 	private static final String AUTHORIZATION = "Authorization";
@@ -65,8 +63,9 @@ public class AuthFilter implements Filter {
 		MyHttpServletRequest request = new MyHttpServletRequest(request0);
 		request.setDataSource(getDataSource());
 
+		boolean restcall = isRequestFromRESTClient(request);
 		String path = ((HttpServletRequest) servletRequest).getServletPath();
-		if (excludeFromFilter(path)) {
+		if (!restcall && excludeFromFilter(path)) {
 			chain.doFilter(request, servletResponse);
 			return;
 		}
@@ -114,8 +113,12 @@ public class AuthFilter implements Filter {
 					request.login(user, password);
 				}
 			}
-
-			if (request.getUserPrincipal() != null) {
+			
+			// If the request has been sent from a REST client, the target
+			// resource is always invoked whether the user is authenticated or
+			// not: the underlying JAX-RS framework (in this case, Jersey) is
+			// responsible for its own security.
+			if (request.getUserPrincipal() != null || restcall) {
 				chain.doFilter(request, response);
 			} else {
 				authenticate(request, response);
@@ -131,20 +134,29 @@ public class AuthFilter implements Filter {
 			HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // I.e., 401
 
-		// Form-based authentication for classic browsers
-		// and Basic authentication for mobile devices using the Glue API
-		// TODO: may use a specific custom parameter to make the diff instead of
-		// the user-agent string
-		// String userAgent = request.getHeader(USER_AGENT);
-		// if (userAgent != null && userAgent.indexOf(APACHE_HTTP_CLIENT) != -1)
-		// {
-		response.setHeader("WWW-Authenticate", "BASIC realm=\"Glue-App\"");
+		// Rest client vs Browser
+		// if (isRequestFromRESTClient(request)) {
+		// response.setHeader("WWW-Authenticate", "BASIC realm=\"Glue-App\"");
+		// } else {
+			String formLoginPage = filterConfig
+					.getInitParameter(FORM_LOGIN_PAGE);
+			filterConfig.getServletContext()
+					.getRequestDispatcher(formLoginPage)
+					.forward(request, response);
 		// }
+	}
 
-		// String formLoginPage =
-		// filterConfig.getInitParameter(FORM_LOGIN_PAGE);
-		// filterConfig.getServletContext().getRequestDispatcher(formLoginPage)
-		// .forward(request, response);
+	/**
+	 * Tells whether or not the given request is from a REST client or a
+	 * browser.
+	 * 
+	 * @param request
+	 * @return <code>true</code> if the request is from a REST client,
+	 *         <code>false</code> otherwise
+	 */
+	private boolean isRequestFromRESTClient(HttpServletRequest request) {
+		String path = request.getServletPath();
+		return path.equals("/services");
 	}
 
 	@Override

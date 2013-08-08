@@ -17,7 +17,7 @@ public class User implements IUser, Serializable {
 
 	private String mailAddress;
 
-	private transient String password;
+	private String password;
 
 	public long getId() {
 		return id;

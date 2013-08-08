@@ -23,12 +23,15 @@ public class UserTest {
 	@Test
 	public void createUser1() {
 		try {
-			user = glue.createUser("Greg", "gregoire.denis@glue.com", "mypassword");
+			final String email= "gregoire.denis@glue.com";
+			final String passwd = "mypassword";
+			user = glue.createUser("Greg", email, passwd);
 			assertTrue(user.getId() != 0);
 			user.setName("Gregouze");
-			user = glue.updateUser(user);
+			glue.login(email, passwd);
+			glue.updateUser(user);
 		} catch (Exception e) {
-			fail("Exception during stream creation");
+			fail("Exception during user creation");
 		}
 
 	}
