@@ -5,8 +5,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-<!-- <f:view locale="fr" /> -->
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	lang="#{languageBean.language}">
+<f:view locale="#{languageBean.locale}" />
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Glue</title>
@@ -93,9 +94,9 @@
 						</c:choose>
 						<li><h:selectOneMenu
 								styleClass="navbar-btn form-control input-small"
-								value="#{language.localeCode}" onchange="submit()"
-								valueChangeListener="#{language.countryLocaleCodeChanged}">
-								<f:selectItems value="#{language.countries}" />
+								value="#{languageBean.language}" onchange="submit()"
+								valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
+								<f:selectItems value="#{languageBean.locales}" />
 							</h:selectOneMenu></li>
 					</ul>
 				</h:form>
@@ -115,7 +116,8 @@
 					<li><a href="#about"><h:outputText value="#{bundle.about}" /></a></li>
 					<li><a href="#blog">Blog</a></li>
 					<li><a href="#contact">Contact</a></li>
-					<li><a href="#contact"><h:outputText value="#{bundle.developers}" /></a></li>
+					<li><a href="#contact"><h:outputText
+								value="#{bundle.developers}" /></a></li>
 				</ul>
 				</footer>
 			</div>
