@@ -35,7 +35,7 @@ public class LanguageBean implements Serializable {
 
 		for (Locale locale : locales) {
 			localeItems.add(new SelectItem(locale.getLanguage(), locale
-					.getDisplayLanguage()));
+					.getDisplayLanguage(locale)));
 		}
 	}
 
