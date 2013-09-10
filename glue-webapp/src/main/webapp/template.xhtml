@@ -22,8 +22,13 @@
 		media="screen" /> -->
 	<h:outputStylesheet library="css" name="datepicker.css" media="screen" />
 
+	<script type="text/javascript"
+		src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<h:outputScript library="js" name="geolocation.js" />
+
 </h:head>
-<h:body>
+<h:body onload="getLocation()">
+
 	<nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
@@ -49,6 +54,8 @@
 				<span class="glyphicon glyphicon-search"></span>
 			</button>
 		</h:form>
+
+		<p id="location" class="navbar-text pull-left"></p>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
