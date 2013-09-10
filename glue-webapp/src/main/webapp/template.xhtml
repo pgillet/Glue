@@ -18,110 +18,156 @@
 	<!-- <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" /> -->
 	<h:outputStylesheet library="css" name="bootstrap.min.css"
 		media="screen" />
-	<h:outputStylesheet library="css" name="bootstrap-glyphicons.css"
-		media="screen" />
+	<!-- <h:outputStylesheet library="css" name="bootstrap-glyphicons.css"
+		media="screen" /> -->
 	<h:outputStylesheet library="css" name="datepicker.css" media="screen" />
 
 </h:head>
 <h:body>
-	<div class="navbar">
-		<div class="container">
-
+	<nav class="navbar navbar-default" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target=".nav-collapse">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
+				data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span><span class="icon-bar"></span>
+				<span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
 
-			<h:link class="navbar-brand pull-left" outcome="main">Glue</h:link>
-
-			<h:form styleClass="navbar-form col-8 col-lg-4">
-				<div class="input-group ">
-					<h:inputText styleClass="form-control"
-						p:placeholder="#{bundle.search}" />
-					<span class="input-group-addon"><h:commandLink action="#">
-							<span class="glyphicon glyphicon-search"></span>
-						</h:commandLink> </span>
-				</div>
-			</h:form>
-
-			<div class="nav-collapse collapse navbar-responsive-collapse">
-				<h:form>
-					<ul class="nav navbar-nav pull-right">
-						<li class="dropdown"><a href="#" class="dropdown-toggle"
-							data-toggle="dropdown"><h:outputText
-									value="#{bundle.dashboard}" />&nbsp;<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else here</a></li>
-								<li class="divider"></li>
-								<li class="dropdown-header">Nav header</li>
-								<li><a href="#">Separated link</a></li>
-								<li><a href="#">One more separated link</a></li>
-								<c:if test="${!empty request.remoteUser}">
-									<li><h:link outcome="/stream/create">
-											<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<h:outputText
-												value="#{bundle.create_stream}" />
-										</h:link></li>
-								</c:if>
-							</ul></li>
-
-						<c:choose>
-							<c:when test="${!empty request.remoteUser}">
-
-								<li><a href="#"><span class="badge">42</span></a></li>
-								<li class="dropdown"><a class="dropdown-toggle"
-									data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-										class="caret"></span>
-								</a>
-									<ul class="dropdown-menu">
-										<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
-													value="#{bundle.account_settings}" /></a></li>
-										<li><h:commandLink action="#{loginBean.logout}">
-												<span class="glyphicon glyphicon-off"></span>&nbsp;<h:outputText
-													value="#{bundle.logout}" />
-											</h:commandLink></li>
-									</ul></li>
-							</c:when>
-							<c:otherwise>
-								<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
-								<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
-								<!-- Button to trigger sign up modal -->
-								<!-- <a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a> -->
-
-							</c:otherwise>
-						</c:choose>
-						<li><h:selectOneMenu
-								styleClass="navbar-btn form-control input-small"
-								value="#{languageBean.language}" onchange="submit()"
-								valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
-								<f:selectItems value="#{languageBean.locales}" />
-							</h:selectOneMenu></li>
-					</ul>
-				</h:form>
-			</div>
-			<!--/.nav-collapse -->
+			<h:link class="navbar-brand" outcome="main">
+				<span class="glyphicon glyphicon-tint"></span>Glue</h:link>
 		</div>
+
+		<h:form styleClass="navbar-form navbar-left" role="search">
+			<div class="form-group">
+				<h:inputText styleClass="form-control"
+					p:placeholder="#{bundle.search}" />
+				<!-- <span class="input-group-addon"><h:commandLink action="#">
+						<span class="glyphicon glyphicon-search"></span>
+					</h:commandLink> </span> -->
+			</div>
+			<button type="submit" class="btn btn-default">
+				<span class="glyphicon glyphicon-search"></span>
+			</button>
+		</h:form>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<h:form>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><h:outputText
+								value="#{bundle.dashboard}" />&nbsp;<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">Nav header</li>
+							<li><a href="#">Separated link</a></li>
+							<li><a href="#">One more separated link</a></li>
+							<c:if test="${!empty request.remoteUser}">
+								<li><h:link outcome="/stream/create">
+										<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<h:outputText
+											value="#{bundle.create_stream}" />
+									</h:link></li>
+							</c:if>
+						</ul></li>
+
+					<c:choose>
+						<c:when test="${!empty request.remoteUser}">
+
+							<li><a href="#"><span class="badge">42</span></a></li>
+							<li class="dropdown"><a class="dropdown-toggle"
+								data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+									class="caret"></span>
+							</a>
+								<ul class="dropdown-menu">
+									<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
+												value="#{bundle.account_settings}" /></a></li>
+									<li><h:commandLink action="#{loginBean.logout}">
+											<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
+												value="#{bundle.logout}" />
+										</h:commandLink></li>
+								</ul></li>
+						</c:when>
+						<c:otherwise>
+							<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
+							<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
+							<!-- Button to trigger sign up modal -->
+							<!-- <a href="#myModal" role="button" data-toggle="modal">#{bundle.sign_up}</a> -->
+
+						</c:otherwise>
+					</c:choose>
+				</ul>
+			</h:form>
+		</div>
+
+		<!--/.nav-collapse -->
 	</div>
+	</nav>
 
 	<div id="content" class="container">
 		<ui:insert name="content">Main Content</ui:insert>
-		<div class="row">
-			<div class="col-lg-12">
-				<hr />
-				<footer>
-				<ul class="nav navbar-nav">
-					<li class="disabled"><a href="#">&copy; Glue 2013</a></li>
-					<li><a href="#about"><h:outputText value="#{bundle.about}" /></a></li>
-					<li><a href="#blog">Blog</a></li>
-					<li><a href="#contact">Contact</a></li>
-					<li><a href="#contact"><h:outputText
-								value="#{bundle.developers}" /></a></li>
-				</ul>
-				</footer>
+		<hr />
+		<footer> <small>
+			<div class="row">
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<!-- <li class="disabled"><a href="#">&copy; Glue 2013</a></li> -->
+						<li><strong><h:outputText value="#{bundle.about}" /></strong></li>
+						<li><a href="#"><h:outputText value="#{bundle.company}" /></a></li>
+						<li><a href="#">Blog</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<li><strong><h:outputText
+									value="#{bundle.follow_us}" /></strong></li>
+					</ul>
+				</div>
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<li><strong><h:outputText
+									value="#{bundle.how_it_works}" /></strong></li>
+						<li><a href="#">FAQ</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<li><strong><h:outputText value="#{bundle.legal}" /></strong></li>
+						<li><a href="#"><h:outputText
+									value="#{bundle.terms_of_use}" /></a></li>
+						<li><a href="#"><h:outputText
+									value="#{bundle.privacy_policy}" /></a></li>
+					</ul>
+				</div>
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<li><strong>Mobile</strong></li>
+					</ul>
+				</div>
+				<div class="col-lg-2">
+					<ul class="list-unstyled">
+						<li><strong><h:outputText
+									value="#{bundle.developers}" /></strong></li>
+						<li><a href="#">API</a></li>
+					</ul>
+				</div>
 			</div>
-		</div>
+			<ul class="nav navbar-nav pull-left">
+				<li class="disabled"><a href="#">&copy; Glue 2013</a></li>
+			</ul> <h:form>
+				<ul class="nav navbar-nav pull-right">
+					<li><h:selectOneMenu
+							styleClass="navbar-btn form-control input-small"
+							value="#{languageBean.language}" onchange="submit()"
+							valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
+							<f:selectItems value="#{languageBean.locales}" />
+						</h:selectOneMenu></li>
+				</ul>
+			</h:form>
+		</small></footer>
 	</div>
 	<!-- /container -->
 

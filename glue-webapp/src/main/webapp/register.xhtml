@@ -22,7 +22,7 @@
 					<h:graphicImage name="snail.svg" library="img" />
 				</div>
 				<div class="col-lg-8">
-					<h:form styleClass="form-horizontal">
+					<h:form styleClass="form-horizontal" role="form">
 						<div class="form-group">
 							<c:if test="#{not empty facesContext.messageList}">
 								<div class="col-lg-6 alert alert-danger">
@@ -74,7 +74,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="col-lg-4 col-offset-3">
+							<div class="col-lg-4 col-lg-offset-3">
 								<h:commandButton id="submit" styleClass="btn btn-success"
 									value="#{bundle.sign_up}" action="#{userBean.register}" />
 							</div>
