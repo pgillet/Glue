@@ -32,24 +32,26 @@
 					</c:if>
 				</div>
 				<div class="row form-group">
-					<label class="col-12 col-lg-2 control-label" for="inputTitle"><h:outputText
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"
+						for="inputTitle"><h:outputText
 							value="#{bundle.stream_title}" /></label>
-					<div class="col-8 col-lg-4">
+					<div class="col-xs-6 col-sm-6 col-md-4">
 						<h:inputText id="inputTitle" styleClass="form-control"
 							style="font-size: large;" label="#{bundle.stream_title}"
 							value="#{streamBean.title}" required="true"
 							p:placeholder="#{bundle.stream_event_title}" />
 					</div>
-					<div class="col-2 col-lg-2">
+					<div class="col-xs-6 col-sm-2 col-md-2">
 						<h:commandButton id="submit" styleClass="btn btn-success"
 							value="#{bundle.stream_create}" action="#{streamBean.create}" />
 					</div>
 				</div>
 				<div class="row form-group">
-					<label class="col-lg-2 control-label" for="inputDescription"><h:outputText
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"
+						for="inputDescription"><h:outputText
 							value="#{bundle.stream_description}" />&nbsp;<span
 						class="glyphicon glyphicon-tags"></span></label>
-					<div class="col-lg-4">
+					<div class="col-xs-6 col-sm-6 col-md-4">
 						<h:inputTextarea rows="3" id="inputDescription"
 							styleClass="form-control" label="#{bundle.stream_description}"
 							value="#{streamBean.description}" required="true"
@@ -58,10 +60,11 @@
 					</div>
 				</div>
 				<div class="row form-group">
-					<label class="col-12 col-lg-2 control-label" for="inputPrivacy"><h:outputText
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"
+						for="inputPrivacy"><h:outputText
 							value="#{bundle.stream_privacy}" />&nbsp;<span
 						class="glyphicon glyphicon-eye-open"></span></label>
-					<div class="col-lg-2">
+					<div class="col-xs-12 col-sm-3 col-md-2">
 						<h:selectOneRadio id="inputPrivacy" value="#{streamBean.publicc}">
 							<!-- TODO: should find another mean to add blank spaces between labels -->
 							<f:selectItem id="itemPrivacy1"
@@ -71,7 +74,7 @@
 								itemValue="false" />
 						</h:selectOneRadio>
 					</div>
-					<div class="col-12 col-lg-8">
+					<div class="col-xs-12 col-sm-12 col-md-8">
 						<small><a href="#"> <h:outputText
 									value="#{bundle.stream_privacy_info_link}" />
 						</a></small>
@@ -80,11 +83,11 @@
 				<hr />
 
 				<div class="row form-group">
-					<label class="col-12 col-lg-2 control-label"
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"
 						for="inputParticipationType"><h:outputText
 							value="#{bundle.stream_participation_type}" />&nbsp;<span
 						class="glyphicon glyphicon-lock"></span></label>
-					<div class="col-lg-2">
+					<div class="col-xs-12 col-sm-3 col-md-2">
 						<h:selectOneRadio id="inputParticipationType"
 							value="#{streamBean.open}">
 							<f:selectItem id="itemParticpationType1"
@@ -94,7 +97,7 @@
 								itemValue="false" />
 						</h:selectOneRadio>
 					</div>
-					<div class="col-12 col-lg-8">
+					<div class="col-xs-12 col-sm-12 col-md-8">
 						<small><a href="#"> <h:outputText
 									value="#{bundle.stream_participation_type_info_link}" />
 						</a></small>
@@ -102,14 +105,15 @@
 				</div>
 
 				<div class="row">
-					<div class="col-lg-12">
+					<div class="col-md-12">
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-md-6">
 								<div class="row form-group">
-									<label class="col-lg-4 control-label" for="inputParticipants"><h:outputText
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
+										for="inputParticipants"><h:outputText
 											value="#{bundle.stream_add_participants}" />&nbsp;<span
 										class="glyphicon glyphicon-user"></span></label>
-									<div class="col-lg-6">
+									<div class="col-xs-6 col-sm-6 col-md-6">
 										<h:inputText id="inputParticipants" styleClass="form-control"
 											label="#{bundle.stream_add_participants}"
 											value="#{streamBean.invitedParticipants}"
@@ -117,10 +121,11 @@
 									</div>
 								</div>
 								<div class="row form-group">
-									<label class="col-lg-4 control-label" for="inputGuests"><h:outputText
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
+										for="inputGuests"><h:outputText
 											value="#{bundle.stream_add_guests}" />&nbsp;<span
 										class="glyphicon glyphicon-book"></span></label>
-									<div class="col-lg-6">
+									<div class="col-xs-6 col-sm-6 col-md-6">
 										<h:inputText id="inputGuests" styleClass="form-control"
 											label="#{bundle.stream_add_guests}"
 											value="#{streamBean.invitedGuests}"
@@ -128,13 +133,13 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-md-6">
 								<div class="row form-group">
-									<label class="col-lg-4 control-label"
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
 										for="inputSharedSecretQuestion"><h:outputText
 											value="#{bundle.stream_shared_secret_question}" /> &nbsp;<span
 										class="glyphicon glyphicon-question-sign"></span></label>
-									<div class="col-lg-6">
+									<div class="col-xs-6 col-lg-6">
 										<h:inputText id="inputSharedSecretQuestion"
 											styleClass="form-control"
 											label="#{bundle.stream_shared_secret_question}"
@@ -142,11 +147,11 @@
 									</div>
 								</div>
 								<div class="row form-group">
-									<label class="col-lg-4 control-label"
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
 										for="inputSharedSecretAnswer"><h:outputText
 											value="#{bundle.stream_shared_secret_answer}" /> &nbsp;<span
 										class="glyphicon glyphicon-exclamation-sign"></span></label>
-									<div class="col-lg-6">
+									<div class="col-xs-6 col-lg-6">
 										<h:inputText id="inputSharedSecretAnswer"
 											styleClass="form-control"
 											label="#{bundle.stream_shared_secret_answer}"
@@ -154,10 +159,10 @@
 									</div>
 								</div>
 								<div class="row form-group">
-									<label class="col-lg-4 control-label"
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
 										for="inputParticipationRequest"><h:outputText
 											value="#{bundle.stream_request_to_participate}" /></label>
-									<div class="col-lg-6">
+									<div class="col-xs-6 col-lg-6">
 										<h:selectBooleanCheckbox id="inputParticipationRequest"
 											label="#{bundle.stream_request_to_participate}"
 											value="#{streamBean.shouldRequestToParticipate}" />
@@ -170,63 +175,82 @@
 
 				<hr />
 
-				<div class="form-group">
-					<label class="col-12 col-lg-2 control-label" for="inputStartDate"><h:outputText
-							value="#{bundle.stream_dates}" />&nbsp;<span
-						class="glyphicon glyphicon-calendar"></span></label>
-					<div class="col-8 col-lg-2">
-						<h:inputText id="inputStartDate"
-							styleClass="form-control input-small form_date"
-							label="#{bundle.stream_start_date}"
-							value="#{streamBean.startDate}"
-							p:data-date-format="#{bundle.date_format_js}">
-							<!-- p:data-date-language="en" -->
-							<f:convertDateTime for="inputStartDate"
-								pattern="#{bundle.date_format_jsf}" />
-						</h:inputText>
-					</div>
-					<div class="col-4 col-lg-1">
-						<h:selectOneMenu id="inputStartHour"
-							styleClass="form-control input-small"
-							label="#{bundle.stream_start_date}"
-							value="#{streamBean.startDate}">
-							<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
-								itemLabel="#{entry.value}" itemValue="#{entry.key}" />
-							<f:convertDateTime for="inputStartHour"
-								pattern="#{bundle.time_format}" />
-						</h:selectOneMenu>
-					</div>
-					<div class="col-lg-1">
-						<h:outputText value="#{bundle.stream_to}" />
-					</div>
-					<div class="col-8 col-lg-2">
-						<h:inputText id="inputEndDate"
-							styleClass="form-control input-small form_date"
-							label="#{bundle.stream_end_date}" value="#{streamBean.endDate}"
-							p:data-date-format="#{bundle.date_format_js}">
-							<f:convertDateTime for="inputEndDate"
-								pattern="#{bundle.date_format_jsf}" />
-						</h:inputText>
-					</div>
-					<div class="col-4 col-lg-1">
-						<h:selectOneMenu id="inputEndHour"
-							styleClass="form-control input-small"
-							label="#{bundle.stream_end_date}" value="#{streamBean.endDate}">
-							<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
-								itemLabel="#{entry.value}" itemValue="#{entry.key}" />
-							<f:convertDateTime for="inputEndHour"
-								pattern="#{bundle.time_format}" />
-						</h:selectOneMenu>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
+										for="inputStartDate"><h:outputText
+											value="#{bundle.stream_dates}" />&nbsp;<span
+										class="glyphicon glyphicon-calendar"></span></label>
+									<div class="col-xs-6 col-sm-4 col-md-4">
+										<h:inputText id="inputStartDate"
+											styleClass="form-control input-small form_date"
+											label="#{bundle.stream_start_date}"
+											value="#{streamBean.startDate}"
+											p:data-date-format="#{bundle.date_format_js}">
+											<!-- p:data-date-language="en" -->
+											<f:convertDateTime for="inputStartDate"
+												pattern="#{bundle.date_format_jsf}" />
+										</h:inputText>
+									</div>
+									<div class="col-xs-6 col-sm-2 col-md-4">
+										<h:selectOneMenu id="inputStartHour"
+											styleClass="form-control input-small"
+											label="#{bundle.stream_start_date}"
+											value="#{streamBean.startDate}">
+											<f:selectItems value="#{hours.dateMap.entrySet()}"
+												var="entry" itemLabel="#{entry.value}"
+												itemValue="#{entry.key}" />
+											<f:convertDateTime for="inputStartHour"
+												pattern="#{bundle.time_format}" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+								<label class="col-xs-12 col-sm-3 col-md-4 control-label"
+									for="inputEndDate"> <h:outputText
+										value="#{bundle.stream_to}" />
+								</label>
+								<div class="col-xs-6 col-sm-4 col-md-4">
+									<h:inputText id="inputEndDate"
+										styleClass="form-control input-small form_date"
+										label="#{bundle.stream_end_date}"
+										value="#{streamBean.endDate}"
+										p:data-date-format="#{bundle.date_format_js}">
+										<f:convertDateTime for="inputEndDate"
+											pattern="#{bundle.date_format_jsf}" />
+									</h:inputText>
+								</div>
+								<div class="col-xs-6 col-sm-2 col-md-4">
+									<h:selectOneMenu id="inputEndHour"
+										styleClass="form-control input-small"
+										label="#{bundle.stream_end_date}"
+										value="#{streamBean.endDate}">
+										<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
+											itemLabel="#{entry.value}" itemValue="#{entry.key}" />
+										<f:convertDateTime for="inputEndHour"
+											pattern="#{bundle.time_format}" />
+									</h:selectOneMenu>
+								</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
+
 				<div class="row form-group">
-					<label class="col-lg-2 control-label" for="inputLocation"><h:outputText
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"
+						for="inputLocation"><h:outputText
 							value="#{bundle.stream_location}" />&nbsp;<span
 						class="glyphicon glyphicon-map-marker"></span></label>
-					<div class="col-lg-3">
+					<div class="col-xs-6 col-lg-3">
 						<h:inputText id="inputLocation" styleClass="form-control"
 							label="#{bundle.stream_location}" value="#{streamBean.address}"
-							p:placeholder="" />
+							p:placeholder="#{bundle.stream_input_address}" />
 					</div>
 				</div>
 			</h:form>

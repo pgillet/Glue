@@ -11,12 +11,12 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 @ManagedBean
-@ApplicationScoped
+@RequestScoped
 public class Hours implements Serializable {
 
 	private Map<Date, String> dateMap;
@@ -52,6 +52,7 @@ public class Hours implements Serializable {
 	}
 
 	public Map<Date, String> getDateMap() {
+		init();
 		return dateMap;
 	}
 
