@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.glue.struct.IStream;
+import com.glue.struct.IVenue;
+import com.glue.struct.impl.Venue;
 
 public class StreamData implements IStream {
 
@@ -30,12 +32,8 @@ public class StreamData implements IStream {
 	private long startDate = new Date().getTime();
 
 	private long endDate;
-
-	private double latitude;
-
-	private double longitude;
-
-	private String address;
+	
+	private IVenue venue = new Venue();
 
 	private int nbOfParticipant;
 
@@ -201,48 +199,17 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @return the latitude
+	 * @return the venue
 	 */
-	public double getLatitude() {
-		return latitude;
+	public IVenue getVenue() {
+		return venue;
 	}
 
 	/**
-	 * @param latitude
-	 *            the latitude to set
+	 * @param venue the venue to set
 	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * @param address
-	 *            the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
+	public void setVenue(IVenue venue) {
+		this.venue = venue;
 	}
 
 	@Override

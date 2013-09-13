@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.glue.client.android.widget.SeparatedListAdapter;
 import com.glue.struct.IStream;
+import com.glue.struct.IVenue;
 
 public class StreamDetailListFragment extends ListFragment {
 
@@ -157,10 +158,11 @@ public class StreamDetailListFragment extends ListFragment {
 		location.add(createItem(R.string.end_date, R.drawable.holo_dark_device_access_time, sb.toString()));
 
 		// Location
-		String loc = stream.getAddress();
+		IVenue venue = stream.getVenue();
+		String loc = venue.getAddress();
 		if (loc == null) {
-			double latitude = stream.getLatitude();
-			double longitude = stream.getLongitude();
+			double latitude = venue.getLatitude();
+			double longitude = venue.getLongitude();
 
 			if (latitude != 0 && longitude != 0) {
 				loc = "Lat: " + latitude + ", Long: " + longitude;

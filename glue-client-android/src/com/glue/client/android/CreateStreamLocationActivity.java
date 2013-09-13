@@ -27,6 +27,7 @@ import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.location.LocationConstants;
 import com.glue.client.android.stream.StreamData;
 import com.glue.client.android.utils.Utils;
+import com.glue.struct.impl.Venue;
 
 public class CreateStreamLocationActivity extends LocationActivity implements TimeDialogListener {
 
@@ -69,9 +70,8 @@ public class CreateStreamLocationActivity extends LocationActivity implements Ti
 		// Reset
 		data.setStartDate(0);
 		data.setEndDate(0);
-		data.setAddress(null);
-		data.setLatitude(0);
-		data.setLongitude(0);
+		data.setVenue(new Venue());
+		
 
 		// Populate
 		data.setStartDate(from.getTime().getTime());
@@ -79,12 +79,12 @@ public class CreateStreamLocationActivity extends LocationActivity implements Ti
 			data.setEndDate(to.getTime().getTime());
 		}
 		if (mAddress != null) {
-			data.setAddress(formatAddress(mAddress));
-			data.setLatitude(mAddress.getLatitude());
-			data.setLongitude(mAddress.getLongitude());
+			data.getVenue().setAddress(formatAddress(mAddress));
+			data.getVenue().setLatitude(mAddress.getLatitude());
+			data.getVenue().setLongitude(mAddress.getLongitude());
 		} else if (mLocation != null) {
-			data.setLatitude(mLocation.getLatitude());
-			data.setLongitude(mLocation.getLongitude());
+			data.getVenue().setLatitude(mLocation.getLatitude());
+			data.getVenue().setLongitude(mLocation.getLongitude());
 		}
 	}
 

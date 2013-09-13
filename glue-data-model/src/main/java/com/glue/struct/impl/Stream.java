@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.glue.struct.IStream;
+import com.glue.struct.IVenue;
 
 public class Stream implements IStream, Serializable {
 
@@ -34,17 +35,13 @@ public class Stream implements IStream, Serializable {
 
 	private long endDate;
 
-	private double latitude;
-
-	private double longitude;
-
-	private String address;
-
 	private Set<String> tags;
 
 	private int numberOfParticipant;
 
 	private String thumbPath;
+	
+	private IVenue venue;
 
 	public Stream() {
 	}
@@ -169,51 +166,6 @@ public class Stream implements IStream, Serializable {
 		this.endDate = endDate;
 	}
 
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
-	}
-
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * @param address
-	 *            the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public boolean isPublicc() {
 		return publicc;
 	}
@@ -265,6 +217,22 @@ public class Stream implements IStream, Serializable {
 	@Override
 	public void setThumbPath(String path) {
 		this.thumbPath = path;
+	}
+
+	/**
+	 * @return the venue
+	 */
+	@Override
+	public IVenue getVenue() {
+		return venue;
+	}
+
+	/**
+	 * @param venue the venue to set
+	 */
+	@Override
+	public void setVenue(IVenue venue) {
+		this.venue = venue;
 	}
 
 }

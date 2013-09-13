@@ -1,9 +1,10 @@
 package com.glue.webapp.db;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AbstractDAO implements IDAO {
-	
+
 	protected Connection connection;
 
 	/**
@@ -14,9 +15,10 @@ public class AbstractDAO implements IDAO {
 	}
 
 	/**
-	 * @param connection the connection to set
+	 * @param connection
+	 *            the connection to set
 	 */
-	public void setConnection(Connection connection) {
+	public void setConnection(Connection connection) throws SQLException {
 		this.connection = connection;
 	}
 

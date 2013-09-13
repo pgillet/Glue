@@ -1,6 +1,7 @@
 package com.glue.webapp.db;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public interface IDAO {
 
@@ -12,6 +13,6 @@ public interface IDAO {
 	/**
 	 * @param connection the connection to set
 	 */
-	void setConnection(Connection connection);
+	void setConnection(Connection connection) throws SQLException;
 
 }

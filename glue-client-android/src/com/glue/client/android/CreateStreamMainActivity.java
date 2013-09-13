@@ -52,16 +52,17 @@ public class CreateStreamMainActivity extends LocationActivity {
 					switch (msg.what) {
 					case LocationConstants.UPDATE_ADDRESS:
 						Address address = (Address) msg.obj;
-						data.setLatitude(address.getLatitude());
-						data.setLongitude(address.getLongitude());
-						data.setAddress(formatAddress(address));
+						data.getVenue().setLatitude(address.getLatitude());
+						data.getVenue().setLongitude(address.getLongitude());
+						data.getVenue().setAddress(formatAddress(address));
 						break;
 
 					default:
 						Location location = (Location) msg.obj;
 						if (location != null) {
-							data.setLatitude(location.getLatitude());
-							data.setLongitude(location.getLongitude());
+							data.getVenue().setLatitude(location.getLatitude());
+							data.getVenue().setLongitude(
+									location.getLongitude());
 						}
 						break;
 					}
@@ -92,7 +93,8 @@ public class CreateStreamMainActivity extends LocationActivity {
 		collectStreamData();
 
 		Intent intent = new Intent();
-		intent.setClassName(this, "com.glue.client.android.CreateStreamSummaryActivity");
+		intent.setClassName(this,
+				"com.glue.client.android.CreateStreamSummaryActivity");
 		startActivity(intent);
 	}
 
@@ -100,7 +102,8 @@ public class CreateStreamMainActivity extends LocationActivity {
 		collectStreamData();
 
 		Intent intent = new Intent();
-		intent.setClassName("com.glue.client.android", "com.glue.client.android.CreateStreamUserActivity");
+		intent.setClassName("com.glue.client.android",
+				"com.glue.client.android.CreateStreamUserActivity");
 		startActivity(intent);
 	}
 

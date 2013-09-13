@@ -18,6 +18,8 @@ public class DAOManager {
 
 	protected StreamDAO streamDAO;
 
+	protected VenueDAO venueDAO;
+
 	protected MediaDAO mediaDAO;
 
 	// One instance per thread
@@ -86,6 +88,15 @@ public class DAOManager {
 		streamDAO.setConnection(getConnection());
 
 		return streamDAO;
+	}
+
+	public VenueDAO getVenueDAO() throws SQLException {
+		if (venueDAO == null) {
+			venueDAO = new VenueDAO();
+		}
+		venueDAO.setConnection(getConnection());
+
+		return venueDAO;
 	}
 
 	public MediaDAO getMediaDAO() throws SQLException {

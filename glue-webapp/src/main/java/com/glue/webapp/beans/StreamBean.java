@@ -12,7 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.glue.struct.IUser;
+import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
+import com.glue.struct.impl.Venue;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.logic.UserController;
@@ -329,11 +331,8 @@ public class StreamBean /* implements IStream */{
 		IUser authenticatedUser = (IUser) request.getUserPrincipal();
 
 		Stream stream = new Stream();
-		stream.setAddress(address);
 		stream.setDescription(description);
 		stream.setEndDate(endDate.getTime());
-		stream.setLatitude(latitude);
-		stream.setLongitude(longitude);
 		stream.setOpen(open);
 		stream.setPublicc(publicc);
 		stream.setSharedSecretAnswer(sharedSecretAnswer);
@@ -343,6 +342,11 @@ public class StreamBean /* implements IStream */{
 		stream.setTags(tags);
 		stream.setThumbPath(thumbPath);
 		stream.setTitle(title);
+		
+		IVenue venue = new Venue();
+		venue.setAddress(address);
+		venue.setLatitude(latitude);
+		venue.setLongitude(longitude);
 
 		try {
 			String[] addresses = invitedParticipants.split("\\s+,\\s+");
@@ -355,7 +359,7 @@ public class StreamBean /* implements IStream */{
 			}
 			stream.setInvitedParticipants(m);
 
-			streamController.createStream(stream, authenticatedUser);
+			streamController.createStream(stream, venue, authenticatedUser);
 		} catch (InternalServerException e) {
 			context.addMessage(null, new FacesMessage(e.getMessage()));
 		}

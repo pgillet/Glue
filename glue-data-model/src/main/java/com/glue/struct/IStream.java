@@ -114,33 +114,6 @@ public interface IStream {
 	void setEndDate(long date);
 
 	/**
-	 * Returns the latitude of this stream.
-	 * 
-	 * @returns a double value
-	 */
-	double getLatitude();
-
-	void setLatitude(double latitude);
-
-	/**
-	 * Returns the longitude of this stream.
-	 * 
-	 * @returns a double value
-	 */
-	double getLongitude();
-
-	void setLongitude(double longitude);
-
-	/**
-	 * Returns a string describing the location of this stream.
-	 * 
-	 * @return a String, or null if none is set
-	 */
-	String getAddress();
-
-	void setAddress(String adress);
-
-	/**
 	 * Returns the number of participant of this stream.
 	 * 
 	 * @return the number of participant
@@ -157,4 +130,8 @@ public interface IStream {
 	String getThumbPath();
 
 	void setThumbPath(String path);
+
+	void setVenue(IVenue venue);
+
+	IVenue getVenue();
 }

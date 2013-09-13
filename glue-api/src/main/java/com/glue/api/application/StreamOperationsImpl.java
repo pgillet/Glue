@@ -8,7 +8,9 @@ import java.util.Set;
 import com.glue.api.operations.StreamOperations;
 import com.glue.exceptions.GlueException;
 import com.glue.struct.IStream;
+import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
+import com.glue.struct.impl.Venue;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,11 +44,15 @@ public class StreamOperationsImpl implements StreamOperations {
 		aStream.setShouldRequestToParticipate(shouldRequestToParticipate);
 		aStream.setStartDate(startDate);
 		aStream.setEndDate(endDate);
-		aStream.setLatitude(latitude);
-		aStream.setLongitude(longitude);
-		aStream.setAddress(address);
 		aStream.setInvitedParticipants(invitedParticipants);
 		aStream.setTags(tags);
+		
+		IVenue venue = new Venue();
+		venue.setLatitude(latitude);
+		venue.setLongitude(longitude);
+		venue.setAddress(address);
+		aStream.setVenue(venue);
+		
 		return createOrUpdateStream(aStream);
 	}
 
