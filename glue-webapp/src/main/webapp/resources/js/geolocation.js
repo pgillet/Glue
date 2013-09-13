@@ -1,7 +1,7 @@
 var x;
 var geocoder;
 
-function getLocation() {
+function initialize() {
 	x = document.getElementById("location");
 	geocoder = new google.maps.Geocoder();
 
@@ -85,3 +85,5 @@ function codeLatLng(lat, lng) {
 						}
 					});
 }
+
+google.maps.event.addDomListener(window, 'load', initialize);
