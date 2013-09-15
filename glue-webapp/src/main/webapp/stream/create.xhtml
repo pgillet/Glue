@@ -211,31 +211,32 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-								<label class="col-xs-12 col-sm-3 col-md-4 control-label"
-									for="inputEndDate"> <h:outputText
-										value="#{bundle.stream_to}" />
-								</label>
-								<div class="col-xs-6 col-sm-4 col-md-4">
-									<h:inputText id="inputEndDate"
-										styleClass="form-control input-small form_date"
-										label="#{bundle.stream_end_date}"
-										value="#{streamBean.endDate}"
-										p:data-date-format="#{bundle.date_format_js}">
-										<f:convertDateTime for="inputEndDate"
-											pattern="#{bundle.date_format_jsf}" />
-									</h:inputText>
-								</div>
-								<div class="col-xs-6 col-sm-2 col-md-4">
-									<h:selectOneMenu id="inputEndHour"
-										styleClass="form-control input-small"
-										label="#{bundle.stream_end_date}"
-										value="#{streamBean.endDate}">
-										<f:selectItems value="#{hours.dateMap.entrySet()}" var="entry"
-											itemLabel="#{entry.value}" itemValue="#{entry.key}" />
-										<f:convertDateTime for="inputEndHour"
-											pattern="#{bundle.time_format}" />
-									</h:selectOneMenu>
-								</div>
+									<label class="col-xs-12 col-sm-3 col-md-4 control-label"
+										for="inputEndDate"> <h:outputText
+											value="#{bundle.stream_to}" />
+									</label>
+									<div class="col-xs-6 col-sm-4 col-md-4">
+										<h:inputText id="inputEndDate"
+											styleClass="form-control input-small form_date"
+											label="#{bundle.stream_end_date}"
+											value="#{streamBean.endDate}"
+											p:data-date-format="#{bundle.date_format_js}">
+											<f:convertDateTime for="inputEndDate"
+												pattern="#{bundle.date_format_jsf}" />
+										</h:inputText>
+									</div>
+									<div class="col-xs-6 col-sm-2 col-md-4">
+										<h:selectOneMenu id="inputEndHour"
+											styleClass="form-control input-small"
+											label="#{bundle.stream_end_date}"
+											value="#{streamBean.endDate}">
+											<f:selectItems value="#{hours.dateMap.entrySet()}"
+												var="entry" itemLabel="#{entry.value}"
+												itemValue="#{entry.key}" />
+											<f:convertDateTime for="inputEndHour"
+												pattern="#{bundle.time_format}" />
+										</h:selectOneMenu>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -247,10 +248,14 @@
 						for="inputLocation"><h:outputText
 							value="#{bundle.stream_location}" />&nbsp;<span
 						class="glyphicon glyphicon-map-marker"></span></label>
-					<div class="col-xs-6 col-lg-3">
-						<h:inputText id="inputLocation" styleClass="form-control"
+					<div class="col-xs-6 col-sm-6 col-md-4">
+						<input id="inputLocation" type="text" class="form-control"
+							placeholder="#{bundle.stream_input_address}"
+							value="#{streamBean.address}" />
+						<!-- See JavaScript annotation for the Closure Compiler -->
+						<!-- <h:inputText id="inputLocation" styleClass="form-control"
 							label="#{bundle.stream_location}" value="#{streamBean.address}"
-							p:placeholder="#{bundle.stream_input_address}" />
+							p:placeholder="#{bundle.stream_input_address}" /> -->
 					</div>
 				</div>
 			</h:form>

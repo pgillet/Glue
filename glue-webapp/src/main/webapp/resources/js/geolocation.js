@@ -1,5 +1,6 @@
 var x;
 var geocoder;
+var autocomplete;
 
 function initialize() {
 	x = document.getElementById("location");
@@ -10,6 +11,12 @@ function initialize() {
 	} else {
 		x.innerHTML = "Geolocation is not supported by this browser.";
 	}
+
+	var input = /** @type {HTMLInputElement} */
+	(document.getElementById('inputLocation'));
+	autocomplete = new google.maps.places.Autocomplete(input); // SearchBox vs
+	// Autocomplete
+	// ?
 }
 
 function showPosition(position) {
@@ -38,11 +45,29 @@ function showError(error) {
 function successFunction(position) {
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
+	
 	codeLatLng(lat, lng);
+	
+	// For later address suggestion
+	configureAutocomplete(lat, lng);
+}
+
+// Configure the service to provide Place predictions within the area centered
+// on the user location. Results are biased towards, but not restricted to, this
+// area.
+function configureAutocomplete(lat, lng) {
+	var latLng = new google.maps.LatLng(lat, lng);
+	var radius = 50000; // meters
+	var circle = new google.maps.Circle({
+		center : latLng,
+		radius : radius
+	});
+	var bounds = circle.getBounds();
+	autocomplete.setBounds(bounds);
 }
 
 function codeLatLng(lat, lng) {
-
+	
 	var latlng = new google.maps.LatLng(lat, lng);
 	geocoder
 			.geocode(
