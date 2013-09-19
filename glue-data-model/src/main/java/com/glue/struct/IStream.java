@@ -17,6 +17,26 @@ public interface IStream {
 	String getTitle();
 
 	void setTitle(String title);
+	
+	
+	/**
+	 * Returns the description of this stream.
+	 * 
+	 * @return a String
+	 */
+	String getDescription();
+	
+	void setDescription(String description);
+	
+	/**
+	 * Returns the link to this stream.
+	 * 
+	 * @return a String
+	 */
+	String getUrl();
+	
+	void setUrl(String url);
+	
 
 	/**
 	 * Tells whether this stream is public or private. Private by default.

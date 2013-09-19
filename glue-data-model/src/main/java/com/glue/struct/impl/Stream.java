@@ -18,6 +18,8 @@ public class Stream implements IStream, Serializable {
 	private String title;
 
 	private String description;
+	
+	private String url;
 
 	private boolean publicc;
 
@@ -89,6 +91,20 @@ public class Stream implements IStream, Serializable {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	/**
@@ -235,4 +251,13 @@ public class Stream implements IStream, Serializable {
 		this.venue = venue;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Stream [title=" + title + ", description=" + description
+				+ ", url=" + url + ", publicc=" + publicc + ", open=" + open
+				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	}
 }
