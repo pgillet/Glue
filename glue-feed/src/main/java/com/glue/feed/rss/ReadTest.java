@@ -1,13 +1,11 @@
 package com.glue.feed.rss;
 
-import java.util.List;
-import java.util.Set;
+import java.sql.SQLException;
 
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
+import javax.naming.NamingException;
 
 public class ReadTest {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NamingException, SQLException {
 		RSSFeedParser parser = new RSSFeedParser(
 				"http://lebikini.com/programmation/rss");
 
@@ -15,16 +13,5 @@ public class ReadTest {
 
 		parser.setFeedMessageListener(listener);
 		parser.readFeed();
-
-		List<IStream> streams = listener.getStreams();
-		for (IStream stream : streams) {
-			System.out.println(stream);
-		}
-
-		Set<IVenue> venues = listener.getVenues();
-		for (IVenue venue : venues) {
-			System.out.println(venue);
-		}
-
 	}
 }

@@ -12,4 +12,8 @@ public class FeedMessagePrinter implements FeedMessageListener {
 		System.out.println(msg);
 	}
 
+	@Override
+	public void close() {
+	}
+
 }

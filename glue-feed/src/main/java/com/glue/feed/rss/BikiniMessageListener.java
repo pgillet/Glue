@@ -1,23 +1,41 @@
 package com.glue.feed.rss;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+
+import javax.naming.NamingException;
 
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
+import com.glue.webapp.db.DAOManager;
+import com.glue.webapp.db.StreamDAO;
+import com.glue.webapp.db.VenueDAO;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class BikiniMessageListener implements FeedMessageListener {
 
-	List<IStream> streams = new ArrayList<IStream>();
-	Set<IVenue> venues = new HashSet<IVenue>();
+	private DAOManager manager;
+	private StreamDAO streamDAO;
+	private VenueDAO venueDAO;
+
+	public BikiniMessageListener() throws NamingException, SQLException {
+
+		MysqlDataSource ds = new MysqlDataSource();
+		ds.setServerName("localhost");
+		ds.setPortNumber(3306);
+		ds.setDatabaseName("gluedb");
+		ds.setUser("glue");
+		ds.setPassword("glue");
+
+		manager = DAOManager.getInstance(ds);
+		streamDAO = manager.getStreamDAO();
+		venueDAO = manager.getVenueDAO();
+	}
 
 	@Override
 	public void newMessage(FeedMessage msg) throws Exception {
@@ -60,27 +78,27 @@ public class BikiniMessageListener implements FeedMessageListener {
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(date.getTime());
-		streams.add(stream);
 
 		IVenue venue = new Venue();
 		venue.setName(name);
 		venue.setAddress(address);
 
-		venues.add(venue);
+		// Search for an existing venue
+		IVenue persistentVenue = venueDAO.search(venue.getAddress());
+		if (persistentVenue == null) {
+			System.out.println("Inserting " + venue);
+			persistentVenue = venueDAO.create(venue);
+		}
+		
+		stream.setVenue(persistentVenue);
+
+		System.out.println("Inserting " + stream);
+		streamDAO.create(stream);
 	}
 
-	/**
-	 * @return the streams
-	 */
-	public List<IStream> getStreams() {
-		return streams;
-	}
-
-	/**
-	 * @return the venues
-	 */
-	public Set<IVenue> getVenues() {
-		return venues;
+	@Override
+	public void close() {
+		manager.closeConnectionQuietly();
 	}
 
 }
