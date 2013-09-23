@@ -34,6 +34,9 @@ public class VenueDAO extends AbstractDAO {
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement searchByIdStmt = null;
 	private PreparedStatement searchByAddressStmt = null;
+	
+	protected VenueDAO() {
+	}
 
 	@Override
 	public void setConnection(Connection connection) throws SQLException {

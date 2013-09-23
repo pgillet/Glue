@@ -1,5 +1,6 @@
 package com.glue.webapp.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +26,7 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_STREAM_ID = "stream_id";
 	public static final String COLUMN_TITLE = "title";
+	public static final String COLUMN_DESCRIPTION = "description";
 	public static final String COLUMN_PUBLIC = "public";
 	public static final String COLUMN_OPEN = "open";
 	public static final String COLUMN_SECRET_QUESTION = "secret_question";
@@ -38,17 +40,17 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 	public static final String COLUMN_THUMB_PATH = "thumb_path";
 
-	public static final String INSERT_NEW_STREAM = "INSERT INTO STREAM(TITLE, PUBLIC, OPEN, "
+	public static final String CREATE_STREAM = "INSERT INTO STREAM(TITLE, DESCRIPTION, PUBLIC, OPEN, "
 			+ "SECRET_QUESTION, SECRET_ANSWER, REQUEST_TO_PARTICIPATE, START_DATE, END_DATE, "
-			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
-	public static final String INSERT_NEW_PARTICPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
+	public static final String INSERT_NEW_PARTICIPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
 
-	public static final String UPDATE_STREAM = "UPDATE STREAM SET TITLE=?, PUBLIC=?, OPEN=?, "
+	public static final String UPDATE_STREAM = "UPDATE STREAM SET TITLE=?, DESCRIPTION=?, PUBLIC=?, OPEN=?, "
 			+ "SECRET_QUESTION=?, SECRET_ANSWER=?, REQUEST_TO_PARTICIPATE=?, START_DATE=?, END_DATE=?, VENUE_ID=? "
 			+ "WHERE ID=?";
 
-	public static final String SELECT_STREAM = "SELECT * FROM STREAM WHERE ID=?";
+	public static final String SELECT_STREAM_BY_ID = "SELECT * FROM STREAM WHERE ID=?";
 
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
@@ -60,31 +62,44 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String DELETE_PARTICIPANT = "DELETE FROM stream WHERE stream_id=? and user_id=?";
 
-	PreparedStatement statement = null;
+	private PreparedStatement createStmt = null;
+	private PreparedStatement updateStmt = null;
+	private PreparedStatement deleteStmt = null;
+	private PreparedStatement searchByIdStmt = null;
 
 	protected StreamDAO() {
+	}
+
+	@Override
+	public void setConnection(Connection connection) throws SQLException {
+		super.setConnection(connection);
+
+		this.createStmt = connection.prepareStatement(CREATE_STREAM,
+				Statement.RETURN_GENERATED_KEYS);
+		this.updateStmt = connection.prepareStatement(UPDATE_STREAM);
+		this.deleteStmt = connection.prepareStatement(DELETE_STREAM);
+		this.searchByIdStmt = connection.prepareStatement(SELECT_STREAM_BY_ID);
 	}
 
 	public void create(IStream aStream) throws SQLException {
 
 		checkVenue(aStream);
 
-		statement = connection.prepareStatement(INSERT_NEW_STREAM,
-				Statement.RETURN_GENERATED_KEYS);
-		statement.setString(1, aStream.getTitle());
-		statement.setBoolean(2, aStream.isPublicc());
-		statement.setBoolean(3, aStream.isOpen());
-		statement.setString(4, aStream.getSharedSecretQuestion());
-		statement.setString(5, aStream.getSharedSecretQuestion());
-		statement.setBoolean(6, aStream.isShouldRequestToParticipate());
-		statement.setLong(7, aStream.getStartDate());
-		statement.setLong(8, aStream.getEndDate());
-		statement.setString(9, "/resources/img/empty.gif");
-		statement.setLong(10, aStream.getVenue().getId());
-		statement.executeUpdate();
+		createStmt.setString(1, aStream.getTitle());
+		createStmt.setString(2, aStream.getDescription());
+		createStmt.setBoolean(3, aStream.isPublicc());
+		createStmt.setBoolean(4, aStream.isOpen());
+		createStmt.setString(5, aStream.getSharedSecretQuestion());
+		createStmt.setString(6, aStream.getSharedSecretQuestion());
+		createStmt.setBoolean(7, aStream.isShouldRequestToParticipate());
+		createStmt.setLong(8, aStream.getStartDate());
+		createStmt.setLong(9, aStream.getEndDate());
+		createStmt.setString(10, "/resources/img/empty.gif");
+		createStmt.setLong(11, aStream.getVenue().getId());
+		createStmt.executeUpdate();
 
 		// Get the generated id
-		ResultSet result = statement.getGeneratedKeys();
+		ResultSet result = createStmt.getGeneratedKeys();
 		Long id = null;
 		while (result.next()) {
 			id = result.getLong(1);
@@ -113,20 +128,19 @@ public class StreamDAO extends AbstractDAO {
 
 	public void update(IStream aStream) throws SQLException {
 		checkVenue(aStream);
-		
-		statement = connection.prepareStatement(UPDATE_STREAM,
-				Statement.RETURN_GENERATED_KEYS);
-		statement.setLong(12, aStream.getId());
-		statement.setString(1, aStream.getTitle());
-		statement.setBoolean(2, aStream.isPublicc());
-		statement.setBoolean(3, aStream.isOpen());
-		statement.setString(4, aStream.getSharedSecretQuestion());
-		statement.setString(5, aStream.getSharedSecretAnswer());
-		statement.setBoolean(6, aStream.isShouldRequestToParticipate());
-		statement.setLong(7, aStream.getStartDate());
-		statement.setLong(8, aStream.getEndDate());
-		statement.setLong(9, aStream.getVenue().getId());
-		statement.executeUpdate();
+
+		updateStmt.setLong(12, aStream.getId());
+		updateStmt.setString(1, aStream.getTitle());
+		updateStmt.setString(2, aStream.getDescription());
+		updateStmt.setBoolean(3, aStream.isPublicc());
+		updateStmt.setBoolean(4, aStream.isOpen());
+		updateStmt.setString(5, aStream.getSharedSecretQuestion());
+		updateStmt.setString(6, aStream.getSharedSecretAnswer());
+		updateStmt.setBoolean(7, aStream.isShouldRequestToParticipate());
+		updateStmt.setLong(8, aStream.getStartDate());
+		updateStmt.setLong(9, aStream.getEndDate());
+		updateStmt.setLong(10, aStream.getVenue().getId());
+		updateStmt.executeUpdate();
 
 		// Invited participant
 		updateInvitedParticipant(aStream);
@@ -136,21 +150,21 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	public void delete(long streamId) throws SQLException {
-		statement = connection.prepareStatement(DELETE_STREAM);
-		statement.setLong(1, streamId);
-		statement.executeUpdate();
+		deleteStmt = connection.prepareStatement(DELETE_STREAM);
+		deleteStmt.setLong(1, streamId);
+		deleteStmt.executeUpdate();
 	}
 
 	public IStream search(long streamId) throws SQLException {
 		IStream result = null;
-		PreparedStatement statement = connection.prepareStatement(
-				SELECT_STREAM, Statement.RETURN_GENERATED_KEYS);
-		statement.setLong(1, streamId);
-		ResultSet res = statement.executeQuery();
+
+		searchByIdStmt.setLong(1, streamId);
+		ResultSet res = searchByIdStmt.executeQuery();
 		if (res.next()) {
 			result = new Stream();
 			result.setId(res.getLong(COLUMN_ID));
 			result.setTitle(res.getString(COLUMN_TITLE));
+			result.setDescription(res.getString(COLUMN_DESCRIPTION));
 			result.setPublicc(res.getBoolean(COLUMN_PUBLIC));
 			result.setOpen(res.getBoolean(COLUMN_OPEN));
 			result.setSharedSecretQuestion(res
@@ -218,8 +232,8 @@ public class StreamDAO extends AbstractDAO {
 
 	private void createParticipant(long streamId, long userId, boolean admin)
 			throws SQLException {
-		statement = connection.prepareStatement(INSERT_NEW_PARTICPANT,
-				Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement statement = connection.prepareStatement(
+				INSERT_NEW_PARTICIPANT, Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
 		statement.setBoolean(3, admin);
@@ -227,7 +241,8 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	public void quit(long streamId, long userId) throws SQLException {
-		statement = connection.prepareStatement(DELETE_STREAM);
+		PreparedStatement statement = connection
+				.prepareStatement(DELETE_PARTICIPANT);
 		statement.setLong(1, streamId);
 		statement.setLong(2, userId);
 		statement.executeUpdate();
@@ -235,7 +250,8 @@ public class StreamDAO extends AbstractDAO {
 
 	public boolean isParticipant(long userId, long streamId)
 			throws SQLException {
-		statement = connection.prepareStatement(SELECT_PARTICIPANT);
+		PreparedStatement statement = connection
+				.prepareStatement(SELECT_PARTICIPANT);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
 		ResultSet result = statement.executeQuery();
@@ -244,7 +260,7 @@ public class StreamDAO extends AbstractDAO {
 
 	public boolean isAdministrator(long userId, long streamId)
 			throws SQLException {
-		statement = connection.prepareStatement(SELECT_ADMIN);
+		PreparedStatement statement = connection.prepareStatement(SELECT_ADMIN);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
 		ResultSet result = statement.executeQuery();
@@ -253,7 +269,8 @@ public class StreamDAO extends AbstractDAO {
 
 	public List<IStream> search(String query) throws SQLException {
 		List<IStream> result = new ArrayList<IStream>();
-		statement = connection.prepareStatement(SELECT_STREAM_VIEW);
+		PreparedStatement statement = connection
+				.prepareStatement(SELECT_STREAM_VIEW);
 		ResultSet res = statement.executeQuery();
 		IStream aStream;
 		while (res.next()) {

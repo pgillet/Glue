@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.naming.NamingException;
+import javax.sql.DataSource;
 
+import com.glue.feed.DataSourceManager;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
@@ -15,7 +17,6 @@ import com.glue.struct.impl.Venue;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class BikiniMessageListener implements FeedMessageListener {
 
@@ -24,13 +25,7 @@ public class BikiniMessageListener implements FeedMessageListener {
 	private VenueDAO venueDAO;
 
 	public BikiniMessageListener() throws NamingException, SQLException {
-
-		MysqlDataSource ds = new MysqlDataSource();
-		ds.setServerName("localhost");
-		ds.setPortNumber(3306);
-		ds.setDatabaseName("gluedb");
-		ds.setUser("glue");
-		ds.setPassword("glue");
+		DataSource ds = DataSourceManager.getInstance().getDataSource();
 
 		manager = DAOManager.getInstance(ds);
 		streamDAO = manager.getStreamDAO();
@@ -89,7 +84,7 @@ public class BikiniMessageListener implements FeedMessageListener {
 			System.out.println("Inserting " + venue);
 			persistentVenue = venueDAO.create(venue);
 		}
-		
+
 		stream.setVenue(persistentVenue);
 
 		System.out.println("Inserting " + stream);
