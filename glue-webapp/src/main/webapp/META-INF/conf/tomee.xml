@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomee>
+	<Resource id="jdbc/gluedb" type="javax.sql.DataSource">
+		JdbcDriver com.mysql.jdbc.Driver
+		JdbcUrl jdbc:mysql://localhost/gluedb
+		UserName glue
+		Password glue
+		maxActive 100
+		maxIdle 30
+		maxWait 10000
+	</Resource>
+</tomee>
