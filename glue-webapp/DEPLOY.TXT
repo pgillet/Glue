@@ -1,2 +1,2 @@
-Copy mysql:mysql-connector-java:5.1.26 in ${TOMEE_HOME}/lib directory
-Copy src/main/webapp/META-INF/conf files in ${TOMEE_HOME}/conf directory
+Copy mysql:mysql-connector-java:5.1.26 in <TOMEE>/lib directory
+Copy src/main/webapp/META-INF/conf files in Servers/<TOMEE> folder of your workspace.
