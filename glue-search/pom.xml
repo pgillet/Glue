@@ -1,0 +1,306 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>glue-search</artifactId>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>com.glue</groupId>
+		<artifactId>glue-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<properties>
+		<slf4j.version>1.7.5</slf4j.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<build.profile.id>dev</build.profile.id>
+			</properties>
+		</profile>
+	</profiles>
+
+
+	<dependencies>
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<!-- Solr -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr</artifactId>
+			<version>4.4.0</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>solr</finalName>
+		<filters>
+			<!-- A filter that reads the profile specific configuration file and replaces 
+				the variables found from our resources with the actual property values -->
+			<filter>${project.basedir}/profiles/${build.profile.id}/config.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<configuration>
+					<files>
+						<!-- Properties are read from profile specific property file -->
+						<file>${project.basedir}/profiles/${build.profile.id}/config.properties</file>
+					</files>
+				</configuration>
+				<executions>
+					<!-- Load properties for the default lifecycle -->
+					<execution>
+						<id>default-lifecycle-properties</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+					</execution>
+					<!-- Load properties for the clean lifecycle -->
+					<execution>
+						<id>clean-lifecycle-properties</id>
+						<phase>pre-clean</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.goldin</groupId>
+				<artifactId>copy-maven-plugin</artifactId>
+				<version>0.2.5</version>
+				<executions>
+					<execution>
+						<id>copy-solr-config</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<!-- Copy solr.xml to correct directory and applies properties filtering 
+									to it. -->
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+									<targetPath>${solr.solr.home}</targetPath>
+									<includes>
+										<include>solr.xml</include>
+									</includes>
+								</resource>
+								<!-- Copy core.properties -->
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<targetPath>${solr.solr.home}/${solr.default.core.directory}</targetPath>
+									<filtering>true</filtering>
+									<includes>
+										<include>core.properties</include>
+									</includes>
+								</resource>
+								<!-- Copy configuration files -->
+								<resource>
+									<directory>${project.basedir}/src/main/config</directory>
+									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
+									<preservePath>true</preservePath>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<!-- clean -->
+					<execution>
+						<id>clean-solr</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<failIfNotFound>false</failIfNotFound>
+							<resources>
+								<!-- Clean the overlays directory from the project root directory -->
+								<resource>
+									<clean>true</clean>
+									<cleanEmptyDirectories>true</cleanEmptyDirectories>
+									<directory>${project.basedir}/overlays</directory>
+									<includes>
+										<include>**/**</include>
+									</includes>
+								</resource>
+								<!-- Remove the solr.xml file -->
+								<resource>
+									<clean>true</clean>
+									<directory>${solr.solr.home}</directory>
+									<includes>
+										<include>solr.xml</include>
+									</includes>
+								</resource>
+								<!-- Remove the conf directory -->
+								<resource>
+									<clean>true</clean>
+									<cleanEmptyDirectories>true</cleanEmptyDirectories>
+									<directory>${solr.solr.home}/${solr.default.core.directory}</directory>
+									<includes>
+										<include>conf</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+	<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the container under 
+		$CATALINA_HOME (the container must be previously started and the solr.solr.home 
+		system property must be set), while tomcat7:run will run the current project 
+		as a dynamic web application using an EMBEDDED Tomcat server, which cannot 
+		be used to host the Glue webapp as well. -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<url>http://localhost:8080/manager/html</url>
+					<server>tomcat</server>
+					<path>/solr</path>
+					<!-- System properties are only for tomcat7:run -->
+					<systemProperties>
+						<solr.solr.home>${solr.solr.home}</solr.solr.home>
+					</systemProperties>
+				</configuration>
+				<!-- <executions>
+					<execution>
+						<id>deploy-solr</id>
+						<phase>package</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions> -->
+			</plugin>
+			<!-- <plugin>
+				<groupId>org.apache.openejb.maven</groupId>
+				<artifactId>tomee-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<configuration>
+				    <tomeeVersion>1.5.2</tomeeVersion>
+					<tomeeClassifier>webprofile</tomeeClassifier>
+					<server>tomcat</server>
+					<systemVariables>
+						<solr.solr.home>${solr.solr.home}</solr.solr.home>
+					</systemVariables>
+					<path>/solr</path>
+				</configuration>
+				<executions>
+					<execution>
+						<id>deploy-solr</id>
+						<phase>package</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin> -->
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											properties-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0-alpha-2,)
+										</versionRange>
+										<goals>
+											<goal>
+												read-project-properties
+											</goal>
+											<goal>
+												set-system-properties
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.github.goldin
+										</groupId>
+										<artifactId>
+											copy-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.2.5,)
+										</versionRange>
+										<goals>
+											<goal>copy</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
