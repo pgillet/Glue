@@ -15,25 +15,53 @@
 		<finalName>glue</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
+				<groupId>com.github.goldin</groupId>
+				<artifactId>copy-maven-plugin</artifactId>
+				<version>0.2.5</version>
+				<executions>
+					<execution>
+						<id>copy-tomee-config</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<!-- Copy Tomee configuration files -->
+								<resource>
+									<directory>${project.basedir}/src/main/webapp/META-INF/conf</directory>
+									<targetPath>${env.CATALINA_HOME}/conf</targetPath>
+									<includes>
+										<include>*.*</include>
+									</includes>
+								</resource>
+								<!-- Copy MySQL JDBC Driver -->
+								<resource>
+									<targetPath>${env.CATALINA_HOME}/lib</targetPath>
+									<dependencies>
+										<dependency>
+											<groupId>mysql</groupId>
+											<artifactId>mysql-connector-java</artifactId>
+											<version>${mysql.version}</version>
+										</dependency>
+									</dependencies>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.openejb.maven</groupId>
-				<artifactId>tomee-maven-plugin</artifactId>
-				<version>1.0.1</version>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
 				<configuration>
-					<tomeeVersion>1.5.2</tomeeVersion>
-					<tomeeClassifier>webprofile</tomeeClassifier>
-					<config>${project.basedir}/src/main/webapp/META-INF/conf</config>
-					<libs>
-						<lib>mysql:mysql-connector-java:${mysql.version}</lib>
-					</libs>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcat</server>
+					<path>/${project.build.finalName}</path>
 				</configuration>
+				<!-- <executions> <execution> <id>deploy-glue</id> <phase>package</phase> 
+					<goals> <goal>deploy</goal> </goals> </execution> </executions> -->
 			</plugin>
 		</plugins>
 	</build>
