@@ -1,0 +1,1 @@
+-Dsolr.solr.home=/home/pgillet/git/Glue/glue-search/target/cores

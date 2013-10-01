@@ -12,6 +12,8 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<!-- Running Solr with Maven: see http://www.petrikainulainen.net/programming/maven/running-solr-with-maven/#comment-44781 -->
+
 	<properties>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
@@ -63,6 +65,12 @@
 			<artifactId>solr</artifactId>
 			<version>4.4.0</version>
 			<type>war</type>
+		</dependency>
+		<!-- Solr DataImportHandler -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-dataimporthandler</artifactId>
+			<version>4.4.0</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -145,6 +153,18 @@
 									<directory>${project.basedir}/src/main/config</directory>
 									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
 									<preservePath>true</preservePath>
+									<excludes>
+									    <exclude>*.original</exclude>
+									</excludes>
+								</resource>
+								<!-- Copy solrconfig.xml -->
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
+									<filtering>true</filtering>
+									<includes>
+										<include>solrconfig.xml</include>
+									</includes>
 								</resource>
 							</resources>
 						</configuration>
