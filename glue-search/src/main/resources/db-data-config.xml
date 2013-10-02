@@ -4,10 +4,7 @@
 	<document name="streams">
 		<entity name="stream" query="select * from STREAM">
 			<entity name="venue"
-				query="select * from VENUE where ID='${stream.VENUE_ID}'">
-			</entity>
-			<entity name="media"
-				query="select CAPTION from MEDIA where STREAM_ID='${stream.ID}'">
+				query="select name as venue, address, latitude, longitude from VENUE where id='${stream.venue_id}'">
 			</entity>
 		</entity>
 	</document>
