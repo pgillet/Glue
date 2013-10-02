@@ -150,16 +150,16 @@
 								</resource>
 								<!-- Copy configuration files -->
 								<resource>
-									<directory>${project.basedir}/src/main/config</directory>
+									<directory>${project.basedir}/src/main/conf</directory>
 									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
 									<preservePath>true</preservePath>
 									<excludes>
-									    <exclude>*.original</exclude>
+									    <exclude>solrconfig.xml</exclude>
 									</excludes>
 								</resource>
-								<!-- Copy solrconfig.xml -->
+								<!-- Copy solrconfig.xml with filtering-->
 								<resource>
-									<directory>${project.basedir}/src/main/resources</directory>
+									<directory>${project.basedir}/src/main/conf</directory>
 									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
 									<filtering>true</filtering>
 									<includes>

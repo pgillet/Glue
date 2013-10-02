@@ -117,6 +117,12 @@
 			<artifactId>jersey-servlet</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
+		<!-- SolrJ -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>4.4.0</version>
+		</dependency>
 	</dependencies>
 
 </project>

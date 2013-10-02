@@ -48,14 +48,15 @@
 			<h:form styleClass="navbar-form navbar-left" role="search">
 				<div class="form-group">
 					<h:inputText styleClass="form-control"
-						p:placeholder="#{bundle.search}" />
+						p:placeholder="#{bundle.search}" value="#{streamSearchBean.query}" />
 					<!-- <span class="input-group-addon"><h:commandLink action="#">
 						<span class="glyphicon glyphicon-search"></span>
 					</h:commandLink> </span> -->
 				</div>
-				<button type="submit" class="btn btn-default">
+				<h:commandLink id="submit" styleClass="btn btn-default"
+					action="#{streamSearchBean.search}">
 					<span class="glyphicon glyphicon-search"></span>
-				</button>
+				</h:commandLink>
 			</h:form>
 
 			<ul class="nav navbar-nav navbar-left">
