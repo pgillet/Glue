@@ -1,5 +1,13 @@
 package com.glue.feed.rss;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,6 +16,10 @@ import java.util.Locale;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import com.glue.feed.DataSourceManager;
 import com.glue.struct.IStream;
@@ -66,6 +78,25 @@ public class BikiniMessageListener implements FeedMessageListener {
 		String name = address.substring(0, index).trim();
 		// System.out.println("Venue name = " + name);
 
+		// Get stream image
+		// TODO: waiting for glue-content
+		Document doc = Jsoup.connect(url).get();
+		Elements images = doc.select("#blocImage a img");
+		String imgUrl = images.attr("src");
+
+		URL imageUrl = new URL(imgUrl);
+		File root = new File(System.getProperty("java.io.tmpdir"));
+		File imageFile = new File(imageUrl.getPath());
+		imageFile = new File(root, imageFile.getName());
+
+		System.out.println("Copying " + imageUrl + " to " + imageFile);
+		InputStream in = new BufferedInputStream(imageUrl.openStream());
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(
+				imageFile));
+		copy(in, out);
+		out.close();
+		in.close();
+
 		IStream stream = new Stream();
 		stream.setTitle(title);
 		stream.setDescription(description);
@@ -73,6 +104,7 @@ public class BikiniMessageListener implements FeedMessageListener {
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(date.getTime());
+		stream.setThumbPath(imageFile.getPath());
 
 		IVenue venue = new Venue();
 		venue.setName(name);
@@ -89,6 +121,15 @@ public class BikiniMessageListener implements FeedMessageListener {
 
 		System.out.println("Inserting " + stream);
 		streamDAO.create(stream);
+
+	}
+
+	private void copy(InputStream in, OutputStream out) throws IOException {
+		byte[] buf = new byte[1024];
+		int len = -1;
+		while ((len = in.read(buf)) != -1) {
+			out.write(buf, 0, len);
+		}
 	}
 
 	@Override

@@ -27,6 +27,7 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_STREAM_ID = "stream_id";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_DESCRIPTION = "description";
+	public static final String COLUMN_URL = "url";
 	public static final String COLUMN_PUBLIC = "public";
 	public static final String COLUMN_OPEN = "open";
 	public static final String COLUMN_SECRET_QUESTION = "secret_question";
@@ -34,19 +35,16 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_REQUEST_TO_PARTICPATE = "request_to_participate";
 	public static final String COLUMN_START_DATE = "start_date";
 	public static final String COLUMN_END_DATE = "end_date";
-	public static final String COLUMN_LATITUDE = "latitude";
-	public static final String COLUMN_LONGITUDE = "longitude";
-	public static final String COLUMN_ADRESS = "address";
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 	public static final String COLUMN_THUMB_PATH = "thumb_path";
 
-	public static final String CREATE_STREAM = "INSERT INTO STREAM(TITLE, DESCRIPTION, PUBLIC, OPEN, "
+	public static final String CREATE_STREAM = "INSERT INTO STREAM(TITLE, DESCRIPTION, URL, PUBLIC, OPEN, "
 			+ "SECRET_QUESTION, SECRET_ANSWER, REQUEST_TO_PARTICIPATE, START_DATE, END_DATE, "
-			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	public static final String INSERT_NEW_PARTICIPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
 
-	public static final String UPDATE_STREAM = "UPDATE STREAM SET TITLE=?, DESCRIPTION=?, PUBLIC=?, OPEN=?, "
+	public static final String UPDATE_STREAM = "UPDATE STREAM SET TITLE=?, DESCRIPTION=?, URL=?, PUBLIC=?, OPEN=?, "
 			+ "SECRET_QUESTION=?, SECRET_ANSWER=?, REQUEST_TO_PARTICIPATE=?, START_DATE=?, END_DATE=?, VENUE_ID=? "
 			+ "WHERE ID=?";
 
@@ -87,15 +85,16 @@ public class StreamDAO extends AbstractDAO {
 
 		createStmt.setString(1, aStream.getTitle());
 		createStmt.setString(2, aStream.getDescription());
-		createStmt.setBoolean(3, aStream.isPublicc());
-		createStmt.setBoolean(4, aStream.isOpen());
-		createStmt.setString(5, aStream.getSharedSecretQuestion());
+		createStmt.setString(3, aStream.getUrl());
+		createStmt.setBoolean(4, aStream.isPublicc());
+		createStmt.setBoolean(5, aStream.isOpen());
 		createStmt.setString(6, aStream.getSharedSecretQuestion());
-		createStmt.setBoolean(7, aStream.isShouldRequestToParticipate());
-		createStmt.setLong(8, aStream.getStartDate());
-		createStmt.setLong(9, aStream.getEndDate());
-		createStmt.setString(10, "/resources/img/empty.gif");
-		createStmt.setLong(11, aStream.getVenue().getId());
+		createStmt.setString(7, aStream.getSharedSecretQuestion());
+		createStmt.setBoolean(8, aStream.isShouldRequestToParticipate());
+		createStmt.setLong(9, aStream.getStartDate());
+		createStmt.setLong(10, aStream.getEndDate());
+		createStmt.setString(11, aStream.getThumbPath());
+		createStmt.setLong(12, aStream.getVenue().getId());
 		createStmt.executeUpdate();
 
 		// Get the generated id
@@ -132,14 +131,15 @@ public class StreamDAO extends AbstractDAO {
 		updateStmt.setLong(12, aStream.getId());
 		updateStmt.setString(1, aStream.getTitle());
 		updateStmt.setString(2, aStream.getDescription());
-		updateStmt.setBoolean(3, aStream.isPublicc());
-		updateStmt.setBoolean(4, aStream.isOpen());
-		updateStmt.setString(5, aStream.getSharedSecretQuestion());
-		updateStmt.setString(6, aStream.getSharedSecretAnswer());
-		updateStmt.setBoolean(7, aStream.isShouldRequestToParticipate());
-		updateStmt.setLong(8, aStream.getStartDate());
-		updateStmt.setLong(9, aStream.getEndDate());
-		updateStmt.setLong(10, aStream.getVenue().getId());
+		updateStmt.setString(3, aStream.getUrl());
+		updateStmt.setBoolean(4, aStream.isPublicc());
+		updateStmt.setBoolean(5, aStream.isOpen());
+		updateStmt.setString(6, aStream.getSharedSecretQuestion());
+		updateStmt.setString(7, aStream.getSharedSecretAnswer());
+		updateStmt.setBoolean(8, aStream.isShouldRequestToParticipate());
+		updateStmt.setLong(9, aStream.getStartDate());
+		updateStmt.setLong(10, aStream.getEndDate());
+		updateStmt.setLong(11, aStream.getVenue().getId());
 		updateStmt.executeUpdate();
 
 		// Invited participant
@@ -165,6 +165,7 @@ public class StreamDAO extends AbstractDAO {
 			result.setId(res.getLong(COLUMN_ID));
 			result.setTitle(res.getString(COLUMN_TITLE));
 			result.setDescription(res.getString(COLUMN_DESCRIPTION));
+			result.setUrl(res.getString(COLUMN_URL));
 			result.setPublicc(res.getBoolean(COLUMN_PUBLIC));
 			result.setOpen(res.getBoolean(COLUMN_OPEN));
 			result.setSharedSecretQuestion(res

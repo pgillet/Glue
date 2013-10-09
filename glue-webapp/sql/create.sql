@@ -33,6 +33,7 @@ CREATE TABLE STREAM (
              id BIGINT NOT NULL AUTO_INCREMENT,
              title VARCHAR(200) NOT NULL,
              description VARCHAR(2000),
+             url VARCHAR(2048),
              public BOOL NOT NULL,
              open BOOL NOT NULL,
              secret_question VARCHAR(100),
