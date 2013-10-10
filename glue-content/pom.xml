@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>glue-content</artifactId>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>com.glue</groupId>
+		<artifactId>glue-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<!-- TODO: to be removed when org.apache.chemistry.opencmis:chemistry-opencmis-server-fileshare 
+		will be stable -->
+	<repositories>
+		<repository>
+			<id>Snapshots</id>
+			<url>https://repository.apache.org/content/groups/snapshots/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<slf4j.version>1.7.5</slf4j.version>
+	</properties>
+
+	<dependencies>
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<!-- OpenCMIS FileShare Server Implementation -->
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-server-fileshare</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>glue-content</finalName>
+		<plugins>
+			<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the 
+				container under $CATALINA_HOME (the container must be previously started 
+				and the solr.solr.home system property must be set), while tomcat7:run will 
+				run the current project as a dynamic web application using an EMBEDDED Tomcat 
+				server, which cannot be used to host the Glue webapp as well. -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcat</server>
+					<path>/glue-content</path>
+				</configuration>
+				<!-- <executions> <execution> <id>deploy-opencmis-server</id> <phase>package</phase> 
+					<goals> <goal>deploy</goal> </goals> </execution> </executions> -->
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
