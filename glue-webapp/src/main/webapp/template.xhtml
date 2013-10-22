@@ -18,8 +18,8 @@
 	<!-- <link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" /> -->
 	<h:outputStylesheet library="css" name="bootstrap.min.css"
 		media="screen" />
-	<!-- <h:outputStylesheet library="css" name="bootstrap-glyphicons.css"
-		media="screen" /> -->
+	<h:outputStylesheet library="css" name="glue.css"
+		media="screen" />
 	<h:outputStylesheet library="css" name="datepicker.css" media="screen" />
 
 	<script type="text/javascript"
@@ -147,7 +147,7 @@
 								width="132" height="20"></iframe></li>
 						<li><a href="https://twitter.com/data_glue"
 							class="twitter-follow-button" data-show-count="false">Follow
-								@pagillet</a> <script>
+								@data_glue</a> <script>
 									!function(d, s, id) {
 										var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/
 												.test(d.location) ? 'http'
@@ -197,56 +197,84 @@
 					</ul>
 				</div>
 			</div>
-			<ul class="nav navbar-nav pull-left">
-				<li class="disabled"><a href="#">&copy; Glue 2013</a></li>
-			</ul> <h:form>
-				<ul class="nav navbar-nav pull-right">
-					<li><h:selectOneMenu
-							styleClass="navbar-btn form-control input-small"
-							value="#{languageBean.language}" onchange="submit()"
-							valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
-							<f:selectItems value="#{languageBean.locales}" />
-						</h:selectOneMenu></li>
-				</ul>
-			</h:form>
-		</small>
+			<ul class="nav navbar-nav">
+				<li class="disabled pull-left"><a href="#">&copy; Glue 2013</a></li>
 
-		<div id="carousel-example-generic" class="carousel slide">
-			<!-- Indicators -->
-			<ol class="carousel-indicators">
-				<li data-target="#carousel-example-generic" data-slide-to="0"
-					class="active"></li>
-				<li data-target="#carousel-example-generic" data-slide-to="1"></li>
-				<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-			</ol>
+				<li>
+					<div id="carousel-example-generic" class="carousel slide"
+						style="max-width: 800px;">
+						<!-- Indicators -->
+						<ol class="carousel-indicators">
+							<li data-target="#carousel-example-generic" data-slide-to="0"
+								class="active"></li>
+							<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+							<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+						</ol>
 
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">
-				<div class="item active">
-					<blockquote>
-						<p>"What is a kiss? Why this, as some approve: The sure, sweet
-							cement, glue, and lime of love."</p>
-						<small><cite>Robert Herrick</cite></small>
-					</blockquote>
-					<!-- <div class="carousel-caption">...</div> -->
-				</div>
-				<div class="item">
-					<blockquote>
-						<p>"I'm the glue that holds everything together."</p>
-						<small><cite>Otis Williams</cite></small>
-					</blockquote>
-					<!-- <div class="carousel-caption">...</div> -->
-				</div>
-			</div>
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner">
+							<div class="item active">
+								<blockquote>
+									<p>"What is a kiss? Why this, as some approve: The sure,
+										sweet cement, glue, and lime of love."</p>
+									<small><cite>Robert Herrick</cite></small>
+								</blockquote>
+								<!-- <div class="carousel-caption">...</div> -->
+							</div>
+							<div class="item">
+								<blockquote>
+									<p>"I'm the glue that holds everything together."</p>
+									<small><cite>Otis Williams</cite></small>
+								</blockquote>
+								<!-- <div class="carousel-caption">...</div> -->
+							</div>
+							<div class="item">
+								<blockquote>
+									<p>"When you sell a man a book, you don't sell him 12
+										ounces of paper and ink and glue - you sell him a whole new
+										life."</p>
+									<small><cite>Christopher Morley</cite></small>
+								</blockquote>
+								<!-- <div class="carousel-caption">...</div> -->
+							</div>
+							<div class="item">
+								<blockquote>
+									<p>"Trust is the glue of life. It's the most essential
+										ingredient in effective communication. It's the foundational
+										principle that holds all relationships."</p>
+									<small><cite>Stephen Covey</cite></small>
+								</blockquote>
+								<!-- <div class="carousel-caption">...</div> -->
+							</div>
+							<div class="item">
+								<blockquote>
+									<p>"I was reading a book... 'the history of glue' - I
+										couldn't put it down."</p>
+									<small><cite>Tim Vine</cite></small>
+								</blockquote>
+								<!-- <div class="carousel-caption">...</div> -->
+							</div>
+						</div>
 
-			<!-- Controls -->
-			<!-- <a class="left carousel-control" href="#carousel-example-generic"
+						<!-- Controls -->
+						<!-- <a class="left carousel-control" href="#carousel-example-generic"
 				data-slide="prev"> <span class="icon-prev"></span>
 			</a> <a class="right carousel-control" href="#carousel-example-generic"
 				data-slide="next"> <span class="icon-next"></span>
 			</a> -->
-		</div>
-		</footer>
+					</div>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav pull-right">
+				<li><h:form>
+						<h:selectOneMenu styleClass="navbar-btn form-control input-small"
+							value="#{languageBean.language}" onchange="submit()"
+							valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
+							<f:selectItems value="#{languageBean.locales}" />
+						</h:selectOneMenu>
+					</h:form></li>
+			</ul>
+		</small> </footer>
 	</div>
 	<!-- /container -->
 

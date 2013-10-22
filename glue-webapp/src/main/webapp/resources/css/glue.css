@@ -1,0 +1,27 @@
+.glue-jumbotron {
+	background-image: url(#{   resource [   'img:Empire-State-Building-view.JPG' ]
+}
+
+);
+background-position
+:
+ 
+center
+;
+
+
+}
+.glue-tightened-text {
+	margin:0; 
+padding:0;
+line-height: 70%
+}
+
+.glue-circled-text {
+	background: #005a9c;
+	color: #ffffff;
+	width: 250px;
+	height: 250px;
+	display: table-cell;
+	vertical-align: middle;
+}

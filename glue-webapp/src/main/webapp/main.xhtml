@@ -7,126 +7,165 @@
 	<ui:composition template="./template.xhtml">
 		<ui:define name="content">
 
-			<!-- Carousel
-    ================================================== -->
-			<div id="myCarousel" class="carousel slide">
-				<!-- Indicators -->
-				<ol class="carousel-indicators">
-					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-					<li data-target="#myCarousel" data-slide-to="1"></li>
-					<li data-target="#myCarousel" data-slide-to="2"></li>
-				</ol>
-				<div class="carousel-inner">
-					<div class="item active">
-						<img src="data:image/png;base64,"
-							data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:First slide"
-							alt="First slide" />
-						<div class="container">
-							<div class="carousel-caption">
-								<h1>Example headline.</h1>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-									quam. Donec id elit non mi porta gravida at eget metus. Nullam
-									id dolor id nibh ultricies vehicula ut id elit.</p>
-								<p>
-									<a class="btn btn-large btn-primary" href="#">Sign up today</a>
-								</p>
+			<div id="info" class="jumbotron glue-jumbotron">
+
+				<div class="container">
+
+					<div class="row">
+						<div class="col-md-9">
+							<div class="panel"
+								style="background-color: rgba(234, 81, 19, 0.6); color: white;">
+								<div class="panel-body text-center glue-tightened-text">
+									<h1>
+										<strong>Discover Events</strong>
+									</h1>
+									<h2>and</h2>
+									<h1>
+										<strong>Live Experiences</strong>
+									</h1>
+									<h2>through shared media</h2>
+								</div>
 							</div>
-						</div>
-					</div>
-					<div class="item">
-						<img src="data:image/png;base64,"
-							data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Second slide"
-							alt="Second slide" />
-						<div class="container">
-							<div class="carousel-caption">
-								<h1>Another example headline.</h1>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-									quam. Donec id elit non mi porta gravida at eget metus. Nullam
-									id dolor id nibh ultricies vehicula ut id elit.</p>
-								<p>
-									<a class="btn btn-large btn-primary" href="#">Learn more</a>
-								</p>
+
+							<a data-toggle="modal" href="#myModal"
+								class="btn btn-primary btn-lg">Support Glue</a>
+
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+								aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-hidden="true">&times;</button>
+											<h4 class="modal-title">Come help Glue get into Le
+												Camping Toulouse Saison 3</h4>
+										</div>
+										<div class="modal-body">
+											<h5>
+												Help us show <strong>Le Camping Toulouse Saison 3</strong>
+												how awesome we are by Following our Application Profile.
+												It'll raise the Application's profile and they'll take your
+												support into account! <br />
+												<div class="text-info">To do this, go to our
+													Application's profile by clicking the button below, and
+													share it on Facebook.</div>
+												<br /> Thank you for your support.
+											</h5>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">Close</button>
+											<a class="btn btn-primary" target="_blank"
+												href="http://www.f6s.com/glue?follow=1&amp;accelerator_id=4878">Support
+												Glue</a>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
 							</div>
+							<!-- /.modal -->
+
+
+
+							<!-- Camping Toulouse app_id 196388037101827 -->
+							<!-- <a class="btn btn-primary btn-lg" target="_blank"
+											href="https://www.facebook.com/dialog/feed?
+  app_id=145634995501895
+  &name=Come%20help%20Glue%20get%20into%20Le%20Camping%20Toulouse%20Saison%203&display=popup&caption=Help%20us%20show%20Le%20Camping%20Toulouse%20Saison%203%20how%20awesome%20we%20are%20by%20Following%20our%20Application%20Profile.%20It%27ll%20raise%20the%20Application%27s%20profile%20and%20they%27ll%20take%20your%20support%20into%20account! 
+  &link=http%3A%2F%2Fwww.f6s.com%2Fglue%3Ffollow%3D1%26accelerator_id%3D4878&picture=http%3A%2F%2Fwww.f6s.com%2Fimages%2Forganization_noimage_th3.jpg
+  &redirect_uri=https://developers.facebook.com/tools/explorer&ref=app_share">Support
+											Glue on Facebook</a> -->
+
 						</div>
-					</div>
-					<div class="item">
-						<img src="data:image/png;base64,"
-							data-src="holder.js/100%x500/auto/#777:#7a7a7a/text:Third slide"
-							alt="Third slide" />
-						<div class="container">
-							<div class="carousel-caption">
-								<h1>One more for good measure.</h1>
-								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-									quam. Donec id elit non mi porta gravida at eget metus. Nullam
-									id dolor id nibh ultricies vehicula ut id elit.</p>
-								<p>
-									<a class="btn btn-large btn-primary" href="#">Browse
-										gallery</a>
-								</p>
-							</div>
+
+						<div class="col-md-3 pull-right">
+							<ul class="list-unstyled">
+								<li><a href="https://twitter.com/data_glue"
+									class="twitter-follow-button" data-show-count="false">Follow
+										@data_glue</a> <script>
+											!function(d, s, id) {
+												var js, fjs = d
+														.getElementsByTagName(s)[0], p = /^http:/
+														.test(d.location) ? 'http'
+														: 'https';
+												if (!d.getElementById(id)) {
+													js = d.createElement(s);
+													js.id = id;
+													js.src = p
+															+ '://platform.twitter.com/widgets.js';
+													fjs.parentNode
+															.insertBefore(js,
+																	fjs);
+												}
+											}
+													(document, 'script',
+															'twitter-wjs');
+										</script></li>
+								<li><div class="fb-like"
+										data-href="https://www.facebook.com/dataglue" data-width="132"
+										data-height="20" data-colorscheme="light"
+										data-layout="button_count" data-action="like"
+										data-show-faces="true" data-send="false"></div></li>
+								<li><a href="mailto:glue.contact@gmail.com"
+									class="btn btn-primary btn-xs"><span
+										class="glyphicon glyphicon-envelope"></span> Contact Us</a></li>
+							</ul>
+
+
+
+
+							<!-- 	<a
+										href="https://twitter.com/pagillet"
+										class="twitter-follow-button" data-show-count="false">Follow
+										@jayzeunburne</a>
+									<script>
+										!function(d, s, id) {
+											var js, fjs = d
+													.getElementsByTagName(s)[0], p = /^http:/
+													.test(d.location) ? 'http'
+													: 'https';
+											if (!d.getElementById(id)) {
+												js = d.createElement(s);
+												js.id = id;
+												js.src = p
+														+ '://platform.twitter.com/widgets.js';
+												fjs.parentNode.insertBefore(js,
+														fjs);
+											}
+										}(document, 'script', 'twitter-wjs');
+									</script>
+									<br />
+									<iframe
+										src="http://ghbtns.com/github-btn.html?user=pgillet&type=follow"
+										allowtransparency="true" frameborder="0" scrolling="0"
+										width="134" height="20"></iframe>
+									<br />
+									<iframe
+										src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fgithub.com%2Fpgillet%2FGlue&amp;width=80&amp;height=21&amp;colorscheme=light&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;send=false"
+										scrolling="no" frameborder="0"
+										style="border: none; overflow: hidden; width: 80px; height: 21px;"
+										allowTransparency="true"></iframe>
+									<br /> <a href="mailto:pascalgillet@ymail.com"
+										class="btn btn-primary btn-xs"><span
+										class="glyphicon glyphicon-envelope"></span>
+										pascalgillet@ymail.com</a> -->
+
 						</div>
+
+
+
+
 					</div>
 				</div>
-				<a class="left carousel-control" href="#myCarousel"
-					data-slide="prev"><span
-					class="glyphicon glyphicon-chevron-left"></span></a> <a
-					class="right carousel-control" href="#myCarousel" data-slide="next"><span
-					class="glyphicon glyphicon-chevron-right"></span></a>
 			</div>
-			<!-- /.carousel -->
-
-
 
 			<!-- Marketing messaging and featurettes
     ================================================== -->
 			<!-- Wrap the rest of the page in another container to center all the content. -->
 
 			<div class="container marketing">
-
-				<!-- Three columns of text below the carousel -->
-				<div class="row">
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/png;base64,"
-							data-src="holder.js/140x140" alt="Generic placeholder image" />
-						<h2>Heading</h2>
-						<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis
-							euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.
-							Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-							Praesent commodo cursus magna.</p>
-						<p>
-							<a class="btn btn-default" href="#">View details &raquo;</a>
-						</p>
-					</div>
-					<!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/png;base64,"
-							data-src="holder.js/140x140" alt="Generic placeholder image" />
-						<h2>Heading</h2>
-						<p>Duis mollis, est non commodo luctus, nisi erat porttitor
-							ligula, eget lacinia odio sem nec elit. Cras mattis consectetur
-							purus sit amet fermentum. Fusce dapibus, tellus ac cursus
-							commodo, tortor mauris condimentum nibh.</p>
-						<p>
-							<a class="btn btn-default" href="#">View details &raquo;</a>
-						</p>
-					</div>
-					<!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/png;base64,"
-							data-src="holder.js/140x140" alt="Generic placeholder image" />
-						<h2>Heading</h2>
-						<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis
-							in, egestas eget quam. Vestibulum id ligula porta felis euismod
-							semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-							condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-						<p>
-							<a class="btn btn-default" href="#">View details &raquo;</a>
-						</p>
-					</div>
-					<!-- /.col-lg-4 -->
-				</div>
-				<!-- /.row -->
-
 
 				<h1>Event management throughout the Web...</h1>
 
@@ -138,9 +177,9 @@
 
 				<div class="row featurette">
 					<div class="col-md-9">
-						<h2 class="featurette-heading">
+						<h1 class="featurette-heading">
 							<span class="text-muted">...In event directories.</span>
-						</h2>
+						</h1>
 						<p class="lead">Donec ullamcorper nulla non metus auctor
 							fringilla. Vestibulum id ligula porta felis euismod semper.
 							Praesent commodo cursus magna, vel scelerisque nisl consectetur.
@@ -148,8 +187,9 @@
 					</div>
 					<div class="col-md-3">
 						<div class="hidden-xs">
-							<div class="img-circle img-responsive text-center"
-								style="background: #ef7c00; color: #ffffff; width: 250px; height: 250px; display: table-cell; vertical-align: middle;">
+							<div
+								class="img-circle img-responsive text-center glue-circled-text"
+								style="background: #ef7c00;">
 								<h1>
 									<strong>Event<br />Directories
 									</strong>
@@ -179,8 +219,8 @@
 				<div class="row featurette">
 					<div class="col-md-3">
 						<div class="hidden-xs">
-							<div class="img-circle text-center"
-								style="background: #86ba0c; color: #ffffff; width: 250px; height: 250px; display: table-cell; vertical-align: middle;">
+							<div class="img-circle text-center  glue-circled-text"
+								style="background: #86ba0c;">
 								<h1>
 									<strong>Media<br />Hosting<br />Services
 									</strong>
@@ -215,9 +255,9 @@
 
 					</div>
 					<div class="col-md-9">
-						<h2 class="featurette-heading">
+						<h1 class="featurette-heading">
 							<span class="text-muted">...In media hosting services.</span>
-						</h2>
+						</h1>
 						<p class="lead">Donec ullamcorper nulla non metus auctor
 							fringilla. Vestibulum id ligula porta felis euismod semper.
 							Praesent commodo cursus magna, vel scelerisque nisl consectetur.
@@ -235,9 +275,9 @@
 
 				<div class="row featurette">
 					<div class="col-md-9">
-						<h2 class="featurette-heading">
+						<h1 class="featurette-heading">
 							<span class="text-muted">...In social networks.</span>
-						</h2>
+						</h1>
 						<ul class="list-unstyled">
 							<li><p class="lead">
 									<span class="glyphicon glyphicon-thumbs-up text-info"></span>
@@ -249,7 +289,8 @@
 								</p></li>
 							<li><p class="lead">
 									<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
-									Limited search of events
+									Model not suitable for finding events: need to subscribe and to
+									filter out the relevant information
 								</p></li>
 							<li><p class="lead">
 									<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
@@ -259,8 +300,8 @@
 					</div>
 					<div class="col-md-3">
 						<div class="hidden-xs">
-							<div class="img-circle text-center"
-								style="background: #bd1789; color: #ffffff; width: 250px; height: 250px; display: table-cell; vertical-align: middle;">
+							<div class="img-circle text-center glue-circled-text"
+								style="background: #bd1789;">
 								<h1>
 									<strong>Social<br />Networks
 									</strong>
@@ -287,32 +328,130 @@
 				<hr class="featurette-divider" />
 
 				<div class="row featurette">
-					<div class="col-md-3">
-						<div class="hidden-xs">
-							<!-- <div class="img-circle text-center"
-								style="background: #005a9c; color: #ffffff; width: 250px; height: 250px; display: table-cell; vertical-align: middle;">
-								<h1>
-									<strong>Glue</strong>
-								</h1>
-								<br />
-							</div> -->
-							<h:graphicImage name="glue-snail-blue-white.svg" library="img"
-								alt="Glue snail" styleClass="img-responsive" />
-						</div>
+					<div class="col-md-12 text-center">
+						<h1 class="featurette-heading">
+							<span class="text-muted">Our vision of what it should be!</span>
+						</h1>
 					</div>
-					<div class="col-md-9">
-						<h2 class="featurette-heading">
-							<span class="text-muted">And now, our vision of what it
-								should be!</span>
-						</h2>
+				</div>
+
+				<div class="row featurette text-center hidden-xs">
+					<div class="col-md-3 col-md-offset-4">
+						<h:graphicImage name="glue-snail-white-blue.svg" library="img"
+							alt="Glue snail" styleClass="img-circle img-responsive" />
+					</div>
+				</div>
+
+				<!-- Three columns of text below the carousel -->
+				<div class="row">
+					<div class="col-lg-3">
+						<div class="text-center">
+							<h1>
+								<span
+									title="An event brings together people in a given place and time">
+									<span class="glyphicon glyphicon-user text-muted"></span> <span
+									class="glyphicon glyphicon-globe text-muted"></span> <span
+									class="glyphicon glyphicon-time text-muted"></span>
+								</span>
+							</h1>
+						</div>
+						<h2>Glue is a social network based on events</h2>
+						<p>Glue does not focus on the social interactions that users
+							can have with each other: the users do not enter a profile...</p>
+						<p>
+							Mixing public <span
+								class="glyphicon glyphicon-eye-open text-info"></span> and
+							private <span class="glyphicon glyphicon-eye-close text-info"></span>
+							events nicely
+						</p>
+						<p>
+							Advanced search <span
+								class="glyphicon glyphicon-search text-info"></span> &amp;
+							recommendations <span
+								class="glyphicon glyphicon-bullhorn text-info"></span>
+							capabilities, tailored to your interests
+						</p>
+						<p>
+							<a class="btn btn-default" href="#">View details &raquo;</a>
+						</p>
+					</div>
+					<!-- /.col-lg-4 -->
+					<div class="col-lg-3">
+						<div class="text-center">
+							<h1>
+								<span class="glyphicon glyphicon-picture text-muted"></span> <span
+									class="glyphicon glyphicon-film text-muted"></span> <span
+									class="glyphicon glyphicon-pencil text-muted"></span>
+							</h1>
+						</div>
+						<h2>Share media</h2>
+						<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis
+							in, egestas eget quam. Vestibulum id ligula porta felis euismod
+							semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+							condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+						<p>
+							<a class="btn btn-default" href="#">View details &raquo;</a>
+						</p>
+					</div>
+					<!-- /.col-lg-4 -->
+					<div class="col-lg-3">
+						<div class="text-center">
+							<h1>
+								<span class="glyphicon glyphicon-phone text-muted"></span>
+							</h1>
+						</div>
+						<h2>Giving you a great mobile experience</h2>
+						<p>
+							Contribute to an event by sharing media in real-time.<br />This
+							is now made possible through the emerging 4G system providing
+							mobile ultra-broadband Internet access, and the increasing number
+							of mobile devices with an advanced operating system (smartphones,
+							tablets but also connected cameras).
+						</p>
+						<p>
+							<a class="btn btn-default" href="#">View details &raquo;</a>
+						</p>
+					</div>
+					<!-- /.col-lg-4 -->
+					<div class="col-lg-3">
+						<div class="text-center">
+							<h1>
+								<span class="glyphicon glyphicon-question-sign text-muted"></span>
+							</h1>
+						</div>
+						<h2>OK, but why the snail?</h2>
+						<ul class="list-unstyled">
+							<li><p>
+									<span class="glyphicon glyphicon-hand-right text-info"></span>
+									The snail is slow but very determined.
+								</p></li>
+							<li><p>
+									<span class="glyphicon glyphicon-hand-right text-info"></span>
+									He sticks to what he does best: carry his home wherever he
+									goes. In this way, he really feels at home anywhere!
+								</p></li>
+							<li><p>
+									<span class="glyphicon glyphicon-hand-right text-info"></span>
+									With his eyes at the end of his long tentacles, he knows
+									everything that is happening around him.
+								</p></li>
+						</ul>
+						<!-- <p>
+							<a class="btn btn-default" href="#">View details &raquo;</a>
+						</p> -->
+					</div>
+				</div>
+				<!-- /.row -->
+
+				<div class="row featurette">
+
+					<div class="col-md-12">
+						<h1 class="featurette-heading">
+							<span class="text-muted">The challenges ahead:</span>
+						</h1>
 						<ul class="list-unstyled">
 							<li><p class="lead">
 									<span class="glyphicon glyphicon-thumbs-up text-info"></span>
-									Mixing public and private events nicely
-								</p></li>
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-up text-info"></span>
-									Mixing public and private events
 								</p></li>
 						</ul>
 					</div>
