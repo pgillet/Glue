@@ -25,3 +25,7 @@ line-height: 70%
 	display: table-cell;
 	vertical-align: middle;
 }
+
+.glue-info-badge {
+	cursor:pointer;
+}

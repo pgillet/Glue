@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <h:body>
 	<ui:composition template="./template.xhtml">
 		<ui:define name="content">
@@ -167,184 +168,9 @@
 
 			<div class="container marketing">
 
-				<h1>Event management throughout the Web...</h1>
-
-
-				<!-- START THE FEATURETTES -->
-
-				<hr class="featurette-divider" />
-
-
-				<div class="row featurette">
-					<div class="col-md-9">
-						<h1 class="featurette-heading">
-							<span class="text-muted">...In event directories.</span>
-						</h1>
-						<p class="lead">Donec ullamcorper nulla non metus auctor
-							fringilla. Vestibulum id ligula porta felis euismod semper.
-							Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-							Fusce dapibus, tellus ac cursus commodo.</p>
-					</div>
-					<div class="col-md-3">
-						<div class="hidden-xs">
-							<div
-								class="img-circle img-responsive text-center glue-circled-text"
-								style="background: #ef7c00;">
-								<h1>
-									<strong>Event<br />Directories
-									</strong>
-								</h1>
-							</div>
-						</div>
-						<br />
-						<div class="text-center">
-							<ul class="list-inline">
-								<li><a target="_blank" href="http://www.lastfm.fr/events"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-02.png"
-											library="img" alt="Last.fm Events" title="Last.fm Events" /></a></li>
-								<li><a target="_blank" href="http://www.eventful.com/"><h:graphicImage
-											name="social-media-icons/64/eventful.png" library="img"
-											alt="Eventful" title="Eventful" /></a></li>
-							</ul>
-						</div>
-
-						<!-- <img class="featurette-image img-responsive"
-							src="data:image/png;base64," data-src="holder.js/500x500/auto"
-							alt="Generic placeholder image" /> -->
-					</div>
-				</div>
-
-				<hr class="featurette-divider" />
-
-				<div class="row featurette">
-					<div class="col-md-3">
-						<div class="hidden-xs">
-							<div class="img-circle text-center  glue-circled-text"
-								style="background: #86ba0c;">
-								<h1>
-									<strong>Media<br />Hosting<br />Services
-									</strong>
-								</h1>
-							</div>
-						</div>
-						<br />
-						<div class="text-center">
-							<ul class="list-inline">
-								<li><a target="_blank" href="http://www.youtube.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-03.png"
-											library="img" alt="YouTube" title="YouTube" /></a></li>
-								<li><a target="_blank" href="http://www.flickr.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-25.png"
-											library="img" alt="Flickr" title="Flickr" /></a></li>
-								<li><a target="_blank" href="http://instagram.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-29.png"
-											library="img" alt="Instagram" title="Instagram" /></a></li>
-							</ul>
-							<ul class="list-inline">
-								<li><a target="_blank" href="https://soundcloud.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-08.png"
-											library="img" alt="SoundCloud" title="SoundCloud" /></a></li>
-								<li><a target="_blank" href="https://drive.google.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-23.png"
-											library="img" alt="Google Drive" title="Google Drive" /></a></li>
-								<li><a target="_blank" href="https://www.dropbox.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-24.png"
-											library="img" alt="Dropbox" title="Dropbox" /></a></li>
-							</ul>
-						</div>
-
-					</div>
-					<div class="col-md-9">
-						<h1 class="featurette-heading">
-							<span class="text-muted">...In media hosting services.</span>
-						</h1>
-						<p class="lead">Donec ullamcorper nulla non metus auctor
-							fringilla. Vestibulum id ligula porta felis euismod semper.
-							Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-							Fusce dapibus, tellus ac cursus commodo.</p>
-						<ul class="list-unstyled">
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-up text-info"></span>
-									Mass storage of raw media
-								</p></li>
-						</ul>
-					</div>
-				</div>
-
-				<hr class="featurette-divider" />
-
-				<div class="row featurette">
-					<div class="col-md-9">
-						<h1 class="featurette-heading">
-							<span class="text-muted">...In social networks.</span>
-						</h1>
-						<ul class="list-unstyled">
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-up text-info"></span>
-									Blabla
-								</p></li>
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
-									User-centric
-								</p></li>
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
-									Model not suitable for finding events: need to subscribe and to
-									filter out the relevant information
-								</p></li>
-							<li><p class="lead">
-									<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
-									Mostly informal or private get-togethers
-								</p></li>
-						</ul>
-					</div>
-					<div class="col-md-3">
-						<div class="hidden-xs">
-							<div class="img-circle text-center glue-circled-text"
-								style="background: #bd1789;">
-								<h1>
-									<strong>Social<br />Networks
-									</strong>
-								</h1>
-							</div>
-						</div>
-						<br />
-						<div class="text-center">
-							<ul class="list-inline">
-								<li><a target="_blank" href="https://www.facebook.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-27.png"
-											library="img" alt="Facebook" title="Facebook" /></a></li>
-								<li><a target="_blank" href="https://plus.google.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-04.png"
-											library="img" alt="Google+" title="Google+" /></a></li>
-								<li><a target="_blank" href="https://twitter.com/"><h:graphicImage
-											name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-19.png"
-											library="img" alt="Twitter" title="Twitter" /></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-				<hr class="featurette-divider" />
-
-				<div class="row featurette">
-					<div class="col-md-12 text-center">
-						<h1 class="featurette-heading">
-							<span class="text-muted">Our vision of what it should be!</span>
-						</h1>
-					</div>
-				</div>
-
-				<div class="row featurette text-center hidden-xs">
-					<div class="col-md-2 col-md-offset-5">
-						<h:graphicImage name="glue-snail-white-blue.svg" library="img"
-							alt="Glue snail" styleClass="img-circle img-responsive" />
-					</div>
-				</div>
-
 				<!-- Three columns of text -->
 				<div class="row">
-					<div class="col-lg-3">
+					<div class="col-lg-4">
 						<div class="text-center">
 							<h1>
 								<span
@@ -355,7 +181,7 @@
 								</span>
 							</h1>
 						</div>
-						<h2>Glue is a social network based on events</h2>
+						<h2>Social network based on events</h2>
 						<ul class="list-unstyled lead">
 
 							<li><p>
@@ -398,7 +224,7 @@
 						</p> -->
 					</div>
 					<!-- /.col-lg-4 -->
-					<div class="col-lg-3">
+					<div class="col-lg-4">
 						<div class="text-center">
 							<h1>
 								<span class="glyphicon glyphicon-picture text-muted"></span> <span
@@ -422,13 +248,13 @@
 
 					</div>
 					<!-- /.col-lg-4 -->
-					<div class="col-lg-3">
+					<div class="col-lg-4">
 						<div class="text-center">
 							<h1>
 								<span class="glyphicon glyphicon-phone text-muted"></span>
 							</h1>
 						</div>
-						<h2>Giving you a great mobile experience</h2>
+						<h2>Great mobile experience</h2>
 						<p class="lead">
 							Contribute to an event in real-time.<br />This is now made
 							possible through the emerging 4G system providing mobile
@@ -438,51 +264,60 @@
 								class="glyphicon glyphicon-camera text-info"></span>).
 						</p>
 					</div>
-					<!-- /.col-lg-4 -->
-					<div class="col-lg-3">
-						<div class="text-center">
-							<h1>
-								<span class="glyphicon glyphicon-question-sign text-muted"></span>
-							</h1>
-						</div>
-						<h2>OK, but why the snail?</h2>
-						<ul class="list-unstyled lead">
-							<li><p>
-									<span class="glyphicon glyphicon-hand-right text-info"></span>
-									The snail is slow but very determined.
-								</p></li>
-							<li><p>
-									<span class="glyphicon glyphicon-hand-right text-info"></span>
-									He sticks to what he does best: carry his home wherever he
-									goes. In this way, he really feels at home anywhere!
-								</p></li>
-							<li><p>
-									<span class="glyphicon glyphicon-hand-right text-info"></span>
-									With his eyes at the end of his long tentacles, he knows
-									everything that is happening around him.
-								</p></li>
-						</ul>
-					</div>
 				</div>
 				<!-- /.row -->
 
+				<hr class="featurette-divider" />
+
+				<div class="row featurette text-center hidden-xs">
+					<div class="col-md-2 col-md-offset-5">
+						<h:graphicImage name="glue-snail-white-blue.svg" library="img"
+							alt="Glue snail" styleClass="img-circle img-responsive" />
+
+						<h3><span class="glue-info-badge" data-container="body"
+							data-placement="left" data-toggle="popover" title=""
+							data-content="The snail is slow but very determined. He gains ground despite everything."
+							data-original-title="OK, but why the snail?"><span
+							class="glyphicon glyphicon-asterisk text-muted"></span></span> <span
+							class="glue-info-badge" data-container="body"
+							data-placement="bottom" data-toggle="popover" title=""
+							data-content="He sticks to what he does best: carry his home wherever he
+									goes. In this way, he really feels at home anywhere!"
+							data-original-title="OK, but why the snail?"><span
+							class="glyphicon glyphicon-asterisk text-muted"></span></span> <span
+							class="glue-info-badge" data-container="body"
+							data-placement="right" data-toggle="popover" title=""
+							data-content="With his eyes at the end of his long tentacles, he knows
+									everything that is happening around him."
+							data-original-title="OK, but why the snail?"><span
+							class="glyphicon glyphicon-asterisk text-muted"></span></span></h3>
+					</div>
+
+
+
+				</div>
+
 				<!-- Three columns of text -->
 				<div class="row">
-					<div class="col-lg-6 col-md-offset-3">
+					<div class="col-lg-8 col-md-offset-2">
 						<div class="text-center">
 							<h1>
 								<span class="glyphicon glyphicon-road text-muted"></span>
 							</h1>
 						</div>
-						<h2>The challenges ahead</h2>
+						<h2>
+							Our vision of what it should be! <span class="text-muted">The
+								challenges ahead.</span>
+						</h2>
 						<p class="lead">
 							<span class="glyphicon glyphicon-exclamation-sign text-info"></span>
-							We don't want Glue to be a mashup that simply aggregates content
-							from multiple social networks. This would reflect individual
-							behaviors too much (selfies, raw collection of personal opinions,
-							meaningless user whereabouts). Instead, we want to give you great
-							overviews of events. It is important to make data more useful and
-							more structured, with an actual content of interest.
+							We don't want Glue to be a simple mashup that simply aggregates
+							content from multiple social networks. This would reflect
+							individual behaviors too much (selfies, raw collection of
+							personal opinions, meaningless user whereabouts). Instead, we
+							want to give you great overviews of events. It is important to
+							make data more useful and more structured, with an actual content
+							of interest.
 						</p>
 
 						<p class="lead">
@@ -507,6 +342,176 @@
 					</div>
 				</div>
 				<!-- /.row -->
+
+				<div class="panel-group" id="accordion">
+					<div>
+						<!-- class="panel panel-default"  -->
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="accordion-toggle" data-toggle="collapse"
+									data-parent="#accordion" href="#collapseOne"> The Paths of
+									the Mind that led us to Glue. <span class="text-muted">Event
+										management throughout the Web...</span>
+								</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<!-- START THE FEATURETTES -->
+								<div class="row featurette">
+									<div class="col-md-9">
+										<h1 class="featurette-heading">
+											<span class="text-muted">...In event directories.</span>
+										</h1>
+										<p class="lead">Donec ullamcorper nulla non metus auctor
+											fringilla. Vestibulum id ligula porta felis euismod semper.
+											Praesent commodo cursus magna, vel scelerisque nisl
+											consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+									</div>
+									<div class="col-md-3">
+										<div class="hidden-xs">
+											<div
+												class="img-circle img-responsive text-center glue-circled-text"
+												style="background: #ef7c00;">
+												<h1>
+													<strong>Event<br />Directories
+													</strong>
+												</h1>
+											</div>
+										</div>
+										<br />
+										<div class="text-center">
+											<ul class="list-inline">
+												<li><a target="_blank"
+													href="http://www.lastfm.fr/events"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-02.png"
+															library="img" alt="Last.fm Events" title="Last.fm Events" /></a></li>
+												<li><a target="_blank" href="http://www.eventful.com/"><h:graphicImage
+															name="social-media-icons/64/eventful.png" library="img"
+															alt="Eventful" title="Eventful" /></a></li>
+											</ul>
+										</div>
+
+										<!-- <img class="featurette-image img-responsive"
+							src="data:image/png;base64," data-src="holder.js/500x500/auto"
+							alt="Generic placeholder image" /> -->
+									</div>
+								</div>
+
+								<hr class="featurette-divider" />
+
+								<div class="row featurette">
+									<div class="col-md-3">
+										<div class="hidden-xs">
+											<div class="img-circle text-center  glue-circled-text"
+												style="background: #86ba0c;">
+												<h1>
+													<strong>Media<br />Hosting<br />Services
+													</strong>
+												</h1>
+											</div>
+										</div>
+										<br />
+										<div class="text-center">
+											<ul class="list-inline">
+												<li><a target="_blank" href="http://www.youtube.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-03.png"
+															library="img" alt="YouTube" title="YouTube" /></a></li>
+												<li><a target="_blank" href="http://www.flickr.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-25.png"
+															library="img" alt="Flickr" title="Flickr" /></a></li>
+												<li><a target="_blank" href="http://instagram.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-29.png"
+															library="img" alt="Instagram" title="Instagram" /></a></li>
+											</ul>
+											<ul class="list-inline">
+												<li><a target="_blank" href="https://soundcloud.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-08.png"
+															library="img" alt="SoundCloud" title="SoundCloud" /></a></li>
+												<li><a target="_blank" href="https://drive.google.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-23.png"
+															library="img" alt="Google Drive" title="Google Drive" /></a></li>
+												<li><a target="_blank" href="https://www.dropbox.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-24.png"
+															library="img" alt="Dropbox" title="Dropbox" /></a></li>
+											</ul>
+										</div>
+
+									</div>
+									<div class="col-md-9">
+										<h1 class="featurette-heading">
+											<span class="text-muted">...In media hosting services.</span>
+										</h1>
+										<p class="lead">Donec ullamcorper nulla non metus auctor
+											fringilla. Vestibulum id ligula porta felis euismod semper.
+											Praesent commodo cursus magna, vel scelerisque nisl
+											consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+										<ul class="list-unstyled">
+											<li><p class="lead">
+													<span class="glyphicon glyphicon-thumbs-up text-info"></span>
+													Mass storage of raw media
+												</p></li>
+										</ul>
+									</div>
+								</div>
+
+								<hr class="featurette-divider" />
+
+								<div class="row featurette">
+									<div class="col-md-9">
+										<h1 class="featurette-heading">
+											<span class="text-muted">...In social networks.</span>
+										</h1>
+										<ul class="list-unstyled">
+											<li><p class="lead">
+													<span class="glyphicon glyphicon-thumbs-up text-info"></span>
+													Blabla
+												</p></li>
+											<li><p class="lead">
+													<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
+													User-centric
+												</p></li>
+											<li><p class="lead">
+													<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
+													Model not suitable for finding events: need to subscribe
+													and to filter out the relevant information
+												</p></li>
+											<li><p class="lead">
+													<span class="glyphicon glyphicon-thumbs-down text-danger"></span>
+													Mostly informal or private get-togethers
+												</p></li>
+										</ul>
+									</div>
+									<div class="col-md-3">
+										<div class="hidden-xs">
+											<div class="img-circle text-center glue-circled-text"
+												style="background: #bd1789;">
+												<h1>
+													<strong>Social<br />Networks
+													</strong>
+												</h1>
+											</div>
+										</div>
+										<br />
+										<div class="text-center">
+											<ul class="list-inline">
+												<li><a target="_blank" href="https://www.facebook.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-27.png"
+															library="img" alt="Facebook" title="Facebook" /></a></li>
+												<li><a target="_blank" href="https://plus.google.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-04.png"
+															library="img" alt="Google+" title="Google+" /></a></li>
+												<li><a target="_blank" href="https://twitter.com/"><h:graphicImage
+															name="social-media-icons/64/Social_Media_Icons_CtrlAltDesign_V2-19.png"
+															library="img" alt="Twitter" title="Twitter" /></a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!-- /.container -->
 
