@@ -1,20 +1,11 @@
 .glue-jumbotron {
-	background-image: url(#{   resource [   'img:Empire-State-Building-view.JPG' ]
-}
-
-);
-background-position
-:
- 
-center
-;
-
-
+	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
+background-position:center;
 }
 .glue-tightened-text {
-	margin:0; 
-padding:0;
-line-height: 70%
+	margin: 0;
+	padding: 0;
+	line-height: 70%
 }
 
 .glue-circled-text {
@@ -27,5 +18,9 @@ line-height: 70%
 }
 
 .glue-info-badge {
-	cursor:pointer;
+	cursor: pointer;
+}
+
+.glue-text-justified {
+	text-align: justify;
 }
