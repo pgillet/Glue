@@ -1,3 +1,12 @@
+.glue-brand {
+	font-family: 'chopinscriptmedium';
+	font-size: 60px;
+	font-weight: normal;
+	font-style: normal;
+	color: #005a9c;
+	padding: 15px 15px;
+}
+
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
 background-position:center;
