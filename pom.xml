@@ -39,6 +39,11 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.0</version>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 						only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -101,17 +106,28 @@
 
 	<profiles>
 		<profile>
-			<!-- the standard profile runs the instrumentation tests -->
-			<id>standard</id>
+			<!-- Server side -->
+			<id>server</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
+				<module>glue-data-model</module>
+				<module>glue-search</module>
+				<module>glue-webapp</module>
+			</modules>
+		</profile>
+		<profile>
+			<!-- the standard profile runs the instrumentation tests -->
+			<id>all</id>
+			<modules>
 				<module>ActionBarCompat</module>
 				<module>glue-api</module>
 				<module>glue-client-android</module>
+				<module>glue-content</module>
 				<module>glue-data-model</module>
 				<module>glue-feed</module>
+				<module>glue-search</module>
 				<module>glue-webapp</module>
 			</modules>
 		</profile>
