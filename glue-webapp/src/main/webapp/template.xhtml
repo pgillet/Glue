@@ -54,27 +54,37 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				
-				<h:link class="navbar-brand" outcome="main"><!-- <h:graphicImage name="glue-snail-blue.svg" library="img"
-							alt="Glue snail" style="width:50px; height:50px;"/> --><span class="glue-brand">glue</span></h:link>
+
+				<h:link class="navbar-brand" outcome="main">
+					<span class="glue-brand">glue</span>
+				</h:link>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 
 				<h:form styleClass="navbar-form navbar-left" role="search">
-					<div class="form-group">
+					<div class="form-group" style="width: 300px;">
 						<h:inputText styleClass="form-control"
 							p:placeholder="#{bundle.search}"
 							value="#{streamSearchBean.query}" />
-						<!-- <span class="input-group-addon"><h:commandLink action="#">
-						<span class="glyphicon glyphicon-search"></span>
-					</h:commandLink> </span> -->
+						<!-- input-lg -->
+						<!-- <span class="input-group-addon"><h:commandLink
+								action="#" >
+								<span class="glyphicon glyphicon-search"></span>
+							</h:commandLink></span> -->
 					</div>
-					<h:commandLink id="submit" styleClass="btn btn-default"
-						action="#{streamSearchBean.search}">
-						<span class="glyphicon glyphicon-search"></span>
-					</h:commandLink>
+					<span class="glue-info-badge" data-container="body"
+						data-placement="bottom" data-toggle="popover" title=""
+						data-content="Just hit the search button for a demo!">
+						<h:commandLink id="submit" action="#{streamSearchBean.search}"
+							styleClass="btn btn-primary" data-container="body"
+							data-placement="bottom" data-toggle="popover" title=""
+							data-content="Just hit the search button for a demo.">
+							<!-- btn-lg -->
+							<span class="glyphicon glyphicon-search"></span>
+						</h:commandLink>
+					</span>
 				</h:form>
 
 				<ul class="nav navbar-nav navbar-left">
