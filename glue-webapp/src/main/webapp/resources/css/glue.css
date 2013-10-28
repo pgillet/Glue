@@ -1,9 +1,11 @@
 .glue-brand {
-	font-family: 'chopinscriptmedium';
-	font-size: 60px;
-	font-weight: normal;
+	/* font-family: 'chopinscriptmedium'; */
+	font-size: 50px;
+	font-weight: bold;
 	font-style: normal;
-	padding: 15px 15px;
+	/* color: #3a87ad; */
+	/* padding: 15px 15px; */
+	letter-spacing: -2px;
 }
 
 .glue-jumbotron {
