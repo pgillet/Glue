@@ -330,8 +330,9 @@
 				<div class="row featurette text-center hidden-xs">
 					<div class="col-md-2 col-md-offset-5 col-sm-2 col-sm-offset-5">
 						<h:graphicImage name="glue-snail-white-blue-lg.svg" library="img"
-							alt="Glue snail" styleClass="img-circle img-responsive" />
-
+							alt="Glue snail" styleClass="img-circle img-responsive"
+							style="height:100% \9;" />
+						<!-- Fix IE10: https://github.com/twbs/bootstrap/issues/10073 -->
 						<h3>
 							<span class="glue-info-badge" data-container="body"
 								data-placement="left" data-toggle="popover" title=""
