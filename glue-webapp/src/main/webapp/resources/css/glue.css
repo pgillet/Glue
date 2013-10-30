@@ -11,7 +11,15 @@
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
 background-position:center;
+padding-top: 28px;
+padding-bottom: 28px;
 }
+
+.glue-jumbotron-panel {
+	background-color: rgba(234, 81, 19, 0.6); 
+	color: white;
+}
+
 .glue-tightened-text {
 	margin: 0;
 	padding: 0;
