@@ -14,23 +14,68 @@
 
 					<div class="row">
 						<div class="col-md-7">
-							<div class="panel"
-								style="background-color: rgba(234, 81, 19, 0.6); color: white;">
-								<div class="panel-body text-center">
-									<h1 class="glue-tightened-text">
-										<strong>Discover Events</strong>
-									</h1>
-									<h3 class="glue-tightened-text">and</h3>
-									<h1 class="glue-tightened-text">
-										<strong>Live Experiences</strong>
-									</h1>
-									<h2 class="glue-tightened-text">
-										<strong><em>through shared media</em></strong>
-									</h2>
-								</div>
-								<!-- <h:graphicImage name="glue-snail-white.svg" library="img"
+
+
+							<div id="carousel-example-generic" class="carousel slide">
+								<!-- Indicators -->
+								<ol class="carousel-indicators">
+									<li data-target="#carousel-example-generic" data-slide-to="0"
+										class="active"></li>
+									<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+								</ol>
+
+								<!-- Wrapper for slides -->
+								<div class="carousel-inner">
+									<div class="item active">
+										<div class="panel glue-jumbotron-panel">
+											<div class="panel-body text-center">
+												<h2 class="glue-tightened-text">
+													I'm just <strong>Me</strong>
+												</h2>
+												<hr class="divider" />
+												<h1 class="glue-tightened-text">
+													<strong>Discover Events</strong>
+												</h1>
+												<h3 class="glue-tightened-text">and</h3>
+												<h1 class="glue-tightened-text">
+													<strong>Live Experiences</strong>
+												</h1>
+												<h2 class="glue-tightened-text">
+													<strong><em>through shared media</em></strong>
+												</h2>
+											</div>
+											<!-- <h:graphicImage name="glue-snail-white.svg" library="img"
 									alt="Glue snail" styleClass="img-responsive"
 									style="width: 100px; height: 100px; position: absolute; right: 25px; bottom: 55px;" /> -->
+										</div>
+									</div>
+									<div class="item">
+										<div class="panel glue-jumbotron-panel clearfix">
+											<div class="panel-body text-center">
+												<h2 class="glue-tightened-text">
+													I'm an <strong>Event Organizer</strong>
+												</h2>
+												<hr class="divider" />
+												<h3 class="glue-tightened-text"><br/></h3>
+
+												<h2 class="glue-tightened-text">
+													<strong>Plan and Promote</strong>
+												</h2>
+												<h1 class="glue-tightened-text">
+													<strong>your events</strong>
+												</h1>
+												<h1 class="glue-tightened-text"><br/></h1>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Controls -->
+								<!-- <a class="left carousel-control" href="#carousel-example-generic"
+				data-slide="prev"> <span class="icon-prev"></span>
+			</a> <a class="right carousel-control" href="#carousel-example-generic"
+				data-slide="next"> <span class="icon-next"></span>
+			</a> -->
 							</div>
 
 							<a data-toggle="modal" href="#myModal"
@@ -117,7 +162,8 @@
 								<li><a href="mailto:glue.contact@gmail.com"
 									class="btn btn-primary btn-xs"><span
 										class="glyphicon glyphicon-envelope"></span> Contact us</a></li>
-								<li><br/><h3>
+								<li><br />
+									<h3>
 										<span class="label label-danger"><em>Beta</em></span><span
 											class="label glue-label"><span class="text-danger">available
 												soon!</span></span>
@@ -264,7 +310,6 @@
 						<div class="text-center">
 							<h1>
 								<span class="glyphicon glyphicon-phone text-muted"></span>
-								<span class="glyphicon glyphicon-camera text-muted"></span>
 							</h1>
 							<h2>Great mobile experience</h2>
 						</div>
@@ -283,10 +328,11 @@
 				<hr class="featurette-divider" />
 
 				<div class="row featurette text-center hidden-xs">
-					<div class="col-md-2 col-md-offset-5">
+					<div class="col-md-2 col-md-offset-5 col-sm-2 col-sm-offset-5">
 						<h:graphicImage name="glue-snail-white-blue-lg.svg" library="img"
-							alt="Glue snail" styleClass="img-circle img-responsive" />
-
+							alt="Glue snail" styleClass="img-circle img-responsive"
+							style="width: 100%; " />
+						<!-- Fix IE10: https://github.com/twbs/bootstrap/issues/10073 -->
 						<h3>
 							<span class="glue-info-badge" data-container="body"
 								data-placement="left" data-toggle="popover" title=""
@@ -314,7 +360,7 @@
 
 				<!-- Three columns of text -->
 				<div class="row">
-					<div class="col-lg-8 col-md-offset-2">
+					<div class="col-md-8 col-md-offset-2">
 						<div class="text-center">
 							<h1>
 								<span class="glyphicon glyphicon-road text-muted"></span>
@@ -439,10 +485,6 @@
 														alt="Eventful" title="Eventful" /></a></li>
 										</ul>
 									</div>
-
-									<!-- <img class="featurette-image img-responsive"
-							src="data:image/png;base64," data-src="holder.js/500x500/auto"
-							alt="Generic placeholder image" /> -->
 								</div>
 							</div>
 
@@ -451,7 +493,7 @@
 							<div class="row featurette">
 								<div class="col-md-3">
 									<div class="hidden-xs">
-										<div class="img-circle text-center  glue-circled-text"
+										<div class="img-circle text-center glue-circled-text"
 											style="background: #86ba0c;">
 											<h1>
 												<strong>Media<br />Hosting<br />Services

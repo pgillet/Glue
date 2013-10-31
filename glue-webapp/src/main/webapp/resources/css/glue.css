@@ -1,3 +1,8 @@
+.navbar-glue-default {
+  background-color: #f1f1f1;
+}
+
+
 .glue-brand {
 	/* font-family: 'chopinscriptmedium'; */
 	font-size: 48px;
@@ -11,7 +16,15 @@
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
 background-position:center;
+padding-top: 28px;
+padding-bottom: 28px;
 }
+
+.glue-jumbotron-panel {
+	background-color: rgba(234, 81, 19, 0.6); 
+	color: white;
+}
+
 .glue-tightened-text {
 	margin: 0;
 	padding: 0;
@@ -37,4 +50,21 @@ background-position:center;
 
 .glue-label {
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+#glue-feedback a{
+	background:url(#{ resource ['img:feedback.png']}) no-repeat scroll 50% 50% #428BCA;
+	display:block;
+	height:90px;
+	line-height:0;
+	padding:5px;
+	position:fixed;
+	right:0;
+	text-indent:-99999px;
+	top:40%;
+	width:22px;
+}
+
+#glue-feedback a:hover {
+	background-color:#EA5413;
 }
