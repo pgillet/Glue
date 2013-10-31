@@ -14,6 +14,7 @@ import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.InvitedParticipant;
 import com.glue.struct.impl.Stream;
+import com.glue.struct.impl.Venue;
 
 /**
  * DAO for Stream operations.
@@ -37,7 +38,8 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_END_DATE = "end_date";
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 	public static final String COLUMN_THUMB_PATH = "thumb_path";
-
+	public static final String COLUMN_VENUE_ID = "venue_id";
+	
 	public static final String CREATE_STREAM = "INSERT INTO STREAM(TITLE, DESCRIPTION, URL, PUBLIC, OPEN, "
 			+ "SECRET_QUESTION, SECRET_ANSWER, REQUEST_TO_PARTICIPATE, START_DATE, END_DATE, "
 			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -226,6 +228,11 @@ public class StreamDAO extends AbstractDAO {
 				stream.setStartDate(res.getLong(COLUMN_START_DATE));
 				stream.setEndDate(res.getLong(COLUMN_END_DATE));
 				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+				
+				IVenue dummyVenue = new Venue();
+				dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
+				stream.setVenue(dummyVenue);
 
 				streams.add(stream);
 			}

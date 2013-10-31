@@ -2,7 +2,9 @@ package com.glue.webapp.logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -10,7 +12,6 @@ import javax.naming.NamingException;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
-import com.glue.struct.impl.Venue;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
@@ -43,6 +44,9 @@ public class StreamController {
 						public List<IStream> execute(DAOManager manager)
 								throws Exception {
 
+							// Store venues to avoid repetitive SQL requests
+							Map<Long, IVenue> m = new HashMap<Long, IVenue>();
+
 							StreamDAO streamDAO = manager.getStreamDAO();
 							VenueDAO venueDAO = manager.getVenueDAO();
 
@@ -51,8 +55,20 @@ public class StreamController {
 
 							for (IStream stream : items) {
 
-								// TODO
-								stream.setVenue(new Venue());
+								IVenue persistentVenue = m.get(stream
+										.getVenue().getId());
+								if (persistentVenue == null) { // Not stored yet
+									persistentVenue = venueDAO.search(stream
+											.getVenue().getId());
+
+									// Store the persistent venue into the map
+									m.put(persistentVenue.getId(),
+											persistentVenue);
+								}
+
+								// Replace the dummy venue with the
+								// persistent one
+								stream.setVenue(persistentVenue);
 							}
 
 							return items;
