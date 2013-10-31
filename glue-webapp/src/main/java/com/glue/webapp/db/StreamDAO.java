@@ -50,6 +50,8 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String SELECT_STREAM_BY_ID = "SELECT * FROM STREAM WHERE ID=?";
 
+	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?)";
+
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
 	public static final String SELECT_PARTICIPANT = "SELECT * from PARTICIPANT WHERE user_id=? and stream_id=?";
@@ -178,6 +180,57 @@ public class StreamDAO extends AbstractDAO {
 			result.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 		}
 		return result;
+	}
+
+	public List<IStream> searchInList(Long... ids) throws SQLException {
+		List<IStream> streams = new ArrayList<IStream>();
+
+		// Array array = connection.createArrayOf("BIGINT", ids); // Feature not
+		// supported by MySQL
+
+		if (ids.length > 0) {
+			
+			// ?,?,?,...
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < ids.length; i++) {
+				sb.append('?');
+				sb.append(",");
+			}
+			// Remove the last comma
+			String params = sb.substring(0, sb.length() - 1);
+			String sql = SELECT_STREAM_BY_IDS.replaceAll("\\?", params);
+			
+			PreparedStatement statement = connection
+					.prepareStatement(sql);
+			// statement.setArray(1, array);
+			
+			for (int i = 0; i < ids.length; i++) {
+				statement.setLong(i+1, ids[i]);
+			}
+			
+			ResultSet res = statement.executeQuery();
+			while (res.next()) {
+				IStream stream = new Stream();
+				stream.setId(res.getLong(COLUMN_ID));
+				stream.setTitle(res.getString(COLUMN_TITLE));
+				stream.setDescription(res.getString(COLUMN_DESCRIPTION));
+				stream.setUrl(res.getString(COLUMN_URL));
+				stream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
+				stream.setOpen(res.getBoolean(COLUMN_OPEN));
+				stream.setSharedSecretQuestion(res
+						.getString(COLUMN_SECRET_QUESTION));
+				stream.setSharedSecretAnswer(res
+						.getString(COLUMN_SECRET_ANSWER));
+				stream.setShouldRequestToParticipate(res
+						.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
+				stream.setStartDate(res.getLong(COLUMN_START_DATE));
+				stream.setEndDate(res.getLong(COLUMN_END_DATE));
+				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+
+				streams.add(stream);
+			}
+		}
+		return streams;
 	}
 
 	private void updateInvitedParticipant(IStream aStream) throws SQLException {

@@ -8,13 +8,13 @@ import javax.inject.Inject;
 
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
-import com.glue.webapp.search.SearchEngine;
+import com.glue.webapp.logic.StreamController;
 
 @ManagedBean
 public class StreamSearchBean {
 
 	@Inject
-	private SearchEngine engine;
+	private StreamController streamController;
 
 	private String query;
 
@@ -27,6 +27,8 @@ public class StreamSearchBean {
 	private Date startDate;
 
 	private Date endDate;
+
+	private List<IStream> streams;
 
 	/**
 	 * @return the query
@@ -118,20 +120,36 @@ public class StreamSearchBean {
 		this.endDate = endDate;
 	}
 
+	/**
+	 * @return the streams
+	 */
+	public List<IStream> getStreams() {
+		return streams;
+	}
+
+	/**
+	 * @param streams
+	 *            the streams to set
+	 */
+	public void setStreams(List<IStream> streams) {
+		this.streams = streams;
+	}
+
 	public String search() {
 
 		try {
-			List<IStream> streams = engine.search(query);
-
+			streams = streamController.search(query);
+			
 			for (IStream iStream : streams) {
 				System.out.println(iStream);
 			}
+			
 		} catch (InternalServerException e) {
-
+			// TODO: handle error message
 			e.printStackTrace();
 		}
 
-		return "main";
+		return "stream/search";
 	}
 
 }
