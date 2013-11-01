@@ -1,11 +1,6 @@
-.navbar-glue-default {
-  background-color: #f1f1f1;
-}
-
-
 .glue-brand {
 	/* font-family: 'chopinscriptmedium'; */
-	font-size: 48px;
+	font-size: 38px;
 	font-weight: bold;
 	font-style: normal;
 	/* color: #3a87ad; */
@@ -52,19 +47,39 @@ padding-bottom: 28px;
   background-color: rgba(255, 255, 255, 0.7);
 }
 
-#glue-feedback a{
-	background:url(#{ resource ['img:feedback.png']}) no-repeat scroll 50% 50% #428BCA;
-	display:block;
-	height:90px;
-	line-height:0;
-	padding:5px;
-	position:fixed;
-	right:0;
-	text-indent:-99999px;
-	top:40%;
-	width:22px;
+.glue-navbar-default {
+  background-color: #f1f1f1;
 }
 
-#glue-feedback a:hover {
-	background-color:#EA5413;
+#glue-feedback { 
+  height: 104px; 
+  width: 104px; 
+  position: fixed; 
+  top: 40%; 
+  z-index: 999;
+  transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg); 
+  -moz-transform: rotate(-90deg); 
+  -o-transform: rotate(-90deg); 
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+#glue-feedback a { 
+  display: block; 
+  background: #D9534F; 
+  height: 35px; 
+  width: 120px; 
+  padding: 8px 16px;
+  color: #ffffff; 
+  /*font-family: Arial, sans-serif;*/
+  font-size: 19px; 
+  /*font-weight: bold;*/
+  text-decoration: none; 
+  border-bottom: solid 1px #000000;
+  border-left: solid 1px #000000;
+  border-right: solid 1px #000000;
+}
+
+#glue-feedback a:hover { 
+  background: #EA5413; 
 }
