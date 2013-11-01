@@ -10,7 +10,28 @@
 	<ui:composition template="../template.xhtml">
 		<ui:define name="content">
 
-
+			<c:if test="#{not empty facesContext.messageList}">
+				<div class="row">
+					<div
+						class="col-md-6 col-md-offset-3 alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<h4>
+							<h:outputText value="#{bundle.error}" />
+						</h4>
+						<h:messages layout="table" />
+					</div>
+				</div>
+			</c:if>
+			<c:if test="#{empty streamSearchBean.streams}">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-hidden="true">&times;</button>
+						<strong>Holy guacamole!</strong> No results found.
+					</div>
+				</div>
+			</c:if>
 			<c:forEach items="#{streamSearchBean.streams}" var="stream">
 				<div id="user-block">
 					<ul>

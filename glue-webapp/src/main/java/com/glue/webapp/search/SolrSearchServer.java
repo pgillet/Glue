@@ -19,10 +19,13 @@ import com.glue.webapp.logic.InternalServerException;
  */
 public class SolrSearchServer implements SearchEngine {
 
+	private final String DEFAULT_Q = "*:*";
+
 	private SolrServer solr;
 
 	public SolrSearchServer() {
-		String urlString = "http://localhost:8080/solr";
+		String urlString = "http://localhost:8080/solr"; // TODO: should be
+															// configurable
 		this.solr = new HttpSolrServer(urlString);
 	}
 
@@ -31,8 +34,13 @@ public class SolrSearchServer implements SearchEngine {
 
 		List<? extends IStream> items = null;
 
+		String q = str.trim();
+		if (q.length() == 0) {
+			q = DEFAULT_Q;
+		}
+
 		SolrQuery query = new SolrQuery();
-		query.setQuery(str);
+		query.setQuery(q);
 
 		try {
 			QueryResponse rsp = solr.query(query);

@@ -3,7 +3,9 @@ package com.glue.webapp.beans;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.glue.struct.IStream;
@@ -137,19 +139,16 @@ public class StreamSearchBean {
 
 	public String search() {
 
+		FacesContext context = FacesContext.getCurrentInstance();
+
 		try {
 			streams = streamController.search(query);
-			
-			for (IStream iStream : streams) {
-				System.out.println(iStream);
-			}
-			
 		} catch (InternalServerException e) {
-			// TODO: handle error message
-			e.printStackTrace();
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
 		}
 
-		return "stream/search";
+		return "stream-search";
 	}
 
 }
