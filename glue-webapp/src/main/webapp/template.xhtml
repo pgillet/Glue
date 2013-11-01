@@ -56,7 +56,7 @@
 				</button>
 
 				<h:link class="navbar-brand glue-brand" outcome="main">
-					<span><span class="text-info">G</span><span
+					<span><span class="text-success">g</span><span
 						class="text-muted">l</span><span class="text-muted">u</span><span
 						class="text-muted">e</span></span>
 				</h:link>
@@ -66,27 +66,19 @@
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 
 				<h:form styleClass="navbar-form navbar-left" role="search">
-					<div class="form-group" style="width: 300px;">
+					<div class="input-group" style="width: 400px;">
+					<!-- input-sm -->
 						<h:inputText styleClass="form-control"
 							p:placeholder="#{bundle.search}"
 							value="#{streamSearchBean.query}" />
-						<!-- input-lg -->
-						<!-- <span class="input-group-addon"><h:commandLink
-								action="#" >
+						<span class="input-group-addon glue-info-badge"
+							data-container="body" data-placement="bottom"
+							data-toggle="popover" title=""
+							data-content="Just hit the search button for a demo!"><h:commandLink
+								action="#{streamSearchBean.search}">
 								<span class="glyphicon glyphicon-search"></span>
-							</h:commandLink></span> -->
+							</h:commandLink></span>
 					</div>
-					<span class="glue-info-badge" data-container="body"
-						data-placement="bottom" data-toggle="popover" title=""
-						data-content="Just hit the search button for a demo!"> <h:commandLink
-							id="submit" action="#{streamSearchBean.search}"
-							styleClass="btn btn-primary" data-container="body"
-							data-placement="bottom" data-toggle="popover" title=""
-							data-content="Just hit the search button for a demo.">
-							<!-- btn-lg -->
-							<span class="glyphicon glyphicon-search"></span>
-						</h:commandLink>
-					</span>
 				</h:form>
 
 				<ul class="nav navbar-nav navbar-left">
