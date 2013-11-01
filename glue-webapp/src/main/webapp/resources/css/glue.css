@@ -8,6 +8,12 @@
 	letter-spacing: -4px;
 }
 
+/* Wrapper for page content to push down footer */
+#glue-wrap {
+  min-height: 450px;
+  height: auto;
+}
+
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
 background-position:center;
@@ -66,20 +72,12 @@ padding-bottom: 28px;
 
 #glue-feedback a { 
   display: block; 
-  background: #D9534F; 
+  /*background: #D9534F;*/
   height: 35px; 
   width: 120px; 
   padding: 8px 16px;
   color: #ffffff; 
-  /*font-family: Arial, sans-serif;*/
   font-size: 19px; 
-  /*font-weight: bold;*/
   text-decoration: none; 
-  border-bottom: solid 1px #000000;
-  border-left: solid 1px #000000;
-  border-right: solid 1px #000000;
-}
 
-#glue-feedback a:hover { 
-  background: #EA5413; 
 }

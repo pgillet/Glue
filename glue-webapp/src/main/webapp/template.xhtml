@@ -44,7 +44,7 @@
 	</script>
 
 	<div id="glue-feedback">
-  			<a data-toggle="modal" data-target="#feedback">Feedback</a>
+  			<a class="btn btn-danger" data-toggle="modal" data-target="#feedback">Feedback</a>
 	</div>
 
 	<div class="container">
@@ -128,7 +128,9 @@
 	</div>
 
 	<div id="content" class="container">
-		<ui:insert name="content">Main Content</ui:insert>
+		<div id="glue-wrap">
+			<ui:insert name="content">Main Content</ui:insert>
+		</div>
 		<hr />
 		<footer> <small>
 			<div class="row">

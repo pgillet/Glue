@@ -1,7 +1,6 @@
 package com.glue.webapp.beans;
 
-import java.util.Properties;
-
+import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.mail.Authenticator;
 import javax.mail.MessagingException;
@@ -14,6 +13,9 @@ import javax.mail.internet.MimeMessage;
 
 @ManagedBean
 public class FeedbackBean {
+
+	@Resource(name = "mail/gluemail")
+	private Session mailSession;
 
 	private String subject;
 	private String mailAddress;
@@ -68,23 +70,17 @@ public class FeedbackBean {
 
 		// FacesContext context = FacesContext.getCurrentInstance();
 
-		Properties props = new Properties();
-		// TLS secure connection
-		props.setProperty("mail.transport.protocol", "smtps");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.stmp.user", "glue.contact@gmail.com");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		// props.put("mail.debug", "true");
-		props.put("mail.smtp.port", "587");
+		// It seems that Tomee does not do that job!
+		Session session = Session.getInstance(mailSession.getProperties(), new Authenticator() {
 
-		Session session = Session.getInstance(props, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("glue.contact@gmail.com", "pascal&greg");
+				return new PasswordAuthentication(mailSession.getProperty("mail.smtp.user"), mailSession
+						.getProperty("password"));
 			}
 		});
 		MimeMessage msg = new MimeMessage(session);
+		System.out.println(mailSession.getProperties());
 		try {
 			msg.setFrom(new InternetAddress("glue.contact@gmail.com"));
 			msg.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("glue.contact@gmail.com"));
