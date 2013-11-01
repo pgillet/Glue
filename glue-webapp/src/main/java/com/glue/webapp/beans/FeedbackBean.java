@@ -87,10 +87,13 @@ public class FeedbackBean {
 			msg.setSubject(subject);
 			msg.setText("Provenant de " + mailAddress + "\n" + message);
 			Transport.send(msg);
-		} catch (AddressException e1) {
-			e1.printStackTrace();
-		} catch (MessagingException e1) {
-			e1.printStackTrace();
+			subject = null;
+			mailAddress = null;
+			message = null;
+		} catch (AddressException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
 		}
 
 	}
