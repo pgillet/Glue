@@ -8,6 +8,12 @@
 	letter-spacing: -4px;
 }
 
+/* Wrapper for page content to push down footer */
+#glue-wrap {
+  min-height: 450px;
+  height: auto;
+}
+
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
 background-position:center;
