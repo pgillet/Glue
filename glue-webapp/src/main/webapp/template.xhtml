@@ -19,8 +19,6 @@
 	<h:outputStylesheet library="css" name="bootstrap.min.css"
 		media="screen" />
 	<h:outputStylesheet library="css" name="glue.css" media="screen" />
-	<h:outputStylesheet library="css" name="font-chopin-script.css"
-		media="screen" />
 	<h:outputStylesheet library="css" name="datepicker.css" media="screen" />
 
 	<script type="text/javascript"
@@ -44,7 +42,7 @@
 	</script>
 
 	<div id="glue-feedback">
-  			<a class="btn btn-danger" data-toggle="modal" data-target="#feedback">Feedback</a>
+  			<a class="btn btn-danger" data-toggle="modal" data-controls-modal="feedback" data-backdrop="static" data-keyboard="false" href="#feedback">Feedback</a>
 	</div>
 
 	<div class="container">
@@ -309,7 +307,11 @@
 					          	</label>
 					            <div class="col-lg-10">
 					            	<h:inputText id="feedback-mail" styleClass="form-control"
-										value="#{feedbackBean.mailAddress}"	p:placeholder="you@exemple.com" />					            						            	
+										value="#{feedbackBean.mailAddress}"	p:placeholder="you@exemple.com" validatorMessage="#{bundle.feedback_mail_error}">
+										<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
+										<f:ajax event="keyup" render="feedback-mail-msg"/>
+									</h:inputText>
+									<h:message id="feedback-mail-msg" for="feedback-mail"  style="color: red"/>											            						            	
 					            </div>
 					        </div>
 					        <div class="form-group">	
@@ -325,8 +327,8 @@
 			                <a class="btn btn-default" data-dismiss="modal">
 			                	<h:outputText value="#{bundle.feedback_close}"></h:outputText>
 			                </a>
-			                <h:commandButton styleClass="btn btn-primary" type="submit"
-			                	value="#{bundle.feedback_send}" action="#{feedbackBean.send}"/>
+			                <h:commandButton styleClass="btn btn-primary" value="#{bundle.feedback_send}" action="#{feedbackBean.send}"
+			                />
 			            </div>
 			    	</h:form>
 		        </div><!-- /.modal-content -->
