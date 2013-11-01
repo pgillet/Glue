@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomee>
 	<Resource id="jdbc/gluedb" type="javax.sql.DataSource">
-		JdbcDriver com.mysql.jdbc.Driver
-		JdbcUrl jdbc:mysql://localhost/gluedb
-		UserName glue
-		Password glue
-		maxActive 100
-		maxIdle 30
-		maxWait 10000
+		JdbcDriver ${glue.db.jdbc.driver}
+		JdbcUrl ${glue.db.jdbc.url}
+		UserName ${glue.db.user}
+		Password ${glue.db.password}
+		maxActive ${glue.db.maxActive}
+		maxIdle ${glue.db.maxIdle}
+		maxWait ${glue.db.maxWait}
 	</Resource>
 	<Resource id="mail/gluemail" type="javax.mail.Session">
 		mail.transport.protocol=smtps
@@ -18,6 +18,5 @@
 		mail.smtp.user=glue.contact@gmail.com
 		password=pascal&amp;greg
 		mail.from=glue.contact@gmail.com
-		mail.debug=true
 	</Resource>
 </tomee>

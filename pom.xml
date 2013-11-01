@@ -131,6 +131,22 @@
 				<module>glue-webapp</module>
 			</modules>
 		</profile>
+		
+		<profile>  
+    		<id>dev</id>  
+    		<activation>  
+      			<activeByDefault>true</activeByDefault>  
+    		</activation>  
+    		<properties>  
+      			<build.profile.id>dev</build.profile.id>  
+   			 </properties>  
+  		</profile>  
+  		<profile>  
+    		<id>prod</id>
+    		<properties>  
+     			<build.profile.id>prod</build.profile.id>  
+    		</properties>  
+  		</profile> 
 	</profiles>
 
 </project>
