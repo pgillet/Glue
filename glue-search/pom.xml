@@ -18,19 +18,6 @@
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<build.profile.id>dev</build.profile.id>
-			</properties>
-		</profile>
-	</profiles>
-
-
 	<dependencies>
 		<!-- SLF4J -->
 		<dependency>
@@ -95,6 +82,8 @@
 					<files>
 						<!-- Properties are read from profile specific property file -->
 						<file>${project.basedir}/profiles/${build.profile.id}/config.properties</file>
+						<!-- Profile dependant properties file -->
+						<file>../glue_${build.profile.id}.properties</file>
 					</files>
 				</configuration>
 				<executions>
@@ -129,6 +118,15 @@
 						</goals>
 						<configuration>
 							<resources>
+							    <!-- Copy db-data-config.xml and applies properties filtering -->
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+									<targetPath>${project.basedir}/target/classes</targetPath>
+									<includes>
+										<include>db-data-config.xml</include>
+									</includes>
+								</resource>
 								<!-- Copy solr.xml to correct directory and applies properties filtering 
 									to it. -->
 								<resource>

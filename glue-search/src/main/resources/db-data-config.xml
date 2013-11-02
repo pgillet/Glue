@@ -1,6 +1,6 @@
 <dataConfig>
-	<dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://localhost/gluedb" user="glue" password="glue" />
+	<dataSource type="JdbcDataSource" driver="${glue.db.jdbc.driver}"
+		url="${glue.db.jdbc.url}" user="${glue.db.user}" password="${glue.db.password}" />
 	<document name="streams">
 		<entity name="stream" query="select * from STREAM">
 			<entity name="venue"
@@ -9,4 +9,3 @@
 		</entity>
 	</document>
 </dataConfig>
-
