@@ -25,7 +25,8 @@
 			</c:if>
 			<c:if test="#{empty streamSearchBean.streams}">
 				<div class="row">
-					<div class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
+					<div
+						class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
 						<button type="button" class="close" data-dismiss="alert"
 							aria-hidden="true">&times;</button>
 						<strong>Holy guacamole!</strong> No results found.
@@ -35,11 +36,26 @@
 			<c:forEach items="#{streamSearchBean.streams}" var="stream">
 				<div id="user-block">
 					<ul>
-						<li>What: ${stream.title}</li>
-						<li>Description: ${stream.description}</li>
-						<li>URL: ${stream.url}</li>
-						<li>Where: ${stream.venue.name}</li>
-						<li>Where: ${stream.venue.address}</li>
+						<li>What: #{stream.title}</li>
+						<li>Description: #{stream.description}</li>
+						<li>URL: #{stream.url}</li>
+						<li>When: <c:choose>
+								<c:when test="#{stream.startDate > stream.endDate}">
+									<h:outputText value="#{stream.startDate}">
+										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+									</h:outputText>
+								</c:when>
+								<c:otherwise>
+								From <h:outputText value="#{stream.startDate}">
+										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+									</h:outputText> to <h:outputText value="#{stream.endDate}">
+										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+									</h:outputText>
+								</c:otherwise>
+							</c:choose>
+						</li>
+						<li>Where: #{stream.venue.name}</li>
+						<li>Where: #{stream.venue.address}</li>
 					</ul>
 				</div>
 			</c:forEach>

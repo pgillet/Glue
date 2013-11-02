@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -35,6 +36,8 @@ public class BikiniMessageListener implements FeedMessageListener {
 	private DAOManager manager;
 	private StreamDAO streamDAO;
 	private VenueDAO venueDAO;
+	private DateFormat format;
+	private File root;
 
 	public BikiniMessageListener() throws NamingException, SQLException {
 		DataSource ds = DataSourceManager.getInstance().getDataSource();
@@ -42,6 +45,10 @@ public class BikiniMessageListener implements FeedMessageListener {
 		manager = DAOManager.getInstance(ds);
 		streamDAO = manager.getStreamDAO();
 		venueDAO = manager.getVenueDAO();
+		format = new SimpleDateFormat("'le' E dd MMM yyyy", Locale.FRENCH);
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		format.setTimeZone(tz);
+		root = new File(System.getProperty("java.io.tmpdir"));
 	}
 
 	@Override
@@ -54,8 +61,6 @@ public class BikiniMessageListener implements FeedMessageListener {
 
 		// Begin date
 		String strdate = msg.getTitle().substring(index + 1).trim();
-		DateFormat format = new SimpleDateFormat("'le' E dd MMM yyyy",
-				Locale.FRENCH); // ex: "le vendredi 20 septembre 2013"
 		Date date = format.parse(strdate);
 		// System.out.println("Date = " + date);
 
@@ -85,7 +90,6 @@ public class BikiniMessageListener implements FeedMessageListener {
 		String imgUrl = images.attr("src");
 
 		URL imageUrl = new URL(imgUrl);
-		File root = new File(System.getProperty("java.io.tmpdir"));
 		File imageFile = new File(imageUrl.getPath());
 		imageFile = new File(root, imageFile.getName());
 

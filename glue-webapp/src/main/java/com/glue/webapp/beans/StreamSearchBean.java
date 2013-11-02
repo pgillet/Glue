@@ -2,10 +2,13 @@ package com.glue.webapp.beans;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.DateTimeConverter;
 import javax.inject.Inject;
 
 import com.glue.struct.IStream;
@@ -29,6 +32,8 @@ public class StreamSearchBean {
 	private Date startDate;
 
 	private Date endDate;
+
+	private DateTimeConverter convertDate;
 
 	private List<IStream> streams;
 
@@ -120,6 +125,30 @@ public class StreamSearchBean {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public DateTimeConverter getConvertDate() {
+		return convertDate;
+	}
+
+	public void setConvertDate(DateTimeConverter convertDate) {
+		final String basename = "com.glue.messages.Messages";
+		final String key1 = "date_format_jsf";
+		final String key2 = "time_format";
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
+				.getViewRoot().getLocale());
+		
+		String dateFormat = bundle.getString(key1);
+		String timeFormat = bundle.getString(key2);
+		
+		convertDate.setPattern(dateFormat + " " + timeFormat);
+		
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		convertDate.setTimeZone(tz);
+		
+		this.convertDate = convertDate;
 	}
 
 	/**
