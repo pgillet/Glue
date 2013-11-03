@@ -1,6 +1,9 @@
 package com.glue.webapp.search;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -19,6 +22,8 @@ import com.glue.webapp.logic.InternalServerException;
  */
 public class SolrSearchServer implements SearchEngine {
 
+	private static final String START_DATE_FIELD = "start_date";
+
 	private final String DEFAULT_Q = "*:*";
 
 	private SolrServer solr;
@@ -30,7 +35,8 @@ public class SolrSearchServer implements SearchEngine {
 	}
 
 	@Override
-	public List<IStream> search(String str) throws InternalServerException {
+	public List<IStream> search(String str, Date start, Date end)
+			throws InternalServerException {
 
 		List<? extends IStream> items = null;
 
@@ -41,6 +47,35 @@ public class SolrSearchServer implements SearchEngine {
 
 		SolrQuery query = new SolrQuery();
 		query.setQuery(q);
+
+		// Date criteria
+		Number min = null;
+		if (start != null) {
+			min = start.getTime();
+		} else {
+			// Search from the current date by default
+			TimeZone tz = TimeZone.getTimeZone("UTC");
+			Calendar cal = Calendar.getInstance(tz);
+			// reset hour, minutes, seconds and millis
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+
+			System.out.println("DATE = " + cal.toString());
+
+			min = cal.getTimeInMillis();
+		}
+
+		Number max = ((end != null) ? end.getTime() : Long.MAX_VALUE);
+
+		Number gap = max.longValue() - min.longValue(); // Didn't really get
+														// this parameter!
+
+		query.addNumericRangeFacet(START_DATE_FIELD, min, max, gap);
+
+		// Sort
+		query.addSort(START_DATE_FIELD, SolrQuery.ORDER.asc);
 
 		try {
 			QueryResponse rsp = solr.query(query);

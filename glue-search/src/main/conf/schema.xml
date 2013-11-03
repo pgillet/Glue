@@ -132,6 +132,8 @@
    <field name="title" type="text_general" indexed="true" stored="true" multiValued="false"/>
    <field name="subject" type="text_general" indexed="true" stored="true"/>
    <field name="description" type="text_general" indexed="true" stored="true"/>
+   <field name="start_date" type="tlong" indexed="true" stored="true"/>
+   <field name="end_date" type="tlong" indexed="true" stored="true"/>
    <field name="comments" type="text_general" indexed="true" stored="true"/>
    <field name="author" type="text_general" indexed="true" stored="true"/>
    <field name="keywords" type="text_general" indexed="true" stored="true"/>
@@ -272,6 +274,8 @@
    <copyField source="title" dest="text"/>
    <copyField source="author" dest="text"/>
    <copyField source="description" dest="text"/>
+   <copyField source="venue" dest="text"/>
+   <copyField source="address" dest="text"/>
    <copyField source="keywords" dest="text"/>
    <copyField source="content" dest="text"/>
    <copyField source="content_type" dest="text"/>

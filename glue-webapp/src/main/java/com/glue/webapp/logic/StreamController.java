@@ -28,7 +28,7 @@ public class StreamController {
 
 		// The underlying search engine returns only partial streams (i.e. only
 		// the properties that are actually indexed)
-		List<IStream> temp = engine.search(query);
+		List<IStream> temp = engine.search(query, null, null);
 		final List<Long> ids = new ArrayList<Long>();
 
 		for (IStream stream : temp) {
