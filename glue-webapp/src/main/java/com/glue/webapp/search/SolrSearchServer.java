@@ -76,6 +76,10 @@ public class SolrSearchServer implements SearchEngine {
 
 		// Sort
 		query.addSort(START_DATE_FIELD, SolrQuery.ORDER.asc);
+		
+		
+		// Temp
+		query.setRows(1000);
 
 		try {
 			QueryResponse rsp = solr.query(query);

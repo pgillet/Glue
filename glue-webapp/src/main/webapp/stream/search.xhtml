@@ -34,30 +34,41 @@
 				</div>
 			</c:if>
 			<c:forEach items="#{streamSearchBean.streams}" var="stream">
-				<div id="user-block">
-					<ul>
-						<li>What: #{stream.title}</li>
-						<li>Description: #{stream.description}</li>
-						<li>URL: #{stream.url}</li>
-						<li>When: <c:choose>
-								<c:when test="#{stream.startDate > stream.endDate}">
-									<h:outputText value="#{stream.startDate}">
-										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-									</h:outputText>
-								</c:when>
-								<c:otherwise>
-								From <h:outputText value="#{stream.startDate}">
-										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-									</h:outputText> to <h:outputText value="#{stream.endDate}">
-										<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-									</h:outputText>
-								</c:otherwise>
-							</c:choose>
-						</li>
-						<li>Where: #{stream.venue.name}</li>
-						<li>Where: #{stream.venue.address}</li>
-					</ul>
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+						<ul class="list-unstyled">
+							<li><h3>
+									<a href="#{stream.url}" target="_blank"><strong>#{stream.title}</strong></a>
+								</h3></li>
+							<li><p>
+									<em>#{stream.description}</em>
+								</p></li>
+							<li><h4>
+									<span class="glyphicon glyphicon-calendar text-muted"></span><span> </span>
+									<c:choose>
+										<c:when test="#{stream.startDate > stream.endDate}">
+											<h:outputText value="#{stream.startDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText>
+										</c:when>
+										<c:otherwise> From <h:outputText
+												value="#{stream.startDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText> to <h:outputText value="#{stream.endDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText>
+										</c:otherwise>
+									</c:choose>
+								</h4></li>
+							<li><h4>
+									<span class="glyphicon glyphicon-map-marker text-muted"></span>
+									#{stream.venue.name} - <span class="text-muted">#{stream.venue.address}</span>
+								</h4></li>
+						</ul>
+					</div>
 				</div>
+				<hr />
+
 			</c:forEach>
 
 		</ui:define>
