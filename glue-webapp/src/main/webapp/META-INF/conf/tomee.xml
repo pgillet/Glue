@@ -9,14 +9,4 @@
 		maxIdle ${glue.db.maxIdle}
 		maxWait ${glue.db.maxWait}
 	</Resource>
-	<Resource id="mail/gluemail" type="javax.mail.Session">
-		mail.transport.protocol=smtps
-		mail.smtp.host=smtp.gmail.com 
-		mail.smtp.port=587 
-		mail.smtp.auth=true
-		mail.smtp.starttls.enable=true
-		mail.smtp.user=glue.contact@gmail.com
-		password=pascal&amp;greg
-		mail.from=glue.contact@gmail.com
-	</Resource>
 </tomee>

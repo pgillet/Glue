@@ -1,2 +1,3 @@
 Copy mysql:mysql-connector-java:5.1.26 in <TOMEE>/lib directory
 Copy src/main/webapp/META-INF/conf files in Servers/<TOMEE> folder of your workspace.
+Create GLUE_HOME environment variable (in this directory we will store user feedbacks)

@@ -1,21 +1,21 @@
 package com.glue.webapp.beans;
 
-import javax.annotation.Resource;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.faces.bean.ManagedBean;
-import javax.mail.Authenticator;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @ManagedBean
 public class FeedbackBean {
 
-	@Resource(name = "mail/gluemail")
-	private Session mailSession;
+	/*
+	 * @Resource(name = "mail/gluemail") private Session mailSession;
+	 */
+	private static final String FEEDBACK_FILE_NAME = "Feedback.txt";
 
 	private String subject;
 	private String mailAddress;
@@ -66,35 +66,42 @@ public class FeedbackBean {
 		this.message = message;
 	}
 
-	public void send() {
+	public synchronized void send() {
 
 		// FacesContext context = FacesContext.getCurrentInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYY hh:mm:ss");
+		FileWriter writer = null;
+		BufferedWriter fbw = null;
 
-		// It seems that Tomee does not do that job!
-		Session session = Session.getInstance(mailSession.getProperties(), new Authenticator() {
-
-			@Override
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(mailSession.getProperty("mail.smtp.user"), mailSession
-						.getProperty("password"));
-			}
-		});
-		MimeMessage msg = new MimeMessage(session);
-		System.out.println(mailSession.getProperties());
 		try {
-			msg.setFrom(new InternetAddress("glue.contact@gmail.com"));
-			msg.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("glue.contact@gmail.com"));
-			msg.setSubject(subject);
-			msg.setText("Provenant de " + mailAddress + "\n" + message);
-			Transport.send(msg);
+			writer = new FileWriter(System.getenv("GLUE_HOME") + File.separator + FEEDBACK_FILE_NAME, true);
+			fbw = new BufferedWriter(writer);
+			fbw.write("Date: " + formatter.format(new Date()));
+			fbw.newLine();
+			fbw.write("Sujet: " + (subject == null ? "" : subject));
+			fbw.newLine();
+			fbw.write("Mail: " + (mailAddress == null ? "" : mailAddress));
+			fbw.newLine();
+			fbw.write("Message:");
+			fbw.newLine();
+			fbw.write(message == null ? "" : message);
+			fbw.newLine();
+			fbw.write("----------------------------------------");
+			fbw.newLine();
+			fbw.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (fbw != null) {
+				try {
+					fbw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			subject = null;
 			mailAddress = null;
 			message = null;
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
 		}
-
 	}
 }
