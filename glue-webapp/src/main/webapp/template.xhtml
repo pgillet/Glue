@@ -126,21 +126,12 @@
 		</div>
 		</nav>
 	</div>
-
-	<div id="content" class="container">
-		<div id="glue-wrap">
-			<ui:insert name="content">Main Content</ui:insert>
-		</div>
-
-		<ui:insert name="footer">
-			<ui:include src="default-footer.xhtml" />
-		</ui:insert>
-
-		<!-- Modal -->
+	
+		<!-- Feedback modal window -->
 		<div id="feedback" class="modal fade in" tabindex="-1" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<h:form class="form-horizontal">
+					<h:form id="feedback-form" class="form-horizontal">
 						<div class="modal-header">
 							<h4 class="modal-title">
 								<h:outputText value="#{bundle.feedback_title}"></h:outputText>
@@ -189,7 +180,9 @@
 									value="#{bundle.feedback_close}"></h:outputText>
 							</a>
 							<h:commandButton styleClass="btn btn-primary"
-								value="#{bundle.feedback_send}" action="#{feedbackBean.send}" />
+								value="#{bundle.feedback_send}" action="#{feedbackBean.send}">
+								 <f:ajax execute="@form" render="@all"/>
+							</h:commandButton>
 						</div>
 					</h:form>
 				</div>
@@ -198,6 +191,16 @@
 			<!-- /.modal-dialog -->
 		</div>
 		<!-- /.modal -->
+
+	<div id="content" class="container">
+		<div id="glue-wrap">
+			<ui:insert name="content">Main Content</ui:insert>
+		</div>
+
+		<ui:insert name="footer">
+			<ui:include src="default-footer.xhtml" />
+		</ui:insert>
+
 	</div>
 	<!-- /container -->
 
