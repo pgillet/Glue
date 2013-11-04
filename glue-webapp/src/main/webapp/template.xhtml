@@ -39,11 +39,14 @@
 	</script>
 
 	<div id="glue-feedback">
-  			<a class="btn btn-danger" data-toggle="modal" data-controls-modal="feedback" data-backdrop="static" data-keyboard="false" href="#feedback">Feedback</a>
+		<a class="btn btn-danger" data-toggle="modal"
+			data-controls-modal="feedback" data-backdrop="static"
+			data-keyboard="false" href="#feedback">Feedback</a>
 	</div>
 
 	<div class="container">
-		<nav class="navbar navbar-default glue-navbar-default" role="navigation">
+		<nav class="navbar navbar-default glue-navbar-default"
+			role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -65,19 +68,20 @@
 
 				<h:form styleClass="navbar-form navbar-left" role="search">
 					<div class="input-group" style="width: 400px;">
-					<!-- input-sm -->
+						<!-- input-sm -->
 						<h:inputText styleClass="form-control"
 							p:placeholder="#{bundle.search}"
 							value="#{streamSearchBean.query}" />
 						<span class="input-group-addon glue-info-badge"
 							data-container="body" data-placement="bottom"
 							data-toggle="popover" title=""
-							data-content="Just hit the search button for a demo!">
-							<h:commandLink
+							data-content="Just hit the search button for a demo!"> <h:commandLink
 								action="#{streamSearchBean.search}">
 								<span class="glyphicon glyphicon-search"></span>
 							</h:commandLink></span>
 					</div>
+					<h:commandButton action="#{streamSearchBean.search}"
+						style="display:none;" />
 				</h:form>
 
 				<ul class="nav navbar-nav navbar-left">
@@ -134,57 +138,66 @@
 
 		<!-- Modal -->
 		<div id="feedback" class="modal fade in" tabindex="-1" role="dialog">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-					<h:form class="form-horizontal">		        
-			            <div class="modal-header">			             
-			                <h4 class="modal-title">
-			                	<h:outputText value="#{bundle.feedback_title}"></h:outputText>
-			                </h4>
-			            </div>
-			            <div class="modal-body">			            
-			            	<div class="form-group">			            	
-					            <label class="col-lg-2 control-label" for="feedback-subject">
-					            	<h:outputText value="#{bundle.feedback_subject}"></h:outputText>
-					            </label>
-					            <div class="col-lg-10">
-					            	<h:inputText id="feedback-subject" styleClass="form-control"
-										value="#{feedbackBean.subject}"	p:placeholder="Bug, remark, new idea ..." />					            	
-					            </div>
-					        </div>
-					        <div class="form-group">	
-					          	<label class="col-lg-2 control-label" for="feedback-mail">
-					          		<h:outputText value="#{bundle.feedback_mail}"></h:outputText>
-					          	</label>
-					            <div class="col-lg-10">
-					            	<h:inputText id="feedback-mail" styleClass="form-control"
-										value="#{feedbackBean.mailAddress}"	p:placeholder="you@exemple.com" validatorMessage="#{bundle.feedback_mail_error}">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<h:form class="form-horizontal">
+						<div class="modal-header">
+							<h4 class="modal-title">
+								<h:outputText value="#{bundle.feedback_title}"></h:outputText>
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-subject">
+									<h:outputText value="#{bundle.feedback_subject}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
+									<h:inputText id="feedback-subject" styleClass="form-control"
+										value="#{feedbackBean.subject}"
+										p:placeholder="Bug, remark, new idea ..." />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-mail">
+									<h:outputText value="#{bundle.feedback_mail}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
+									<h:inputText id="feedback-mail" styleClass="form-control"
+										value="#{feedbackBean.mailAddress}"
+										p:placeholder="you@exemple.com"
+										validatorMessage="#{bundle.feedback_mail_error}">
 										<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
-										<f:ajax event="keyup" render="feedback-mail-msg"/>
+										<f:ajax event="keyup" render="feedback-mail-msg" />
 									</h:inputText>
-									<h:message id="feedback-mail-msg" for="feedback-mail"  style="color: red"/>											            						            	
-					            </div>
-					        </div>
-					        <div class="form-group">	
-					         	<label class="col-lg-2 control-label" for="feedback-message">
-					         		<h:outputText value="#{bundle.feedback_message}"></h:outputText>
-					         	</label>
-					         	<div class="col-lg-10">
-					         		<h:inputTextarea id="feedback-message" styleClass="form-control" value="#{feedbackBean.message}" rows="8"/>
-					         	</div>  
-					       </div>
-			            </div>
-			            <div class="modal-footer">
-			                <a class="btn btn-default" data-dismiss="modal">
-			                	<h:outputText value="#{bundle.feedback_close}"></h:outputText>
-			                </a>
-			                <h:commandButton styleClass="btn btn-primary" value="#{bundle.feedback_send}" action="#{feedbackBean.send}"
-			                />
-			            </div>
-			    	</h:form>
-		        </div><!-- /.modal-content -->
-		    </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+									<h:message id="feedback-mail-msg" for="feedback-mail"
+										style="color: red" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-message">
+									<h:outputText value="#{bundle.feedback_message}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
+									<h:inputTextarea id="feedback-message"
+										styleClass="form-control" value="#{feedbackBean.message}"
+										rows="8" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<a class="btn btn-default" data-dismiss="modal"> <h:outputText
+									value="#{bundle.feedback_close}"></h:outputText>
+							</a>
+							<h:commandButton styleClass="btn btn-primary"
+								value="#{bundle.feedback_send}" action="#{feedbackBean.send}" />
+						</div>
+					</h:form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
 	</div>
 	<!-- /container -->
 
