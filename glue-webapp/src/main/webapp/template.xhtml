@@ -77,7 +77,7 @@
 							data-toggle="popover" title=""
 							data-content="Just hit the search button for a demo!"> <h:commandLink
 								action="#{streamSearchBean.search}">
-								<span class="glyphicon glyphicon-search"></span>
+								<span class="glyphicon glyphicon-search glue-search"></span>
 							</h:commandLink></span>
 					</div>
 					<h:commandButton action="#{streamSearchBean.search}"
@@ -179,9 +179,9 @@
 							<a class="btn btn-default" data-dismiss="modal"> <h:outputText
 									value="#{bundle.feedback_close}"></h:outputText>
 							</a>
-							<h:commandButton styleClass="btn btn-primary"
+							<h:commandButton styleClass="btn btn-primary hidefeedback"
 								value="#{bundle.feedback_send}" action="#{feedbackBean.send}">
-								 <f:ajax execute="@form" render="@all"/>
+								 <f:ajax execute="@form"/>
 							</h:commandButton>
 						</div>
 					</h:form>
@@ -219,6 +219,13 @@
 		$(document).ready(function(){
 		$('.carousel').carousel({interval: 15000});
 		});
-</h:outputScript>
+	</h:outputScript>
+	<h:outputScript>
+		$('.hidefeedback').click(function(e){
+   		 	e.preventDefault();
+    		$('.modal').modal('hide');
+    		return false;
+		});
+	</h:outputScript>
 </h:body>
 </html>
