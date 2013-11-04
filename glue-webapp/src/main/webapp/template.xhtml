@@ -158,7 +158,7 @@
 										p:placeholder="you@exemple.com"
 										validatorMessage="#{bundle.feedback_mail_error}">
 										<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
-										<f:ajax event="keyup" render="feedback-mail-msg" />
+										<f:ajax event="valueChange" render="feedback-mail-msg" />
 									</h:inputText>
 									<h:message id="feedback-mail-msg" for="feedback-mail"
 										style="color: red" />
