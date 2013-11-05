@@ -72,13 +72,13 @@
 						<h:inputText styleClass="form-control"
 							p:placeholder="#{bundle.search}"
 							value="#{streamSearchBean.query}" />
-						<span class="input-group-addon glue-info-badge"
-							data-container="body" data-placement="bottom"
-							data-toggle="popover" title=""
-							data-content="Just hit the search button for a demo!"> <h:commandLink
-								action="#{streamSearchBean.search}">
-								<span class="glyphicon glyphicon-search glue-search"></span>
-							</h:commandLink></span>
+						<h:commandLink action="#{streamSearchBean.search}"
+							styleClass="input-group-addon">
+							<span class="glue-info-badge" data-container="body"
+								data-placement="bottom" data-toggle="popover" title=""
+								data-content="Just hit the search button for a demo!"><span
+								class="glyphicon glyphicon-search text-muted"></span></span>
+						</h:commandLink>
 					</div>
 					<h:commandButton action="#{streamSearchBean.search}"
 						style="display:none;" />

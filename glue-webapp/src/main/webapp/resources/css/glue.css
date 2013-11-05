@@ -40,10 +40,6 @@ padding-bottom: 28px;
 	vertical-align: middle;
 }
 
-.glue-info-badge {
-	cursor: pointer;
-}
-
 .glue-text-justified {
 	text-align: justify;
 }
@@ -79,8 +75,4 @@ padding-bottom: 28px;
   font-size: 19px; 
   text-decoration: none; 
 
-}
-
-.glue-search {
-	color: black;
 }
