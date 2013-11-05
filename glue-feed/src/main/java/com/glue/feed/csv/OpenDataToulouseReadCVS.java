@@ -204,7 +204,7 @@ public class OpenDataToulouseReadCVS {
 
 		// Venue name
 		String name = cleanup(fields[10]).toUpperCase();
-		System.out.println("Name = " + name);
+		// System.out.println("Name = " + name);
 
 		// Venue latitude
 		String latitude = cleanup(fields[20]);
@@ -249,16 +249,22 @@ public class OpenDataToulouseReadCVS {
 
 		venue.setUrl(removeUrlExceptions(cleanup(fields[24])));
 
-		// Search for an existing venue
-		IVenue persistentVenue = venueDAO.search(venue.getAddress());
-		if (persistentVenue == null) {
-			System.out.println("Inserting " + venue);
-			persistentVenue = venueDAO.create(venue);
-		}
-		stream.setVenue(persistentVenue);
+		// Search for an existing stream
+		if (!streamDAO.exist(stream.getTitle(), stream.getStartDate())) {
 
-		System.out.println("Inserting " + stream);
-		streamDAO.create(stream);
+			// Search for an existing venue
+			IVenue persistentVenue = venueDAO.search(venue.getAddress());
+			if (persistentVenue == null) {
+				System.out.println("Inserting " + venue);
+				persistentVenue = venueDAO.create(venue);
+			}
+			stream.setVenue(persistentVenue);
+
+			System.out.println("Inserting " + stream);
+			streamDAO.create(stream);
+		} else {
+			throw new SQLException("Duplicate Stream " + stream.getTitle() + "!");
+		}
 	}
 
 	private String cleanup(String str) {
