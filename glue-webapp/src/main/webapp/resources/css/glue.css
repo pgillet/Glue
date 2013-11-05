@@ -9,19 +9,21 @@
 
 /* Wrapper for page content to push down footer */
 #glue-wrap {
-  min-height: 450px;
-  height: auto;
+	min-height: 450px;
+	height: auto;
 }
 
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
-background-position:center;
-padding-top: 28px;
-padding-bottom: 28px;
+	background-repeat:no-repeat;
+	background-position: center;
+	background-size: cover;
+	padding-top: 28px;
+	padding-bottom: 28px;
 }
 
 .glue-jumbotron-panel {
-	background-color: rgba(234, 81, 19, 0.6); 
+	background-color: rgba(234, 81, 19, 0.6);
 	color: white;
 }
 
@@ -45,34 +47,33 @@ padding-bottom: 28px;
 }
 
 .glue-label {
-  background-color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(255, 255, 255, 0.7);
 }
 
 .glue-navbar-default {
-  background-color: #f1f1f1;
+	background-color: #f1f1f1;
 }
 
-#glue-feedback { 
-  height: 104px; 
-  width: 104px; 
-  position: fixed; 
-  top: 40%; 
-  z-index: 999;
-  transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg); 
-  -moz-transform: rotate(-90deg); 
-  -o-transform: rotate(-90deg); 
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+#glue-feedback {
+	height: 104px;
+	width: 104px;
+	position: fixed;
+	top: 40%;
+	z-index: 999;
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3 );
 }
 
-#glue-feedback a { 
-  display: block; 
-  /*background: #D9534F;*/
-  height: 35px; 
-  width: 120px; 
-  padding: 8px 16px;
-  color: #ffffff; 
-  font-size: 19px; 
-  text-decoration: none; 
-
+#glue-feedback a {
+	display: block;
+	/*background: #D9534F;*/
+	height: 35px;
+	width: 120px;
+	padding: 8px 16px;
+	color: #ffffff;
+	font-size: 19px;
+	text-decoration: none;
 }
