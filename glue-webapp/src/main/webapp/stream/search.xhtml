@@ -44,17 +44,21 @@
 									<em>#{stream.description}</em>
 								</p></li>
 							<li><h4>
-									<span class="glyphicon glyphicon-calendar text-muted"></span><span> </span>
+									<span class="glyphicon glyphicon-calendar text-muted"></span><span>
+									</span>
 									<c:choose>
 										<c:when test="#{stream.startDate > stream.endDate}">
 											<h:outputText value="#{stream.startDate}">
 												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
 											</h:outputText>
 										</c:when>
-										<c:otherwise> From <h:outputText
-												value="#{stream.startDate}">
+										<c:otherwise>
+											<h:outputText value="#{bundle.stream_date_from} " />
+											<h:outputText value="#{stream.startDate}">
 												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText> to <h:outputText value="#{stream.endDate}">
+											</h:outputText>
+											<h:outputText value=" #{bundle.stream_date_to} " />
+											<h:outputText value="#{stream.endDate}">
 												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
 											</h:outputText>
 										</c:otherwise>
