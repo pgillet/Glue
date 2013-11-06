@@ -35,8 +35,7 @@ public class SolrSearchServer implements SearchEngine {
 	}
 
 	@Override
-	public List<IStream> search(String str, Date start, Date end)
-			throws InternalServerException {
+	public List<IStream> search(String str, Date start, Date end) throws InternalServerException {
 
 		List<? extends IStream> items = null;
 
@@ -69,15 +68,11 @@ public class SolrSearchServer implements SearchEngine {
 
 		Number max = ((end != null) ? end.getTime() : Long.MAX_VALUE);
 
-		Number gap = max.longValue() - min.longValue(); // Didn't really get
-														// this parameter!
-
-		query.addNumericRangeFacet(START_DATE_FIELD, min, max, gap);
+		query.addFilterQuery(START_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
 		// Sort
 		query.addSort(START_DATE_FIELD, SolrQuery.ORDER.asc);
-		
-		
+
 		// Temp
 		query.setRows(1000);
 
