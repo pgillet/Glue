@@ -7,9 +7,9 @@
  
    <Resource name="jdbc/gluedb" auth="Container"
         type="javax.sql.DataSource"
-        maxActive="100" maxIdle="30" maxWait="10000"
-        username="glue"
-        password="glue"
-        driverClassName="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost/gluedb"/>
+        maxActive="${glue.db.maxActive}" maxIdle="${glue.db.maxIdle}" maxWait="${glue.db.maxWait}"
+        username="${glue.db.user}"
+        password="${glue.db.password}"
+        driverClassName="${glue.db.jdbc.driver}"
+        url="${glue.db.jdbc.url}"/>
 </Context>
