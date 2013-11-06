@@ -1,11 +1,11 @@
 package com.glue.feed.csv;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.sql.DataSource;
 
@@ -24,9 +26,6 @@ import com.glue.struct.impl.Venue;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
-import com.google.code.geocoder.Geocoder;
-import com.google.code.geocoder.model.GeocodeResponse;
-import com.google.code.geocoder.model.GeocoderRequest;
 
 /**
  * Read from a CSV file the list of cultural events in Toulouse and
@@ -42,12 +41,36 @@ public class OpenDataToulouseReadCVS {
 
 	public static void main(String[] args) throws IOException {
 
+		URL url = new URL(
+				" http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
+
+		ZipInputStream zin = new ZipInputStream(url.openStream());
+		ZipEntry ze = zin.getNextEntry();
+		while (!ze.getName().endsWith(".csv")) {
+			zin.closeEntry();
+			ze = zin.getNextEntry();
+		}
+
+		// Get the stream from zipentry
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		int count;
+		byte data[] = new byte[1024];
+		while ((count = zin.read(data, 0, 1024)) > -1) {
+			bout.write(data, 0, count);
+		}
+		bout.close();
+		zin.close();
+
+		// Create the reader
+		ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(bin));
+
 		OpenDataToulouseReadCVS obj = new OpenDataToulouseReadCVS();
-		obj.run();
+		obj.run(reader);
 
 	}
 
-	public void run() throws IOException {
+	public void run(BufferedReader reader) throws IOException {
 
 		String line = null;
 		int countCommitted = 0;
@@ -56,49 +79,42 @@ public class OpenDataToulouseReadCVS {
 		DataSource ds = DataSourceManager.getInstance().getDataSource();
 		manager = DAOManager.getInstance(ds);
 
-		final Geocoder geocoder = new Geocoder();
-
-		Path path = Paths.get("C:\\Glue\\Agenda.csv");
 		try {
 			streamDAO = manager.getStreamDAO();
 			venueDAO = manager.getVenueDAO();
 
-			try (BufferedReader reader = Files.newBufferedReader(path, Charset.defaultCharset())) {
-				String nextLine = "";
-				String currentLine = null;
-				// First line, commentary fields
-				line = reader.readLine();
-				line = reader.readLine();
-				while (line != null) {
-					currentLine = line;
+			String nextLine = "";
+			String currentLine = null;
+			// First line, commentary fields
+			line = reader.readLine();
+			line = reader.readLine();
+			while (line != null) {
+				currentLine = line;
+				nextLine = reader.readLine();
+				while ((nextLine != null) && !currentLine.endsWith(";\"\"")) {
+					currentLine += nextLine.trim();
 					nextLine = reader.readLine();
-					while ((nextLine != null) && !currentLine.endsWith(";\"\"")) {
-						currentLine += nextLine.trim();
-						nextLine = reader.readLine();
-					}
-					try {
-						manageLine(currentLine, streamDAO, venueDAO, geocoder);
-						countCommitted++;
-					} catch (SQLException e) {
-						e.printStackTrace();
-					} finally {
-						countTotal++;
-					}
-
-					line = nextLine;
 				}
+				try {
+					manageLine(currentLine);
+					countCommitted++;
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					countTotal++;
+				}
+
+				line = nextLine;
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		System.out.println(countCommitted + "/" + countTotal + " have been successful imported.");
 	}
 
-	private void manageLine(String currentLine, StreamDAO streamDAO, VenueDAO venueDAO, Geocoder geocoder)
-			throws SQLException {
+	private void manageLine(String currentLine) throws SQLException {
 
 		final String delim = "\";\"";
 
@@ -169,9 +185,6 @@ public class OpenDataToulouseReadCVS {
 		// 27: Tarif enfant : tarif enfant
 		// 28: Tranche d'âge enfant : indication des tranches d'âge
 		// jeune public : 0 - 3 ans / 4 - 7 ans / 8 - 12 ans / + 12 ans
-
-		GeocoderRequest geocoderRequest;
-		GeocodeResponse geocoderResponse;
 
 		DateFormat format = new SimpleDateFormat("dd/MM/yy"); // ex: "14/05/77"
 
@@ -292,4 +305,5 @@ public class OpenDataToulouseReadCVS {
 		}
 		return url;
 	}
+
 }
