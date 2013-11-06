@@ -54,7 +54,8 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String SELECT_STREAM_EXIST = "SELECT * FROM STREAM WHERE TITLE=? and START_DATE=?";
 
-	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?)";
+	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?) ORDER BY "
+			+ COLUMN_START_DATE;
 
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
