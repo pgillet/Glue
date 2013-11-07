@@ -44,88 +44,86 @@
 			data-keyboard="false" href="#feedback">Feedback</a>
 	</div>
 
+	<nav class="navbar navbar-default navbar-fixed-top glue-navbar-default"
+		role="navigation">
 	<div class="container">
-		<nav class="navbar navbar-default glue-navbar-default"
-			role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span><span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span><span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
 
-				<h:link class="navbar-brand glue-brand" outcome="main">
-					<span><span class="text-success">g</span><span
-						class="text-muted">l</span><span class="text-muted">u</span><span
-						class="text-muted">e</span></span>
-				</h:link>
-			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-
-				<h:form styleClass="navbar-form navbar-left" role="search">
-					<div class="input-group" style="width: 400px;">
-						<!-- input-sm -->
-						<h:inputText styleClass="form-control"
-							p:placeholder="#{bundle.search}"
-							value="#{streamSearchBean.query}" />
-						<h:commandLink action="#{streamSearchBean.search}"
-							styleClass="input-group-addon">
-							<span class="glue-info-badge" data-container="body"
-								data-placement="bottom" data-toggle="popover" title=""
-								data-content="Just hit the search button for a demo!"><span
-								class="glyphicon glyphicon-search text-muted"></span></span>
-						</h:commandLink>
-					</div>
-					<h:commandButton action="#{streamSearchBean.search}"
-						style="display:none;" />
-				</h:form>
-
-				<ul class="nav navbar-nav navbar-left">
-					<li id="location" class="navbar-text"></li>
-				</ul>
-
-				<h:form>
-					<ul class="nav navbar-nav navbar-right">
-						<c:choose>
-							<c:when test="${!empty request.remoteUser}">
-								<li><h:link outcome="/stream/create"
-										title="#{bundle.create_stream}">
-										<span class="glyphicon glyphicon-plus-sign"></span>
-									</h:link></li>
-								<li><a href="#"><span class="badge">42</span></a></li>
-								<li class="dropdown"><a class="dropdown-toggle"
-									data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-										class="caret"></span>
-								</a>
-									<ul class="dropdown-menu">
-										<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
-													value="#{bundle.account_settings}" /></a></li>
-										<li><a href="#"><span
-												class="glyphicon glyphicon-filter"></span>&nbsp;<h:outputText
-													value="#{bundle.search_filters}" /></a></li>
-										<li><h:commandLink action="#{loginBean.logout}">
-												<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
-													value="#{bundle.logout}" />
-											</h:commandLink></li>
-									</ul></li>
-							</c:when>
-							<c:otherwise>
-								<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
-								<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
-							</c:otherwise>
-						</c:choose>
-					</ul>
-				</h:form>
-			</div>
-
-			<!--/.nav-collapse -->
+			<h:link class="navbar-brand glue-brand" outcome="main">
+				<span><span class="text-success">g</span><span
+					class="text-muted">l</span><span class="text-muted">u</span><span
+					class="text-muted">e</span></span>
+			</h:link>
 		</div>
-		</nav>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+
+			<h:form styleClass="navbar-form navbar-left" role="search">
+				<div class="input-group" style="width: 400px;">
+					<!-- input-sm -->
+					<h:inputText styleClass="form-control"
+						p:placeholder="#{bundle.search}"
+						value="#{streamSearchBean.query}" />
+					<h:commandLink action="#{streamSearchBean.search}"
+						styleClass="input-group-addon">
+						<span class="glue-info-badge" data-container="body"
+							data-placement="bottom" data-toggle="popover" title=""
+							data-content="Just hit the search button for a demo!"><span
+							class="glyphicon glyphicon-search text-muted"></span></span>
+					</h:commandLink>
+				</div>
+				<h:commandButton action="#{streamSearchBean.search}"
+					style="display:none;" />
+			</h:form>
+
+			<ul class="nav navbar-nav navbar-left">
+				<li id="location" class="navbar-text"></li>
+			</ul>
+
+			<h:form>
+				<ul class="nav navbar-nav navbar-right">
+					<c:choose>
+						<c:when test="${!empty request.remoteUser}">
+							<li><h:link outcome="/stream/create"
+									title="#{bundle.create_stream}">
+									<span class="glyphicon glyphicon-plus-sign"></span>
+								</h:link></li>
+							<li><a href="#"><span class="badge">42</span></a></li>
+							<li class="dropdown"><a class="dropdown-toggle"
+								data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+									class="caret"></span>
+							</a>
+								<ul class="dropdown-menu">
+									<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
+												value="#{bundle.account_settings}" /></a></li>
+									<li><a href="#"><span
+											class="glyphicon glyphicon-filter"></span>&nbsp;<h:outputText
+												value="#{bundle.search_filters}" /></a></li>
+									<li><h:commandLink action="#{loginBean.logout}">
+											<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
+												value="#{bundle.logout}" />
+										</h:commandLink></li>
+								</ul></li>
+						</c:when>
+						<c:otherwise>
+							<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
+							<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
+						</c:otherwise>
+					</c:choose>
+				</ul>
+			</h:form>
+		</div>
+
+		<!--/.nav-collapse -->
 	</div>
+	</nav>
 	
 		<!-- Feedback modal window -->
 		<div id="feedback" class="modal fade in" tabindex="-1" role="dialog">
