@@ -23,6 +23,7 @@ import com.glue.webapp.logic.InternalServerException;
 public class SolrSearchServer implements SearchEngine {
 
 	private static final String START_DATE_FIELD = "start_date";
+	private static final String END_DATE_FIELD = "end_date";
 
 	private final String DEFAULT_Q = "*:*";
 
@@ -60,15 +61,12 @@ public class SolrSearchServer implements SearchEngine {
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-
-			System.out.println("DATE = " + cal.toString());
-
 			min = cal.getTimeInMillis();
 		}
 
-		Number max = ((end != null) ? end.getTime() : Long.MAX_VALUE);
+		String max = ((end != null) ? Long.toString(end.getTime()) : "*");
 
-		query.addFilterQuery(START_DATE_FIELD + ":[" + min + " TO " + max + "]");
+		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
 		// Sort
 		query.addSort(START_DATE_FIELD, SolrQuery.ORDER.asc);

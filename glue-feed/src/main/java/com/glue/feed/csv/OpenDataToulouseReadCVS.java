@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -38,6 +39,7 @@ public class OpenDataToulouseReadCVS {
 	private DAOManager manager;
 	private StreamDAO streamDAO;
 	private VenueDAO venueDAO;
+	private DateFormat format;
 
 	public static void main(String[] args) throws IOException {
 
@@ -78,6 +80,9 @@ public class OpenDataToulouseReadCVS {
 
 		DataSource ds = DataSourceManager.getInstance().getDataSource();
 		manager = DAOManager.getInstance(ds);
+		format = new SimpleDateFormat("dd/MM/yy"); // ex: "14/05/77"
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		format.setTimeZone(tz);
 
 		try {
 			streamDAO = manager.getStreamDAO();
@@ -109,6 +114,8 @@ public class OpenDataToulouseReadCVS {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			manager.closeConnectionQuietly();
 		}
 
 		System.out.println(countCommitted + "/" + countTotal + " have been successful imported.");
@@ -186,8 +193,6 @@ public class OpenDataToulouseReadCVS {
 		// 28: Tranche d'âge enfant : indication des tranches d'âge
 		// jeune public : 0 - 3 ans / 4 - 7 ans / 8 - 12 ans / + 12 ans
 
-		DateFormat format = new SimpleDateFormat("dd/MM/yy"); // ex: "14/05/77"
-
 		// use semi-colon as separator
 		String[] fields = currentLine.split(delim);
 
@@ -198,13 +203,16 @@ public class OpenDataToulouseReadCVS {
 		Date edate = null;
 		try {
 			sdate = format.parse(strdate);
-			edate = format.parse(enddate);
+
+			// If endate empty, set endate to start_date
+			if ("".equals(enddate)) {
+				edate = sdate;
+			} else {
+				edate = format.parse(enddate);
+			}
 		} catch (ParseException e) {
 			System.out.println("Format de date incorrect " + sdate + " " + edate);
 		}
-
-		System.out.println("Date = " + sdate);
-		// System.out.println("Date = " + edate);
 
 		// Description
 		String description = (cleanup(fields[3]) + "\n" + cleanup(fields[7])).trim();
@@ -231,9 +239,7 @@ public class OpenDataToulouseReadCVS {
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());
-		if (edate.getTime() != sdate.getTime()) {
-			stream.setEndDate(edate.getTime());
-		}
+		stream.setEndDate(edate.getTime());
 
 		IVenue venue = new Venue();
 		venue.setName(name);

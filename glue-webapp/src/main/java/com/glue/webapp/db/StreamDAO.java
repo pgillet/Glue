@@ -187,7 +187,6 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	public boolean exist(String title, long startdate) throws SQLException {
-		System.out.println("Test");
 		existStmt.setString(1, title);
 		existStmt.setLong(2, startdate);
 		System.out.println(existStmt);
