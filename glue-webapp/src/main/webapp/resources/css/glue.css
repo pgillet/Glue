@@ -24,6 +24,10 @@ body { padding-top: 70px; }
 	padding-bottom: 28px;
 }
 
+.glue-jumbotron-tlse {
+	background-image: url(#{     resource [     'img:Toulouse_Capitole_Night_Wikimedia_Commons_bw.jpg' ]});
+}
+
 .glue-jumbotron-panel {
 	background-color: rgba(234, 81, 19, 0.6);
 	color: white;
