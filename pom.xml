@@ -8,6 +8,10 @@
 	<packaging>pom</packaging>
 	<name>Glue - Parent</name>
 
+	<properties>
+		<solr.version>4.5.1</solr.version>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

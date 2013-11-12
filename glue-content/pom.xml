@@ -65,15 +65,13 @@
 	<build>
 		<finalName>glue-content</finalName>
 		<plugins>
-			<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the 
-				container under $CATALINA_HOME (the container must be previously started 
-				and the solr.solr.home system property must be set), while tomcat7:run will 
-				run the current project as a dynamic web application using an EMBEDDED Tomcat 
-				server, which cannot be used to host the Glue webapp as well. -->
+	<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the container 
+		under $CATALINA_HOME (the container must be previously started), while tomcat7:run 
+		will run the current project as a dynamic web application using an EMBEDDED 
+		Tomcat server, which cannot be used to host the Glue webapp as well. -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0</version>
 				<configuration>
 					<url>http://localhost:8080/manager/text</url>
 					<server>tomcat</server>
