@@ -107,6 +107,11 @@
    -->
         
    <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
+
+   <!-- points to the root document of a block of nested documents -->
+   <field name="_root_" type="string" indexed="true" stored="false"/>
+
+
    <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
    <field name="name" type="text_general" indexed="true" stored="true"/>
    <field name="manu" type="text_general" indexed="true" stored="true" omitNorms="true"/>
@@ -134,6 +139,7 @@
    <field name="description" type="text_general" indexed="true" stored="true"/>
    <field name="start_date" type="tlong" indexed="true" stored="true"/>
    <field name="end_date" type="tlong" indexed="true" stored="true"/>
+   <field name="duration" type="tlong" indexed="true" stored="true"/>
    <field name="comments" type="text_general" indexed="true" stored="true"/>
    <field name="author" type="text_general" indexed="true" stored="true"/>
    <field name="keywords" type="text_general" indexed="true" stored="true"/>
@@ -175,8 +181,10 @@
    <!--
      Some fields such as popularity and manu_exact could be modified to
      leverage doc values:
-     <field name="popularity" type="int" indexed="true" stored="true" docValues="true" default="0" />
-     <field name="manu_exact" type="string" indexed="false" stored="false" docValues="true" default="" />
+     <field name="popularity" type="int" indexed="true" stored="true" docValues="true" />
+     <field name="manu_exact" type="string" indexed="false" stored="false" docValues="true" />
+     <field name="cat" type="string" indexed="true" stored="true" docValues="true" multiValued="true"/>
+
 
      Although it would make indexing slightly slower and the index bigger, it
      would also make the index faster to load, more memory-efficient and more
