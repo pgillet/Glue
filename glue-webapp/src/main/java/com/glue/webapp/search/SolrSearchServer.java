@@ -22,7 +22,16 @@ import com.glue.webapp.logic.InternalServerException;
  */
 public class SolrSearchServer implements SearchEngine {
 
-	private static final String START_DATE_FIELD = "start_date";
+	private String queryString;
+
+	private Date startDate;
+
+	private Date endDate;
+
+	private int start;
+
+	private int rows = DEFAULT_ROWS;
+
 	private static final String END_DATE_FIELD = "end_date";
 
 	private final String DEFAULT_Q = "*:*";
@@ -36,22 +45,17 @@ public class SolrSearchServer implements SearchEngine {
 	}
 
 	@Override
-	public List<IStream> search(String str, Date start, Date end) throws InternalServerException {
+	public List<IStream> search() throws InternalServerException {
 
 		List<? extends IStream> items = null;
 
-		String q = str.trim();
-		if (q.length() == 0) {
-			q = DEFAULT_Q;
-		}
-
 		SolrQuery query = new SolrQuery();
-		query.setQuery(q);
+		query.setQuery("{!boost b=$bfunction v=$qq}");
 
 		// Date criteria
 		Number min = null;
-		if (start != null) {
-			min = start.getTime();
+		if (startDate != null) {
+			min = startDate.getTime();
 		} else {
 			// Search from the current date by default
 			TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -64,12 +68,17 @@ public class SolrSearchServer implements SearchEngine {
 			min = cal.getTimeInMillis();
 		}
 
-		String max = ((end != null) ? Long.toString(end.getTime()) : "*");
-
+		// Looking for event where end date between min and max
+		String max = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
 		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
-		// Sort
-		query.addSort(START_DATE_FIELD, SolrQuery.ORDER.asc);
+		// 5.787037e-10 = 1 month
+		// 2 boost functions =
+		// 1 - end_date close to today
+		// 2 - start_date has already started
+		query.add("bfunction",
+				"sum(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),scale(ms(NOW/DAY,start_date),0,1))");
+		query.add("qq", str.trim().length() == 0 ? DEFAULT_Q : str.trim());
 
 		// Temp
 		query.setRows(1000);
@@ -83,6 +92,76 @@ public class SolrSearchServer implements SearchEngine {
 		}
 
 		return (List<IStream>) items;
+	}
+
+	@Override
+	public String getQueryString() {
+		return queryString;
+	}
+
+	/**
+	 * @param queryString
+	 *            the queryString to set
+	 */
+	@Override
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
+
+	@Override
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	/**
+	 * @param startDate
+	 *            the startDate to set
+	 */
+	@Override
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Override
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	/**
+	 * @param endDate
+	 *            the endDate to set
+	 */
+	@Override
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public int getStart() {
+		return start;
+	}
+
+	/**
+	 * @param start
+	 *            the start to set
+	 */
+	@Override
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	@Override
+	public int getRows() {
+		return rows;
+	}
+
+	/**
+	 * @param rows
+	 *            the rows to set
+	 */
+	@Override
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 
 }
