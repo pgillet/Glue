@@ -68,8 +68,8 @@ public class SolrSearchServer implements SearchEngine {
 			min = cal.getTimeInMillis();
 		}
 
-		// Looking for event where end date between min and max
 		String max = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
+
 		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
 		// 5.787037e-10 = 1 month
@@ -78,7 +78,7 @@ public class SolrSearchServer implements SearchEngine {
 		// 2 - start_date has already started
 		query.add("bfunction",
 				"sum(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),scale(ms(NOW/DAY,start_date),0,1))");
-		query.add("qq", str.trim().length() == 0 ? DEFAULT_Q : str.trim());
+		query.add("qq", queryString.trim().length() == 0 ? DEFAULT_Q : queryString.trim());
 
 		// Temp
 		query.setRows(1000);
