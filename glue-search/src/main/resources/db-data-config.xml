@@ -2,7 +2,7 @@
 	<dataSource type="JdbcDataSource" driver="${glue.db.jdbc.driver}"
 		url="${glue.db.jdbc.url}" user="${glue.db.user}" password="${glue.db.password}" />
 	<document name="streams">
-		<entity name="stream" query="select * from STREAM">
+		<entity name="stream" query="select *,end_date-start_date as duration from STREAM">
 			<entity name="venue"
 				query="select name as venue, address, latitude, longitude from VENUE where id='${stream.venue_id}'">
 			</entity>

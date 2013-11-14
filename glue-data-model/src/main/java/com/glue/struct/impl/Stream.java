@@ -18,7 +18,7 @@ public class Stream implements IStream, Serializable {
 	private String title;
 
 	private String description;
-	
+
 	private String url;
 
 	private boolean publicc;
@@ -42,7 +42,7 @@ public class Stream implements IStream, Serializable {
 	private int numberOfParticipant;
 
 	private String thumbPath;
-	
+
 	private IVenue venue;
 
 	public Stream() {
@@ -101,7 +101,8 @@ public class Stream implements IStream, Serializable {
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	public void setUrl(String url) {
 		this.url = url;
@@ -244,20 +245,44 @@ public class Stream implements IStream, Serializable {
 	}
 
 	/**
-	 * @param venue the venue to set
+	 * @param venue
+	 *            the venue to set
 	 */
 	@Override
 	public void setVenue(IVenue venue) {
 		this.venue = venue;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Stream [title=" + title + ", description=" + description
-				+ ", url=" + url + ", publicc=" + publicc + ", open=" + open
-				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
+		return "Stream [title=" + title + ", description=" + description + ", url=" + url + ", publicc=" + publicc
+				+ ", open=" + open + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stream other = (Stream) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 }

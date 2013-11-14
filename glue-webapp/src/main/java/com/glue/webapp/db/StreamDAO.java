@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,8 +55,7 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String SELECT_STREAM_EXIST = "SELECT * FROM STREAM WHERE TITLE=? and START_DATE=?";
 
-	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?) ORDER BY "
-			+ COLUMN_START_DATE;
+	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?)";
 
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
 
@@ -195,7 +195,8 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	public List<IStream> searchInList(Long... ids) throws SQLException {
-		List<IStream> streams = new ArrayList<IStream>();
+		Map<Long, IStream> idStreamsMap = new HashMap<Long, IStream>();
+		List<IStream> streams = new ArrayList<>();
 
 		// Array array = connection.createArrayOf("BIGINT", ids); // Feature not
 		// supported by MySQL
@@ -240,8 +241,13 @@ public class StreamDAO extends AbstractDAO {
 				dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
 				stream.setVenue(dummyVenue);
 
-				streams.add(stream);
+				idStreamsMap.put(stream.getId(), stream);
 			}
+		}
+
+		// Reorder streams
+		for (int i = 0; i < ids.length; i++) {
+			streams.add(idStreamsMap.get(ids[i]));
 		}
 		return streams;
 	}

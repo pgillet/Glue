@@ -72,12 +72,13 @@ public class SolrSearchServer implements SearchEngine {
 
 		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
-		// 5.787037e-10 = 1 month
-		// 2 boost functions =
+		// 5.787037e-10 = 1 / (30 days)
+		// 3.8580247e-11 = 1 / (300 days)
+		// product of 2 functions =
 		// 1 - end_date close to today
 		// 2 - start_date has already started
 		query.add("bfunction",
-				"sum(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),scale(ms(NOW/DAY,start_date),0,1))");
+				"product(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),recip(ms(start_date,NOW/DAY),3.8580247e-11,1,2))");
 		query.add("qq", queryString.trim().length() == 0 ? DEFAULT_Q : queryString.trim());
 
 		// Temp
