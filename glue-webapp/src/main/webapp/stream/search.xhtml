@@ -10,70 +10,115 @@
 	<ui:composition template="../template.xhtml">
 		<ui:define name="content">
 
-			<c:if test="#{not empty facesContext.messageList}">
-				<div class="row">
-					<div
-						class="col-md-6 col-md-offset-3 alert alert-danger alert-dismissable">
-						<button type="button" class="close" data-dismiss="alert"
-							aria-hidden="true">&times;</button>
-						<h4>
-							<h:outputText value="#{bundle.error}" />
-						</h4>
-						<h:messages layout="table" />
-					</div>
-				</div>
-			</c:if>
-			<c:if test="#{empty streamSearchBean.streams}">
-				<div class="row">
-					<div
-						class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
-						<button type="button" class="close" data-dismiss="alert"
-							aria-hidden="true">&times;</button>
-						<strong>Holy guacamole!</strong> No results found.
-					</div>
-				</div>
-			</c:if>
-			<c:forEach items="#{streamSearchBean.streams}" var="stream">
-				<div class="row">
-					<div class="col-md-6 col-md-offset-3">
-						<ul class="list-unstyled">
-							<li><h3>
-									<a href="#{stream.url}" target="_blank"><strong>#{stream.title}</strong></a>
-								</h3></li>
-							<li><p>
-									<em>#{stream.description}</em>
-								</p></li>
-							<li><h4>
-									<span class="glyphicon glyphicon-calendar text-muted"></span><span>
-									</span>
-									<c:choose>
-										<c:when test="#{stream.startDate > stream.endDate}">
-											<h:outputText value="#{stream.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-										</c:when>
-										<c:otherwise>
-											<h:outputText value="#{bundle.stream_date_from} " />
-											<h:outputText value="#{stream.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-											<h:outputText value=" #{bundle.stream_date_to} " />
-											<h:outputText value="#{stream.endDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-										</c:otherwise>
-									</c:choose>
-								</h4></li>
-							<li><h4>
-									<span class="glyphicon glyphicon-map-marker text-muted"></span>
-									#{stream.venue.name} - <span class="text-muted">#{stream.venue.address}</span>
-								</h4></li>
-						</ul>
-					</div>
-				</div>
-				<hr />
+			<h:form>
 
-			</c:forEach>
+				<h:outputText styleClass="text-muted">#{streamSearchBean.totalRows} #{bundle.results}</h:outputText>
+
+				<!-- Reuse the properties from request to request -->
+				<h:inputHidden value="#{streamSearchBean.query}" />
+				<h:inputHidden value="#{streamSearchBean.startDate}" />
+				<h:inputHidden value="#{streamSearchBean.endDate}" />
+				<h:inputHidden value="#{streamSearchBean.latitude}" />
+				<h:inputHidden value="#{streamSearchBean.longitude}" />
+				<h:inputHidden value="#{streamSearchBean.location}" />
+				<!-- Pagination controls -->
+				<h:inputHidden value="#{streamSearchBean.start}" />
+				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
+				<h:inputHidden value="#{streamSearchBean.totalRows}" />
+
+				<c:if test="#{not empty facesContext.messageList}">
+					<div class="row">
+						<div
+							class="col-md-6 col-md-offset-3 alert alert-danger alert-dismissable">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-hidden="true">&times;</button>
+							<h4>
+								<h:outputText value="#{bundle.error}" />
+							</h4>
+							<h:messages layout="table" />
+						</div>
+					</div>
+				</c:if>
+				<c:if test="#{empty streamSearchBean.streams}">
+					<div class="row">
+						<div
+							class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-hidden="true">&times;</button>
+							<strong>Holy guacamole!</strong> No results found.
+						</div>
+					</div>
+				</c:if>
+
+				<ui:repeat var="stream" value="#{streamSearchBean.streams}">
+					<div class="row">
+						<div class="col-md-6 col-md-offset-3">
+							<ul class="list-unstyled">
+								<li><h3>
+										<a href="#{stream.url}" target="_blank"><strong>#{stream.title}</strong></a>
+									</h3></li>
+								<li><p>
+										<em>#{stream.description}</em>
+									</p></li>
+								<li><h4>
+										<span class="glyphicon glyphicon-calendar text-muted"></span><span>
+										</span>
+										<c:choose>
+											<c:when test="#{stream.startDate > stream.endDate}">
+												<h:outputText value="#{bundle.stream_date_from} " />
+												<h:outputText value="#{stream.startDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+												<h:outputText value=" #{bundle.stream_date_to} " />
+												<h:outputText value="#{stream.endDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+											</c:when>
+											<c:otherwise>
+												<h:outputText value="#{stream.startDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+											</c:otherwise>
+										</c:choose>
+									</h4></li>
+								<li><h4>
+										<span class="glyphicon glyphicon-map-marker text-muted"></span>
+										#{stream.venue.name} - <span class="text-muted">#{stream.venue.address}</span>
+									</h4></li>
+							</ul>
+						</div>
+					</div>
+					<hr />
+
+				</ui:repeat>
+
+				<div class="text-center ">
+					<ul class="pagination">
+						<li><h:commandLink action="#{streamSearchBean.first}"
+								disabled="#{not streamSearchBean.previous}" value="&#171;">
+								<f:ajax execute="@form" render="@form" />
+							</h:commandLink></li>
+						<li><h:commandLink action="#{streamSearchBean.previous}"
+								disabled="#{not streamSearchBean.previous}"
+								value="#{bundle.previous}">
+								<f:ajax execute="@form" render="@form" />
+							</h:commandLink></li>
+						<li><h:commandLink action="#{streamSearchBean.next}"
+								disabled="#{not streamSearchBean.next}" value="#{bundle.next}">
+								<f:ajax execute="@form" render="@form" />
+							</h:commandLink></li>
+						<li><h:commandLink action="#{streamSearchBean.last}"
+								disabled="#{not streamSearchBean.next}" value="&#187;">
+								<f:ajax execute="@form" render="@form" />
+							</h:commandLink></li>
+					</ul>
+				</div>
+
+
+			</h:form>
 
 		</ui:define>
 	</ui:composition>

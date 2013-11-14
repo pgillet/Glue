@@ -3,14 +3,19 @@ package com.glue.webapp.search;
 import java.util.Date;
 import java.util.List;
 
-import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
 
-public interface SearchEngine {
+public interface SearchEngine<T> {
 
-	public static final int DEFAULT_ROWS = 10;
-
-	List<IStream> search() throws InternalServerException;
+	/**
+	 * Performs a query to the search engine with all the sent parameters.
+	 * 
+	 * @return the <code>rows</code> elements from <code>start</code> offset.
+	 * @throws InternalServerException
+	 *             if communication or parsing issues occurred while talking to
+	 *             the search engine
+	 */
+	List<T> search() throws InternalServerException;
 
 	/**
 	 * Returns the query string.
@@ -55,6 +60,13 @@ public interface SearchEngine {
 	void setEndDate(Date endDate);
 
 	/**
+	 * Returns the total number of found documents from the last search.
+	 * 
+	 * @return the total number of found documents from the last search
+	 */
+	long getNumFound();
+
+	/**
 	 * Returns the offset (by default, 0) at which the search engine should
 	 * begin returning responses.
 	 * 
@@ -71,16 +83,14 @@ public interface SearchEngine {
 	void setStart(int start);
 
 	/**
-	 * Returns the number of responses that should be returned at a time
-	 * (default value: 10)
+	 * Returns the number of responses that should be returned at a time.
 	 * 
-	 * @return
+	 * @return the number of responses that should be returned at a time
 	 */
 	int getRows();
 
 	/**
-	 * Controls how many rows of responses are returned at a time (default
-	 * value: 10).
+	 * Controls how many rows of responses are returned at a time.
 	 * 
 	 * @param rows
 	 */

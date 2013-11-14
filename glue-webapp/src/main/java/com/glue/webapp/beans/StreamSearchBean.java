@@ -2,6 +2,7 @@ package com.glue.webapp.beans;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -14,9 +15,10 @@ import javax.inject.Inject;
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
+import com.glue.webapp.search.PageIterator;
 
 @ManagedBean
-public class StreamSearchBean {
+public class StreamSearchBean implements PageIterator<Void> {
 
 	@Inject
 	private StreamController streamController;
@@ -139,15 +141,16 @@ public class StreamSearchBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
 				.getViewRoot().getLocale());
-		
+
 		String dateFormat = bundle.getString(key1);
 		String timeFormat = bundle.getString(key2);
-		
-		convertDate.setPattern(dateFormat + " " + timeFormat);
-		
+
+		// convertDate.setPattern(dateFormat + " " + timeFormat);
+		convertDate.setPattern(dateFormat);
+
 		TimeZone tz = TimeZone.getTimeZone("UTC");
 		convertDate.setTimeZone(tz);
-		
+
 		this.convertDate = convertDate;
 	}
 
@@ -171,13 +174,162 @@ public class StreamSearchBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			streams = streamController.search(query);
+			init();
+			streams = streamController.search();
 		} catch (InternalServerException e) {
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}
 
 		return "stream-search";
+	}
+
+	@Override
+	public boolean hasNext() {
+		return streamController.hasNext();
+	}
+	
+	/**
+	 * For EL access.
+	 * @return
+	 */
+	public boolean isNext() {
+		return hasNext();
+	}
+
+	@Override
+	public Void next() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try {
+			init();
+			streams = streamController.next();
+		} catch (NoSuchElementException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		}
+
+		return null;
+	}
+
+	/**
+	 * Populate the underlying stream controller.
+	 */
+	private void init() {
+		streamController.setQueryString(query);
+	}
+
+	@Override
+	public boolean hasPrevious() {
+		return streamController.hasPrevious();
+	}
+	
+	/**
+	 * For EL access.
+	 * @return
+	 */
+	public boolean isPrevious() {
+		return hasPrevious();
+	}
+
+	@Override
+	public Void previous() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try {
+			init();
+			streams = streamController.previous();
+		} catch (NoSuchElementException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		}
+
+		return null;
+	}
+
+	@Override
+	public Void first() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try {
+			init();
+			streams = streamController.first();
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		}
+
+		return null;
+	}
+
+	@Override
+	public Void last() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		try {
+			init();
+			streams = streamController.last();
+		} catch (InternalServerException e) {
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		}
+
+		return null;
+	}
+
+	@Override
+	public Void get(int pageNumber) throws NoSuchElementException {
+		// TODO Not yet implemented
+		return null;
+	}
+
+	@Override
+	public int getStart() {
+		return streamController.getStart();
+	}
+
+	@Override
+	public void setStart(int start) {
+		streamController.setStart(start);
+
+	}
+
+	@Override
+	public int getRowsPerPage() {
+		return streamController.getRowsPerPage();
+	}
+
+	@Override
+	public void setRowsPerPage(int rows) {
+		streamController.setRowsPerPage(rows);
+	}
+
+	@Override
+	public long getTotalRows() {
+		return streamController.getTotalRows();
+	}
+	
+	/**
+	 * For pagination control from request to request.
+	 */
+	public void setTotalRows(long totalRows) {
+		streamController.setTotalRows(totalRows);
+	}
+
+	@Override
+	public int getPageIndex() {
+		return streamController.getPageIndex();
+	}
+
+	@Override
+	public int getTotalPages() {
+		return streamController.getTotalPages();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -17,21 +18,52 @@ import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
 import com.glue.webapp.repository.RepositoryManager;
+import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
-public class StreamController {
+public class StreamController implements PageIterator<List<IStream>> {
 
 	@Inject
-	private SearchEngine engine;
+	private SearchEngine<IStream> engine;
 
-	public List<IStream> search(String query) throws InternalServerException {
+	private int start;
+
+	private int rowsPerPage = PageIterator.DEFAULT_ROWS;
+
+	private long totalRows;
+
+	private String queryString;
+
+	/**
+	 * @return the queryString
+	 */
+	public String getQueryString() {
+		return queryString;
+	}
+
+	/**
+	 * @param queryString
+	 *            the queryString to set
+	 */
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
+
+	public List<IStream> search() throws InternalServerException {
 
 		// The underlying search engine returns only partial streams (i.e. only
 		// the properties that are actually indexed)
-		engine.setQueryString(query);
+		engine.setQueryString(queryString);
 		engine.setStartDate(null);
 		engine.setEndDate(null);
+		engine.setStart(start);
+		engine.setRows(rowsPerPage);
+
 		List<IStream> temp = engine.search();
+
+		// Stores the total number of found results
+		totalRows = engine.getNumFound();
+
 		final List<Long> ids = new ArrayList<Long>();
 
 		for (IStream stream : temp) {
@@ -87,6 +119,15 @@ public class StreamController {
 		}
 	}
 
+	/**
+	 * This method should be moved in another controller dedicated to stream
+	 * creation.
+	 * 
+	 * @param stream
+	 * @param venue
+	 * @param admin
+	 * @throws InternalServerException
+	 */
 	public void createStream(final IStream stream, final IVenue venue,
 			final IUser admin) throws InternalServerException {
 		try {
@@ -123,6 +164,103 @@ public class StreamController {
 		} catch (Exception e) {
 			throw new InternalServerException(e);
 		}
+	}
+
+	@Override
+	public boolean hasNext() {
+		return getPageIndex() < (getTotalPages() - 1);
+	}
+
+	@Override
+	public List<IStream> next() throws InternalServerException,
+			NoSuchElementException {
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+
+		start += rowsPerPage;
+		return search();
+	}
+
+	@Override
+	public boolean hasPrevious() {
+		return getPageIndex() > 0;
+	}
+
+	@Override
+	public List<IStream> previous() throws InternalServerException,
+			NoSuchElementException {
+		if (!hasPrevious()) {
+			throw new NoSuchElementException();
+		}
+
+		start -= rowsPerPage;
+		return search();
+	}
+
+	@Override
+	public List<IStream> first() throws InternalServerException {
+		start = 0;
+		return search();
+	}
+
+	@Override
+	public List<IStream> last() throws InternalServerException {
+		start = (getTotalPages() - 1) * rowsPerPage; // last page index
+		return search();
+	}
+
+	@Override
+	public List<IStream> get(int pageNumber) throws NoSuchElementException {
+		// TODO Not yet implemented!
+		return null;
+	}
+
+	@Override
+	public int getStart() {
+		return start;
+	}
+
+	@Override
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	@Override
+	public int getRowsPerPage() {
+		return rowsPerPage;
+	}
+
+	@Override
+	public void setRowsPerPage(int rowsPerPage) {
+		this.rowsPerPage = rowsPerPage;
+	}
+
+	@Override
+	public long getTotalRows() {
+		return totalRows;
+	}
+
+	/**
+	 * For pagination control from request to request.
+	 */
+	public void setTotalRows(long totalRows) {
+		this.totalRows = totalRows;
+	}
+
+	@Override
+	public int getPageIndex() {
+		return start / rowsPerPage;
+	}
+
+	@Override
+	public int getTotalPages() {
+		int num = (int) totalRows / rowsPerPage;
+		if (totalRows % rowsPerPage > 0) {
+			num++;
+		}
+
+		return num;
 	}
 
 }

@@ -20,7 +20,7 @@ import com.glue.webapp.logic.InternalServerException;
  * @author pgillet
  * 
  */
-public class SolrSearchServer implements SearchEngine {
+public class SolrSearchServer implements SearchEngine<IStream> {
 
 	private String queryString;
 
@@ -30,8 +30,11 @@ public class SolrSearchServer implements SearchEngine {
 
 	private int start;
 
-	private int rows = DEFAULT_ROWS;
+	private int rows;
 
+	private long numFound;
+
+	private static final String START_DATE_FIELD = "start_date";
 	private static final String END_DATE_FIELD = "end_date";
 
 	private final String DEFAULT_Q = "*:*";
@@ -68,7 +71,8 @@ public class SolrSearchServer implements SearchEngine {
 			min = cal.getTimeInMillis();
 		}
 
-		String max = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
+		String max = ((endDate != null) ? Long.toString(endDate.getTime())
+				: "*");
 
 		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
 
@@ -77,22 +81,31 @@ public class SolrSearchServer implements SearchEngine {
 		// product of 2 functions =
 		// 1 - end_date close to today
 		// 2 - start_date has already started
-		query.add("bfunction",
+		query.add(
+				"bfunction",
 				"product(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),recip(ms(start_date,NOW/DAY),3.8580247e-11,1,2))");
-		query.add("qq", queryString.trim().length() == 0 ? DEFAULT_Q : queryString.trim());
+		query.add("qq", queryString.trim().length() == 0 ? DEFAULT_Q
+				: queryString.trim());
 
-		// Temp
-		query.setRows(1000);
+		query.setStart(start);
+		query.setRows(rows);
 
 		try {
 			QueryResponse rsp = solr.query(query);
 			items = rsp.getBeans(SolrStream.class);
 
+			// Get the total number of results
+			numFound = rsp.getResults().getNumFound();
 		} catch (SolrServerException e) {
 			throw new InternalServerException(e);
 		}
 
 		return (List<IStream>) items;
+	}
+
+	@Override
+	public long getNumFound() {
+		return numFound;
 	}
 
 	@Override
@@ -142,10 +155,6 @@ public class SolrSearchServer implements SearchEngine {
 		return start;
 	}
 
-	/**
-	 * @param start
-	 *            the start to set
-	 */
 	@Override
 	public void setStart(int start) {
 		this.start = start;
@@ -156,13 +165,8 @@ public class SolrSearchServer implements SearchEngine {
 		return rows;
 	}
 
-	/**
-	 * @param rows
-	 *            the rows to set
-	 */
 	@Override
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
-
 }
