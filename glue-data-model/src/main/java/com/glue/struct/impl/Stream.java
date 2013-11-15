@@ -3,9 +3,11 @@ package com.glue.struct.impl;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 
@@ -44,6 +46,8 @@ public class Stream implements IStream, Serializable {
 	private String thumbPath;
 
 	private IVenue venue;
+
+	private List<ICategory> categories;
 
 	public Stream() {
 	}
@@ -251,6 +255,16 @@ public class Stream implements IStream, Serializable {
 	@Override
 	public void setVenue(IVenue venue) {
 		this.venue = venue;
+	}
+
+	@Override
+	public List<ICategory> getCategories() {
+		return categories;
+	}
+
+	@Override
+	public void setCategories(List<ICategory> categories) {
+		this.categories = categories;
 	}
 
 	/*

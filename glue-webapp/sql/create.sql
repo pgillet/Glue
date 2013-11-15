@@ -48,7 +48,7 @@ CREATE TABLE STREAM (
              FOREIGN KEY (venue_id) REFERENCES VENUE(id) 
              		ON DELETE SET NULL
              );
-             
+			  
 -- TAG table
 CREATE TABLE TAG (
              id BIGINT NOT NULL AUTO_INCREMENT,
@@ -119,3 +119,25 @@ CREATE OR REPLACE VIEW STREAM_VIEW AS
   INNER JOIN PARTICIPANT
   ON STREAM.id = PARTICIPANT.stream_id
   GROUP BY PARTICIPANT.stream_id;
+  
+  -- CATEGORY table
+CREATE TABLE CATEGORY (
+			id BIGINT NOT NULL AUTO_INCREMENT,
+			name VARCHAR(100) NOT NULL,
+            PRIMARY KEY(id)
+			);
+			
+-- STREAM_CATEGORY table
+CREATE TABLE STREAM_CATEGORY (
+             id BIGINT NOT NULL AUTO_INCREMENT,
+             category_id BIGINT NOT NULL,
+             stream_id BIGINT NOT NULL,
+             PRIMARY KEY (id),
+             FOREIGN KEY (category_id) REFERENCES CATEGORY(id)
+                     ON DELETE CASCADE,
+             FOREIGN KEY (stream_id) REFERENCES STREAM(id)
+                     ON DELETE CASCADE
+             );
+  
+  
+  
