@@ -2,9 +2,11 @@ package com.glue.client.android.stream;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Venue;
@@ -14,9 +16,9 @@ public class StreamData implements IStream {
 	private long id;
 
 	private String title;
-	
+
 	private String description;
-	
+
 	private String url;
 
 	private boolean publicc;
@@ -36,12 +38,14 @@ public class StreamData implements IStream {
 	private long startDate = new Date().getTime();
 
 	private long endDate;
-	
+
 	private IVenue venue = new Venue();
 
 	private int nbOfParticipant;
 
 	private String thumbPath;
+
+	private List<ICategory> categories;
 
 	private static StreamData instance = new StreamData();
 
@@ -75,7 +79,8 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -89,7 +94,8 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	public void setUrl(String url) {
 		this.url = url;
@@ -238,7 +244,8 @@ public class StreamData implements IStream {
 	}
 
 	/**
-	 * @param venue the venue to set
+	 * @param venue
+	 *            the venue to set
 	 */
 	public void setVenue(IVenue venue) {
 		this.venue = venue;
@@ -272,6 +279,16 @@ public class StreamData implements IStream {
 	@Override
 	public void setThumbPath(String path) {
 		this.thumbPath = path;
+	}
+
+	@Override
+	public List<ICategory> getCategories() {
+		return categories;
+	}
+
+	@Override
+	public void setCategories(List<ICategory> categories) {
+		this.categories = categories;
 	}
 
 }

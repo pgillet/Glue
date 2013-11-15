@@ -1,5 +1,6 @@
 package com.glue.struct;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,26 +18,24 @@ public interface IStream {
 	String getTitle();
 
 	void setTitle(String title);
-	
-	
+
 	/**
 	 * Returns the description of this stream.
 	 * 
 	 * @return a String
 	 */
 	String getDescription();
-	
+
 	void setDescription(String description);
-	
+
 	/**
 	 * Returns the link to this stream.
 	 * 
 	 * @return a String
 	 */
 	String getUrl();
-	
+
 	void setUrl(String url);
-	
 
 	/**
 	 * Tells whether this stream is public or private. Private by default.
@@ -154,4 +153,14 @@ public interface IStream {
 	void setVenue(IVenue venue);
 
 	IVenue getVenue();
+
+	/**
+	 * Returns a list of Categories.
+	 * 
+	 * @return a list of Categories.
+	 */
+	List<ICategory> getCategories();
+
+	void setCategories(List<ICategory> categories);
+
 }

@@ -1,10 +1,12 @@
 package com.glue.webapp.search;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.beans.Field;
 
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 
@@ -40,9 +42,11 @@ public class SolrStream implements IStream {
 
 	private boolean shouldRequestToParticipate;
 
-	private long startDate;
+	@Field
+	private long start_date;
 
-	private long endDate;
+	@Field
+	private long end_date;
 
 	private Set<String> tags;
 
@@ -51,6 +55,9 @@ public class SolrStream implements IStream {
 	private String thumbPath;
 
 	private IVenue venue;
+
+	@Field
+	private List<ICategory> categories;
 
 	/**
 	 * @return the id
@@ -206,7 +213,7 @@ public class SolrStream implements IStream {
 	 * @return the startDate
 	 */
 	public long getStartDate() {
-		return startDate;
+		return start_date;
 	}
 
 	/**
@@ -214,14 +221,14 @@ public class SolrStream implements IStream {
 	 *            the startDate to set
 	 */
 	public void setStartDate(long startDate) {
-		this.startDate = startDate;
+		this.start_date = startDate;
 	}
 
 	/**
 	 * @return the endDate
 	 */
 	public long getEndDate() {
-		return endDate;
+		return end_date;
 	}
 
 	/**
@@ -229,7 +236,7 @@ public class SolrStream implements IStream {
 	 *            the endDate to set
 	 */
 	public void setEndDate(long endDate) {
-		this.endDate = endDate;
+		this.end_date = endDate;
 	}
 
 	/**
@@ -299,16 +306,22 @@ public class SolrStream implements IStream {
 	 */
 	@Override
 	public String toString() {
-		return "SolrStream [id=" + id + ", title=" + title + ", description="
-				+ description + ", url=" + url + ", publicc=" + publicc
-				+ ", open=" + open + ", invitedParticipants="
-				+ invitedParticipants + ", sharedSecretQuestion="
-				+ sharedSecretQuestion + ", sharedSecretAnswer="
-				+ sharedSecretAnswer + ", shouldRequestToParticipate="
-				+ shouldRequestToParticipate + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", tags=" + tags
-				+ ", numberOfParticipant=" + numberOfParticipant
+		return "SolrStream [id=" + id + ", title=" + title + ", description=" + description + ", url=" + url
+				+ ", publicc=" + publicc + ", open=" + open + ", invitedParticipants=" + invitedParticipants
+				+ ", sharedSecretQuestion=" + sharedSecretQuestion + ", sharedSecretAnswer=" + sharedSecretAnswer
+				+ ", shouldRequestToParticipate=" + shouldRequestToParticipate + ", startDate=" + start_date
+				+ ", endDate=" + end_date + ", tags=" + tags + ", numberOfParticipant=" + numberOfParticipant
 				+ ", thumbPath=" + thumbPath + ", venue=" + venue + "]";
+	}
+
+	@Override
+	public List<ICategory> getCategories() {
+		return categories;
+	}
+
+	@Override
+	public void setCategories(List<ICategory> categories) {
+		this.categories = categories;
 	}
 
 }

@@ -2,14 +2,23 @@ package com.glue.feed.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.zip.ZipEntry;
@@ -18,10 +27,12 @@ import java.util.zip.ZipInputStream;
 import javax.sql.DataSource;
 
 import com.glue.feed.DataSourceManager;
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
+import com.glue.webapp.db.CategoryDAO;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
@@ -37,6 +48,9 @@ public class OpenDataToulouseReadCVS {
 	private DAOManager manager;
 	private StreamDAO streamDAO;
 	private VenueDAO venueDAO;
+	private CategoryDAO categoryDAO;
+	private Map<String, ICategory> dbCategories;
+	private Map<String, String> catDico;
 	private DateFormat format;
 
 	public static void main(String[] args) throws IOException {
@@ -51,24 +65,11 @@ public class OpenDataToulouseReadCVS {
 			ze = zin.getNextEntry();
 		}
 
-		// Get the stream from zipentry
-		// ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		// int count;
-		// byte data[] = new byte[1024];
-		// while ((count = zin.read(data, 0, 1024)) > -1) {
-		// bout.write(data, 0, count);
-		// }
-		// bout.close();
-		// zin.close();
-
-		// Create the reader
-		// ByteArrayInputStream bin = new
-		// ByteArrayInputStream(bout.toByteArray());
-		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, "ISO-8859-1"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, StandardCharsets.ISO_8859_1));
 
 		OpenDataToulouseReadCVS obj = new OpenDataToulouseReadCVS();
 		obj.run(reader);
-		
+
 		reader.close();
 
 	}
@@ -88,6 +89,13 @@ public class OpenDataToulouseReadCVS {
 		try {
 			streamDAO = manager.getStreamDAO();
 			venueDAO = manager.getVenueDAO();
+			categoryDAO = manager.getCategoryDAO();
+
+			// Get all categories
+			dbCategories = getCategoriesFromDb();
+
+			// Get dictionary
+			catDico = getCategoryDictionnary();
 
 			String nextLine = "";
 			String currentLine = null;
@@ -166,7 +174,8 @@ public class OpenDataToulouseReadCVS {
 		// Cirque, Comique, Contes, Course � pied, Danse, Fanfares
 		// bandas, F�te, Feux d'artifice, Fleurs Plantes, Gastronomie,
 		// Historique, Jazz et blues, Jeune public, Litt�rature,
-		// Marionnette, M�di�val, Mode, Mod�lisme, Montgolfi�res, Mus�e,
+		// Marionnette, M�di�val, Mode, Mod�lisme, Montgolfi�res,
+		// Mus�e,
 		// Musical, Musique classique, Musique contemporaine, Musique de
 		// vari�t�, Musique du monde, Musique folklorique (country),
 		// Musique sacr�e, Nocturne, No�l, Op�rette, Peinture,
@@ -180,7 +189,8 @@ public class OpenDataToulouseReadCVS {
 		// pied maximum)
 		// 20: GoogleMap latitude : Coordonn�e Y (latitude)
 		// 21: GoogleMap longitude : Coordonn�e X (longitude)
-		// 22: R�servation t�l�phone : num�ro de t�l�phone du service
+		// 22: R�servation t�l�phone : num�ro de t�l�phone du
+		// service
 		// r�servation et d'information
 		// 23: R�servation email : adresse email du service r�servation
 		// et d'information
@@ -241,6 +251,7 @@ public class OpenDataToulouseReadCVS {
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());
 		stream.setEndDate(edate.getTime());
+		stream.setCategories(getCategories(fields[16], fields[17], fields[18]));
 
 		IVenue venue = new Venue();
 		venue.setName(name);
@@ -287,6 +298,19 @@ public class OpenDataToulouseReadCVS {
 		}
 	}
 
+	// Get categories from a string like "CAT1, CAT2, CAT3"
+	private Set<String> extractCategoriesFromField(String field) {
+
+		Set<String> result = new HashSet<String>();
+		if (!"".equals(field)) {
+			String[] values = field.split(",");
+			for (int i = 0; i < values.length; i++) {
+				result.add(values[i].trim());
+			}
+		}
+		return result;
+	}
+
 	private String cleanup(String str) {
 		if (str.startsWith("\"")) {
 			str = str.substring(1, str.length());
@@ -313,4 +337,91 @@ public class OpenDataToulouseReadCVS {
 		return url;
 	}
 
+	// Categories extraction and mapping methods
+
+	private Map<String, ICategory> getCategoriesFromDb() {
+
+		Map<String, ICategory> result = new HashMap<String, ICategory>();
+
+		// Get all Categories from DB
+		Set<ICategory> categories;
+		try {
+			categories = categoryDAO.searchAll();
+
+			// Return a map view Name,Category
+			for (ICategory cat : categories) {
+				result.put(cat.getName().toLowerCase(), cat);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	private List<ICategory> getCategories(String field1, String field2, String field3) {
+
+		List<ICategory> result = new ArrayList<>();
+		Set<ICategory> temp = new HashSet<>();
+
+		// Get all possible Categories
+		Set<String> categories = extractCategoriesFromField(cleanup(field1));
+		categories.addAll(extractCategoriesFromField(cleanup(field2)));
+		categories.addAll(extractCategoriesFromField(cleanup(field3)));
+
+		// Iterate over categories
+		for (String catStr : categories) {
+
+			// Try to find mapping from dico
+			String category = catDico.get(catStr.toLowerCase());
+			if (category != null && !"".equals(category)) {
+				temp.add(dbCategories.get(category));
+			}
+		}
+
+		// Default key is "autre"
+		if (temp.isEmpty()) {
+			temp.add(dbCategories.get("autre"));
+		}
+		result.addAll(temp);
+		return result;
+	}
+
+	// Retrieve categories dictionnary from property file
+	private Map<String, String> getCategoryDictionnary() {
+
+		Map<String, String> dico = new HashMap<>();
+		Properties properties = new Properties();
+		InputStream in = OpenDataToulouseReadCVS.class.getResourceAsStream("../dico.properties");
+		Reader reader = new InputStreamReader(in, StandardCharsets.ISO_8859_1);
+		try {
+			properties.load(reader);
+			for (Entry<Object, Object> entry : properties.entrySet()) {
+
+				// Retrieve cat_name from key (key = glue.category.cat_name)
+				String value = (String) entry.getKey();
+
+				if (value.startsWith("glue.category")) {
+					value = value.substring(value.lastIndexOf(".") + 1, value.length());
+
+					// Split values (value = cat1#cat2# ...)
+					String[] keys = ((String) entry.getValue()).split("#");
+					for (int i = 0; i < keys.length; i++) {
+						dico.put(keys[i], value);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return dico;
+	}
 }

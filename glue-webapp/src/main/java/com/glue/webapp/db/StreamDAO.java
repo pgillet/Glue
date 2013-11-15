@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.InvitedParticipant;
@@ -67,11 +68,17 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String DELETE_PARTICIPANT = "DELETE FROM stream WHERE stream_id=? and user_id=?";
 
+	// Stream Category
+	public static final String CREATE_STREAM_CATEGORY = "INSERT IGNORE INTO STREAM_CATEGORY(category_id,stream_id) VALUES (?,?)";
+
+	public static final String SELECT_STREAM_CATEGORY = "select * from category where id in (select category_id from stream_category where stream_id = ?);";
+
 	private PreparedStatement createStmt = null;
 	private PreparedStatement updateStmt = null;
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement searchByIdStmt = null;
 	private PreparedStatement existStmt = null;
+	private PreparedStatement createStreamTagStmt = null;
 
 	protected StreamDAO() {
 	}
@@ -85,11 +92,13 @@ public class StreamDAO extends AbstractDAO {
 		this.deleteStmt = connection.prepareStatement(DELETE_STREAM);
 		this.searchByIdStmt = connection.prepareStatement(SELECT_STREAM_BY_ID);
 		this.existStmt = connection.prepareStatement(SELECT_STREAM_EXIST);
+		this.createStreamTagStmt = connection.prepareStatement(CREATE_STREAM_CATEGORY);
 	}
 
 	public void create(IStream aStream) throws SQLException {
 
 		checkVenue(aStream);
+		checkCategories(aStream);
 
 		createStmt.setString(1, aStream.getTitle());
 		createStmt.setString(2, aStream.getDescription());
@@ -113,6 +122,9 @@ public class StreamDAO extends AbstractDAO {
 		}
 		aStream.setId(id);
 
+		// Stream - Categories links
+		updateStreamCategories(aStream);
+
 		// Invited participant
 		updateInvitedParticipant(aStream);
 
@@ -121,7 +133,23 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	/**
-	 * Check the stream integrity.
+	 * Create Stream to Category link.
+	 * 
+	 * @param stream
+	 * @throws SQLException
+	 */
+	private void updateStreamCategories(IStream stream) throws SQLException {
+
+		for (ICategory category : stream.getCategories()) {
+			createStreamTagStmt.setLong(1, category.getId());
+			createStreamTagStmt.setLong(2, stream.getId());
+			createStreamTagStmt.execute();
+		}
+
+	}
+
+	/**
+	 * Check the stream integrity (Venue).
 	 * 
 	 * @param aStream
 	 * @throws SQLException
@@ -133,8 +161,24 @@ public class StreamDAO extends AbstractDAO {
 		}
 	}
 
+	/**
+	 * Check the stream integrity (Categories).
+	 * 
+	 * @param aStream
+	 * @throws SQLException
+	 */
+	private void checkCategories(IStream aStream) throws SQLException {
+		List<ICategory> categories = aStream.getCategories();
+		for (ICategory cat : categories) {
+			if (cat != null && cat.getId() == null) {
+				throw new SQLException("A category is set but is not persisted");
+			}
+		}
+	}
+
 	public void update(IStream aStream) throws SQLException {
 		checkVenue(aStream);
+		checkCategories(aStream);
 
 		updateStmt.setLong(12, aStream.getId());
 		updateStmt.setString(1, aStream.getTitle());
@@ -149,6 +193,9 @@ public class StreamDAO extends AbstractDAO {
 		updateStmt.setLong(10, aStream.getEndDate());
 		updateStmt.setLong(11, aStream.getVenue().getId());
 		updateStmt.executeUpdate();
+
+		// Update Categories
+		updateStreamCategories(aStream);
 
 		// Invited participant
 		updateInvitedParticipant(aStream);
@@ -235,11 +282,12 @@ public class StreamDAO extends AbstractDAO {
 				stream.setStartDate(res.getLong(COLUMN_START_DATE));
 				stream.setEndDate(res.getLong(COLUMN_END_DATE));
 				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
-				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 
 				IVenue dummyVenue = new Venue();
 				dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
 				stream.setVenue(dummyVenue);
+
+				// Set categories
 
 				idStreamsMap.put(stream.getId(), stream);
 			}

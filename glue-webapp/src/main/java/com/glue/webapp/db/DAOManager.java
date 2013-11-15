@@ -22,6 +22,8 @@ public class DAOManager {
 
 	protected MediaDAO mediaDAO;
 
+	protected CategoryDAO categoryDAO;
+
 	// One instance per thread
 	private static final ThreadLocal<DAOManager> localInstance = new ThreadLocal<DAOManager>() {
 		protected DAOManager initialValue() {
@@ -106,6 +108,15 @@ public class DAOManager {
 		mediaDAO.setConnection(getConnection());
 
 		return mediaDAO;
+	}
+
+	public CategoryDAO getCategoryDAO() throws SQLException {
+		if (categoryDAO == null) {
+			categoryDAO = new CategoryDAO();
+		}
+		categoryDAO.setConnection(getConnection());
+
+		return categoryDAO;
 	}
 
 	public <T> T transaction(DAOCommand<T> command) throws Exception {
