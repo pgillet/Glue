@@ -12,20 +12,6 @@
 
 			<h:form>
 
-				<h:outputText styleClass="text-muted">#{streamSearchBean.totalRows} #{bundle.results}</h:outputText>
-
-				<!-- Reuse the properties from request to request -->
-				<h:inputHidden value="#{streamSearchBean.query}" />
-				<h:inputHidden value="#{streamSearchBean.startDate}" />
-				<h:inputHidden value="#{streamSearchBean.endDate}" />
-				<h:inputHidden value="#{streamSearchBean.latitude}" />
-				<h:inputHidden value="#{streamSearchBean.longitude}" />
-				<h:inputHidden value="#{streamSearchBean.location}" />
-				<!-- Pagination controls -->
-				<h:inputHidden value="#{streamSearchBean.start}" />
-				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
-				<h:inputHidden value="#{streamSearchBean.totalRows}" />
-
 				<c:if test="#{not empty facesContext.messageList}">
 					<div class="row">
 						<div
@@ -49,6 +35,26 @@
 						</div>
 					</div>
 				</c:if>
+
+				<ui:fragment rendered="#{not empty streamSearchBean.streams}">
+					<p class="text-muted">
+						<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
+					</p>
+				</ui:fragment>
+
+				<!-- Reuse the properties from request to request -->
+				<h:inputHidden value="#{streamSearchBean.query}" />
+				<h:inputHidden value="#{streamSearchBean.startDate}" />
+				<h:inputHidden value="#{streamSearchBean.endDate}" />
+				<h:inputHidden value="#{streamSearchBean.latitude}" />
+				<h:inputHidden value="#{streamSearchBean.longitude}" />
+				<h:inputHidden value="#{streamSearchBean.location}" />
+				<!-- Pagination controls -->
+				<h:inputHidden value="#{streamSearchBean.start}" />
+				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
+				<h:inputHidden value="#{streamSearchBean.totalRows}" />
+
+
 
 				<ui:repeat var="stream" value="#{streamSearchBean.streams}"
 					varStatus="status">
@@ -92,28 +98,29 @@
 
 				</ui:repeat>
 
-				<div class="text-center ">
-					<ul class="pagination">
-						<li><h:commandLink action="#{streamSearchBean.first}"
-								disabled="#{not streamSearchBean.previous}" value="&#171;">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandLink></li>
-						<li><h:commandLink action="#{streamSearchBean.previous}"
-								disabled="#{not streamSearchBean.previous}"
-								value="#{bundle.previous}">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandLink></li>
-						<li><h:commandLink action="#{streamSearchBean.next}"
-								disabled="#{not streamSearchBean.next}" value="#{bundle.next}">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandLink></li>
-						<li><h:commandLink action="#{streamSearchBean.last}"
-								disabled="#{not streamSearchBean.next}" value="&#187;">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandLink></li>
-					</ul>
-				</div>
-
+				<c:if test="#{not empty streamSearchBean.streams}">
+					<div class="text-center ">
+						<ul class="pagination">
+							<li><h:commandLink action="#{streamSearchBean.first}"
+									disabled="#{not streamSearchBean.previous}" value="&#171;">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li><h:commandLink action="#{streamSearchBean.previous}"
+									disabled="#{not streamSearchBean.previous}"
+									value="#{bundle.previous}">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li><h:commandLink action="#{streamSearchBean.next}"
+									disabled="#{not streamSearchBean.next}" value="#{bundle.next}">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li><h:commandLink action="#{streamSearchBean.last}"
+									disabled="#{not streamSearchBean.next}" value="&#187;">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+						</ul>
+					</div>
+				</c:if>
 
 			</h:form>
 
