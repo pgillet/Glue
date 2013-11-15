@@ -101,23 +101,31 @@
 				<c:if test="#{not empty streamSearchBean.streams}">
 					<div class="text-center ">
 						<ul class="pagination">
-							<li><h:commandLink action="#{streamSearchBean.first}"
-									disabled="#{not streamSearchBean.previous}" value="&#171;">
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.first}"
+									disabled="#{not streamSearchBean.previous}" value="&#171;"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
 									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
-							<li><h:commandLink action="#{streamSearchBean.previous}"
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.previous}"
 									disabled="#{not streamSearchBean.previous}"
-									value="#{bundle.previous}">
+									value="#{bundle.previous}"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
 									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
-							<li><h:commandLink action="#{streamSearchBean.next}"
-									disabled="#{not streamSearchBean.next}" value="#{bundle.next}">
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.next}"
+									disabled="#{not streamSearchBean.next}" value="#{bundle.next}"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
 									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
-							<li><h:commandLink action="#{streamSearchBean.last}"
-									disabled="#{not streamSearchBean.next}" value="&#187;">
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.last}"
+									disabled="#{not streamSearchBean.next}" value="&#187;"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
 									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
+								</h:commandButton></li>
 						</ul>
 					</div>
 				</c:if>
