@@ -50,7 +50,8 @@
 					</div>
 				</c:if>
 
-				<ui:repeat var="stream" value="#{streamSearchBean.streams}">
+				<ui:repeat var="stream" value="#{streamSearchBean.streams}"
+					varStatus="status">
 					<div class="row">
 						<div class="col-md-6 col-md-offset-3">
 							<ul class="list-unstyled">
@@ -61,28 +62,22 @@
 										<em>#{stream.description}</em>
 									</p></li>
 								<li><h4>
-										<span class="glyphicon glyphicon-calendar text-muted"></span><span>
-										</span>
-										<c:choose>
-											<c:when test="#{stream.startDate > stream.endDate}">
-												<h:outputText value="#{bundle.stream_date_from} " />
-												<h:outputText value="#{stream.startDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-												<h:outputText value=" #{bundle.stream_date_to} " />
-												<h:outputText value="#{stream.endDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-											</c:when>
-											<c:otherwise>
-												<h:outputText value="#{stream.startDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-											</c:otherwise>
-										</c:choose>
+										<span class="glyphicon glyphicon-calendar text-muted"></span>&#160;
+										<ui:fragment rendered="#{stream.startDate lt stream.endDate}">
+											<h:outputText value="#{bundle.stream_date_from} " />
+											<h:outputText value="#{stream.startDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText>
+											<h:outputText value=" #{bundle.stream_date_to} " />
+											<h:outputText value="#{stream.endDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText>
+										</ui:fragment>
+										<ui:fragment rendered="#{stream.startDate ge stream.endDate}">
+											<h:outputText value="#{stream.startDate}">
+												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+											</h:outputText>
+										</ui:fragment>
 									</h4></li>
 								<li><h4>
 										<span class="glyphicon glyphicon-map-marker text-muted"></span>
@@ -91,7 +86,9 @@
 							</ul>
 						</div>
 					</div>
-					<hr />
+					<ui:fragment rendered="#{not status.last}">
+						<hr />
+					</ui:fragment>
 
 				</ui:repeat>
 
