@@ -137,20 +137,32 @@
 		</profile>
 		
 		<profile>  
-    		<id>dev</id>  
-    		<activation>  
-      			<activeByDefault>true</activeByDefault>  
-    		</activation>  
-    		<properties>  
-      			<build.profile.id>dev</build.profile.id>  
-   			 </properties>  
+	    		<id>dev</id>
+	    		<activation>  
+	      			<activeByDefault>true</activeByDefault>  
+	    		</activation>
+			<build>
+				<filters>
+					<filter>../glue_dev.properties</filter>
+				</filters>			
+			</build>
+	    		<properties>  
+	      			<build.profile.id>dev</build.profile.id>
+			        <javax.faces.project.stage>Development</javax.faces.project.stage>
+	   		</properties>  		
   		</profile>  
   		<profile>  
-    		<id>prod</id>
-    		<properties>  
-     			<build.profile.id>prod</build.profile.id>  
-    		</properties>  
-  		</profile> 
+	    		<id>prod</id>
+			<build>
+				<filters>
+					<filter>../glue_prod.properties</filter>
+				</filters>			
+			</build>
+	    		<properties>  
+	     			<build.profile.id>prod</build.profile.id>
+				<javax.faces.project.stage>Production</javax.faces.project.stage>  
+	    		</properties>  
+	  	</profile> 
 	</profiles>
 
 </project>

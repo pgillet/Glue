@@ -1,6 +1,5 @@
 package com.glue.webapp.beans;
 
-import i18n.I18nFilter;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,6 +17,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
+import com.glue.webapp.i18n.I18nFilter;
 
 @ManagedBean
 @SessionScoped

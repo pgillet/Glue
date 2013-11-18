@@ -1,4 +1,4 @@
-package i18n;
+package com.glue.webapp.i18n;
 
 import java.io.IOException;
 import java.util.Locale;

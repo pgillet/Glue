@@ -82,8 +82,6 @@
 					<files>
 						<!-- Properties are read from profile specific property file -->
 						<file>${project.basedir}/profiles/${build.profile.id}/config.properties</file>
-						<!-- Profile dependant properties file -->
-						<file>../glue_${build.profile.id}.properties</file>
 					</files>
 				</configuration>
 				<executions>
@@ -118,15 +116,6 @@
 						</goals>
 						<configuration>
 							<resources>
-							    <!-- Copy db-data-config.xml and applies properties filtering -->
-								<resource>
-									<directory>${project.basedir}/src/main/resources</directory>
-									<filtering>true</filtering>
-									<targetPath>${project.basedir}/target/classes</targetPath>
-									<includes>
-										<include>db-data-config.xml</include>
-									</includes>
-								</resource>
 								<!-- Copy solr.xml to correct directory and applies properties filtering 
 									to it. -->
 								<resource>
@@ -207,6 +196,24 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<webResources>
+						<!-- Copy db-data-config.xml and applies properties filtering -->
+						<resource>
+							<directory>${project.basedir}/src/main/resources</directory>
+							<filtering>true</filtering>
+							<targetPath>${project.basedir}/target/classes</targetPath>
+							<includes>
+								<include>db-data-config.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
 			</plugin>
 	<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the container under 
 		$CATALINA_HOME (the container must be previously started and the solr.solr.home 
