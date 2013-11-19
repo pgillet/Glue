@@ -135,15 +135,15 @@ public class StreamSearchBean implements PageIterator<Void> {
 
 	public void setConvertDate(DateTimeConverter convertDate) {
 		final String basename = "com.glue.messages.Messages";
-		final String key1 = "date_format_jsf";
-		final String key2 = "time_format";
+		final String key1 = "date_format_long";
+		// final String key2 = "time_format";
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
 				.getViewRoot().getLocale());
 
 		String dateFormat = bundle.getString(key1);
-		String timeFormat = bundle.getString(key2);
+		// String timeFormat = bundle.getString(key2);
 
 		// convertDate.setPattern(dateFormat + " " + timeFormat);
 		convertDate.setPattern(dateFormat);
