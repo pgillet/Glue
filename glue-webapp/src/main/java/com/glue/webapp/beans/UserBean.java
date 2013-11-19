@@ -5,6 +5,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.impl.User;
 import com.glue.webapp.auth.LoginBean;
 import com.glue.webapp.logic.AlreadyExistsException;
@@ -13,6 +16,8 @@ import com.glue.webapp.logic.UserController;
 
 @ManagedBean
 public class UserBean {
+	
+	static final Logger LOG = LoggerFactory.getLogger(UserBean.class);
 
 	private String name;
 	private String mailAddress;
@@ -92,8 +97,10 @@ public class UserBean {
 
 			return loginBean.login();
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(e.getMessage()));
 		} catch (AlreadyExistsException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(e.getMessage()));
 		}
 

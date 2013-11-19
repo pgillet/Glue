@@ -8,7 +8,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DAOManager {
+	
+	static final Logger LOG = LoggerFactory.getLogger(DAOManager.class);
 
 	private DataSource dataSource;
 
@@ -129,6 +134,7 @@ public class DAOManager {
 			connection.commit();
 			return returnValue;
 		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 			connection.rollback();
 			throw e; // or wrap it before rethrowing it
 		} finally {
@@ -168,8 +174,7 @@ public class DAOManager {
 		try {
 			closeConnection();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 

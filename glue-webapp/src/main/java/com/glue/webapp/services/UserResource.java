@@ -17,6 +17,9 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IUser;
 import com.glue.struct.impl.User;
 import com.glue.webapp.logic.AlreadyExistsException;
@@ -25,6 +28,8 @@ import com.glue.webapp.logic.UserController;
 
 @Path("/users")
 public class UserResource {
+	
+	static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
 	@Context
 	SecurityContext securityContext;
@@ -46,9 +51,11 @@ public class UserResource {
 		try {
 			userController.createUser(user);
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			throw new WebApplicationException(e,
 					Response.Status.INTERNAL_SERVER_ERROR);
 		} catch (AlreadyExistsException e) {
+			LOG.error(e.getMessage(), e);
 			throw new WebApplicationException(e, Response
 					.status(Response.Status.CONFLICT).entity(e.getMessage())
 					/*
@@ -80,6 +87,7 @@ public class UserResource {
 
 				return Response.ok().build();
 			} catch (InternalServerException e) {
+				LOG.error(e.getMessage(), e);
 				throw new WebApplicationException(e,
 						Response.Status.INTERNAL_SERVER_ERROR);
 			}
@@ -99,6 +107,7 @@ public class UserResource {
 
 			return user;
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			throw new WebApplicationException(e,
 					Response.Status.INTERNAL_SERVER_ERROR);
 		}

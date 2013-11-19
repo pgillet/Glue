@@ -9,9 +9,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 
 public class GSonHelper {
+	
+	static final Logger LOG = LoggerFactory.getLogger(GSonHelper.class);
 
 	public static <T> T getGsonObjectFromRequest(HttpServletRequest request, Type aClass) throws IOException {
 
@@ -42,11 +47,9 @@ public class GSonHelper {
 				return (gson.fromJson(jsonObject, aClass));
 			}
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 
 		return null;
@@ -58,11 +61,9 @@ public class GSonHelper {
 			return request.getPart("file");
 
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 
 		return null;

@@ -9,8 +9,13 @@ import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @ManagedBean
 public class FeedbackBean {
+	
+	static final Logger LOG = LoggerFactory.getLogger(FeedbackBean.class);
 
 	/*
 	 * @Resource(name = "mail/gluemail") private Session mailSession;
@@ -90,13 +95,13 @@ public class FeedbackBean {
 			fbw.newLine();
 			fbw.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			LOG.error(ex.getMessage(), ex);
 		} finally {
 			if (fbw != null) {
 				try {
 					fbw.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					LOG.error(e.getMessage(), e);
 				}
 			}
 			subject = null;

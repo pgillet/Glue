@@ -10,6 +10,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
@@ -21,6 +23,8 @@ import com.glue.webapp.logic.InternalServerException;
  * 
  */
 public class SolrSearchServer implements SearchEngine<IStream> {
+	
+	static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
 	private String queryString;
 
@@ -97,6 +101,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 			// Get the total number of results
 			numFound = rsp.getResults().getNumFound();
 		} catch (SolrServerException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		}
 

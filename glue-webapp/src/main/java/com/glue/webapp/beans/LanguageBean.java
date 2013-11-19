@@ -18,11 +18,16 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.webapp.i18n.I18nFilter;
 
 @ManagedBean
 @SessionScoped
 public class LanguageBean implements Serializable {
+	
+	static final Logger LOG = LoggerFactory.getLogger(LanguageBean.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -106,6 +111,7 @@ public class LanguageBean implements Serializable {
 			try {
 				setLanguage(language);
 			} catch (IOException ex) {
+				LOG.error(ex.getMessage(), ex);
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage("An unexpected error occured."));
 			}

@@ -6,11 +6,16 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IUser;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.UserDAO;
 
 public class UserController {
+	
+	static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	public void createUser(IUser user) throws InternalServerException,
 			AlreadyExistsException {
@@ -27,8 +32,10 @@ public class UserController {
 
 			userDAO.create(user);
 		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} finally {
 			if (manager != null) {
@@ -45,8 +52,10 @@ public class UserController {
 			UserDAO userDAO = manager.getUserDAO();
 			userDAO.update(user);
 		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} finally {
 			if (manager != null) {
@@ -65,8 +74,10 @@ public class UserController {
 
 			user = userDAO.search(Long.valueOf(userId));
 		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} finally {
 			if (manager != null) {
@@ -102,8 +113,10 @@ public class UserController {
 				}
 			}
 		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} finally {
 			if (manager != null) {

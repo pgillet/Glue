@@ -10,6 +10,9 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
@@ -22,6 +25,8 @@ import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
 public class StreamController implements PageIterator<List<IStream>> {
+	
+	static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
 	@Inject
 	private SearchEngine<IStream> engine;
@@ -113,8 +118,10 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 			return streams;
 		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		}
 	}

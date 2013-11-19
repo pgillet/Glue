@@ -6,8 +6,14 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @ManagedBean
 public class LoginBean {
+	
+	static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
+	
 	private String username;
 	private String password;
 
@@ -49,7 +55,7 @@ public class LoginBean {
 		try {
 			request.login(this.username, this.password);
 		} catch (ServletException e) {
-
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage("Login failed."));
 			return "login";
 		}
@@ -65,6 +71,7 @@ public class LoginBean {
 		try {
 			request.logout();
 		} catch (ServletException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage("Logout failed."));
 		}
 

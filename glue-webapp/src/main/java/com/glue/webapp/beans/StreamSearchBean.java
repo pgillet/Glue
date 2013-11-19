@@ -12,6 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
@@ -19,6 +22,8 @@ import com.glue.webapp.search.PageIterator;
 
 @ManagedBean
 public class StreamSearchBean implements PageIterator<Void> {
+	
+	static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
 	@Inject
 	private StreamController streamController;
@@ -177,6 +182,7 @@ public class StreamSearchBean implements PageIterator<Void> {
 			init();
 			streams = streamController.search();
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}
@@ -205,9 +211,11 @@ public class StreamSearchBean implements PageIterator<Void> {
 			init();
 			streams = streamController.next();
 		} catch (NoSuchElementException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}
@@ -243,9 +251,11 @@ public class StreamSearchBean implements PageIterator<Void> {
 			init();
 			streams = streamController.previous();
 		} catch (NoSuchElementException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}
@@ -261,6 +271,7 @@ public class StreamSearchBean implements PageIterator<Void> {
 			init();
 			streams = streamController.first();
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}
@@ -276,6 +287,7 @@ public class StreamSearchBean implements PageIterator<Void> {
 			init();
 			streams = streamController.last();
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(
 					"Holy guacamole! You got an error."));
 		}

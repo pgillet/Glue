@@ -11,6 +11,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
@@ -21,6 +24,8 @@ import com.glue.webapp.logic.UserController;
 
 @ManagedBean
 public class StreamBean /* implements IStream */{
+	
+	static final Logger LOG = LoggerFactory.getLogger(StreamBean.class);
 
 	// TODO: should probably use Dependency Injection here!
 	StreamController streamController = new StreamController();
@@ -361,6 +366,7 @@ public class StreamBean /* implements IStream */{
 
 			streamController.createStream(stream, venue, authenticatedUser);
 		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
 			context.addMessage(null, new FacesMessage(e.getMessage()));
 		}
 

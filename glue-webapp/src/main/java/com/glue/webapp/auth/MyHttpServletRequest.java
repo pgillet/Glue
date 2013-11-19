@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.webapp.db.DAOManager;
@@ -16,6 +19,8 @@ import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.UserDAO;
 
 class MyHttpServletRequest extends HttpServletRequestWrapper {
+	
+	static final Logger LOG = LoggerFactory.getLogger(MyHttpServletRequest.class);
 
 	private static final String USER_PRINCIPAL = "user_principal";
 	private static final String CURRENT_STREAM = "current_stream";
@@ -89,6 +94,7 @@ class MyHttpServletRequest extends HttpServletRequestWrapper {
 			UserDAO userDAO = manager.getUserDAO();
 			user = userDAO.authenticate(username, password);
 		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
 			throw new ServletException(e);
 		} finally {
 			manager.closeConnectionQuietly();
@@ -181,8 +187,7 @@ class MyHttpServletRequest extends HttpServletRequestWrapper {
 
 				b = streamDAO.isParticipant(principal.getId(), stream.getId());
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.error(e.getMessage(), e);
 			} finally {
 				manager.closeConnectionQuietly();
 			}
