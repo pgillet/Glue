@@ -32,16 +32,15 @@ public class CreateMediaServlet extends AbstractDatabaseServlet {
 	private Part streamPart;
 
 	@Override
-	protected void doOperation(HttpServletRequest request,
-			HttpServletResponse response, DAOManager manager)
+	protected void doOperation(HttpServletRequest request, HttpServletResponse response, DAOManager manager)
 			throws SQLException {
 
 		// Create a media
 		MediaDAO mediaDAO = manager.getMediaDAO();
 
 		UserPrincipal principal = (UserPrincipal) request.getUserPrincipal();
-
-		mediaDAO.create(media, principal);
+		media.setUser(principal);
+		mediaDAO.create(media);
 
 		// Create associated file
 		try {
@@ -55,16 +54,13 @@ public class CreateMediaServlet extends AbstractDatabaseServlet {
 		}
 	}
 
-	protected void retrieveDatasFromRequest(HttpServletRequest request)
-			throws IOException {
-		media = GSonHelper.getGsonObjectFromMultiPartRequest(request,
-				Media.class);
+	protected void retrieveDatasFromRequest(HttpServletRequest request) throws IOException {
+		media = GSonHelper.getGsonObjectFromMultiPartRequest(request, Media.class);
 		streamPart = GSonHelper.getStreamPartFromMultiPartRequest(request);
 	}
 
 	@Override
-	protected void sendResponse(HttpServletResponse response)
-			throws IOException {
+	protected void sendResponse(HttpServletResponse response) throws IOException {
 		PrintWriter writer = response.getWriter();
 		writer.write(gson.toJson(media));
 	}

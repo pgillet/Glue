@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>glue-feed</artifactId>
-
+	
 	<parent>
 		<groupId>com.glue</groupId>
 		<artifactId>glue-parent</artifactId>
@@ -17,6 +17,10 @@
 			<id>Snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots/</url>
 		</repository>
+		<repository>
+      		<id>google-api-services</id>
+      		<url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
+    	</repository>
 	</repositories>
 	
 	<dependencies>
@@ -42,11 +46,6 @@
 			<version>1.7.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.code.geocoder-java</groupId>
-			<artifactId>geocoder-java</artifactId>
-			<version>0.15</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.chemistry.opencmis</groupId>
 			<artifactId>chemistry-opencmis-client-impl</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
@@ -56,5 +55,18 @@
 			<artifactId>geocoder-java</artifactId>
 			<version>0.15</version>
 		</dependency>
+		
+		<!-- YouTube Data V3 support -->
+	    <dependency>
+	      <groupId>com.google.apis</groupId>
+	      <artifactId>google-api-services-youtube</artifactId>
+	      <version>v3-rev8-1.12.0-beta</version>
+	    </dependency>
+
+	    <dependency>
+	      <groupId>com.google.http-client</groupId>
+	      <artifactId>google-http-client-jackson2</artifactId>
+	      <version>1.12.0-beta</version>
+	    </dependency>
 	</dependencies>
 </project>

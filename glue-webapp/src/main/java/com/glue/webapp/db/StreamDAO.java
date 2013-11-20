@@ -56,6 +56,8 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String SELECT_STREAM_EXIST = "SELECT * FROM STREAM WHERE TITLE=? and START_DATE=?";
 
+	public static final String SELECT_STREAM_BETWEEN = "SELECT * FROM STREAM WHERE END_DATE<? and END_DATE>?";
+
 	public static final String SELECT_STREAM_BY_IDS = "SELECT * FROM STREAM WHERE ID IN (?)";
 
 	public static final String SELECT_STREAM_VIEW = "SELECT * from STREAM_VIEW";
@@ -79,6 +81,7 @@ public class StreamDAO extends AbstractDAO {
 	private PreparedStatement searchByIdStmt = null;
 	private PreparedStatement existStmt = null;
 	private PreparedStatement createStreamTagStmt = null;
+	private PreparedStatement searchBetweenStmt = null;
 
 	protected StreamDAO() {
 	}
@@ -93,6 +96,7 @@ public class StreamDAO extends AbstractDAO {
 		this.searchByIdStmt = connection.prepareStatement(SELECT_STREAM_BY_ID);
 		this.existStmt = connection.prepareStatement(SELECT_STREAM_EXIST);
 		this.createStreamTagStmt = connection.prepareStatement(CREATE_STREAM_CATEGORY);
+		this.searchBetweenStmt = connection.prepareStatement(SELECT_STREAM_BETWEEN);
 	}
 
 	public void create(IStream aStream) throws SQLException {
@@ -397,6 +401,37 @@ public class StreamDAO extends AbstractDAO {
 			aStream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 			aStream.setNumberOfParticipant(res.getInt(COLUMN_NB_OF_PARTICIPANT));
 			result.add(aStream);
+		}
+		return result;
+	}
+
+	// Search stream between before and after
+	public List<IStream> searchBetween(long after, long before) throws SQLException {
+		List<IStream> result = new ArrayList<IStream>();
+		searchBetweenStmt.setLong(1, before);
+		searchBetweenStmt.setLong(2, after);
+		ResultSet res = searchBetweenStmt.executeQuery();
+		IStream stream;
+		while (res.next()) {
+			stream = new Stream();
+			stream.setId(res.getLong(COLUMN_ID));
+			stream.setTitle(res.getString(COLUMN_TITLE));
+			stream.setDescription(res.getString(COLUMN_DESCRIPTION));
+			stream.setUrl(res.getString(COLUMN_URL));
+			stream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
+			stream.setOpen(res.getBoolean(COLUMN_OPEN));
+			stream.setSharedSecretQuestion(res.getString(COLUMN_SECRET_QUESTION));
+			stream.setSharedSecretAnswer(res.getString(COLUMN_SECRET_ANSWER));
+			stream.setShouldRequestToParticipate(res.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
+			stream.setStartDate(res.getLong(COLUMN_START_DATE));
+			stream.setEndDate(res.getLong(COLUMN_END_DATE));
+			stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+
+			IVenue dummyVenue = new Venue();
+			dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
+			stream.setVenue(dummyVenue);
+
+			result.add(stream);
 		}
 		return result;
 	}

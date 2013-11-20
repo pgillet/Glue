@@ -3,6 +3,8 @@ package com.glue.struct.impl;
 import java.io.Serializable;
 
 import com.glue.struct.IMedia;
+import com.glue.struct.IStream;
+import com.glue.struct.IUser;
 
 public class Media implements IMedia, Serializable {
 
@@ -14,18 +16,29 @@ public class Media implements IMedia, Serializable {
 	String mimeType;
 	Double latitude;
 	Double longitude;
-	Long startDate;
-	Long streamId;
+	Long creationDate;
+	IStream stream;
+	IUser user;
+	boolean external;
+	String url;
 
 	public Media() {
 	}
 
-	public Long getStreamId() {
-		return streamId;
+	public IStream getStream() {
+		return stream;
 	}
 
-	public void setStreamId(Long streamId) {
-		this.streamId = streamId;
+	public void setStream(IStream stream) {
+		this.stream = stream;
+	}
+
+	public IUser getUser() {
+		return user;
+	}
+
+	public void setUser(IUser user) {
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -76,12 +89,39 @@ public class Media implements IMedia, Serializable {
 		this.longitude = longitude;
 	}
 
-	public Long getStartDate() {
-		return startDate;
+	public Long getCreationDate() {
+		return creationDate;
 	}
 
-	public void setStartDate(Long startDate) {
-		this.startDate = startDate;
+	public void setCreationDate(Long creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	@Override
+	public boolean isExternal() {
+		return external;
+	}
+
+	@Override
+	public void setExternal(boolean external) {
+		this.external = external;
+	}
+
+	@Override
+	public String getUrl() {
+		return url;
+	}
+
+	@Override
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	@Override
+	public String toString() {
+		return "Media [id=" + id + ", caption=" + caption + ", extension=" + extension + ", mimeType=" + mimeType
+				+ ", latitude=" + latitude + ", longitude=" + longitude + ", creationDate=" + creationDate
+				+ ", streamId=" + stream.getId() + "]";
 	}
 
 }

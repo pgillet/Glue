@@ -39,13 +39,10 @@ public class RepositoryManager {
 		return file.mkdirs();
 	}
 
-	public static void createMedia(IMedia media, Part mediaPart)
-			throws IOException {
+	public static void createMedia(IMedia media, Part mediaPart) throws IOException {
 
-		File streamDirectory = new File(Root,
-				Long.toString(media.getStreamId()));
-		File mediaFile = new File(streamDirectory, Long.toString(media.getId())
-				+ "." + media.getExtension());
+		File streamDirectory = new File(Root, Long.toString(media.getStream().getId()));
+		File mediaFile = new File(streamDirectory, Long.toString(media.getId()) + "." + media.getExtension());
 
 		LOG.info("Writing media file part to: " + mediaFile.getPath());
 		mediaPart.write(mediaFile.getPath());

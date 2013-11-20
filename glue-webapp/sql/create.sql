@@ -97,7 +97,7 @@ CREATE TABLE PARTICIPANT (
 -- MEDIA table
 CREATE TABLE MEDIA (
 			id BIGINT NOT NULL AUTO_INCREMENT,
-			user_id BIGINT NOT NULL,
+			user_id BIGINT,
 			stream_id BIGINT NOT NULL,
 			extension VARCHAR(5),
 			mime_type ENUM('Audio','Picture','Text') NOT NULL,

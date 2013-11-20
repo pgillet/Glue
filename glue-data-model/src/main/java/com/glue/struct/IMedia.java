@@ -6,9 +6,13 @@ public interface IMedia {
 
 	void setId(Long id);
 
-	Long getStreamId();
+	IStream getStream();
 
-	void setStreamId(Long streamId);
+	void setStream(IStream stream);
+
+	IUser getUser();
+
+	void setUser(IUser user);
 
 	String getExtension();
 
@@ -30,8 +34,16 @@ public interface IMedia {
 
 	void setLongitude(Double longitude);
 
-	Long getStartDate();
+	Long getCreationDate();
 
-	void setStartDate(Long date);
+	void setCreationDate(Long date);
+
+	boolean isExternal();
+
+	void setExternal(boolean external);
+
+	String getUrl();
+
+	void setUrl(String url);
 
 }
