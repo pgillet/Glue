@@ -7,7 +7,7 @@
     </layout>
   </appender>
   
-  <logger name="com.glue" level="TRACE"/>
+  <logger name="com.glue" level="DEBUG"/>
   
 
   <root level="debug">

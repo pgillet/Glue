@@ -52,11 +52,9 @@ public class I18nFilter implements Filter {
 			}
 		}
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Request path = " + path);
-			LOG.debug("User locale = " + locale);
-			LOG.debug("Request URI = "
-					+ ((HttpServletRequest) request).getRequestURI());
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("Request path = " + path);
+			LOG.trace("User locale = " + locale);
 		}
 
 		if (locale == null) {
