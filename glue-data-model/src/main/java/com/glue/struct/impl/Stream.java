@@ -49,6 +49,8 @@ public class Stream implements IStream, Serializable {
 
 	private List<ICategory> categories;
 
+	private String price;
+
 	public Stream() {
 	}
 
@@ -298,5 +300,15 @@ public class Stream implements IStream, Serializable {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getPrice() {
+		return price;
+	}
+
+	@Override
+	public void setPrice(String price) {
+		this.price = price;
 	}
 }

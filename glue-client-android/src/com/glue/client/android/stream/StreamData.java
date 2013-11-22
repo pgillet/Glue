@@ -47,6 +47,8 @@ public class StreamData implements IStream {
 
 	private List<ICategory> categories;
 
+	private String price;
+
 	private static StreamData instance = new StreamData();
 
 	private StreamData() {
@@ -289,6 +291,16 @@ public class StreamData implements IStream {
 	@Override
 	public void setCategories(List<ICategory> categories) {
 		this.categories = categories;
+	}
+
+	@Override
+	public String getPrice() {
+		return price;
+	}
+
+	@Override
+	public void setPrice(String price) {
+		this.price = price;
 	}
 
 }

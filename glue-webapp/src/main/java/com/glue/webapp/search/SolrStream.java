@@ -59,6 +59,8 @@ public class SolrStream implements IStream {
 	@Field
 	private List<ICategory> categories;
 
+	private String price;
+
 	/**
 	 * @return the id
 	 */
@@ -299,21 +301,6 @@ public class SolrStream implements IStream {
 		this.venue = venue;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "SolrStream [id=" + id + ", title=" + title + ", description=" + description + ", url=" + url
-				+ ", publicc=" + publicc + ", open=" + open + ", invitedParticipants=" + invitedParticipants
-				+ ", sharedSecretQuestion=" + sharedSecretQuestion + ", sharedSecretAnswer=" + sharedSecretAnswer
-				+ ", shouldRequestToParticipate=" + shouldRequestToParticipate + ", startDate=" + start_date
-				+ ", endDate=" + end_date + ", tags=" + tags + ", numberOfParticipant=" + numberOfParticipant
-				+ ", thumbPath=" + thumbPath + ", venue=" + venue + "]";
-	}
-
 	@Override
 	public List<ICategory> getCategories() {
 		return categories;
@@ -322,6 +309,26 @@ public class SolrStream implements IStream {
 	@Override
 	public void setCategories(List<ICategory> categories) {
 		this.categories = categories;
+	}
+
+	@Override
+	public String getPrice() {
+		return price;
+	}
+
+	@Override
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	@Override
+	public String toString() {
+		return "SolrStream [title=" + title + ", description=" + description + ", url=" + url + ", publicc=" + publicc
+				+ ", open=" + open + ", invitedParticipants=" + invitedParticipants + ", sharedSecretQuestion="
+				+ sharedSecretQuestion + ", sharedSecretAnswer=" + sharedSecretAnswer + ", shouldRequestToParticipate="
+				+ shouldRequestToParticipate + ", start_date=" + start_date + ", end_date=" + end_date + ", tags="
+				+ tags + ", numberOfParticipant=" + numberOfParticipant + ", thumbPath=" + thumbPath + ", venue="
+				+ venue + ", categories=" + categories + ", price=" + price + "]";
 	}
 
 }

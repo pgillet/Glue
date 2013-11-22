@@ -41,15 +41,16 @@ public class StreamDAO extends AbstractDAO {
 	public static final String COLUMN_NB_OF_PARTICIPANT = "nb_of_participant";
 	public static final String COLUMN_THUMB_PATH = "thumb_path";
 	public static final String COLUMN_VENUE_ID = "venue_id";
+	public static final String COLUMN_PRICE = "price";
 
 	public static final String CREATE_STREAM = "INSERT INTO STREAM(TITLE, DESCRIPTION, URL, PUBLIC, OPEN, "
 			+ "SECRET_QUESTION, SECRET_ANSWER, REQUEST_TO_PARTICIPATE, START_DATE, END_DATE, "
-			+ "THUMB_PATH, VENUE_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ "THUMB_PATH, VENUE_ID, PRICE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	public static final String INSERT_NEW_PARTICIPANT = "INSERT IGNORE INTO PARTICIPANT(user_id, stream_id, admin) VALUES (?,?,?)";
 
 	public static final String UPDATE_STREAM = "UPDATE STREAM SET TITLE=?, DESCRIPTION=?, URL=?, PUBLIC=?, OPEN=?, "
-			+ "SECRET_QUESTION=?, SECRET_ANSWER=?, REQUEST_TO_PARTICIPATE=?, START_DATE=?, END_DATE=?, VENUE_ID=? "
+			+ "SECRET_QUESTION=?, SECRET_ANSWER=?, REQUEST_TO_PARTICIPATE=?, START_DATE=?, END_DATE=?, VENUE_ID=?, PRICE=?"
 			+ "WHERE ID=?";
 
 	public static final String SELECT_STREAM_BY_ID = "SELECT * FROM STREAM WHERE ID=?";
@@ -116,6 +117,7 @@ public class StreamDAO extends AbstractDAO {
 		createStmt.setLong(10, aStream.getEndDate());
 		createStmt.setString(11, aStream.getThumbPath());
 		createStmt.setLong(12, aStream.getVenue().getId());
+		createStmt.setString(13, aStream.getPrice());
 		createStmt.executeUpdate();
 
 		// Get the generated id
@@ -184,7 +186,7 @@ public class StreamDAO extends AbstractDAO {
 		checkVenue(aStream);
 		checkCategories(aStream);
 
-		updateStmt.setLong(12, aStream.getId());
+		updateStmt.setLong(13, aStream.getId());
 		updateStmt.setString(1, aStream.getTitle());
 		updateStmt.setString(2, aStream.getDescription());
 		updateStmt.setString(3, aStream.getUrl());
@@ -196,6 +198,7 @@ public class StreamDAO extends AbstractDAO {
 		updateStmt.setLong(9, aStream.getStartDate());
 		updateStmt.setLong(10, aStream.getEndDate());
 		updateStmt.setLong(11, aStream.getVenue().getId());
+		updateStmt.setString(12, aStream.getPrice());
 		updateStmt.executeUpdate();
 
 		// Update Categories
@@ -233,6 +236,7 @@ public class StreamDAO extends AbstractDAO {
 			result.setStartDate(res.getLong(COLUMN_START_DATE));
 			result.setEndDate(res.getLong(COLUMN_END_DATE));
 			result.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+			result.setPrice(res.getString(COLUMN_PRICE));
 		}
 		return result;
 	}
@@ -286,6 +290,7 @@ public class StreamDAO extends AbstractDAO {
 				stream.setStartDate(res.getLong(COLUMN_START_DATE));
 				stream.setEndDate(res.getLong(COLUMN_END_DATE));
 				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+				stream.setPrice(res.getString(COLUMN_PRICE));
 
 				IVenue dummyVenue = new Venue();
 				dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
@@ -400,6 +405,7 @@ public class StreamDAO extends AbstractDAO {
 			aStream.setOpen(res.getBoolean(COLUMN_OPEN));
 			aStream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
 			aStream.setNumberOfParticipant(res.getInt(COLUMN_NB_OF_PARTICIPANT));
+			aStream.setPrice(res.getString(COLUMN_PRICE));
 			result.add(aStream);
 		}
 		return result;
@@ -426,6 +432,7 @@ public class StreamDAO extends AbstractDAO {
 			stream.setStartDate(res.getLong(COLUMN_START_DATE));
 			stream.setEndDate(res.getLong(COLUMN_END_DATE));
 			stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
+			stream.setPrice(res.getString(COLUMN_PRICE));
 
 			IVenue dummyVenue = new Venue();
 			dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));

@@ -163,4 +163,13 @@ public interface IStream {
 
 	void setCategories(List<ICategory> categories);
 
+	/**
+	 * Returns event price.
+	 * 
+	 * @return an event price.
+	 */
+	String getPrice();
+
+	void setPrice(String price);
+
 }

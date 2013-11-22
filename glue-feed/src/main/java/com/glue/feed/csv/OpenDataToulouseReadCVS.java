@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -65,7 +66,8 @@ public class OpenDataToulouseReadCVS {
 			ze = zin.getNextEntry();
 		}
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, StandardCharsets.ISO_8859_1));
+		// CSV files encoding = "Windows-1252"
+		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, Charset.forName("Windows-1252")));
 
 		OpenDataToulouseReadCVS obj = new OpenDataToulouseReadCVS();
 		obj.run(reader);
@@ -252,6 +254,7 @@ public class OpenDataToulouseReadCVS {
 		stream.setStartDate(sdate.getTime());
 		stream.setEndDate(edate.getTime());
 		stream.setCategories(getCategories(fields[16], fields[17], fields[18]));
+		stream.setPrice(cleanup(fields[26]));
 
 		IVenue venue = new Venue();
 		venue.setName(name);
@@ -395,7 +398,7 @@ public class OpenDataToulouseReadCVS {
 		Map<String, String> dico = new HashMap<>();
 		Properties properties = new Properties();
 		InputStream in = OpenDataToulouseReadCVS.class.getResourceAsStream("../dico.properties");
-		Reader reader = new InputStreamReader(in, StandardCharsets.ISO_8859_1);
+		Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 		try {
 			properties.load(reader);
 			for (Entry<Object, Object> entry : properties.entrySet()) {
