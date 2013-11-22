@@ -23,7 +23,7 @@ import com.glue.webapp.logic.InternalServerException;
  * 
  */
 public class SolrSearchServer implements SearchEngine<IStream> {
-	
+
 	static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
 	private String queryString;
@@ -38,7 +38,6 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 	private long numFound;
 
-	private static final String START_DATE_FIELD = "start_date";
 	private static final String END_DATE_FIELD = "end_date";
 
 	private final String DEFAULT_Q = "*:*";
@@ -56,43 +55,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 		List<? extends IStream> items = null;
 
-		SolrQuery query = new SolrQuery();
-		query.setQuery("{!boost b=$bfunction v=$qq}");
-
-		// Date criteria
-		Number min = null;
-		if (startDate != null) {
-			min = startDate.getTime();
-		} else {
-			// Search from the current date by default
-			TimeZone tz = TimeZone.getTimeZone("UTC");
-			Calendar cal = Calendar.getInstance(tz);
-			// reset hour, minutes, seconds and millis
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			min = cal.getTimeInMillis();
-		}
-
-		String max = ((endDate != null) ? Long.toString(endDate.getTime())
-				: "*");
-
-		query.addFilterQuery(END_DATE_FIELD + ":[" + min + " TO " + max + "]");
-
-		// 5.787037e-10 = 1 / (30 days)
-		// 3.8580247e-11 = 1 / (300 days)
-		// product of 2 functions =
-		// 1 - end_date close to today
-		// 2 - start_date has already started
-		query.add(
-				"bfunction",
-				"product(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),recip(ms(start_date,NOW/DAY),3.8580247e-11,1,2))");
-		query.add("qq", queryString.trim().length() == 0 ? DEFAULT_Q
-				: queryString.trim());
-
-		query.setStart(start);
-		query.setRows(rows);
+		SolrQuery query = constructSolrQuery();
 
 		try {
 			QueryResponse rsp = solr.query(query);
@@ -106,6 +69,64 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 		}
 
 		return (List<IStream>) items;
+	}
+
+	private SolrQuery constructSolrQuery() {
+		SolrQuery query = new SolrQuery();
+
+		// Get dates
+		String begin = ((startDate != null) ? Long.toString(startDate.getTime()) : "*");
+		String end = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
+
+		if (isFullQuery()) {
+
+			// Specific boost calculation for empty queries
+			query.setQuery("{!boost b=$bfunction v=$qq}");
+
+			// If no begin date, begin is equal to "today"
+			if ("*".equals(begin)) {
+				// Search from the current date by default
+				TimeZone tz = TimeZone.getTimeZone("UTC");
+				Calendar cal = Calendar.getInstance(tz);
+				// reset hour, minutes, seconds and millis
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+				begin = Long.toString(cal.getTimeInMillis());
+			}
+
+			// 5.787037e-10 = 1 / (30 days)
+			// 3.8580247e-11 = 1 / (300 days)
+			// product of 2 functions =
+			// 1 - end_date close to today
+			// 2 - start_date has already started
+			query.add("bfunction",
+					"product(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),recip(ms(start_date,NOW/DAY),3.8580247e-11,1,2))");
+			query.add("qq", DEFAULT_Q);
+
+		}
+
+		// If we are looking for something specific, no boost!
+		else {
+			query.setQuery(queryString);
+			// query.addSort(END_DATE_FIELD, ORDER.desc);
+		}
+		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "]");
+		query.setStart(start);
+		query.setRows(rows);
+		return query;
+	}
+
+	/**
+	 * Return true if the query criteria in null or * or *:*
+	 * 
+	 * @param query
+	 * @return
+	 */
+	private boolean isFullQuery() {
+		return (queryString == null)
+				|| ("".equals(queryString) || ("*".equals(queryString)) || ("*:*").equals(queryString));
 	}
 
 	@Override
