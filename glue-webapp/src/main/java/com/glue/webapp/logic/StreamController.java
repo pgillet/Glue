@@ -1,11 +1,13 @@
 package com.glue.webapp.logic;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -13,9 +15,11 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
+import com.glue.webapp.db.CategoryDAO;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
@@ -25,8 +29,13 @@ import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
 public class StreamController implements PageIterator<List<IStream>> {
-	
+
 	static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
+
+	/**
+	 * An awful cache for categories.
+	 */
+	private static Set<ICategory> _categories = null;
 
 	@Inject
 	private SearchEngine<IStream> engine;
@@ -38,6 +47,8 @@ public class StreamController implements PageIterator<List<IStream>> {
 	private long totalRows;
 
 	private String queryString;
+	
+	private String[] categories;
 
 	/**
 	 * @return the queryString
@@ -54,11 +65,26 @@ public class StreamController implements PageIterator<List<IStream>> {
 		this.queryString = queryString;
 	}
 
+	/**
+	 * @return the categories
+	 */
+	public String[] getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @param categories the categories to set
+	 */
+	public void setCategories(String[] categories) {
+		this.categories = categories;
+	}
+
 	public List<IStream> search() throws InternalServerException {
 
 		// The underlying search engine returns only partial streams (i.e. only
 		// the properties that are actually indexed)
 		engine.setQueryString(queryString);
+		engine.setCategories(categories);
 		engine.setStartDate(null);
 		engine.setEndDate(null);
 		engine.setStart(start);
@@ -169,6 +195,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 			});
 
 		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 			throw new InternalServerException(e);
 		}
 	}
@@ -268,6 +295,33 @@ public class StreamController implements PageIterator<List<IStream>> {
 		}
 
 		return num;
+	}
+
+	/**
+	 * @return
+	 * @throws InternalServerException
+	 */
+	public synchronized Set<ICategory> getAllCategories()
+			throws InternalServerException {
+
+		if (_categories == null) {
+			DAOManager manager = null;
+			try {
+				manager = DAOManager.getInstance();
+				CategoryDAO categoryDAO = manager.getCategoryDAO();
+				_categories = categoryDAO.searchAll();
+			} catch (NamingException e) {
+				LOG.error(e.getMessage(), e);
+				throw new InternalServerException(e);
+			} catch (SQLException e) {
+				LOG.error(e.getMessage(), e);
+				throw new InternalServerException(e);
+			} finally {
+				manager.closeConnectionQuietly();
+			}
+		}
+
+		return _categories;
 	}
 
 }

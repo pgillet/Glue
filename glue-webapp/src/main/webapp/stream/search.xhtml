@@ -36,10 +36,33 @@
 					</div>
 				</c:if>
 
+				<c:if test="#{not empty streamSearchBean.streams}">
+					<div class="row glue-hr-bottom-border">
+						<div class="col-md-11 col-md-offset-1">
+							<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
+							<ui:repeat var="item" value="#{streamSearchBean.categories}">
+								<h:commandButton styleClass="btn text-muted glue-btn-cat"
+									style="#{streamSearchBean.getStyle(item.name)}"
+									value="#{item.name}"
+									action="#{streamSearchBean.enableCategory}">
+									<f:param name="cat" value="#{item.name}"></f:param>
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton>
+							</ui:repeat>
+						</div>
+					</div>
+				</c:if>
+
 				<ui:fragment rendered="#{not empty streamSearchBean.streams}">
-					<p class="text-muted">
-						<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
-					</p>
+					<br />
+					<div class="row">
+						<div class="col-md-6 col-md-offset-1">
+							<p class="text-muted">
+								<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
+							</p>
+						</div>
+					</div>
+					<br />
 				</ui:fragment>
 
 				<!-- Reuse the properties from request to request -->
@@ -49,52 +72,53 @@
 				<h:inputHidden value="#{streamSearchBean.latitude}" />
 				<h:inputHidden value="#{streamSearchBean.longitude}" />
 				<h:inputHidden value="#{streamSearchBean.location}" />
+				<h:inputHidden value="#{streamSearchBean.catSelection}"
+					converter="StringCollectionConverter" />
 				<!-- Pagination controls -->
 				<h:inputHidden value="#{streamSearchBean.start}" />
 				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
 				<h:inputHidden value="#{streamSearchBean.totalRows}" />
 
-
-
 				<ui:repeat var="stream" value="#{streamSearchBean.streams}"
 					varStatus="status">
 					<div class="row">
-						<div class="col-md-6 col-md-offset-3">
+						<div class="col-md-6 col-md-offset-1">
 							<ul class="list-unstyled">
-								<li><h3>
+								<li><h4>
 										<a href="#{stream.url}" target="_blank"><strong>#{stream.title}</strong></a>
-									</h3></li>
-								<li><p>
-										<em>#{stream.description}</em>
-									</p></li>
-								<li><h4>
-										<span class="glyphicon glyphicon-calendar text-muted"></span>&#160;
-										<ui:fragment rendered="#{stream.startDate lt stream.endDate}">
-											<h:outputText value="#{bundle.stream_date_from} " />
-											<h:outputText value="#{stream.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-											<h:outputText value=" #{bundle.stream_date_to} " />
-											<h:outputText value="#{stream.endDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-										</ui:fragment>
-										<ui:fragment rendered="#{stream.startDate ge stream.endDate}">
-											<h:outputText value="#{stream.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
-											</h:outputText>
-										</ui:fragment>
 									</h4></li>
-								<li><h4>
+								<li><p>#{stream.description}</p></li>
+								<li><h5>
+										<strong> <span
+											class="glyphicon glyphicon-calendar text-muted"></span>&#160;
+											<ui:fragment rendered="#{stream.startDate lt stream.endDate}">
+												<h:outputText value="#{bundle.stream_date_from} " />
+												<h:outputText value="#{stream.startDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+												<h:outputText value=" #{bundle.stream_date_to} " />
+												<h:outputText value="#{stream.endDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+											</ui:fragment> <ui:fragment
+												rendered="#{stream.startDate ge stream.endDate}">
+												<h:outputText value="#{stream.startDate}">
+													<f:convertDateTime
+														binding="#{streamSearchBean.convertDate}" />
+												</h:outputText>
+											</ui:fragment></strong>
+									</h5></li>
+								<li><h5>
 										<span class="glyphicon glyphicon-map-marker text-muted"></span>
-										#{stream.venue.name} - <span class="text-muted">#{stream.venue.address}</span>
-									</h4></li>
+										<strong>#{stream.venue.name}</strong> - <span
+											class="text-muted">#{stream.venue.address}</span>
+									</h5></li>
 							</ul>
 						</div>
 					</div>
-					<ui:fragment rendered="#{not status.last}">
-						<hr />
-					</ui:fragment>
+					<br />
 
 				</ui:repeat>
 

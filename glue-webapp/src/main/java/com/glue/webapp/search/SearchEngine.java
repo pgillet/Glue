@@ -96,4 +96,18 @@ public interface SearchEngine<T> {
 	 */
 	void setRows(int rows);
 
+	/**
+	 * Returns the selected categories.
+	 * 
+	 * @return
+	 */
+	String[] getCategories();
+
+	/**
+	 * Sets the wanted categories
+	 * 
+	 * @param categories
+	 */
+	void setCategories(String[] categories);
+
 }

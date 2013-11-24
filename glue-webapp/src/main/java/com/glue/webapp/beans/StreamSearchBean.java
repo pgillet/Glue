@@ -1,11 +1,14 @@
 package com.glue.webapp.beans;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -15,20 +18,21 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.search.PageIterator;
 
 @ManagedBean
-public class StreamSearchBean implements PageIterator<Void> {
-	
+public class StreamSearchBean implements PageIterator<Void>, Serializable {
+
+	private static final String PARAM_CAT = "cat";
+
 	static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
 	@Inject
 	private StreamController streamController;
-
-	private String query;
 
 	private String location;
 
@@ -42,13 +46,24 @@ public class StreamSearchBean implements PageIterator<Void> {
 
 	private DateTimeConverter convertDate;
 
+	private Category[] categories = Category.values();
+
+	private List<String> catSelection = new ArrayList<>();
+
 	private List<IStream> streams;
+
+	@PostConstruct
+	public void init() {
+		for (Category category : categories) {
+			catSelection.add(category.name());
+		}
+	}
 
 	/**
 	 * @return the query
 	 */
 	public String getQuery() {
-		return query;
+		return streamController.getQueryString();
 	}
 
 	/**
@@ -56,7 +71,7 @@ public class StreamSearchBean implements PageIterator<Void> {
 	 *            the query to set
 	 */
 	public void setQuery(String query) {
-		this.query = query;
+		streamController.setQueryString(query);
 	}
 
 	/**
@@ -167,6 +182,28 @@ public class StreamSearchBean implements PageIterator<Void> {
 	}
 
 	/**
+	 * @return the categories
+	 */
+	public Category[] getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @return the catSelection
+	 */
+	public List<String> getCatSelection() {
+		return catSelection;
+	}
+
+	/**
+	 * @param catSelection
+	 *            the catSelection to set
+	 */
+	public void setCatSelection(List<String> catSelection) {
+		this.catSelection = catSelection;
+	}
+
+	/**
 	 * @param streams
 	 *            the streams to set
 	 */
@@ -179,7 +216,6 @@ public class StreamSearchBean implements PageIterator<Void> {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			init();
 			streams = streamController.search();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
@@ -194,9 +230,10 @@ public class StreamSearchBean implements PageIterator<Void> {
 	public boolean hasNext() {
 		return streamController.hasNext();
 	}
-	
+
 	/**
 	 * For EL access.
+	 * 
 	 * @return
 	 */
 	public boolean isNext() {
@@ -208,7 +245,6 @@ public class StreamSearchBean implements PageIterator<Void> {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			init();
 			streams = streamController.next();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
@@ -223,20 +259,14 @@ public class StreamSearchBean implements PageIterator<Void> {
 		return null;
 	}
 
-	/**
-	 * Populate the underlying stream controller.
-	 */
-	private void init() {
-		streamController.setQueryString(query);
-	}
-
 	@Override
 	public boolean hasPrevious() {
 		return streamController.hasPrevious();
 	}
-	
+
 	/**
 	 * For EL access.
+	 * 
 	 * @return
 	 */
 	public boolean isPrevious() {
@@ -248,7 +278,6 @@ public class StreamSearchBean implements PageIterator<Void> {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			init();
 			streams = streamController.previous();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
@@ -268,7 +297,6 @@ public class StreamSearchBean implements PageIterator<Void> {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			init();
 			streams = streamController.first();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
@@ -284,7 +312,6 @@ public class StreamSearchBean implements PageIterator<Void> {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			init();
 			streams = streamController.last();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
@@ -326,7 +353,7 @@ public class StreamSearchBean implements PageIterator<Void> {
 	public long getTotalRows() {
 		return streamController.getTotalRows();
 	}
-	
+
 	/**
 	 * For pagination control from request to request.
 	 */
@@ -342,6 +369,44 @@ public class StreamSearchBean implements PageIterator<Void> {
 	@Override
 	public int getTotalPages() {
 		return streamController.getTotalPages();
+	}
+
+	/**
+	 * Returns the content of the style attribute to apply to the given category
+	 * selector that has just been toggled.
+	 * 
+	 * @param cat
+	 * @return
+	 */
+	public String getStyle(String cat) {
+		String styleAttr = "";
+		if (catSelection.contains(cat)) {
+			styleAttr = "border-bottom: 3px solid "
+					+ Category.valueOf(cat).getColor() + ";";
+		}
+
+		return styleAttr;
+	}
+
+	public void enableCategory() {
+		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+		LOG.debug("Toggle category = " + cat);
+
+		if (!catSelection.remove(cat)) {
+			catSelection.add(cat);
+		}
+
+		streamController.setCategories(catSelection
+				.toArray(new String[catSelection.size()]));
+
+		try {
+			streams = streamController.search();
+		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					"Holy guacamole! You got an error."));
+		}
 	}
 
 }

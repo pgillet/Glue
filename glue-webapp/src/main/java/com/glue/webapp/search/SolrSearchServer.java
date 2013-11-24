@@ -27,6 +27,8 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
 	private String queryString;
+	
+	private String[] categories;
 
 	private Date startDate;
 
@@ -146,6 +148,20 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	@Override
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
+	}
+
+	/**
+	 * @return the categories
+	 */
+	public String[] getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @param categories the categories to set
+	 */
+	public void setCategories(String[] categories) {
+		this.categories = categories;
 	}
 
 	@Override
