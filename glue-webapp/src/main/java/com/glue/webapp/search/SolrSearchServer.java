@@ -115,6 +115,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 			// query.addSort(END_DATE_FIELD, ORDER.desc);
 		}
 		if (categories != null && categories.length > 0) {
+			System.out.println("cat = " + constructCategoriesFilter());
 			query.addFilterQuery("category:" + constructCategoriesFilter());
 		}
 		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "]");
