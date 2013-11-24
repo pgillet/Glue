@@ -29,11 +29,15 @@ public class StringCollectionConverter implements Converter {
 		List<String> l = null;
 		if (value != null) {
 			// Remove the leading and trailing brackets
-
 			String str = value.trim();
-			str = str.substring(1, str.length() - 1);
-			String[] tokens = str.split(",\\s");
-			l = new ArrayList<>(Arrays.asList(tokens));
+			str = str.substring(1, str.length() - 1).trim();
+			if (str.length() > 0) {
+				String[] tokens = str.split(",\\s");
+				l = new ArrayList<>(Arrays.asList(tokens));
+			} else {
+				// Empty list
+				l = new ArrayList<>();
+			}
 		}
 
 		return l;

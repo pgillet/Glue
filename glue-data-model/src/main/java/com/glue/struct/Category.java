@@ -3,7 +3,7 @@ package com.glue.struct;
 
 public enum Category {
 	MUSIC("#3a87ad"), PERFORMING_ART("#b94a48"), SPORT("#468847"), CONFERENCE("#c09853"), EXHIBITION("#428bca"), OTHER(
-			"#999999");
+			"#bd1789");
 
 	private final String color;
 
