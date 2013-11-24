@@ -27,6 +27,8 @@ import com.glue.webapp.search.PageIterator;
 @ManagedBean
 public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
+	private static final String ERROR_MESSAGE = "Holy guacamole! You got an error.";
+
 	private static final String PARAM_CAT = "cat";
 
 	static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
@@ -159,7 +161,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		// final String key2 = "time_format";
 
 		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = ResourceBundle.getBundle(basename, context.getViewRoot().getLocale());
+		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
+				.getViewRoot().getLocale());
 
 		String dateFormat = bundle.getString(key1);
 		// String timeFormat = bundle.getString(key2);
@@ -218,7 +221,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.search();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 
 		return "stream-search";
@@ -246,10 +249,10 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.next();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 
 		return null;
@@ -277,10 +280,10 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.previous();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 
 		return null;
@@ -294,7 +297,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.first();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 
 		return null;
@@ -308,7 +311,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.last();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 
 		return null;
@@ -373,7 +376,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	public String getStyle(String cat) {
 		String styleAttr = "";
 		if (catSelection.contains(cat)) {
-			styleAttr = "border-bottom: 3px solid " + Category.valueOf(cat).getColor() + ";";
+			styleAttr = "border-bottom: 3px solid "
+					+ Category.valueOf(cat).getColor() + ";";
 		}
 
 		return styleAttr;
@@ -387,15 +391,35 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			catSelection.add(cat);
 		}
 
-		streamController.setCategories(catSelection.toArray(new String[catSelection.size()]));
+		streamController.setCategories(catSelection
+				.toArray(new String[catSelection.size()]));
 
 		try {
 			streams = streamController.search();
-			// streams = streamController.next();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage("Holy guacamole! You got an error."));
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+		}
+	}
+
+	public void selectCategory() {
+		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+		LOG.debug("Select category = " + cat);
+
+		// Select only the chosen category
+		catSelection.clear();
+		catSelection.add(cat);
+
+		streamController.setCategories(catSelection
+				.toArray(new String[catSelection.size()]));
+
+		try {
+			streams = streamController.search();
+		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 	}
 
