@@ -1,7 +1,6 @@
 package com.glue.webapp.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -50,14 +49,12 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
 	private Category[] categories = Category.values();
 
-	private List<String> catSelection = new ArrayList<>();
-
 	private List<IStream> streams;
 
 	@PostConstruct
 	public void init() {
 		for (Category category : categories) {
-			catSelection.add(category.name());
+			getCatSelection().add(category.name());
 		}
 	}
 
@@ -194,7 +191,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 * @return the catSelection
 	 */
 	public List<String> getCatSelection() {
-		return catSelection;
+		return streamController.getCategories();
 	}
 
 	/**
@@ -202,9 +199,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 *            the catSelection to set
 	 */
 	public void setCatSelection(List<String> catSelection) {
-		this.catSelection = catSelection;
-		streamController.setCategories(catSelection
-				.toArray(new String[catSelection.size()]));
+		streamController.setCategories(catSelection);
 	}
 
 	/**
@@ -377,7 +372,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 */
 	public String getStyle(String cat) {
 		String styleAttr = "";
-		if (catSelection.contains(cat)) {
+		if (getCatSelection().contains(cat)) {
 			styleAttr = "border-bottom: 3px solid "
 					+ Category.valueOf(cat).getColor() + ";";
 		}
@@ -389,12 +384,9 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
 		LOG.debug("Toggle category = " + cat);
 
-		if (!catSelection.remove(cat)) {
-			catSelection.add(cat);
+		if (!getCatSelection().remove(cat)) {
+			getCatSelection().add(cat);
 		}
-
-		streamController.setCategories(catSelection
-				.toArray(new String[catSelection.size()]));
 
 		try {
 			streams = streamController.search();
@@ -410,11 +402,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		LOG.debug("Select category = " + cat);
 
 		// Select only the chosen category
-		catSelection.clear();
-		catSelection.add(cat);
-
-		streamController.setCategories(catSelection
-				.toArray(new String[catSelection.size()]));
+		getCatSelection().clear();
+		getCatSelection().add(cat);
 
 		try {
 			streams = streamController.search();

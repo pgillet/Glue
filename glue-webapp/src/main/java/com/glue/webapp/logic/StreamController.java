@@ -39,7 +39,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 	private String queryString;
 
-	private String[] categories;
+	private List<String> categories = new ArrayList<>();
 
 	/**
 	 * @return the queryString
@@ -59,7 +59,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 	/**
 	 * @return the categories
 	 */
-	public String[] getCategories() {
+	public List<String> getCategories() {
 		return categories;
 	}
 
@@ -67,7 +67,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 	 * @param categories
 	 *            the categories to set
 	 */
-	public void setCategories(String[] categories) {
+	public void setCategories(List<String> categories) {
 		this.categories = categories;
 	}
 
@@ -76,7 +76,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 		// The underlying search engine returns only partial streams (i.e. only
 		// the properties that are actually indexed)
 		engine.setQueryString(queryString);
-		engine.setCategories(categories);
+		engine.setCategories(categories.toArray(new String[categories.size()]));
 		engine.setStartDate(null);
 		engine.setEndDate(null);
 		engine.setStart(start);
