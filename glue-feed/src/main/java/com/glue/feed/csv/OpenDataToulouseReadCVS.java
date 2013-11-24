@@ -12,11 +12,9 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -28,12 +26,11 @@ import java.util.zip.ZipInputStream;
 import javax.sql.DataSource;
 
 import com.glue.feed.DataSourceManager;
-import com.glue.struct.ICategory;
+import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
-import com.glue.webapp.db.CategoryDAO;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
@@ -49,8 +46,6 @@ public class OpenDataToulouseReadCVS {
 	private DAOManager manager;
 	private StreamDAO streamDAO;
 	private VenueDAO venueDAO;
-	private CategoryDAO categoryDAO;
-	private Map<String, ICategory> dbCategories;
 	private Map<String, String> catDico;
 	private DateFormat format;
 
@@ -91,10 +86,6 @@ public class OpenDataToulouseReadCVS {
 		try {
 			streamDAO = manager.getStreamDAO();
 			venueDAO = manager.getVenueDAO();
-			categoryDAO = manager.getCategoryDAO();
-
-			// Get all categories
-			dbCategories = getCategoriesFromDb();
 
 			// Get dictionary
 			catDico = getCategoryDictionnary();
@@ -253,7 +244,8 @@ public class OpenDataToulouseReadCVS {
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());
 		stream.setEndDate(edate.getTime());
-		stream.setCategories(getCategories(fields[16], fields[17], fields[18]));
+		Category cat = getCategory(fields[16], fields[17], fields[18]);
+		stream.setCategory(cat);
 		stream.setPrice(cleanup(fields[26]));
 
 		IVenue venue = new Venue();
@@ -308,7 +300,7 @@ public class OpenDataToulouseReadCVS {
 		if (!"".equals(field)) {
 			String[] values = field.split(",");
 			for (int i = 0; i < values.length; i++) {
-				result.add(values[i].trim());
+				result.add(values[i].toLowerCase().trim());
 			}
 		}
 		return result;
@@ -340,56 +332,45 @@ public class OpenDataToulouseReadCVS {
 		return url;
 	}
 
-	// Categories extraction and mapping methods
-
-	private Map<String, ICategory> getCategoriesFromDb() {
-
-		Map<String, ICategory> result = new HashMap<String, ICategory>();
-
-		// Get all Categories from DB
-		Set<ICategory> categories;
-		try {
-			categories = categoryDAO.searchAll();
-
-			// Return a map view Name,Category
-			for (ICategory cat : categories) {
-				result.put(cat.getName().toLowerCase(), cat);
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	private List<ICategory> getCategories(String field1, String field2, String field3) {
-
-		List<ICategory> result = new ArrayList<>();
-		Set<ICategory> temp = new HashSet<>();
+	private Category getCategory(String field1, String field2, String field3) {
 
 		// Get all possible Categories
 		Set<String> categories = extractCategoriesFromField(cleanup(field1));
 		categories.addAll(extractCategoriesFromField(cleanup(field2)));
 		categories.addAll(extractCategoriesFromField(cleanup(field3)));
 
-		// Iterate over categories
+		// Some main rules concert > spectacle
+		if (categories.contains("concert")) {
+			return Category.MUSIC;
+		}
+
+		if (categories.contains("conference") || categories.contains("conférence")) {
+			return Category.CONFERENCE;
+		}
+
+		if (categories.contains("spectacle")) {
+			return Category.PERFORMING_ART;
+		}
+
+		if (categories.contains("exposition")) {
+			return Category.EXHIBITION;
+		}
+
+		if (categories.contains("photographie")) {
+			return Category.EXHIBITION;
+		}
+
+		// Return the first found
 		for (String catStr : categories) {
 
 			// Try to find mapping from dico
 			String category = catDico.get(catStr.toLowerCase());
 			if (category != null && !"".equals(category)) {
-				temp.add(dbCategories.get(category));
+				return Category.valueOf(category.toUpperCase());
 			}
 		}
 
-		// Default key is "autre"
-		if (temp.isEmpty()) {
-			temp.add(dbCategories.get("autre"));
-		}
-		result.addAll(temp);
-		return result;
+		return Category.OTHER;
 	}
 
 	// Retrieve categories dictionnary from property file

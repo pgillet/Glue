@@ -43,7 +43,7 @@
 							<ui:repeat var="item" value="#{streamSearchBean.categories}">
 								<h:commandButton styleClass="btn text-muted glue-btn-cat"
 									style="#{streamSearchBean.getStyle(item.name)}"
-									value="#{item.name}"
+									value="#{bundle[item.name]}"
 									action="#{streamSearchBean.enableCategory}">
 									<f:param name="cat" value="#{item.name}"></f:param>
 									<f:ajax execute="@form" render="@form" />

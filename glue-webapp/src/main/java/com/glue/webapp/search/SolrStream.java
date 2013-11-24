@@ -1,12 +1,11 @@
 package com.glue.webapp.search;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.beans.Field;
 
-import com.glue.struct.ICategory;
+import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 
@@ -57,7 +56,7 @@ public class SolrStream implements IStream {
 	private IVenue venue;
 
 	@Field
-	private List<ICategory> categories;
+	private String category;
 
 	private String price;
 
@@ -302,13 +301,13 @@ public class SolrStream implements IStream {
 	}
 
 	@Override
-	public List<ICategory> getCategories() {
-		return categories;
+	public Category getCategory() {
+		return Category.valueOf(category);
 	}
 
 	@Override
-	public void setCategories(List<ICategory> categories) {
-		this.categories = categories;
+	public void setCategory(Category category) {
+		this.category = category.name();
 	}
 
 	@Override
@@ -328,7 +327,7 @@ public class SolrStream implements IStream {
 				+ sharedSecretQuestion + ", sharedSecretAnswer=" + sharedSecretAnswer + ", shouldRequestToParticipate="
 				+ shouldRequestToParticipate + ", start_date=" + start_date + ", end_date=" + end_date + ", tags="
 				+ tags + ", numberOfParticipant=" + numberOfParticipant + ", thumbPath=" + thumbPath + ", venue="
-				+ venue + ", categories=" + categories + ", price=" + price + "]";
+				+ venue + ", category=" + category + ", price=" + price + "]";
 	}
 
 }

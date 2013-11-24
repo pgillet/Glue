@@ -114,7 +114,7 @@
    <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
    <field name="title" type="text_general" indexed="true" stored="true" multiValued="false"/>
    <field name="description" type="text_general" indexed="true" stored="true"/>
-   <field name="categories" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="category" type="text_general" indexed="true" stored="true"/>
    <field name="start_date" type="tlong" indexed="true" stored="true"/>
    <field name="end_date" type="tlong" indexed="true" stored="true"/>
    <field name="duration" type="tlong" indexed="true" stored="false"/>
@@ -229,7 +229,7 @@
    <copyField source="description" dest="text"/>
    <copyField source="venue" dest="text"/>
    <copyField source="address" dest="text"/>
-   <copyField source="categories" dest="text"/>
+   <copyField source="category" dest="text"/>
 	
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 

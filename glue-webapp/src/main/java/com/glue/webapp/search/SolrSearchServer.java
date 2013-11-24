@@ -27,7 +27,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
 	private String queryString;
-	
+
 	private String[] categories;
 
 	private Date startDate;
@@ -114,6 +114,9 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 			query.setQuery(queryString);
 			// query.addSort(END_DATE_FIELD, ORDER.desc);
 		}
+		if (categories != null && categories.length > 0) {
+			query.addFilterQuery("category:" + constructCategoriesFilter());
+		}
 		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "]");
 		query.setStart(start);
 		query.setRows(rows);
@@ -158,7 +161,8 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	}
 
 	/**
-	 * @param categories the categories to set
+	 * @param categories
+	 *            the categories to set
 	 */
 	public void setCategories(String[] categories) {
 		this.categories = categories;
@@ -210,5 +214,18 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	@Override
 	public void setRows(int rows) {
 		this.rows = rows;
+	}
+
+	private String constructCategoriesFilter() {
+		String result = "";
+		// Add first category
+		if (categories.length > 0) {
+			result += categories[0];
+		}
+		// For each other categories
+		for (int i = 1; i < categories.length; i++) {
+			result += " or " + categories[i];
+		}
+		return result;
 	}
 }

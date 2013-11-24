@@ -2,11 +2,10 @@ package com.glue.client.android.stream;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.glue.struct.ICategory;
+import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Venue;
@@ -45,7 +44,7 @@ public class StreamData implements IStream {
 
 	private String thumbPath;
 
-	private List<ICategory> categories;
+	private Category category;
 
 	private String price;
 
@@ -284,13 +283,13 @@ public class StreamData implements IStream {
 	}
 
 	@Override
-	public List<ICategory> getCategories() {
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 
 	@Override
-	public void setCategories(List<ICategory> categories) {
-		this.categories = categories;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	@Override

@@ -6,9 +6,6 @@
 			<entity name="venue"
 				query="select name as venue, address, latitude, longitude from VENUE where id='${stream.venue_id}'">
 			</entity>
-			<entity name="categories"
-				query="select name as categories from CATEGORY where id in (select category_id from STREAM_CATEGORY where stream_id='${stream.id}')">
-			</entity>
 		</entity>
 	</document>
 </dataConfig>

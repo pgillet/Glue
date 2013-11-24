@@ -1,6 +1,5 @@
 package com.glue.struct;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -155,13 +154,13 @@ public interface IStream {
 	IVenue getVenue();
 
 	/**
-	 * Returns a list of Categories.
+	 * Return the category.
 	 * 
-	 * @return a list of Categories.
+	 * @return the category.
 	 */
-	List<ICategory> getCategories();
+	Category getCategory();
 
-	void setCategories(List<ICategory> categories);
+	void setCategory(Category category);
 
 	/**
 	 * Returns event price.
