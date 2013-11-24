@@ -44,7 +44,8 @@ CREATE TABLE STREAM (
              end_date BIGINT UNSIGNED,
              thumb_path VARCHAR(255),
 			 price VARCHAR(30),
-             venue_id BIGINT,
+			 category ENUM(  'OTHER', 'MUSIC', 'PERFORMING_ART', 'EXHIBITION', 'SPORT' , 'CONFERENCE') NOT NULL,
+			 venue_id BIGINT,
              PRIMARY KEY (id),
              FOREIGN KEY (venue_id) REFERENCES VENUE(id) 
              		ON DELETE SET NULL
@@ -113,8 +114,7 @@ CREATE TABLE MEDIA (
 			FOREIGN KEY (stream_id) REFERENCES STREAM(id)
                      ON DELETE CASCADE
 			);
-			
-			
+	
 -- VIEWS
 CREATE OR REPLACE VIEW STREAM_VIEW AS
   SELECT STREAM.id, title, public, open, thumb_path, count(*) as nb_of_participant
@@ -122,25 +122,6 @@ CREATE OR REPLACE VIEW STREAM_VIEW AS
   INNER JOIN PARTICIPANT
   ON STREAM.id = PARTICIPANT.stream_id
   GROUP BY PARTICIPANT.stream_id;
-  
-  -- CATEGORY table
-CREATE TABLE CATEGORY (
-			id BIGINT NOT NULL AUTO_INCREMENT,
-			name VARCHAR(100) NOT NULL,
-            PRIMARY KEY(id)
-			);
-			
--- STREAM_CATEGORY table
-CREATE TABLE STREAM_CATEGORY (
-             id BIGINT NOT NULL AUTO_INCREMENT,
-             category_id BIGINT NOT NULL,
-             stream_id BIGINT NOT NULL,
-             PRIMARY KEY (id),
-             FOREIGN KEY (category_id) REFERENCES CATEGORY(id)
-                     ON DELETE CASCADE,
-             FOREIGN KEY (stream_id) REFERENCES STREAM(id)
-                     ON DELETE CASCADE
-             );
   
   
   

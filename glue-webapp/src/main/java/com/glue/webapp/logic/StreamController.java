@@ -1,13 +1,11 @@
 package com.glue.webapp.logic;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -15,11 +13,9 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.ICategory;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
-import com.glue.webapp.db.CategoryDAO;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
@@ -32,11 +28,6 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 	static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
-	/**
-	 * An awful cache for categories.
-	 */
-	private static Set<ICategory> _categories = null;
-
 	@Inject
 	private SearchEngine<IStream> engine;
 
@@ -47,7 +38,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 	private long totalRows;
 
 	private String queryString;
-	
+
 	private String[] categories;
 
 	/**
@@ -73,7 +64,8 @@ public class StreamController implements PageIterator<List<IStream>> {
 	}
 
 	/**
-	 * @param categories the categories to set
+	 * @param categories
+	 *            the categories to set
 	 */
 	public void setCategories(String[] categories) {
 		this.categories = categories;
@@ -103,44 +95,38 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 		try {
 			DAOManager manager = DAOManager.getInstance();
-			List<IStream> streams = manager
-					.transaction(new DAOCommand<List<IStream>>() {
+			List<IStream> streams = manager.transaction(new DAOCommand<List<IStream>>() {
 
-						@Override
-						public List<IStream> execute(DAOManager manager)
-								throws Exception {
+				@Override
+				public List<IStream> execute(DAOManager manager) throws Exception {
 
-							// Store venues to avoid repetitive SQL requests
-							Map<Long, IVenue> m = new HashMap<Long, IVenue>();
+					// Store venues to avoid repetitive SQL requests
+					Map<Long, IVenue> m = new HashMap<Long, IVenue>();
 
-							StreamDAO streamDAO = manager.getStreamDAO();
-							VenueDAO venueDAO = manager.getVenueDAO();
+					StreamDAO streamDAO = manager.getStreamDAO();
+					VenueDAO venueDAO = manager.getVenueDAO();
 
-							List<IStream> items = streamDAO.searchInList(ids
-									.toArray(new Long[ids.size()]));
+					List<IStream> items = streamDAO.searchInList(ids.toArray(new Long[ids.size()]));
 
-							for (IStream stream : items) {
+					for (IStream stream : items) {
 
-								IVenue persistentVenue = m.get(stream
-										.getVenue().getId());
-								if (persistentVenue == null) { // Not stored yet
-									persistentVenue = venueDAO.search(stream
-											.getVenue().getId());
+						IVenue persistentVenue = m.get(stream.getVenue().getId());
+						if (persistentVenue == null) { // Not stored yet
+							persistentVenue = venueDAO.search(stream.getVenue().getId());
 
-									// Store the persistent venue into the map
-									m.put(persistentVenue.getId(),
-											persistentVenue);
-								}
-
-								// Replace the dummy venue with the
-								// persistent one
-								stream.setVenue(persistentVenue);
-							}
-
-							return items;
+							// Store the persistent venue into the map
+							m.put(persistentVenue.getId(), persistentVenue);
 						}
 
-					});
+						// Replace the dummy venue with the
+						// persistent one
+						stream.setVenue(persistentVenue);
+					}
+
+					return items;
+				}
+
+			});
 
 			return streams;
 		} catch (NamingException e) {
@@ -161,8 +147,8 @@ public class StreamController implements PageIterator<List<IStream>> {
 	 * @param admin
 	 * @throws InternalServerException
 	 */
-	public void createStream(final IStream stream, final IVenue venue,
-			final IUser admin) throws InternalServerException {
+	public void createStream(final IStream stream, final IVenue venue, final IUser admin)
+			throws InternalServerException {
 		try {
 			DAOManager manager = DAOManager.getInstance();
 
@@ -206,8 +192,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 	}
 
 	@Override
-	public List<IStream> next() throws InternalServerException,
-			NoSuchElementException {
+	public List<IStream> next() throws InternalServerException, NoSuchElementException {
 		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
@@ -222,8 +207,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 	}
 
 	@Override
-	public List<IStream> previous() throws InternalServerException,
-			NoSuchElementException {
+	public List<IStream> previous() throws InternalServerException, NoSuchElementException {
 		if (!hasPrevious()) {
 			throw new NoSuchElementException();
 		}
@@ -296,32 +280,4 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 		return num;
 	}
-
-	/**
-	 * @return
-	 * @throws InternalServerException
-	 */
-	public synchronized Set<ICategory> getAllCategories()
-			throws InternalServerException {
-
-		if (_categories == null) {
-			DAOManager manager = null;
-			try {
-				manager = DAOManager.getInstance();
-				CategoryDAO categoryDAO = manager.getCategoryDAO();
-				_categories = categoryDAO.searchAll();
-			} catch (NamingException e) {
-				LOG.error(e.getMessage(), e);
-				throw new InternalServerException(e);
-			} catch (SQLException e) {
-				LOG.error(e.getMessage(), e);
-				throw new InternalServerException(e);
-			} finally {
-				manager.closeConnectionQuietly();
-			}
-		}
-
-		return _categories;
-	}
-
 }
