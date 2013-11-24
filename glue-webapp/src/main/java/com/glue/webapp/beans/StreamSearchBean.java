@@ -400,6 +400,29 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+<<<<<<< HEAD
+=======
+		}
+	}
+
+	public void selectCategory() {
+		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+		LOG.debug("Select category = " + cat);
+
+		// Select only the chosen category
+		catSelection.clear();
+		catSelection.add(cat);
+
+		streamController.setCategories(catSelection
+				.toArray(new String[catSelection.size()]));
+
+		try {
+			streams = streamController.search();
+		} catch (InternalServerException e) {
+			LOG.error(e.getMessage(), e);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+>>>>>>> branch 'master' of https://github.com/pgillet/Glue.git
 		}
 	}
 
