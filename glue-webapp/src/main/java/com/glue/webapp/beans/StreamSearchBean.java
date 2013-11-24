@@ -203,6 +203,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 */
 	public void setCatSelection(List<String> catSelection) {
 		this.catSelection = catSelection;
+		streamController.setCategories(catSelection
+				.toArray(new String[catSelection.size()]));
 	}
 
 	/**
