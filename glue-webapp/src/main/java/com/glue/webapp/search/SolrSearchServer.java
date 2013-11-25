@@ -1,5 +1,6 @@
 package com.glue.webapp.search;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +56,12 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	@Override
 	public List<IStream> search() throws InternalServerException {
 
-		List<? extends IStream> items = null;
+		List<? extends IStream> items = new ArrayList<IStream>();
+
+		// No category
+		if (categories == null || categories.length == 0) {
+			return (List<IStream>) items;
+		}
 
 		SolrQuery query = constructSolrQuery();
 
@@ -115,6 +121,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 			// query.addSort(END_DATE_FIELD, ORDER.desc);
 		}
 		if (categories != null && categories.length > 0) {
+			System.out.println("cat = " + constructCategoriesFilter());
 			query.addFilterQuery("category:" + constructCategoriesFilter());
 		}
 		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "]");
