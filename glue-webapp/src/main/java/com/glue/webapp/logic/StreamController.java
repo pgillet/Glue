@@ -185,6 +185,38 @@ public class StreamController implements PageIterator<List<IStream>> {
 			throw new InternalServerException(e);
 		}
 	}
+	
+	public IStream search(final long id) throws InternalServerException {
+		try {
+			DAOManager manager = DAOManager.getInstance();
+			IStream stream = manager.transaction(new DAOCommand<IStream>() {
+
+				@Override
+				public IStream execute(DAOManager manager) throws Exception {
+
+					StreamDAO streamDAO = manager.getStreamDAO();
+					VenueDAO venueDAO = manager.getVenueDAO();
+
+					IStream stream = streamDAO.search(id);
+					IVenue venue = venueDAO.search(stream.getVenue().getId());
+					stream.setVenue(venue);
+					
+					// TODO: retrieve media
+
+					return stream;
+				}
+
+			});
+
+			return stream;
+		} catch (NamingException e) {
+			LOG.error(e.getMessage(), e);
+			throw new InternalServerException(e);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			throw new InternalServerException(e);
+		}
+	}
 
 	@Override
 	public boolean hasNext() {

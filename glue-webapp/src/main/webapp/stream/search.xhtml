@@ -87,12 +87,16 @@
 								<li><h4>
 										<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
 											onclick="jsf.ajax.addOnEvent(scrollToTop);"> -->
-											<span class="glyphicon glyphicon-stop"
-												style="color: #{stream.category.color};"></span>
-											<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
+										<span class="glyphicon glyphicon-stop"
+											style="color:#{stream.category.color};"></span>
+										<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
 											<f:ajax execute="@form" render="@form" />
 										</h:commandLink> -->
-										&#160;<a href="#{stream.url}" target="_blank"><strong>#{stream.title}</strong></a>
+										&#160; <strong><h:link includeViewParams="true"
+												value="#{stream.title}" outcome="/stream/item.xhtml">
+												<f:param name="id" value="#{stream.id}"></f:param>
+											</h:link>
+										</strong>
 									</h4></li>
 								<li><p>#{stream.description}</p></li>
 								<li><h5>

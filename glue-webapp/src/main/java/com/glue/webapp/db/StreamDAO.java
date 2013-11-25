@@ -185,24 +185,48 @@ public class StreamDAO extends AbstractDAO {
 		searchByIdStmt.setLong(1, streamId);
 		ResultSet res = searchByIdStmt.executeQuery();
 		if (res.next()) {
-			result = new Stream();
-			result.setId(res.getLong(COLUMN_ID));
-			result.setTitle(res.getString(COLUMN_TITLE));
-			result.setDescription(res.getString(COLUMN_DESCRIPTION));
-			result.setUrl(res.getString(COLUMN_URL));
-			result.setPublicc(res.getBoolean(COLUMN_PUBLIC));
-			result.setOpen(res.getBoolean(COLUMN_OPEN));
-			result.setSharedSecretQuestion(res.getString(COLUMN_SECRET_QUESTION));
-			result.setSharedSecretAnswer(res.getString(COLUMN_SECRET_ANSWER));
-			result.setShouldRequestToParticipate(res.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
-			result.setStartDate(res.getLong(COLUMN_START_DATE));
-			result.setEndDate(res.getLong(COLUMN_END_DATE));
-			result.setThumbPath(res.getString(COLUMN_THUMB_PATH));
-			result.setPrice(res.getString(COLUMN_PRICE));
-			result.setCategory(Category.valueOf(res.getString(COLUMN_CATEGORY).toUpperCase()));
+			result = populateStream(res);
 		}
 		return result;
 	}
+	
+	/**
+	 * Retrieves the stream value in the current row of the given ResultSet
+	 * object. The caller must ensure that the current row is valid and that the
+	 * ResultSet is not closed.
+	 * 
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private IStream populateStream(ResultSet rs) throws SQLException {
+		IStream result = new Stream();
+
+		result.setId(rs.getLong(COLUMN_ID));
+		result.setTitle(rs.getString(COLUMN_TITLE));
+		result.setDescription(rs.getString(COLUMN_DESCRIPTION));
+		result.setUrl(rs.getString(COLUMN_URL));
+		result.setPublicc(rs.getBoolean(COLUMN_PUBLIC));
+		result.setOpen(rs.getBoolean(COLUMN_OPEN));
+		result.setSharedSecretQuestion(rs.getString(COLUMN_SECRET_QUESTION));
+		result.setSharedSecretAnswer(rs.getString(COLUMN_SECRET_ANSWER));
+		result.setShouldRequestToParticipate(rs
+				.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
+		result.setStartDate(rs.getLong(COLUMN_START_DATE));
+		result.setEndDate(rs.getLong(COLUMN_END_DATE));
+		result.setThumbPath(rs.getString(COLUMN_THUMB_PATH));
+		result.setPrice(rs.getString(COLUMN_PRICE));
+		result.setCategory(Category.valueOf(rs.getString(COLUMN_CATEGORY)
+				.toUpperCase()));
+
+		// Venue
+		IVenue dummyVenue = new Venue();
+		dummyVenue.setId(rs.getLong(COLUMN_VENUE_ID));
+		result.setVenue(dummyVenue);
+
+		return result;
+	} 
+	
 
 	public boolean exist(String title, long startdate) throws SQLException {
 		existStmt.setString(1, title);
@@ -240,28 +264,7 @@ public class StreamDAO extends AbstractDAO {
 
 			ResultSet res = statement.executeQuery();
 			while (res.next()) {
-				IStream stream = new Stream();
-				stream.setId(res.getLong(COLUMN_ID));
-				stream.setTitle(res.getString(COLUMN_TITLE));
-				stream.setDescription(res.getString(COLUMN_DESCRIPTION));
-				stream.setUrl(res.getString(COLUMN_URL));
-				stream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
-				stream.setOpen(res.getBoolean(COLUMN_OPEN));
-				stream.setSharedSecretQuestion(res.getString(COLUMN_SECRET_QUESTION));
-				stream.setSharedSecretAnswer(res.getString(COLUMN_SECRET_ANSWER));
-				stream.setShouldRequestToParticipate(res.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
-				stream.setStartDate(res.getLong(COLUMN_START_DATE));
-				stream.setEndDate(res.getLong(COLUMN_END_DATE));
-				stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
-				stream.setPrice(res.getString(COLUMN_PRICE));
-				stream.setCategory(Category.valueOf(res.getString(COLUMN_CATEGORY).toUpperCase()));
-
-				IVenue dummyVenue = new Venue();
-				dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
-				stream.setVenue(dummyVenue);
-
-				// Set categories
-
+				IStream stream = populateStream(res);
 				idStreamsMap.put(stream.getId(), stream);
 			}
 		}
@@ -356,26 +359,6 @@ public class StreamDAO extends AbstractDAO {
 		return result.next();
 	}
 
-	public List<IStream> search(String query) throws SQLException {
-		List<IStream> result = new ArrayList<IStream>();
-		PreparedStatement statement = connection.prepareStatement(SELECT_STREAM_VIEW);
-		ResultSet res = statement.executeQuery();
-		IStream aStream;
-		while (res.next()) {
-			aStream = new Stream();
-			aStream.setId(res.getLong(COLUMN_ID));
-			aStream.setTitle(res.getString(COLUMN_TITLE));
-			aStream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
-			aStream.setOpen(res.getBoolean(COLUMN_OPEN));
-			aStream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
-			aStream.setNumberOfParticipant(res.getInt(COLUMN_NB_OF_PARTICIPANT));
-			aStream.setPrice(res.getString(COLUMN_PRICE));
-			aStream.setCategory(Category.valueOf(res.getString(COLUMN_CATEGORY).toUpperCase()));
-			result.add(aStream);
-		}
-		return result;
-	}
-
 	// Search stream between before and after
 	public List<IStream> searchBetween(long after, long before) throws SQLException {
 		List<IStream> result = new ArrayList<IStream>();
@@ -384,26 +367,7 @@ public class StreamDAO extends AbstractDAO {
 		ResultSet res = searchBetweenStmt.executeQuery();
 		IStream stream;
 		while (res.next()) {
-			stream = new Stream();
-			stream.setId(res.getLong(COLUMN_ID));
-			stream.setTitle(res.getString(COLUMN_TITLE));
-			stream.setDescription(res.getString(COLUMN_DESCRIPTION));
-			stream.setUrl(res.getString(COLUMN_URL));
-			stream.setPublicc(res.getBoolean(COLUMN_PUBLIC));
-			stream.setOpen(res.getBoolean(COLUMN_OPEN));
-			stream.setSharedSecretQuestion(res.getString(COLUMN_SECRET_QUESTION));
-			stream.setSharedSecretAnswer(res.getString(COLUMN_SECRET_ANSWER));
-			stream.setShouldRequestToParticipate(res.getBoolean(COLUMN_REQUEST_TO_PARTICPATE));
-			stream.setStartDate(res.getLong(COLUMN_START_DATE));
-			stream.setEndDate(res.getLong(COLUMN_END_DATE));
-			stream.setThumbPath(res.getString(COLUMN_THUMB_PATH));
-			stream.setPrice(res.getString(COLUMN_PRICE));
-			stream.setCategory(Category.valueOf(res.getString(COLUMN_CATEGORY).toUpperCase()));
-
-			IVenue dummyVenue = new Venue();
-			dummyVenue.setId(res.getLong(COLUMN_VENUE_ID));
-			stream.setVenue(dummyVenue);
-
+			stream = populateStream(res);
 			result.add(stream);
 		}
 		return result;

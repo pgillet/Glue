@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 @WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
 		@WebInitParam(name = "form-login-page", value = "/login.xhtml"),
-		@WebInitParam(name = "excludes", value = "/main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml") })
+		@WebInitParam(name = "excludes", value = "/main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml, /stream/item.xhtml") })
 public class AuthFilter implements Filter {
 
 	private static final String RESOURCES = "/resources";
