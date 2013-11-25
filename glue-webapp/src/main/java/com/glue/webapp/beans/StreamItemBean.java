@@ -30,23 +30,25 @@ public class StreamItemBean {
 
 	@PostConstruct
 	public void init() {
-
-		FacesContext context = FacesContext.getCurrentInstance();
 		String id = FacesUtil.getRequestParameter(PARAM_ID);
+		
+		if (id != null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			
+			try {
+				item = streamController.search(Long.valueOf(id));
 
-		try {
-			item = streamController.search(Long.valueOf(id));
+				if (item == null) {
+					context.addMessage(null, new FacesMessage(ERROR_MESSAGE_2));
+				}
 
-			if (item == null) {
+			} catch (NumberFormatException e) {
+				LOG.error(e.getMessage(), e);
 				context.addMessage(null, new FacesMessage(ERROR_MESSAGE_2));
+			} catch (InternalServerException e) {
+				LOG.error(e.getMessage(), e);
+				context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 			}
-
-		} catch (NumberFormatException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE_2));
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
 		}
 	}
 
