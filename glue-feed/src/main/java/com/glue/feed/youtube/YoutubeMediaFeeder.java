@@ -57,7 +57,7 @@ public class YoutubeMediaFeeder {
 			// Search for streams from "after" to "today"
 			streams = streamDAO.searchBetween(after, before);
 
-			// For each streams from "after" to "yesterday"
+			// For each streams from "after" to "today"
 			for (IStream stream : streams) {
 
 				// Set venue
@@ -70,8 +70,14 @@ public class YoutubeMediaFeeder {
 
 				// Persist videos
 				for (IMedia video : videos) {
-					mediaDAO.create(video);
-					System.out.println("Creation of media " + video.getUrl());
+
+					// Url already in databases for that stream
+					if (!mediaDAO.exist(video)) {
+						mediaDAO.create(video);
+						System.out.println("Creation of media " + video.getUrl());
+					} else {
+						System.out.println("Media " + video.getUrl() + " already stored");
+					}
 				}
 			}
 
