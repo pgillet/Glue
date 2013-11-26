@@ -58,14 +58,15 @@
 									<span class="fa-li fa fa-map-marker text-muted"></span> <strong>#{streamItemBean.item.venue.name}</strong>
 									- <span class="text-muted">#{streamItemBean.item.venue.address}</span>
 								</h4></li>
-							<li><h4>
-									<i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
-								</h4></li>
+							<c:if test="#{not empty streamItemBean.item.price}">
+								<li><h4>
+										<i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
+									</h4></li>
+							</c:if>
 						</ul>
 					</div>
 					<div class="col-md-1 col-md-offset-1">
-						<br/>
-						<i class="fa fa-facebook-square fa-2x text-info"></i><br />
+						<br /> <i class="fa fa-facebook-square fa-2x text-info"></i><br />
 						<i class="fa fa-google-plus-square fa-2x text-danger"></i><br />
 						<i class="fa fa-twitter-square fa-2x text-primary"></i>
 					</div>
@@ -80,6 +81,21 @@
 						</div>
 					</div>
 				</div>
+
+				<c:forEach var="media" items="#{streamItemBean.item.media}">
+					<c:choose>
+						<c:when test="#{media.mimeType eq 'Video'}">
+							<div class="row">
+								<div class="col-md-6 col-md-offset-1">
+									<iframe width="560" height="315" src="#{media.url}"
+										frameborder="0" allowfullscreen="true"></iframe>
+								</div>
+							</div>
+							<br/>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+
 			</ui:fragment>
 		</ui:define>
 	</ui:composition>

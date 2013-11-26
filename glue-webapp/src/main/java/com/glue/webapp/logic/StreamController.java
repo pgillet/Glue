@@ -13,11 +13,13 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.IUser;
 import com.glue.struct.IVenue;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
+import com.glue.webapp.db.MediaDAO;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
 import com.glue.webapp.repository.RepositoryManager;
@@ -196,12 +198,14 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 					StreamDAO streamDAO = manager.getStreamDAO();
 					VenueDAO venueDAO = manager.getVenueDAO();
+					MediaDAO mediaDAO = manager.getMediaDAO();
 
 					IStream stream = streamDAO.search(id);
 					IVenue venue = venueDAO.search(stream.getVenue().getId());
 					stream.setVenue(venue);
 					
-					// TODO: retrieve media
+					List<IMedia> media = mediaDAO.search(stream.getId());
+					stream.setMedia(media);
 
 					return stream;
 				}

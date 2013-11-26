@@ -3,10 +3,12 @@ package com.glue.struct.impl;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.glue.struct.Category;
+import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 
@@ -49,6 +51,8 @@ public class Stream implements IStream, Serializable {
 	private Category category;
 
 	private String price;
+	
+	private List<IMedia> media;
 
 	public Stream() {
 	}
@@ -309,5 +313,15 @@ public class Stream implements IStream, Serializable {
 	@Override
 	public void setPrice(String price) {
 		this.price = price;
+	}
+
+	@Override
+	public List<IMedia> getMedia() {
+		return media;
+	}
+
+	@Override
+	public void setMedia(List<IMedia> media) {
+		this.media = media;
 	}
 }

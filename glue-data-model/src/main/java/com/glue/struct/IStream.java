@@ -1,5 +1,6 @@
 package com.glue.struct;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -170,5 +171,17 @@ public interface IStream {
 	String getPrice();
 
 	void setPrice(String price);
+	
+	/**
+	 * Returns the media related to this stream
+	 * @return
+	 */
+	List<IMedia> getMedia();
+	
+	/**
+	 * Sets the media related to this stream.
+	 * @param media
+	 */
+	void setMedia(List<IMedia> media);
 
 }

@@ -1,11 +1,13 @@
 package com.glue.webapp.search;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.beans.Field;
 
 import com.glue.struct.Category;
+import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 
@@ -59,6 +61,8 @@ public class SolrStream implements IStream {
 	private String category;
 
 	private String price;
+	
+	private List<IMedia> media;
 
 	/**
 	 * @return the id
@@ -318,6 +322,16 @@ public class SolrStream implements IStream {
 	@Override
 	public void setPrice(String price) {
 		this.price = price;
+	}
+	
+	@Override
+	public List<IMedia> getMedia() {
+		return media;
+	}
+
+	@Override
+	public void setMedia(List<IMedia> media) {
+		this.media = media;
 	}
 
 	@Override
