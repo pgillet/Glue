@@ -36,11 +36,14 @@ public class MediaDAO extends AbstractDAO {
 
 	public static final String SELECT_MEDIAS_STREAM = "SELECT * from MEDIA WHERE stream_id=?";
 
+	public static final String SELECT_MEDIA = "SELECT ID from MEDIA WHERE stream_id=? and url=?";
+
 	public static final String DELETE_MEDIA = "DELETE FROM MEDIA WHERE id=?";
 
 	private PreparedStatement createStmt = null;
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement selectStmt = null;
+	private PreparedStatement existStmt = null;
 
 	protected MediaDAO() {
 	}
@@ -49,10 +52,10 @@ public class MediaDAO extends AbstractDAO {
 	public void setConnection(Connection connection) throws SQLException {
 		super.setConnection(connection);
 
-		createStmt = connection.prepareStatement(CREATE_MEDIA,
-				Statement.RETURN_GENERATED_KEYS);
+		createStmt = connection.prepareStatement(CREATE_MEDIA, Statement.RETURN_GENERATED_KEYS);
 		deleteStmt = connection.prepareStatement(DELETE_MEDIA);
 		selectStmt = connection.prepareStatement(SELECT_MEDIAS_STREAM);
+		existStmt = connection.prepareStatement(SELECT_MEDIA);
 	}
 
 	public void create(IMedia media) throws SQLException {
@@ -121,5 +124,19 @@ public class MediaDAO extends AbstractDAO {
 			result.add(media);
 		}
 		return result;
+	}
+
+	/**
+	 * Return true if the media already exist in db.
+	 * 
+	 * @param media
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean exist(IMedia media) throws SQLException {
+		existStmt.setLong(1, media.getStream().getId());
+		existStmt.setString(2, media.getUrl());
+		ResultSet res = existStmt.executeQuery();
+		return res.next();
 	}
 }
