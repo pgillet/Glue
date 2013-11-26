@@ -31,18 +31,15 @@
 			<ui:fragment rendered="#{not empty streamItemBean.item}">
 				<div class="row">
 					<div class="col-md-6 col-md-offset-1">
-						<ul class="list-unstyled">
+						<ul class="fa-ul">
+							<li><h3 class="text-primary">
+									<strong>#{streamItemBean.item.title}</strong>
+								</h3></li>
 							<li><h4>
-									<a href="#{streamItemBean.item.url}" target="_blank"><strong>#{streamItemBean.item.title}</strong></a>
-								</h4></li>
-							<li><p>#{streamItemBean.item.description}</p></li>
-							<li><h5>
-									<strong> <span
-										class="glyphicon glyphicon-calendar text-muted"></span>&#160;
+									<strong> <i class="fa-li fa fa-calendar text-muted"></i>
 										<ui:fragment
 											rendered="#{streamItemBean.item.startDate lt streamItemBean.item.endDate}">
-											<h:outputText
-												value="#{bundle.stream_date_from} " />
+											<h:outputText value="#{bundle.stream_date_from} " />
 											<h:outputText value="#{streamItemBean.item.startDate}">
 												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
 											</h:outputText>
@@ -56,13 +53,31 @@
 												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
 											</h:outputText>
 										</ui:fragment></strong>
-								</h5></li>
-							<li><h5>
-									<span class="glyphicon glyphicon-map-marker text-muted"></span>
-									<strong>#{streamItemBean.item.venue.name}</strong> - <span
-										class="text-muted">#{streamItemBean.item.venue.address}</span>
-								</h5></li>
+								</h4></li>
+							<li><h4>
+									<span class="fa-li fa fa-map-marker text-muted"></span> <strong>#{streamItemBean.item.venue.name}</strong>
+									- <span class="text-muted">#{streamItemBean.item.venue.address}</span>
+								</h4></li>
+							<li><h4>
+									<i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
+								</h4></li>
 						</ul>
+					</div>
+					<div class="col-md-1 col-md-offset-1">
+						<br/>
+						<i class="fa fa-facebook-square fa-2x text-info"></i><br />
+						<i class="fa fa-google-plus-square fa-2x text-danger"></i><br />
+						<i class="fa fa-twitter-square fa-2x text-primary"></i>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-6 col-md-offset-1">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<p>#{streamItemBean.item.description}</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</ui:fragment>
