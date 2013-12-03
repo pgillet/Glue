@@ -26,6 +26,8 @@ public class DAOManager {
 	protected VenueDAO venueDAO;
 
 	protected MediaDAO mediaDAO;
+	
+	protected TagDAO tagDAO;
 
 	// One instance per thread
 	private static final ThreadLocal<DAOManager> localInstance = new ThreadLocal<DAOManager>() {
@@ -112,8 +114,21 @@ public class DAOManager {
 
 		return mediaDAO;
 	}
+	
+	public TagDAO getTagDAO() throws SQLException {
+		if (tagDAO == null) {
+			tagDAO = new TagDAO();
+		}
+		tagDAO.setConnection(getConnection());
+
+		return tagDAO;
+	}
 
 	public <T> T transaction(DAOCommand<T> command) throws Exception {
+		return transaction(command, true);
+	}
+
+	public <T> T transaction(DAOCommand<T> command, boolean close) throws Exception {
 		try {
 			Connection connection = getConnection();
 			connection.setAutoCommit(false);
@@ -128,7 +143,9 @@ public class DAOManager {
 			throw e; // or wrap it before rethrowing it
 		} finally {
 			connection.setAutoCommit(true);
-			closeConnection();
+			if(close){
+				closeConnection();
+			}
 		}
 	}
 

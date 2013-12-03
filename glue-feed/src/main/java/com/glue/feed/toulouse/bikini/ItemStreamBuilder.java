@@ -1,4 +1,4 @@
-package com.glue.feed.rss;
+package com.glue.feed.toulouse.bikini;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -8,80 +8,64 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.glue.feed.DataSourceManager;
+import com.glue.feed.xml.StreamBuilder;
+import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
-import com.glue.webapp.db.DAOManager;
-import com.glue.webapp.db.StreamDAO;
-import com.glue.webapp.db.VenueDAO;
 
-public class BikiniMessageListener implements FeedMessageListener {
+public class ItemStreamBuilder implements StreamBuilder<Item> {
 
-	private DAOManager manager;
-	private StreamDAO streamDAO;
-	private VenueDAO venueDAO;
+	static final Logger LOG = LoggerFactory.getLogger(ItemStreamBuilder.class);
+
+	private static final String DATE_PATTERN = "'le' E dd MMM yyyy";
 	private DateFormat format;
 	private File root;
 
-	public BikiniMessageListener() throws NamingException, SQLException {
-		DataSource ds = DataSourceManager.getInstance().getDataSource();
-
-		manager = DAOManager.getInstance(ds);
-		streamDAO = manager.getStreamDAO();
-		venueDAO = manager.getVenueDAO();
-		format = new SimpleDateFormat("'le' E dd MMM yyyy", Locale.FRENCH);
+	public ItemStreamBuilder() {
+		format = new SimpleDateFormat(DATE_PATTERN, Locale.FRENCH);
 		TimeZone tz = TimeZone.getTimeZone("UTC");
 		format.setTimeZone(tz);
 		root = new File(System.getProperty("java.io.tmpdir"));
 	}
 
 	@Override
-	public void newMessage(FeedMessage msg) throws Exception {
-
+	public IStream buildStream(Item msg) throws Exception {
 		// Title
-		int index = msg.getTitle().lastIndexOf(":");
-		String title = msg.getTitle().substring(0, index).trim();
-		// System.out.println("title = " + title);
+		int index = msg.title.lastIndexOf(":");
+		String title = msg.title.substring(0, index).trim();
 
 		// Begin date
-		String strdate = msg.getTitle().substring(index + 1).trim();
+		String strdate = msg.title.substring(index + 1).trim();
 		Date date = format.parse(strdate);
-		// System.out.println("Date = " + date);
 
 		// Link
-		String url = msg.getLink();
-		// System.out.println("Link = " + url);
+		String url = msg.link;
 
 		// Description
-		index = msg.getDescription().lastIndexOf("<br>");
-		String description = msg.getDescription().substring(0, index);
-		// System.out.println("Description = " + description);
+		index = msg.description.lastIndexOf("<br>");
+		String description = msg.description.substring(0, index);
 
 		// Venue address
-		index = msg.getDescription().lastIndexOf(":");
-		String address = msg.getDescription().substring(index + 1).trim();
-		// System.out.println("Venue address = " + address);
+		index = msg.description.lastIndexOf(":");
+		String address = msg.description.substring(index + 1).trim();
 
 		// Venue name
 		index = address.lastIndexOf("(");
 		String name = address.substring(0, index).trim();
-		// System.out.println("Venue name = " + name);
 
 		// Get stream image
 		// TODO: waiting for glue-content
@@ -105,27 +89,17 @@ public class BikiniMessageListener implements FeedMessageListener {
 		stream.setTitle(title);
 		stream.setDescription(description);
 		stream.setUrl(url);
-		stream.setPublicc(true);
-		stream.setOpen(true);
 		stream.setStartDate(date.getTime());
+		stream.setEndDate(date.getTime());
 		stream.setThumbPath(imageFile.getPath());
+		stream.setCategory(Category.MUSIC);
 
 		IVenue venue = new Venue();
 		venue.setName(name);
 		venue.setAddress(address);
+		stream.setVenue(venue);
 
-		// Search for an existing venue
-		IVenue persistentVenue = venueDAO.search(venue.getAddress());
-		if (persistentVenue == null) {
-			System.out.println("Inserting " + venue);
-			persistentVenue = venueDAO.create(venue);
-		}
-
-		stream.setVenue(persistentVenue);
-
-		System.out.println("Inserting " + stream);
-		streamDAO.create(stream);
-
+		return stream;
 	}
 
 	private void copy(InputStream in, OutputStream out) throws IOException {
@@ -134,11 +108,6 @@ public class BikiniMessageListener implements FeedMessageListener {
 		while ((len = in.read(buf)) != -1) {
 			out.write(buf, 0, len);
 		}
-	}
-
-	@Override
-	public void close() {
-		manager.closeConnectionQuietly();
 	}
 
 }

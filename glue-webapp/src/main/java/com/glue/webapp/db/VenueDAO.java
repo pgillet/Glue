@@ -26,6 +26,8 @@ public class VenueDAO extends AbstractDAO {
 	public static final String SELECT_VENUE_BY_ID = "SELECT * FROM VENUE WHERE ID=?";
 
 	public static final String SELECT_VENUE_BY_ADDRESS = "SELECT * FROM VENUE WHERE ADDRESS=?";
+	
+	public static final String SELECT_VENUE_BY_NAME = "SELECT * FROM VENUE WHERE NAME=?";
 
 	public static final String DELETE_VENUE = "DELETE FROM VENUE WHERE id=?";
 
@@ -34,6 +36,7 @@ public class VenueDAO extends AbstractDAO {
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement searchByIdStmt = null;
 	private PreparedStatement searchByAddressStmt = null;
+	private PreparedStatement searchByNameStmt = null;
 	
 	protected VenueDAO() {
 	}
@@ -49,6 +52,8 @@ public class VenueDAO extends AbstractDAO {
 		this.searchByIdStmt = connection.prepareStatement(SELECT_VENUE_BY_ID);
 		this.searchByAddressStmt = connection
 				.prepareStatement(SELECT_VENUE_BY_ADDRESS);
+		this.searchByNameStmt = connection
+				.prepareStatement(SELECT_VENUE_BY_NAME);
 	}
 
 	public IVenue create(IVenue venue) throws SQLException {
@@ -82,13 +87,7 @@ public class VenueDAO extends AbstractDAO {
 		searchByIdStmt.setLong(1, id);
 		ResultSet res = searchByIdStmt.executeQuery();
 		if (res.next()) {
-			result = new Venue();
-			result.setId(res.getLong(COLUMN_ID));
-			result.setName(res.getString(COLUMN_NAME));
-			result.setLatitude(res.getDouble(COLUMN_LATITUDE));
-			result.setLongitude(res.getDouble(COLUMN_LONGITUDE));
-			result.setAddress(res.getString(COLUMN_ADDRESS));
-			result.setUrl(res.getString(COLUMN_URL));
+			result = populateVenue(res);
 		}
 		return result;
 	}
@@ -99,19 +98,44 @@ public class VenueDAO extends AbstractDAO {
 	 * @param address
 	 * @return
 	 */
-	public IVenue search(String address) throws SQLException {
+	public IVenue searchByAddress(String address) throws SQLException {
 		IVenue result = null;
 		searchByAddressStmt.setString(1, address);
 		ResultSet res = searchByAddressStmt.executeQuery();
 		if (res.next()) {
-			result = new Venue();
-			result.setId(res.getLong(COLUMN_ID));
-			result.setName(res.getString(COLUMN_NAME));
-			result.setLatitude(res.getDouble(COLUMN_LATITUDE));
-			result.setLongitude(res.getDouble(COLUMN_LONGITUDE));
-			result.setAddress(res.getString(COLUMN_ADDRESS));
-			result.setUrl(res.getString(COLUMN_URL));
+			result = populateVenue(res);
 		}
+		return result;
+	}
+	
+	public IVenue searchByName(String name) throws SQLException {
+		IVenue result = null;
+		searchByNameStmt.setString(1, name);
+		ResultSet res = searchByNameStmt.executeQuery();
+		if (res.next()) {
+			result = populateVenue(res);
+		}
+		return result;
+	}
+
+	/**
+	 * Retrieves the venue value in the current row of the given ResultSet
+	 * object. The caller must ensure that the current row is valid and that the
+	 * ResultSet is not closed.
+	 * 
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private IVenue populateVenue(ResultSet rs) throws SQLException {
+		IVenue result;
+		result = new Venue();
+		result.setId(rs.getLong(COLUMN_ID));
+		result.setName(rs.getString(COLUMN_NAME));
+		result.setLatitude(rs.getDouble(COLUMN_LATITUDE));
+		result.setLongitude(rs.getDouble(COLUMN_LONGITUDE));
+		result.setAddress(rs.getString(COLUMN_ADDRESS));
+		result.setUrl(rs.getString(COLUMN_URL));
 		return result;
 	}
 

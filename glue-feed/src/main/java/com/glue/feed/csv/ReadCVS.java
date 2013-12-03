@@ -161,7 +161,7 @@ public class ReadCVS {
 						venue.setAddress(address);
 
 						// Search for an existing venue
-						IVenue persistentVenue = venueDAO.search(venue
+						IVenue persistentVenue = venueDAO.searchByAddress(venue
 								.getAddress());
 						if (persistentVenue == null) {
 							// Geocoding: convert the address into geographic

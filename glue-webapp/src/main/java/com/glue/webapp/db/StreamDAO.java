@@ -56,7 +56,7 @@ public class StreamDAO extends AbstractDAO {
 
 	public static final String SELECT_STREAM_BY_ID = "SELECT * FROM STREAM WHERE ID=?";
 
-	public static final String SELECT_STREAM_EXIST = "SELECT * FROM STREAM WHERE TITLE=? and START_DATE=?";
+	public static final String SELECT_STREAM_EXIST = "SELECT * FROM STREAM WHERE TITLE=? AND START_DATE=? AND VENUE_ID=?";
 
 	public static final String SELECT_STREAM_BETWEEN = "SELECT * FROM STREAM WHERE END_DATE<? and END_DATE>?";
 
@@ -91,12 +91,14 @@ public class StreamDAO extends AbstractDAO {
 	public void setConnection(Connection connection) throws SQLException {
 		super.setConnection(connection);
 
-		this.createStmt = connection.prepareStatement(CREATE_STREAM, Statement.RETURN_GENERATED_KEYS);
+		this.createStmt = connection.prepareStatement(CREATE_STREAM,
+				Statement.RETURN_GENERATED_KEYS);
 		this.updateStmt = connection.prepareStatement(UPDATE_STREAM);
 		this.deleteStmt = connection.prepareStatement(DELETE_STREAM);
 		this.searchByIdStmt = connection.prepareStatement(SELECT_STREAM_BY_ID);
 		this.existStmt = connection.prepareStatement(SELECT_STREAM_EXIST);
-		this.searchBetweenStmt = connection.prepareStatement(SELECT_STREAM_BETWEEN);
+		this.searchBetweenStmt = connection
+				.prepareStatement(SELECT_STREAM_BETWEEN);
 	}
 
 	public void create(IStream aStream) throws SQLException {
@@ -189,7 +191,7 @@ public class StreamDAO extends AbstractDAO {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Retrieves the stream value in the current row of the given ResultSet
 	 * object. The caller must ensure that the current row is valid and that the
@@ -225,15 +227,33 @@ public class StreamDAO extends AbstractDAO {
 		result.setVenue(dummyVenue);
 
 		return result;
-	} 
-	
+	}
 
-	public boolean exist(String title, long startdate) throws SQLException {
+	public boolean exists(String title, long startdate, long venueId)
+			throws SQLException {
 		existStmt.setString(1, title);
 		existStmt.setLong(2, startdate);
-		// System.out.println(existStmt);
+		existStmt.setLong(3, venueId);
 		ResultSet res = existStmt.executeQuery();
 		return res.next();
+	}
+
+	/**
+	 * Tells whether a stream with the same title, start date and venue as the
+	 * given stream already exists in database. The given stream must have a
+	 * persistent venue.
+	 * 
+	 * @param stream
+	 *            a stream with a persistent venue
+	 * @return
+	 * @throws SQLException
+	 * @throws NullPointerException
+	 *             If the given stream has no venue or if the venue is not
+	 *             persistent
+	 */
+	public boolean exists(IStream stream) throws SQLException {
+		return exists(stream.getTitle(), stream.getStartDate(), stream
+				.getVenue().getId());
 	}
 
 	public List<IStream> searchInList(Long... ids) throws SQLException {
@@ -313,7 +333,7 @@ public class StreamDAO extends AbstractDAO {
 		Set<String> tagSet = aStream.getTags();
 		if (tagSet != null) {
 			for (String aTag : tagSet) {
-				tagDAO.create(aTag, aStream.getId());
+				tagDAO.addTag(aTag, aStream.getId());
 			}
 		}
 
@@ -327,9 +347,10 @@ public class StreamDAO extends AbstractDAO {
 		createParticipant(streamId, userId, true);
 	}
 
-	private void createParticipant(long streamId, long userId, boolean admin) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(INSERT_NEW_PARTICIPANT,
-				Statement.RETURN_GENERATED_KEYS);
+	private void createParticipant(long streamId, long userId, boolean admin)
+			throws SQLException {
+		PreparedStatement statement = connection.prepareStatement(
+				INSERT_NEW_PARTICIPANT, Statement.RETURN_GENERATED_KEYS);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
 		statement.setBoolean(3, admin);
@@ -337,21 +358,25 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	public void quit(long streamId, long userId) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(DELETE_PARTICIPANT);
+		PreparedStatement statement = connection
+				.prepareStatement(DELETE_PARTICIPANT);
 		statement.setLong(1, streamId);
 		statement.setLong(2, userId);
 		statement.executeUpdate();
 	}
 
-	public boolean isParticipant(long userId, long streamId) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(SELECT_PARTICIPANT);
+	public boolean isParticipant(long userId, long streamId)
+			throws SQLException {
+		PreparedStatement statement = connection
+				.prepareStatement(SELECT_PARTICIPANT);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
 		ResultSet result = statement.executeQuery();
 		return result.next();
 	}
 
-	public boolean isAdministrator(long userId, long streamId) throws SQLException {
+	public boolean isAdministrator(long userId, long streamId)
+			throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(SELECT_ADMIN);
 		statement.setLong(1, userId);
 		statement.setLong(2, streamId);
@@ -360,7 +385,8 @@ public class StreamDAO extends AbstractDAO {
 	}
 
 	// Search stream between before and after
-	public List<IStream> searchBetween(long after, long before) throws SQLException {
+	public List<IStream> searchBetween(long after, long before)
+			throws SQLException {
 		List<IStream> result = new ArrayList<IStream>();
 		searchBetweenStmt.setLong(1, before);
 		searchBetweenStmt.setLong(2, after);

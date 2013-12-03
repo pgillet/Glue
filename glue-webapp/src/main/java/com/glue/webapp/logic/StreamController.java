@@ -162,7 +162,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 					VenueDAO venueDAO = manager.getVenueDAO();
 
 					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.search(venue.getAddress());
+					IVenue persistentVenue = venueDAO.searchByAddress(venue.getAddress());
 					if (persistentVenue == null) {
 						persistentVenue = venueDAO.create(venue);
 					}

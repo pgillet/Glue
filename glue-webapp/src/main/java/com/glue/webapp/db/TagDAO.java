@@ -1,5 +1,6 @@
 package com.glue.webapp.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,47 +24,66 @@ public class TagDAO extends AbstractDAO {
 	public static final String INSERT_NEW_STREAM_TAG = "INSERT IGNORE INTO STREAM_TAG(tag_id,stream_id) VALUES (?,?)";
 	public static final String DELETE_ALL_STREAM_TAG = "DELETE FROM STREAM_TAG WHERE stream_id=?";
 
-	PreparedStatement statement = null;
+	PreparedStatement selectTagStmt = null;
+	PreparedStatement createTagStmt = null;
+	PreparedStatement createStreamTagStmt = null;
+	PreparedStatement deleteStreamTagStmt = null;
 
 	protected TagDAO() {
 	}
 
-	public void create(String aTag, long streamId) throws SQLException {
+	@Override
+	public void setConnection(Connection connection) throws SQLException {
+		super.setConnection(connection);
+
+		this.createTagStmt = connection.prepareStatement(INSERT_NEW_TAG,
+				Statement.RETURN_GENERATED_KEYS);
+		this.createStreamTagStmt = connection
+				.prepareStatement(INSERT_NEW_STREAM_TAG);
+		this.selectTagStmt = connection.prepareStatement(SELECT_TAG);
+		this.deleteStreamTagStmt = connection
+				.prepareStatement(DELETE_ALL_STREAM_TAG);
+	}
+
+	/**
+	 * Creates the given tag if it does not already exist, and associates it to
+	 * the stream with the given id.
+	 * 
+	 * @param aTag
+	 * @param streamId
+	 * @throws SQLException
+	 */
+	public void addTag(String aTag, long streamId) throws SQLException {
 
 		Long tagId = null;
 		ResultSet result;
 
 		// Tag already exist?
-		statement = connection.prepareStatement(SELECT_TAG);
-		statement.setString(1, aTag);
-		result = statement.executeQuery();
+		selectTagStmt.setString(1, aTag);
+		result = selectTagStmt.executeQuery();
 		if (result.next()) {
 			tagId = result.getLong(1);
 		} else {
 
 			// Tag does not exist, create it
-			statement = connection.prepareStatement(INSERT_NEW_TAG, Statement.RETURN_GENERATED_KEYS);
-			statement.setString(1, aTag);
-			statement.executeUpdate();
+			createTagStmt.setString(1, aTag);
+			createTagStmt.executeUpdate();
 
 			// Get the generated id
-			result = statement.getGeneratedKeys();
-			while (result.next()) {
+			result = createTagStmt.getGeneratedKeys();
+			if (result.next()) {
 				tagId = result.getLong(1);
 			}
 		}
 
 		// Update STREAM_TAG table
-		statement = connection.prepareStatement(INSERT_NEW_STREAM_TAG);
-		statement.setLong(1, tagId);
-		statement.setLong(2, streamId);
-		statement.executeUpdate();
-
+		createStreamTagStmt.setLong(1, tagId);
+		createStreamTagStmt.setLong(2, streamId);
+		createStreamTagStmt.executeUpdate();
 	}
 
 	public void deleteAll(long streamId) throws SQLException {
-		statement = connection.prepareStatement(DELETE_ALL_STREAM_TAG);
-		statement.setLong(1, streamId);
-		statement.executeUpdate();
+		deleteStreamTagStmt.setLong(1, streamId);
+		deleteStreamTagStmt.executeUpdate();
 	}
 }

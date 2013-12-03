@@ -52,7 +52,7 @@ public class OpenDataToulouseReadCVS {
 	public static void main(String[] args) throws IOException {
 
 		URL url = new URL(
-				" http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
+				"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
 
 		ZipInputStream zin = new ZipInputStream(url.openStream());
 		ZipEntry ze = zin.getNextEntry();
@@ -274,18 +274,17 @@ public class OpenDataToulouseReadCVS {
 		}
 
 		venue.setUrl(removeUrlExceptions(cleanup(fields[24])));
+		
+		// Search for an existing venue
+		IVenue persistentVenue = venueDAO.searchByAddress(venue.getAddress());
+		if (persistentVenue == null) {
+			System.out.println("Inserting " + venue);
+			persistentVenue = venueDAO.create(venue);
+		}
+		stream.setVenue(persistentVenue);
 
 		// Search for an existing stream
-		if (!streamDAO.exist(stream.getTitle(), stream.getStartDate())) {
-
-			// Search for an existing venue
-			IVenue persistentVenue = venueDAO.search(venue.getAddress());
-			if (persistentVenue == null) {
-				System.out.println("Inserting " + venue);
-				persistentVenue = venueDAO.create(venue);
-			}
-			stream.setVenue(persistentVenue);
-
+		if (!streamDAO.exists(stream)) {
 			System.out.println("Inserting " + stream);
 			streamDAO.create(stream);
 		} else {
@@ -344,7 +343,7 @@ public class OpenDataToulouseReadCVS {
 			return Category.MUSIC;
 		}
 
-		if (categories.contains("conference") || categories.contains("conférence")) {
+		if (categories.contains("conference") || categories.contains("confï¿½rence")) {
 			return Category.CONFERENCE;
 		}
 

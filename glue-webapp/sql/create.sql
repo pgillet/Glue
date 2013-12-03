@@ -48,7 +48,8 @@ CREATE TABLE STREAM (
 			 venue_id BIGINT,
              PRIMARY KEY (id),
              FOREIGN KEY (venue_id) REFERENCES VENUE(id) 
-             		ON DELETE SET NULL
+             		ON DELETE SET NULL,
+             UNIQUE (title, start_date, venue_id) 
              );
 			  
 -- TAG table
