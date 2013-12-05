@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.feed.xml.ElementFilter;
 import com.glue.feed.xml.FeedMessageListener;
-import com.glue.feed.xml.StreamBuilder;
+import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.feed.xml.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 import com.glue.struct.IStream;
@@ -48,13 +48,13 @@ public class LibraryAgendaMain {
 				filter, Record.class);
 
 		final FeedMessageListener delegate = new StreamMessageListener();
-		final StreamBuilder streamBuilder = new RecordStreamBuilder();
+		final GlueObjectBuilder<Record, IStream> streamBuilder = new RecordStreamBuilder();
 
 		parser.setFeedMessageListener(new FeedMessageListener<Record>() {
 
 			@Override
 			public void newMessage(Record msg) throws Exception {
-				IStream stream = streamBuilder.buildStream(msg);
+				IStream stream = streamBuilder.build(msg);
 				delegate.newMessage(stream);
 			}
 

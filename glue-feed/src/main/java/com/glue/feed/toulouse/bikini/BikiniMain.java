@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.feed.xml.ElementFilter;
 import com.glue.feed.xml.FeedMessageListener;
-import com.glue.feed.xml.StreamBuilder;
+import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.feed.xml.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 import com.glue.struct.IStream;
@@ -36,13 +36,13 @@ public class BikiniMain {
 				Item.class);
 
 		final FeedMessageListener delegate = new StreamMessageListener();
-		final StreamBuilder streamBuilder = new ItemStreamBuilder();
+		final GlueObjectBuilder<Item, IStream> streamBuilder = new ItemStreamBuilder();
 
 		parser.setFeedMessageListener(new FeedMessageListener<Item>() {
 
 			@Override
 			public void newMessage(Item msg) throws Exception {
-				IStream stream = streamBuilder.buildStream(msg);
+				IStream stream = streamBuilder.build(msg);
 				delegate.newMessage(stream);
 			}
 

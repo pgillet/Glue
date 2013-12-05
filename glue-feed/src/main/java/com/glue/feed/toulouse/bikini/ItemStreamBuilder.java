@@ -20,14 +20,14 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.StreamBuilder;
+import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
 
-public class ItemStreamBuilder implements StreamBuilder<Item> {
+public class ItemStreamBuilder implements GlueObjectBuilder<Item, IStream> {
 
 	static final Logger LOG = LoggerFactory.getLogger(ItemStreamBuilder.class);
 
@@ -43,7 +43,7 @@ public class ItemStreamBuilder implements StreamBuilder<Item> {
 	}
 
 	@Override
-	public IStream buildStream(Item msg) throws Exception {
+	public IStream build(Item msg) throws Exception {
 		// Title
 		int index = msg.title.lastIndexOf(":");
 		String title = msg.title.substring(0, index).trim();

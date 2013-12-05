@@ -12,14 +12,14 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.StreamBuilder;
+import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
 
-public class RecordStreamBuilder implements StreamBuilder<Record> {
+public class RecordStreamBuilder implements GlueObjectBuilder<Record, IStream> {
 
 	static final Logger LOG = LoggerFactory
 			.getLogger(RecordStreamBuilder.class);
@@ -39,7 +39,7 @@ public class RecordStreamBuilder implements StreamBuilder<Record> {
 	}
 
 	@Override
-	public IStream buildStream(Record record) throws Exception {
+	public IStream build(Record record) throws Exception {
 		IStream stream = new Stream();
 
 		stream.setTitle(record.title);
