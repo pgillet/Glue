@@ -6,12 +6,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-import javax.xml.stream.StreamFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.ElementFilter;
 import com.glue.feed.xml.FeedMessageListener;
 import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.feed.xml.StreamMessageListener;
@@ -42,10 +39,8 @@ public class LibraryAgendaMain {
 		Reader reader0 = new InputStreamReader(in, "UTF-8");
 		Reader reader = new BufferedReader(reader0);
 
-		StreamFilter filter = new ElementFilter("record");
-
 		XMLFeedParser<Record> parser = new XMLFeedParser<Record>(reader,
-				filter, Record.class);
+				Record.class);
 
 		final FeedMessageListener delegate = new StreamMessageListener();
 		final GlueObjectBuilder<Record, IStream> streamBuilder = new RecordStreamBuilder();
@@ -65,7 +60,7 @@ public class LibraryAgendaMain {
 		});
 
 		parser.read();
-		delegate.close();
+		parser.close();
 		LOG.info("Done");
 
 	}

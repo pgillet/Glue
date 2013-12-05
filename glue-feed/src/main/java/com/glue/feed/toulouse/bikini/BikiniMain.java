@@ -6,12 +6,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-import javax.xml.stream.StreamFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.ElementFilter;
 import com.glue.feed.xml.FeedMessageListener;
 import com.glue.feed.xml.GlueObjectBuilder;
 import com.glue.feed.xml.StreamMessageListener;
@@ -30,10 +27,7 @@ public class BikiniMain {
 		Reader reader0 = new InputStreamReader(in, "UTF-8");
 		Reader reader = new BufferedReader(reader0);
 
-		StreamFilter filter = new ElementFilter("item");
-
-		XMLFeedParser<Item> parser = new XMLFeedParser<Item>(reader, filter,
-				Item.class);
+		XMLFeedParser<Item> parser = new XMLFeedParser<Item>(reader, Item.class);
 
 		final FeedMessageListener delegate = new StreamMessageListener();
 		final GlueObjectBuilder<Item, IStream> streamBuilder = new ItemStreamBuilder();
@@ -53,7 +47,7 @@ public class BikiniMain {
 		});
 
 		parser.read();
-		delegate.close();
+		parser.close();
 		LOG.info("Done");
 
 	}

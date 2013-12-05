@@ -29,6 +29,20 @@ public class XMLFeedParser<T> {
 	Class<T> clazz;
 	Unmarshaller unmarshaller;
 
+	/**
+	 * Equivalent to <code>this(reader, new ElementFilter(clazz), clazz)</code>.
+	 * 
+	 * @param reader
+	 * @param clazz
+	 * @throws XMLStreamException
+	 * @throws FactoryConfigurationError
+	 * @throws JAXBException
+	 */
+	public XMLFeedParser(Reader reader, Class<T> clazz)
+			throws XMLStreamException, FactoryConfigurationError, JAXBException {
+		this(reader, new ElementFilter(clazz), clazz);
+	}
+
 	public XMLFeedParser(Reader reader, StreamFilter filter, Class<T> clazz)
 			throws XMLStreamException, FactoryConfigurationError, JAXBException {
 		this.clazz = clazz;
@@ -37,13 +51,6 @@ public class XMLFeedParser<T> {
 		XMLInputFactory xmlif = XMLInputFactory.newInstance();
 		this.xsr = xmlif.createFilteredReader(
 				xmlif.createXMLStreamReader(reader), filter);
-
-		// Ignore headers
-		//skipElements(XMLEvent.START_DOCUMENT, XMLEvent.DTD, XMLEvent.SPACE);
-		// Ignore root element
-//		xsr.nextTag();
-		// If there's no tag, ignore root element's end
-		//skipElements(XMLStreamReader.END_ELEMENT);
 	}
 
 	public T next() throws XMLStreamException, JAXBException {
@@ -61,6 +68,9 @@ public class XMLFeedParser<T> {
 	}
 
 	public void close() throws XMLStreamException {
+		if (feedMessageListener != null) {
+			feedMessageListener.close();
+		}
 		xsr.close();
 	}
 

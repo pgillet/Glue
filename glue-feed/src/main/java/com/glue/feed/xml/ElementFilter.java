@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A simple filter that accepts elements with the specified name, and all their
- * children.
+ * A simple filter that accepts elements with the specified name (ignoring
+ * case), and all their children.
  * 
  * @author pgillet
  * 
@@ -24,6 +24,15 @@ public class ElementFilter implements StreamFilter {
 		this.name = name;
 	}
 
+	/**
+	 * Initializes the filter with the simple name of the given class.
+	 * 
+	 * @param name
+	 */
+	public ElementFilter(Class clazz) {
+		this(clazz.getSimpleName());
+	}
+
 	@Override
 	public boolean accept(XMLStreamReader reader) {
 		boolean accepted = false;
@@ -31,10 +40,11 @@ public class ElementFilter implements StreamFilter {
 		if (subElement) {
 			accepted = true;
 		} else if (reader.isStartElement()
-				&& name.equals(reader.getLocalName())) {
+				&& name.equalsIgnoreCase(reader.getLocalName())) {
 			subElement = true;
 			accepted = true;
-		} else if (reader.isEndElement() && name.equals(reader.getLocalName())) {
+		} else if (reader.isEndElement()
+				&& name.equalsIgnoreCase(reader.getLocalName())) {
 			subElement = false;
 			accepted = true;
 		}
