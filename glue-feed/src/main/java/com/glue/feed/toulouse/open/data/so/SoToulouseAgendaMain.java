@@ -23,10 +23,10 @@ import com.glue.struct.IStream;
  * 
  * @author grdenis
  */
-public class SoMain {
+public class SoToulouseAgendaMain {
 
 	static final Logger LOG = LoggerFactory
-			.getLogger(SoMain.class);
+			.getLogger(SoToulouseAgendaMain.class);
 
 	public static void main(String[] args) throws Exception {
 
