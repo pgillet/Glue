@@ -1,4 +1,4 @@
-package com.glue.feed.toulouse.so;
+package com.glue.feed.toulouse.open.data.so;
 
 /**
  * Description des champs :

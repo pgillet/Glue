@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.feed.DataSourceManager;
+import com.glue.feed.FeedMessageListener;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;
 import com.glue.webapp.db.DAOCommand;
@@ -48,7 +49,7 @@ public class StreamMessageListener implements FeedMessageListener<IStream> {
 
 					IVenue venue = stream.getVenue();
 					if (venue == null) {
-						// Streams without a venue are not allowed
+						LOG.trace("Streams without a venue are not allowed");
 						return null;
 					}
 
