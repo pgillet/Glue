@@ -38,6 +38,9 @@ public class ToulouseEquipementsMain {
 			zin.closeEntry();
 			ze = zin.getNextEntry();
 		}
+		
+		// Consume the BOM ( http://en.wikipedia.org/wiki/Byte_order_mark )
+		zin.read(new byte[3]);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, Charset.forName("UTF-8")));
 
