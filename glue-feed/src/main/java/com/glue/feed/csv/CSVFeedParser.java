@@ -9,9 +9,9 @@ import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
 
-import com.glue.feed.DefaultFeedMessageListener;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.FeedParser;
+import com.glue.feed.listener.DefaultFeedMessageListener;
 
 public class CSVFeedParser<T> implements FeedParser<T> {
 

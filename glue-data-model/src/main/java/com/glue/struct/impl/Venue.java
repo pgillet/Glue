@@ -5,18 +5,22 @@ import java.io.Serializable;
 import com.glue.struct.IVenue;
 
 public class Venue implements IVenue, Serializable {
-	
+
+	private static final long serialVersionUID = -6222720029004741490L;
+
 	private Long id;
-	
+
 	private String name;
-	
+
 	private double latitude;
 
 	private double longitude;
 
 	private String address;
-	
+
 	private String url;
+
+	private String city;
 
 	/**
 	 * @return the id
@@ -27,7 +31,8 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	@Override
 	public void setId(Long id) {
@@ -43,7 +48,8 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	@Override
 	public void setName(String name) {
@@ -59,7 +65,8 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param latitude the latitude to set
+	 * @param latitude
+	 *            the latitude to set
 	 */
 	@Override
 	public void setLatitude(double latitude) {
@@ -75,7 +82,8 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param longitude the longitude to set
+	 * @param longitude
+	 *            the longitude to set
 	 */
 	@Override
 	public void setLongitude(double longitude) {
@@ -91,7 +99,8 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param address the address to set
+	 * @param address
+	 *            the address to set
 	 */
 	@Override
 	public void setAddress(String address) {
@@ -107,14 +116,17 @@ public class Venue implements IVenue, Serializable {
 	}
 
 	/**
-	 * @param url the url to set
+	 * @param url
+	 *            the url to set
 	 */
 	@Override
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -133,7 +145,9 @@ public class Venue implements IVenue, Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -162,12 +176,10 @@ public class Venue implements IVenue, Serializable {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(latitude) != Double
-				.doubleToLongBits(other.latitude)) {
+		if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(longitude) != Double
-				.doubleToLongBits(other.longitude)) {
+		if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude)) {
 			return false;
 		}
 		if (name == null) {
@@ -187,14 +199,25 @@ public class Venue implements IVenue, Serializable {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Venue [name=" + name + ", latitude=" + latitude
-				+ ", longitude=" + longitude + ", address=" + address
+		return "Venue [name=" + name + ", latitude=" + latitude + ", longitude=" + longitude + ", address=" + address
 				+ ", url=" + url + "]";
+	}
+
+	@Override
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Override
+	public String getCity() {
+		return city;
 	}
 
 }

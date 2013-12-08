@@ -1,10 +1,11 @@
-package com.glue.feed;
+package com.glue.feed.listener;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.feed.FeedMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 
 /**

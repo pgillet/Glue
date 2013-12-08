@@ -1,4 +1,4 @@
-package com.glue.feed.xml;
+package com.glue.feed.listener;
 
 import java.sql.SQLException;
 import java.util.Set;

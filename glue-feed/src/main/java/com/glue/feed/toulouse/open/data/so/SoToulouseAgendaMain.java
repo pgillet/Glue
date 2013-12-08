@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
-import com.glue.feed.xml.StreamMessageListener;
+import com.glue.feed.listener.StreamMessageListener;
 import com.glue.struct.IStream;
 
 /**

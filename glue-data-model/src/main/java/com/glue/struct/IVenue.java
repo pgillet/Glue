@@ -25,4 +25,8 @@ public interface IVenue {
 	void setName(String name);
 
 	String getName();
+
+	void setCity(String city);
+
+	String getCity();
 }

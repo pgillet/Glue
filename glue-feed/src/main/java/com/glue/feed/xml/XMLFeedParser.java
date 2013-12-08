@@ -19,9 +19,9 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.DefaultFeedMessageListener;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.FeedParser;
+import com.glue.feed.listener.DefaultFeedMessageListener;
 
 public class XMLFeedParser<T> implements FeedParser<T> {
 
