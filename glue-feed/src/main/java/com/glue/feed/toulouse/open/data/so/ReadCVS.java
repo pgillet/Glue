@@ -1,4 +1,4 @@
-package com.glue.feed.csv;
+package com.glue.feed.toulouse.open.data.so;
 
 import java.io.BufferedReader;
 import java.io.IOException;

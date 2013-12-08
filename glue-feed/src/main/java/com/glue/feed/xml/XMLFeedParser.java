@@ -19,11 +19,15 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XMLFeedParser<T> {
+import com.glue.feed.DefaultFeedMessageListener;
+import com.glue.feed.FeedMessageListener;
+import com.glue.feed.FeedParser;
+
+public class XMLFeedParser<T> implements FeedParser<T> {
 
 	static final Logger LOG = LoggerFactory.getLogger(XMLFeedParser.class);
 
-	private FeedMessageListener<T> feedMessageListener;
+	private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<T>();
 
 	XMLStreamReader xsr;
 	Class<T> clazz;
@@ -67,11 +71,16 @@ public class XMLFeedParser<T> {
 		return xsr.hasNext();
 	}
 
-	public void close() throws XMLStreamException {
+	public void close() throws IOException {
 		if (feedMessageListener != null) {
 			feedMessageListener.close();
 		}
-		xsr.close();
+		try {
+			xsr.close();
+		} catch (XMLStreamException e) {
+			LOG.error(e.getMessage(), e);
+			throw new IOException(e);
+		}
 	}
 
 	/**
@@ -80,6 +89,7 @@ public class XMLFeedParser<T> {
 	 * @throws NullPointerException
 	 *             If a listener has not been set for this parser
 	 */
+	@Override
 	public void read() throws Exception {
 		try {
 			while (xsr.hasNext()) {
@@ -96,7 +106,7 @@ public class XMLFeedParser<T> {
 
 	}
 
-	void skipElements(Integer... elements) throws XMLStreamException {
+	private void skipElements(Integer... elements) throws XMLStreamException {
 		int eventType = xsr.getEventType();
 
 		List<Integer> types = Arrays.asList(elements);
@@ -108,6 +118,7 @@ public class XMLFeedParser<T> {
 	/**
 	 * @return the feedMessageListener
 	 */
+	@Override
 	public FeedMessageListener<T> getFeedMessageListener() {
 		return feedMessageListener;
 	}

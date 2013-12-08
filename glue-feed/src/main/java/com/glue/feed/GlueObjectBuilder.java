@@ -1,4 +1,4 @@
-package com.glue.feed.xml;
+package com.glue.feed;
 
 
 public interface GlueObjectBuilder<T, V> {

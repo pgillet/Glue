@@ -26,7 +26,7 @@ CREATE TABLE VENUE (
             longitude DECIMAL(10,8),
             url VARCHAR(2048),
             PRIMARY KEY(id),
-            UNIQUE (address)
+            UNIQUE (name, address)
 			);
 
 -- Stream table
