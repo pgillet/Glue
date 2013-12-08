@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.GlueObjectBuilder;
+import com.glue.feed.GlueObjectBuilder;
 import com.glue.struct.Category;
 import com.glue.struct.IStream;
 import com.glue.struct.IVenue;

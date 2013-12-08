@@ -1,6 +1,7 @@
 package com.glue.feed.toulouse.open.data.biblio;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -9,8 +10,8 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.feed.xml.FeedMessageListener;
-import com.glue.feed.xml.GlueObjectBuilder;
+import com.glue.feed.FeedMessageListener;
+import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.xml.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 import com.glue.struct.IStream;
@@ -54,7 +55,7 @@ public class LibraryAgendaMain {
 			}
 
 			@Override
-			public void close() {
+			public void close() throws IOException {
 				delegate.close();
 			}
 		});
