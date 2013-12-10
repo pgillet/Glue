@@ -58,11 +58,6 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 		List<? extends IStream> items = new ArrayList<IStream>();
 
-		// No category
-		if (categories == null || categories.length == 0) {
-			return (List<IStream>) items;
-		}
-
 		SolrQuery query = constructSolrQuery();
 
 		try {

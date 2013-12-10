@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -50,13 +49,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	private Category[] categories = Category.values();
 
 	private List<IStream> streams;
-
-	@PostConstruct
-	public void init() {
-		for (Category category : categories) {
-			getCatSelection().add(category.name());
-		}
-	}
 
 	/**
 	 * @return the query
@@ -389,7 +381,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		}
 
 		try {
-			streams = streamController.search();
+			streams = streamController.first();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -406,7 +398,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		getCatSelection().add(cat);
 
 		try {
-			streams = streamController.search();
+			streams = streamController.first();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
