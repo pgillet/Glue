@@ -2,18 +2,22 @@ package com.glue.feed.toulouse.open.data.venue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
+import com.glue.feed.io.FileExtensionFilter;
+import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.VenueMessageListener;
 import com.glue.struct.IVenue;
 
@@ -25,26 +29,21 @@ import com.glue.struct.IVenue;
  */
 public class ToulouseEquipementsMain {
 
-	static final Logger LOG = LoggerFactory.getLogger(ToulouseEquipementsMain.class);
+	static final Logger LOG = LoggerFactory
+			.getLogger(ToulouseEquipementsMain.class);
 
 	public static void main(String[] args) throws Exception {
 
 		URL url = new URL(
 				"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23851-equipements-culturels/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
-
 		ZipInputStream zin = new ZipInputStream(url.openStream());
-		ZipEntry ze = zin.getNextEntry();
-		while (!ze.getName().endsWith(".csv")) {
-			zin.closeEntry();
-			ze = zin.getNextEntry();
-		}
-		
-		// Consume the BOM ( http://en.wikipedia.org/wiki/Byte_order_mark )
-		zin.read(new byte[3]);
+		ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(".csv"));
+		InputStream in = GlueIOUtils.getDeferredInputStream(zin, entry.getName());
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, Charset.forName("UTF-8")));
-
-		CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader, VenueBean.class);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new BOMInputStream(in), Charset.forName("UTF-8")));
+		CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader,
+				VenueBean.class);
 
 		final FeedMessageListener<IVenue> delegate = new VenueMessageListener();
 		final GlueObjectBuilder<VenueBean, IVenue> venueBuilder = new VenueBeanVenueBuilder();

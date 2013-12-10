@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
+import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 import com.glue.struct.IStream;
@@ -35,7 +36,8 @@ public class LibraryAgendaMain {
 	public static void main(String[] args) throws Exception {
 
 		URL url = new URL("http://www.bibliotheque.toulouse.fr/fluxEvents.xml");
-		InputStream in = url.openStream();
+		InputStream in0 = url.openStream();
+		InputStream in = GlueIOUtils.getDeferredInputStream(in0, url.getFile());
 
 		Reader reader0 = new InputStreamReader(in, "UTF-8");
 		Reader reader = new BufferedReader(reader0);
