@@ -37,8 +37,10 @@ public class ToulouseEquipementsMain {
 		URL url = new URL(
 				"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23851-equipements-culturels/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
 		ZipInputStream zin = new ZipInputStream(url.openStream());
-		ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(".csv"));
-		InputStream in = GlueIOUtils.getDeferredInputStream(zin, entry.getName());
+		ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
+				".csv"));
+		InputStream in = GlueIOUtils.getDeferredInputStream(zin,
+				entry.getName());
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				new BOMInputStream(in), Charset.forName("UTF-8")));

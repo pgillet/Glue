@@ -74,7 +74,8 @@ public class GlueIOUtils {
 			IOUtils.copy(in, out);
 
 			long end = System.currentTimeMillis();
-			LOG.info(String.format("Copied input data from %s in %d ms", name, end - start));
+			LOG.info(String.format("Copied input data from %s in %d ms", name,
+					end - start));
 
 			// The problem here is that we wait the input data to be fully
 			// copied before returning an input stream on it
@@ -94,5 +95,4 @@ public class GlueIOUtils {
 			IOUtils.closeQuietly(out);
 		}
 	}
-
 }
