@@ -1,19 +1,29 @@
 package com.glue.feed.toulouse.open.data.venue;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
+import org.apache.commons.io.output.DeferredFileOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
+import com.glue.feed.io.FileExtensionFilter;
+import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.VenueMessageListener;
 import com.glue.struct.IVenue;
 
@@ -25,26 +35,38 @@ import com.glue.struct.IVenue;
  */
 public class ToulouseEquipementsMain {
 
-	static final Logger LOG = LoggerFactory.getLogger(ToulouseEquipementsMain.class);
+	static final Logger LOG = LoggerFactory
+			.getLogger(ToulouseEquipementsMain.class);
 
 	public static void main(String[] args) throws Exception {
 
 		URL url = new URL(
 				"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23851-equipements-culturels/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
-
 		ZipInputStream zin = new ZipInputStream(url.openStream());
-		ZipEntry ze = zin.getNextEntry();
-		while (!ze.getName().endsWith(".csv")) {
-			zin.closeEntry();
-			ze = zin.getNextEntry();
-		}
+		ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(".csv"));
+
+		int threshold = 20 * 1024; // 20 Kio
+		String prefix = FilenameUtils.getBaseName(entry.getName());
+		String suffix = FilenameUtils.getExtension(entry.getName());
+		DeferredFileOutputStream out = new DeferredFileOutputStream(threshold,
+				prefix, suffix, null);
+		IOUtils.copy(zin, out);
+		IOUtils.closeQuietly(zin);
+		IOUtils.closeQuietly(out);
 		
-		// Consume the BOM ( http://en.wikipedia.org/wiki/Byte_order_mark )
-		zin.read(new byte[3]);
+		// TODO: should use a pipe
+		InputStream in = null;
+		byte[] data = out.getData();
+		if(data != null){
+			in = new ByteArrayInputStream(data);
+		} else {
+			in = new FileInputStream(out.getFile());
+		}
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(zin, Charset.forName("UTF-8")));
-
-		CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader, VenueBean.class);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new BOMInputStream(in), Charset.forName("UTF-8")));
+		CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader,
+				VenueBean.class);
 
 		final FeedMessageListener<IVenue> delegate = new VenueMessageListener();
 		final GlueObjectBuilder<VenueBean, IVenue> venueBuilder = new VenueBeanVenueBuilder();
@@ -65,6 +87,7 @@ public class ToulouseEquipementsMain {
 
 		parser.read();
 		parser.close();
+		FileUtils.deleteQuietly(out.getFile());
 		LOG.info("Done");
 	}
 }
