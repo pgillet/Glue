@@ -42,7 +42,9 @@
 							<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
 							<ui:repeat var="item" value="#{streamSearchBean.categories}">
 								<h:commandButton styleClass="btn text-muted glue-btn-cat"
-									style="#{streamSearchBean.getStyle(item.name)}"
+									style="#{streamSearchBean.getCategoryStyle(item.name, false, false)}"
+									onmouseover="#{streamSearchBean.getCategoryStyle(item.name, true, true)}"
+									onmouseout="#{streamSearchBean.getCategoryStyle(item.name, true, false)}"
 									value="#{bundle[item.name.toLowerCase()]}"
 									action="#{streamSearchBean.enableCategory}">
 									<f:param name="cat" value="#{item.name}"></f:param>

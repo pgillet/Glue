@@ -356,17 +356,34 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	/**
-	 * Returns the content of the style attribute to apply to the given category
-	 * selector that has just been toggled.
+	 * Returns the CSS styles to apply to the given category selector.
 	 * 
 	 * @param cat
+	 *            the category name
+	 * @param javascriptSyntax
+	 *            a boolean telling whether the method should return the
+	 *            JavaScript syntax or not
+	 * @param onmouseover
+	 *            a boolean telling whether the method should return the CSS
+	 *            styles to be applied when the pointer is moved onto the
+	 *            element (onMouseOver attribute) or away from it (onMouseOut
+	 *            attribute). This parameter is ignored if javascriptSyntax is
+	 *            set to false.
 	 * @return
 	 */
-	public String getStyle(String cat) {
-		String styleAttr = "";
-		if (getCatSelection().contains(cat)) {
-			styleAttr = "border-bottom: 3px solid "
-					+ Category.valueOf(cat).getColor() + ";";
+	public String getCategoryStyle(String cat, boolean javascriptSyntax,
+			boolean onmouseover) {
+		String styleAttr;
+		if (javascriptSyntax) {
+			// JavaScript syntax
+			styleAttr = "this.style.borderBottom = '3px solid %s' ;";
+		} else {
+			styleAttr = "border-bottom: 3px solid %s ;";
+		}
+		if (getCatSelection().contains(cat) || onmouseover) {
+			styleAttr = String.format(styleAttr, Category.valueOf(cat).getColor());
+		} else {
+			styleAttr = String.format(styleAttr, "transparent");
 		}
 
 		return styleAttr;
