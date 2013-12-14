@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
+import com.glue.feed.error.StoreErrorListener;
 import com.glue.feed.io.FileExtensionFilter;
 import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.StreamMessageListener;
@@ -63,9 +64,12 @@ public class SoToulouseAgendaMain {
 				delegate.close();
 			}
 		});
+		
+		parser.addErrorListener(new StoreErrorListener());
 
 		parser.read();
 		parser.close();
+		parser.flush();
 		LOG.info("Done");
 	}
 }

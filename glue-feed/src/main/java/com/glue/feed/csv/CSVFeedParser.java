@@ -11,13 +11,21 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.FeedParser;
+import com.glue.feed.error.ErrorDispatcher;
+import com.glue.feed.error.ErrorHandler;
+import com.glue.feed.error.ErrorLevel;
+import com.glue.feed.error.ErrorListener;
+import com.glue.feed.error.ErrorManager;
 import com.glue.feed.listener.DefaultFeedMessageListener;
 
-public class CSVFeedParser<T> implements FeedParser<T> {
+public class CSVFeedParser<T> implements ErrorHandler, ErrorManager,
+		FeedParser<T> {
 
 	static final Logger LOG = LoggerFactory.getLogger(CSVFeedParser.class);
 
 	private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<>();
+
+	private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
 	private Reader reader;
 	private Class<T> clazz;
@@ -65,6 +73,10 @@ public class CSVFeedParser<T> implements FeedParser<T> {
 							beanReader.getLineNumber(),
 							beanReader.getUntokenizedRow());
 					LOG.error(e.getMessage(), e);
+					
+					errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
+							e.getMessage(), e, "CSV",
+							beanReader.getLineNumber());
 				}
 			} while (msg != null);
 
@@ -129,6 +141,32 @@ public class CSVFeedParser<T> implements FeedParser<T> {
 	@Override
 	public void close() throws IOException {
 		reader.close();
+	}
+
+	@Override
+	public ErrorListener[] getErrorListeners() {
+		return errorDispatcher.getErrorListeners();
+	}
+
+	@Override
+	public void addErrorListener(ErrorListener l) {
+		errorDispatcher.addErrorListener(l);
+	}
+
+	@Override
+	public void removeErrorListener(ErrorListener l) {
+		errorDispatcher.removeErrorListener(l);
+	}
+
+	@Override
+	public void fireErrorEvent(ErrorLevel lvl, String message, Throwable cause,
+			String source, int lineNumber) {
+		errorDispatcher.fireErrorEvent(lvl, message, cause, source, lineNumber);
+	}
+
+	@Override
+	public void flush() throws IOException {
+		errorDispatcher.flush();
 	}
 
 }

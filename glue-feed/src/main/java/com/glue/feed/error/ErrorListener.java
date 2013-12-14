@@ -1,5 +1,6 @@
 package com.glue.feed.error;
 
+import java.io.Flushable;
 import java.util.EventListener;
 
 /**
@@ -17,7 +18,7 @@ import java.util.EventListener;
  *
  * @author pgillet
  */
-public interface ErrorListener extends EventListener {
+public interface ErrorListener extends EventListener, Flushable {
 
     /**
      * Invoked when an error (recoverable or not) has been fired.
