@@ -75,7 +75,7 @@ public class CSVFeedParser<T> implements ErrorHandler, ErrorManager,
 					LOG.error(e.getMessage(), e);
 					
 					errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
-							e.getMessage(), e, "CSV",
+							e.getMessage(), e, "csv",
 							beanReader.getLineNumber());
 				}
 			} while (msg != null);

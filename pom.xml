@@ -10,6 +10,7 @@
 
 	<properties>
 		<solr.version>4.5.1</solr.version>
+		<mysql.version>5.1.26</mysql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -26,8 +27,23 @@
 			</dependency>
 			<dependency>
 				<groupId>com.glue</groupId>
+				<artifactId>glue-persistence</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.glue</groupId>
 				<artifactId>glue-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>1.0.13</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -116,7 +132,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
-				<module>glue-data-model</module>
+				<module>glue-persistence</module>
 				<module>glue-search</module>
 				<module>glue-webapp</module>
 			</modules>
@@ -130,6 +146,7 @@
 				<module>glue-client-android</module>
 				<module>glue-content</module>
 				<module>glue-data-model</module>
+				<module>glue-persistence</module>
 				<module>glue-feed</module>
 				<module>glue-search</module>
 				<module>glue-webapp</module>

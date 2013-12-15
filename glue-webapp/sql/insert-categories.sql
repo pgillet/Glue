@@ -1,5 +1,0 @@
-INSERT INTO CATEGORY (name) VALUES ("Musique");
-INSERT INTO CATEGORY (name) VALUES ("Sport");
-INSERT INTO CATEGORY (name) VALUES ("Spectacle");
-INSERT INTO CATEGORY (name) VALUES ("Exposition");
-INSERT INTO CATEGORY (name) VALUES ("Autre");
