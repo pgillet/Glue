@@ -24,7 +24,7 @@ import com.glue.struct.impl.Venue;
  * @author Greg
  * 
  */
-public class StreamDAO extends AbstractDAO {
+public class StreamDAO extends AbstractDAO implements IDAO<IStream> {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_STREAM_ID = "stream_id";
@@ -101,7 +101,7 @@ public class StreamDAO extends AbstractDAO {
 				.prepareStatement(SELECT_STREAM_BETWEEN);
 	}
 
-	public void create(IStream aStream) throws SQLException {
+	public IStream create(IStream aStream) throws SQLException {
 
 		checkVenue(aStream);
 
@@ -129,11 +129,10 @@ public class StreamDAO extends AbstractDAO {
 		}
 		aStream.setId(id);
 
-		// Invited participant
-		updateInvitedParticipant(aStream);
-
 		// Tags
 		updateTags(aStream);
+		
+		return aStream;
 	}
 
 	/**
@@ -167,9 +166,6 @@ public class StreamDAO extends AbstractDAO {
 		updateStmt.setString(12, aStream.getPrice());
 		updateStmt.setString(13, aStream.getCategory().name());
 		updateStmt.executeUpdate();
-
-		// Invited participant
-		updateInvitedParticipant(aStream);
 
 		// Store tags
 		updateTags(aStream);

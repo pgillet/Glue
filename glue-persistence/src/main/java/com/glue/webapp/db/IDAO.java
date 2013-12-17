@@ -1,18 +1,14 @@
 package com.glue.webapp.db;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface IDAO {
+public interface IDAO<T> {
 
-	/**
-	 * @return the connection
-	 */
-	Connection getConnection();
-
-	/**
-	 * @param connection the connection to set
-	 */
-	void setConnection(Connection connection) throws SQLException;
+	
+	T create(T obj) throws SQLException;
+	
+	void update(T obj) throws SQLException;
+	
+	void delete(long id) throws SQLException;
 
 }

@@ -17,7 +17,7 @@ import com.glue.struct.impl.Media;
  * @author Greg
  * 
  */
-public class MediaDAO extends AbstractDAO {
+public class MediaDAO extends AbstractDAO implements IDAO<IMedia> {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_STREAM_ID = "stream_id";
@@ -34,6 +34,8 @@ public class MediaDAO extends AbstractDAO {
 	public static final String CREATE_MEDIA = "INSERT INTO MEDIA(stream_id, user_id, extension, "
 			+ "mime_type, caption, latitude, longitude, creation_date, url, external) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
+	public static final String UPDATE_MEDIA = "UPDATE MEDIA SET STREAM_ID=?, USER_ID=?, EXTENSION=?, MIME_TYPE=?, CAPTION=?, LATITUDE=?, LONGITUDE=?, CREATION_DATE=?, URL=?, EXTERNAL=? WHERE ID=?";
+
 	public static final String SELECT_MEDIAS_STREAM = "SELECT * from MEDIA WHERE stream_id=?";
 
 	public static final String SELECT_MEDIA = "SELECT ID from MEDIA WHERE stream_id=? and url=?";
@@ -41,6 +43,7 @@ public class MediaDAO extends AbstractDAO {
 	public static final String DELETE_MEDIA = "DELETE FROM MEDIA WHERE id=?";
 
 	private PreparedStatement createStmt = null;
+	private PreparedStatement updateStmt = null;
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement selectStmt = null;
 	private PreparedStatement existStmt = null;
@@ -52,13 +55,15 @@ public class MediaDAO extends AbstractDAO {
 	public void setConnection(Connection connection) throws SQLException {
 		super.setConnection(connection);
 
-		createStmt = connection.prepareStatement(CREATE_MEDIA, Statement.RETURN_GENERATED_KEYS);
+		createStmt = connection.prepareStatement(CREATE_MEDIA,
+				Statement.RETURN_GENERATED_KEYS);
+		updateStmt = connection.prepareStatement(UPDATE_MEDIA);
 		deleteStmt = connection.prepareStatement(DELETE_MEDIA);
 		selectStmt = connection.prepareStatement(SELECT_MEDIAS_STREAM);
 		existStmt = connection.prepareStatement(SELECT_MEDIA);
 	}
 
-	public void create(IMedia media) throws SQLException {
+	public IMedia create(IMedia media) throws SQLException {
 		createStmt.setLong(1, media.getStream().getId());
 		if (media.getUser() != null) {
 			createStmt.setLong(2, media.getUser().getId());
@@ -99,6 +104,8 @@ public class MediaDAO extends AbstractDAO {
 			id = result.getLong(1);
 		}
 		media.setId(id);
+
+		return media;
 	}
 
 	public void delete(long mediaId) throws SQLException {
@@ -138,5 +145,41 @@ public class MediaDAO extends AbstractDAO {
 		existStmt.setString(2, media.getUrl());
 		ResultSet res = existStmt.executeQuery();
 		return res.next();
+	}
+
+	@Override
+	public void update(IMedia media) throws SQLException {
+		updateStmt.setLong(1, media.getStream().getId());
+		if (media.getUser() != null) {
+			updateStmt.setLong(2, media.getUser().getId());
+		} else {
+			updateStmt.setNull(2, java.sql.Types.BIGINT);
+		}
+		if (media.getExtension() != null) {
+			updateStmt.setString(3, media.getExtension());
+		} else {
+			updateStmt.setNull(3, java.sql.Types.VARCHAR);
+		}
+		updateStmt.setString(4, media.getMimeType());
+		updateStmt.setString(5, media.getCaption());
+		if (media.getLatitude() != null) {
+			updateStmt.setDouble(6, media.getLatitude());
+		} else {
+			updateStmt.setNull(6, java.sql.Types.DECIMAL);
+		}
+		if (media.getLongitude() != null) {
+			updateStmt.setDouble(7, media.getLongitude());
+		} else {
+			updateStmt.setNull(7, java.sql.Types.DECIMAL);
+		}
+		if (media.getCreationDate() != null) {
+			updateStmt.setLong(8, media.getCreationDate());
+		} else {
+			updateStmt.setNull(8, java.sql.Types.BIGINT);
+		}
+		updateStmt.setString(9, media.getUrl());
+		updateStmt.setBoolean(10, media.isExternal());
+
+		updateStmt.executeUpdate();
 	}
 }

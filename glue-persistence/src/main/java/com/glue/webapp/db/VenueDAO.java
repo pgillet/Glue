@@ -9,7 +9,7 @@ import java.sql.Statement;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Venue;
 
-public class VenueDAO extends AbstractDAO {
+public class VenueDAO extends AbstractDAO implements IDAO<IVenue> {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_NAME = "name";
