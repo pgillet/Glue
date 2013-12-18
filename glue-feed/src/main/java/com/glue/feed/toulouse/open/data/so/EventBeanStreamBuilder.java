@@ -69,8 +69,10 @@ public class EventBeanStreamBuilder implements
 		}
 
 		// Description
-		String description = (bean.getDescriptifCourt() + "\n" + bean
-				.getHoraires()).trim();
+		StringBuilder description = new StringBuilder()
+				.append(StringUtils.defaultString(bean.getDescriptifCourt()))
+				.append("\n")
+				.append(StringUtils.defaultString(bean.getHoraires()));
 
 		// Venue address
 		StringBuilder address = new StringBuilder()
@@ -91,7 +93,7 @@ public class EventBeanStreamBuilder implements
 
 		IStream stream = new Stream();
 		stream.setTitle(bean.getNomDeLaManifestation());
-		stream.setDescription(description);
+		stream.setDescription(description.toString().trim());
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());
