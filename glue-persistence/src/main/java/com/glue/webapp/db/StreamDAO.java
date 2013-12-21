@@ -101,7 +101,7 @@ public class StreamDAO extends AbstractDAO implements IDAO<IStream> {
 				.prepareStatement(SELECT_STREAM_BETWEEN);
 	}
 
-	public IStream create(IStream aStream) throws SQLException {
+	public IStream create(IStream aStream) throws Exception {
 
 		checkVenue(aStream);
 
@@ -148,7 +148,7 @@ public class StreamDAO extends AbstractDAO implements IDAO<IStream> {
 		}
 	}
 
-	public void update(IStream aStream) throws SQLException {
+	public void update(IStream aStream) throws Exception {
 		checkVenue(aStream);
 
 		updateStmt.setLong(14, aStream.getId());
@@ -171,7 +171,7 @@ public class StreamDAO extends AbstractDAO implements IDAO<IStream> {
 		updateTags(aStream);
 	}
 
-	public void delete(long streamId) throws SQLException {
+	public void delete(long streamId) throws Exception {
 		deleteStmt = connection.prepareStatement(DELETE_STREAM);
 		deleteStmt.setLong(1, streamId);
 		deleteStmt.executeUpdate();
