@@ -28,13 +28,11 @@ import com.glue.struct.IVenue;
 import com.glue.struct.impl.Stream;
 import com.glue.struct.impl.Venue;
 
-public class EventBeanStreamBuilder implements
-		GlueObjectBuilder<EventBean, IStream> {
+public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStream> {
 
 	private static final String DATE_PATTERN = "dd/MM/yy"; // ex: "14/05/77"
 
-	static final Logger LOG = LoggerFactory
-			.getLogger(EventBeanStreamBuilder.class);
+	static final Logger LOG = LoggerFactory.getLogger(EventBeanStreamBuilder.class);
 
 	private DateFormat format;
 
@@ -68,14 +66,15 @@ public class EventBeanStreamBuilder implements
 			LOG.error("Format de date incorrect " + sdate + " " + edate);
 		}
 
-		// Description
-		String description = (bean.getDescriptifCourt() + "\n" + bean
-				.getHoraires()).trim();
+		// Description		
+		StringBuilder description = new StringBuilder()
+				.append(StringUtils.defaultString(bean.getDescriptifCourt()))
+				.append("\n")
+				.append(StringUtils.defaultString(bean.getHoraires()));
 
 		// Venue address
-		StringBuilder address = new StringBuilder()
-				.append(StringUtils.defaultString(bean.getLieuAdresse1())).append(" ")
-				.append(StringUtils.defaultString(bean.getLieuAdresse2())).append(" ")
+		StringBuilder address = new StringBuilder().append(StringUtils.defaultString(bean.getLieuAdresse1()))
+				.append(" ").append(StringUtils.defaultString(bean.getLieuAdresse2())).append(" ")
 				.append(StringUtils.defaultString(bean.getLieuAdresse3())).append(" ")
 				.append(StringUtils.defaultString(bean.getCodePostal())).append(" ")
 				.append(StringUtils.defaultString(bean.getCommune()));
@@ -91,13 +90,12 @@ public class EventBeanStreamBuilder implements
 
 		IStream stream = new Stream();
 		stream.setTitle(bean.getNomDeLaManifestation());
-		stream.setDescription(description);
+		stream.setDescription(description.toString().trim());
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());
 		stream.setEndDate(edate.getTime());
-		Category cat = getCategory(bean.getTypeDeManifestation(),
-				bean.getCatégorieDeLaManifestation(),
+		Category cat = getCategory(bean.getTypeDeManifestation(), bean.getCatégorieDeLaManifestation(),
 				bean.getThèmeDeLaManifestation());
 		stream.setCategory(cat);
 		stream.setPrice(bean.getTarifNormal());
@@ -123,9 +121,10 @@ public class EventBeanStreamBuilder implements
 			 * .getResults().get(0).getFormattedAddress()); }
 			 */
 		}
-		venue.setAddress(address.toString().trim());
+		venue.setAddress(address.toString().trim().toUpperCase());
 
 		venue.setUrl(removeUrlExceptions(bean.getRéservationSiteInternet()));
+		venue.setCity(StringUtils.defaultString(bean.getCommune()).toUpperCase());
 		stream.setVenue(venue);
 
 		return stream;
@@ -173,8 +172,7 @@ public class EventBeanStreamBuilder implements
 			return Category.MUSIC;
 		}
 
-		if (categories.contains("conference")
-				|| categories.contains("conférence")) {
+		if (categories.contains("conference") || categories.contains("conférence")) {
 			return Category.CONFERENCE;
 		}
 
@@ -208,8 +206,7 @@ public class EventBeanStreamBuilder implements
 
 		Map<String, String> dico = new HashMap<>();
 		Properties properties = new Properties();
-		InputStream in = EventBeanStreamBuilder.class
-				.getResourceAsStream("/com/glue/feed/dico.properties");
+		InputStream in = EventBeanStreamBuilder.class.getResourceAsStream("/com/glue/feed/dico.properties");
 		Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 		try {
 			properties.load(reader);
@@ -219,8 +216,7 @@ public class EventBeanStreamBuilder implements
 				String value = (String) entry.getKey();
 
 				if (value.startsWith("glue.category")) {
-					value = value.substring(value.lastIndexOf(".") + 1,
-							value.length());
+					value = value.substring(value.lastIndexOf(".") + 1, value.length());
 
 					// Split values (value = cat1#cat2# ...)
 					String[] keys = ((String) entry.getValue()).split("#");

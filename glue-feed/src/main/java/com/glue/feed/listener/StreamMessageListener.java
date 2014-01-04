@@ -21,41 +21,35 @@ import com.glue.webapp.db.VenueDAO;
 
 public class StreamMessageListener implements FeedMessageListener<IStream> {
 
-	static final Logger LOG = LoggerFactory
-			.getLogger(StreamMessageListener.class);
+	static final Logger LOG = LoggerFactory.getLogger(StreamMessageListener.class);
 
 	private DAOManager manager;
-	private StreamDAO streamDAO;
-	private VenueDAO venueDAO;
-	private TagDAO tagDAO;
 
 	public StreamMessageListener() throws NamingException, SQLException {
 		DataSource ds = DataSourceManager.getInstance().getDataSource();
-
 		manager = DAOManager.getInstance(ds);
-		streamDAO = manager.getStreamDAO();
-		venueDAO = manager.getVenueDAO();
-		tagDAO = manager.getTagDAO();
 	}
 
 	@Override
-	public void newMessage(final IStream stream) {
+	public void newMessage(final IStream stream) throws Exception {
 
-		try {
-			manager.transaction(new DAOCommand<Void>() {
+		final StreamDAO streamDAO = manager.getStreamDAO(true); // with indexing
+		final VenueDAO venueDAO = manager.getVenueDAO();
+		final TagDAO tagDAO = manager.getTagDAO();
 
-				@Override
-				public Void execute(DAOManager manager) throws Exception {
+		manager.transaction(new DAOCommand<Void>() {
 
-					IVenue venue = stream.getVenue();
-					if (venue == null) {
-						LOG.trace("Streams without a venue are not allowed");
-						return null;
-					}
+			@Override
+			public Void execute(DAOManager manager) throws Exception {
+
+				IVenue venue = stream.getVenue();
+				if (venue == null) {
+					LOG.trace("Streams without a venue are not allowed");
+					return null;
+				}
 
 					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.searchByName(venue
-							.getName()); // searchByAddress?
+					IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
 					if (persistentVenue == null) {
 						LOG.info("Inserting " + venue);
 						persistentVenue = venueDAO.create(venue);
@@ -64,35 +58,31 @@ public class StreamMessageListener implements FeedMessageListener<IStream> {
 					}
 					stream.setVenue(persistentVenue);
 
-					if (!streamDAO.exists(stream)) {
-						LOG.info("Inserting " + stream);
-						streamDAO.create(stream);
+				if (!streamDAO.exists(stream)) {
+					LOG.info("Inserting " + stream);
+					streamDAO.create(stream);
 
-						// Stream tags
-						Set<String> tags = stream.getTags();
-						if (tags != null && !tags.isEmpty()) {
-							for (String tag : tags) {
-								LOG.info("Adding tag = " + tag);
-								tagDAO.addTag(tag, stream.getId());
-							}
+					// Stream tags
+					Set<String> tags = stream.getTags();
+					if (tags != null && !tags.isEmpty()) {
+						for (String tag : tags) {
+							LOG.info("Adding tag = " + tag);
+							tagDAO.addTag(tag, stream.getId());
 						}
-					} else {
-						LOG.info("Stream already exists = " + stream);
 					}
-
-					return null;
+				} else {
+					LOG.info("Stream already exists = " + stream);
 				}
 
-			}, false);
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-		}
+				return null;
+			}
 
+		});
 	}
 
 	@Override
 	public void close() {
-		manager.closeConnectionQuietly();
+		manager.shutdownQuietly();
 	}
 
 }
