@@ -90,7 +90,7 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 
 		IStream stream = new Stream();
 		stream.setTitle(bean.getNomDeLaManifestation());
-		stream.setDescription(description.toString().trim());
+		stream.setDescription(description);
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());

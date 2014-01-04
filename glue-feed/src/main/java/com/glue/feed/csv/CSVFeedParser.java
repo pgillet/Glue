@@ -73,7 +73,7 @@ public class CSVFeedParser<T> implements ErrorHandler, ErrorManager,
 							beanReader.getLineNumber(),
 							beanReader.getUntokenizedRow());
 					LOG.error(e.getMessage(), e);
-					
+
 					errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
 							e.getMessage(), e, "csv",
 							beanReader.getLineNumber());
@@ -140,6 +140,9 @@ public class CSVFeedParser<T> implements ErrorHandler, ErrorManager,
 
 	@Override
 	public void close() throws IOException {
+		if (feedMessageListener != null) {
+			feedMessageListener.close();
+		}
 		reader.close();
 	}
 

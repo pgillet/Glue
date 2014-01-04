@@ -14,7 +14,7 @@ import com.glue.struct.impl.User;
  * @author Greg
  * 
  */
-public class UserDAO extends AbstractDAO {
+public class UserDAO extends AbstractDAO implements IDAO<IUser> {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_NAME = "name";
@@ -38,7 +38,7 @@ public class UserDAO extends AbstractDAO {
 	protected UserDAO() {
 	}
 
-	public void create(IUser user) throws SQLException {
+	public IUser create(IUser user) throws SQLException {
 
 		statement = connection.prepareStatement(INSERT_NEW_USER, Statement.RETURN_GENERATED_KEYS);
 		statement.setString(1, user.getName());
@@ -53,6 +53,8 @@ public class UserDAO extends AbstractDAO {
 			id = result.getLong(1);
 		}
 		user.setId(id);
+		
+		return user;
 	}
 
 	public void update(IUser user) throws SQLException {
@@ -108,6 +110,13 @@ public class UserDAO extends AbstractDAO {
 			result.setPassword(res.getString(COLUMN_PWD));
 		}
 		return result;
+	}
+
+	@Override
+	public void delete(long id) throws SQLException {
+		statement = connection.prepareStatement(DELETE_USER);
+		statement.setLong(1, id);
+		statement.executeUpdate();
 	}
 
 }

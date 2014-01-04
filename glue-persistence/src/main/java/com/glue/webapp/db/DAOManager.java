@@ -1,5 +1,7 @@
 package com.glue.webapp.db;
 
+import java.io.Flushable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -11,6 +13,9 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.db.index.SolrServerManager;
+import com.glue.db.index.SolrStreamDAO;
+
 public class DAOManager {
 
 	static final Logger LOG = LoggerFactory.getLogger(DAOManager.class);
@@ -19,6 +24,8 @@ public class DAOManager {
 
 	private Connection connection;
 
+	SolrServerManager solrServerManager = new SolrServerManager();
+
 	protected UserDAO userDAO;
 
 	protected StreamDAO streamDAO;
@@ -26,7 +33,7 @@ public class DAOManager {
 	protected VenueDAO venueDAO;
 
 	protected MediaDAO mediaDAO;
-	
+
 	protected TagDAO tagDAO;
 
 	// One instance per thread
@@ -89,12 +96,27 @@ public class DAOManager {
 	}
 
 	public StreamDAO getStreamDAO() throws SQLException {
+		return getStreamDAO(false);
+	}
+
+	// TODO: should introduce a smart DAOManagerFactory!
+	public StreamDAO getStreamDAO(boolean indexing) throws SQLException {
 		if (streamDAO == null) {
-			streamDAO = new StreamDAO();
+			streamDAO = createStreamDAO(indexing);
 		}
 		streamDAO.setConnection(getConnection());
 
 		return streamDAO;
+	}
+
+	protected StreamDAO createStreamDAO(boolean indexing) {
+		if (indexing) {
+			SolrStreamDAO streamDAO = new SolrStreamDAO();
+			streamDAO.setSolrServer(solrServerManager.getSolrServer());
+			return streamDAO;
+		} else {
+			return new StreamDAO();
+		}
 	}
 
 	public VenueDAO getVenueDAO() throws SQLException {
@@ -114,7 +136,7 @@ public class DAOManager {
 
 		return mediaDAO;
 	}
-	
+
 	public TagDAO getTagDAO() throws SQLException {
 		if (tagDAO == null) {
 			tagDAO = new TagDAO();
@@ -125,10 +147,6 @@ public class DAOManager {
 	}
 
 	public <T> T transaction(DAOCommand<T> command) throws Exception {
-		return transaction(command, true);
-	}
-
-	public <T> T transaction(DAOCommand<T> command, boolean close) throws Exception {
 		try {
 			Connection connection = getConnection();
 			connection.setAutoCommit(false);
@@ -143,9 +161,7 @@ public class DAOManager {
 			throw e; // or wrap it before rethrowing it
 		} finally {
 			connection.setAutoCommit(true);
-			if(close){
-				closeConnection();
-			}
+			closeConnection();
 		}
 	}
 
@@ -183,11 +199,35 @@ public class DAOManager {
 			LOG.error(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * Flushes and releases any resources associated with this manager. 
+	 * @throws IOException 
+	 * @throws SQLException 
+	 */
+	public void shutdown() throws IOException, SQLException {
+		if(streamDAO instanceof Flushable){
+			((Flushable) streamDAO).flush();
+		}
+		
+		closeConnection();
+	}
+	
+	public void shutdownQuietly(){
+		try {
+			shutdown();
+		} catch (IOException e) {
+			LOG.error(e.getMessage(), e);
+		} catch (SQLException e) {
+			LOG.error(e.getMessage(), e);
+		}
+	}
+	
 
 	@Override
 	protected void finalize() throws Throwable {
 		try {
-			closeConnection();
+			shutdown();
 		} finally {
 			super.finalize();
 		}

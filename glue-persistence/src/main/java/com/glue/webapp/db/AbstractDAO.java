@@ -3,7 +3,7 @@ package com.glue.webapp.db;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AbstractDAO implements IDAO {
+public abstract class AbstractDAO {
 
 	protected Connection connection;
 

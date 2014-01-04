@@ -55,7 +55,7 @@ public class VenueMessageListener implements FeedMessageListener<IVenue> {
 
 	@Override
 	public void close() {
-		manager.shutdownQuietly();
+		manager.closeConnectionQuietly();
 	}
 
 }
