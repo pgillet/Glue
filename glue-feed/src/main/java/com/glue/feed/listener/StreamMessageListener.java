@@ -21,7 +21,8 @@ import com.glue.webapp.db.VenueDAO;
 
 public class StreamMessageListener implements FeedMessageListener<IStream> {
 
-	static final Logger LOG = LoggerFactory.getLogger(StreamMessageListener.class);
+	static final Logger LOG = LoggerFactory
+			.getLogger(StreamMessageListener.class);
 
 	private DAOManager manager;
 
@@ -48,15 +49,15 @@ public class StreamMessageListener implements FeedMessageListener<IStream> {
 					return null;
 				}
 
-					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
-					if (persistentVenue == null) {
-						LOG.info("Inserting " + venue);
-						persistentVenue = venueDAO.create(venue);
-					} else {
-						LOG.info("Venue already exists = " + venue);
-					}
-					stream.setVenue(persistentVenue);
+				// Search for an existing venue
+				IVenue persistentVenue = venueDAO.searchByName(venue.getName()); // searchByAddress?
+				if (persistentVenue == null) {
+					LOG.info("Inserting " + venue);
+					persistentVenue = venueDAO.create(venue);
+				} else {
+					LOG.info("Venue already exists = " + venue);
+				}
+				stream.setVenue(persistentVenue);
 
 				if (!streamDAO.exists(stream)) {
 					LOG.info("Inserting " + stream);
