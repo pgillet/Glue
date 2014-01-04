@@ -9,7 +9,7 @@ import java.sql.Statement;
 import com.glue.struct.IVenue;
 import com.glue.struct.impl.Venue;
 
-public class VenueDAO extends AbstractDAO {
+public class VenueDAO extends AbstractDAO implements IDAO<IVenue> {
 
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_NAME = "name";
@@ -17,16 +17,17 @@ public class VenueDAO extends AbstractDAO {
 	public static final String COLUMN_LONGITUDE = "longitude";
 	public static final String COLUMN_ADDRESS = "address";
 	public static final String COLUMN_URL = "url";
+	public static final String COLUMN_CITY = "city";
 
 	// CRUD
-	public static final String CREATE_VENUE = "INSERT INTO VENUE(name, latitude, longitude, address, url) VALUES (?,?,?,?,?)";
+	public static final String CREATE_VENUE = "INSERT INTO VENUE(name, latitude, longitude, address, url, city) VALUES (?,?,?,?,?,?)";
 
-	public static final String UPDATE_VENUE = "UPDATE VENUE SET name=?, latitude=?, longitude=?, address=?, url=? WHERE id=?";
+	public static final String UPDATE_VENUE = "UPDATE VENUE SET name=?, latitude=?, longitude=?, address=?, url=?, city=? WHERE id=?";
 
 	public static final String SELECT_VENUE_BY_ID = "SELECT * FROM VENUE WHERE ID=?";
 
-	public static final String SELECT_VENUE_BY_ADDRESS = "SELECT * FROM VENUE WHERE ADDRESS=?";
-	
+	public static final String SELECT_VENUE_BY_NAME_AND_CITY = "SELECT * FROM VENUE WHERE NAME=? and CITY=?";
+
 	public static final String SELECT_VENUE_BY_NAME = "SELECT * FROM VENUE WHERE NAME=?";
 
 	public static final String DELETE_VENUE = "DELETE FROM VENUE WHERE id=?";
@@ -35,9 +36,9 @@ public class VenueDAO extends AbstractDAO {
 	private PreparedStatement updateStmt = null;
 	private PreparedStatement deleteStmt = null;
 	private PreparedStatement searchByIdStmt = null;
-	private PreparedStatement searchByAddressStmt = null;
+	private PreparedStatement searchForDuplicateStmt = null;
 	private PreparedStatement searchByNameStmt = null;
-	
+
 	protected VenueDAO() {
 	}
 
@@ -45,15 +46,12 @@ public class VenueDAO extends AbstractDAO {
 	public void setConnection(Connection connection) throws SQLException {
 		super.setConnection(connection);
 		// Init prepared statements
-		this.createStmt = connection.prepareStatement(CREATE_VENUE,
-				Statement.RETURN_GENERATED_KEYS);
+		this.createStmt = connection.prepareStatement(CREATE_VENUE, Statement.RETURN_GENERATED_KEYS);
 		this.updateStmt = connection.prepareStatement(UPDATE_VENUE);
 		this.deleteStmt = connection.prepareStatement(DELETE_VENUE);
 		this.searchByIdStmt = connection.prepareStatement(SELECT_VENUE_BY_ID);
-		this.searchByAddressStmt = connection
-				.prepareStatement(SELECT_VENUE_BY_ADDRESS);
-		this.searchByNameStmt = connection
-				.prepareStatement(SELECT_VENUE_BY_NAME);
+		this.searchForDuplicateStmt = connection.prepareStatement(SELECT_VENUE_BY_NAME_AND_CITY);
+		this.searchByNameStmt = connection.prepareStatement(SELECT_VENUE_BY_NAME);
 	}
 
 	public IVenue create(IVenue venue) throws SQLException {
@@ -62,6 +60,7 @@ public class VenueDAO extends AbstractDAO {
 		createStmt.setDouble(3, venue.getLongitude());
 		createStmt.setString(4, venue.getAddress());
 		createStmt.setString(5, venue.getUrl());
+		createStmt.setString(6, venue.getCity());
 		createStmt.executeUpdate();
 
 		ResultSet rs = createStmt.getGeneratedKeys();
@@ -79,6 +78,8 @@ public class VenueDAO extends AbstractDAO {
 		updateStmt.setDouble(3, venue.getLongitude());
 		updateStmt.setString(4, venue.getAddress());
 		updateStmt.setString(5, venue.getUrl());
+		createStmt.setString(6, venue.getCity());
+		createStmt.setLong(7, venue.getId());
 		updateStmt.executeUpdate();
 	}
 
@@ -93,25 +94,16 @@ public class VenueDAO extends AbstractDAO {
 	}
 
 	/**
-	 * Here, we suppose that addresses are stored in a standard format.
+	 * Search for an existing venue: Name + City
 	 * 
-	 * @param address
+	 * @param venue
 	 * @return
 	 */
-	public IVenue searchByAddress(String address) throws SQLException {
+	public IVenue searchForDuplicate(IVenue venue) throws SQLException {
 		IVenue result = null;
-		searchByAddressStmt.setString(1, address);
-		ResultSet res = searchByAddressStmt.executeQuery();
-		if (res.next()) {
-			result = populateVenue(res);
-		}
-		return result;
-	}
-	
-	public IVenue searchByName(String name) throws SQLException {
-		IVenue result = null;
-		searchByNameStmt.setString(1, name);
-		ResultSet res = searchByNameStmt.executeQuery();
+		searchForDuplicateStmt.setString(1, venue.getName());
+		searchForDuplicateStmt.setString(2, venue.getCity());
+		ResultSet res = searchForDuplicateStmt.executeQuery();
 		if (res.next()) {
 			result = populateVenue(res);
 		}
@@ -136,6 +128,7 @@ public class VenueDAO extends AbstractDAO {
 		result.setLongitude(rs.getDouble(COLUMN_LONGITUDE));
 		result.setAddress(rs.getString(COLUMN_ADDRESS));
 		result.setUrl(rs.getString(COLUMN_URL));
+		result.setCity(rs.getString(COLUMN_CITY));
 		return result;
 	}
 
