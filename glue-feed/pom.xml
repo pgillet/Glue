@@ -63,6 +63,17 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<!-- Quartz Job Scheduler -->
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+		    <version>2.2.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz-jobs</artifactId>
+		    <version>2.2.1</version>
+		</dependency>
 		<!-- Super CSV -->
 		<dependency>
 			<groupId>net.sf.supercsv</groupId>

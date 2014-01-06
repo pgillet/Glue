@@ -48,8 +48,10 @@ public class SolrBaseDAO implements SolrDAO {
 	@Override
 	public void flush() throws IOException {
 		try {
-			solrServer.add(docs);
-			solrServer.commit();
+			if (!docs.isEmpty()) {
+				solrServer.add(docs);
+				solrServer.commit();
+			}
 		} catch (SolrServerException e) {
 			LOG.error(e.getMessage(), e);
 			throw new IOException(e);

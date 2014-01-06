@@ -9,6 +9,12 @@ import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.feed.DataSourceManager;
 import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
@@ -17,15 +23,12 @@ import com.glue.webapp.db.MediaDAO;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
 
-public class YoutubeMediaFeeder {
+public class YoutubeMediaFeeder implements Job {
+
+	static final Logger LOG = LoggerFactory.getLogger(YoutubeMediaFeeder.class);
 
 	private DAOManager manager;
 	private Calendar calendar;
-
-	public static void main(String[] args) {
-		YoutubeMediaFeeder feeder = new YoutubeMediaFeeder();
-		feeder.run();
-	}
 
 	public YoutubeMediaFeeder() {
 		DataSource ds = DataSourceManager.getInstance().getDataSource();
@@ -40,7 +43,9 @@ public class YoutubeMediaFeeder {
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
 
-	private void run() {
+	@Override
+	public void execute(JobExecutionContext context)
+			throws JobExecutionException {
 		long before = calendar.getTimeInMillis();
 		calendar.add(Calendar.DATE, -7);
 		long after = calendar.getTimeInMillis();
@@ -66,7 +71,8 @@ public class YoutubeMediaFeeder {
 				System.out.println("Stream " + stream.getTitle());
 
 				// Search for videos for that stream
-				List<IMedia> videos = YoutubeRequester.getInstance().search(stream);
+				List<IMedia> videos = YoutubeRequester.getInstance().search(
+						stream);
 
 				// Persist videos
 				for (IMedia video : videos) {
@@ -74,18 +80,26 @@ public class YoutubeMediaFeeder {
 					// Url already in databases for that stream
 					if (!mediaDAO.exist(video)) {
 						mediaDAO.create(video);
-						System.out.println("Creation of media " + video.getUrl());
+						System.out.println("Creation of media "
+								+ video.getUrl());
 					} else {
-						System.out.println("Media " + video.getUrl() + " already stored");
+						System.out.println("Media " + video.getUrl()
+								+ " already stored");
 					}
 				}
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Sql Exception: " + e.getMessage());
-			System.exit(1);
+			LOG.error("Sql Exception: " + e.getMessage());
+			throw new JobExecutionException(e);
 		} catch (IOException e) {
-			System.err.println("There was an IO error: " + e.getCause() + " : " + e.getMessage());
+			LOG.error("There was an IO error: " + e.getMessage(), e);
+			throw new JobExecutionException(e);
 		}
+	}
+	
+	public static void main(String[] args) throws JobExecutionException {
+		YoutubeMediaFeeder job = new YoutubeMediaFeeder();
+		job.execute(null);
 	}
 }
