@@ -4,7 +4,11 @@
 	<document name="streams">
 		<entity name="stream" query="select *,end_date-start_date as duration from STREAM">
 			<entity name="venue"
-				query="select name as venue, address, latitude, longitude from VENUE where id='${stream.venue_id}'">
+				query="select * from VENUE where id='${stream.venue_id}'">
+				<field column="name" name="venue" />
+				<field column="city" name="city" />
+				<field column="latitude" name="latlng_0_coordinate" />
+				<field column="longitude" name="latlng_1_coordinate" />
 			</entity>
 		</entity>
 	</document>

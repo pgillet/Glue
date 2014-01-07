@@ -11,9 +11,9 @@ import com.glue.webapp.db.StreamDAO;
 
 public class SolrStreamDAO extends StreamDAO implements SolrDAO {
 
-	public static final String FIELD_LONGITUDE = "longitude";
-	public static final String FIELD_LATITUDE = "latitude";
-	public static final String FIELD_ADDRESS = "address";
+	public static final String FIELD_LONGITUDE = "latlng_1_coordinate";
+	public static final String FIELD_LATITUDE = "latlng_0_coordinate";
+	public static final String FIELD_CITY = "city";
 	public static final String FIELD_VENUE = "venue";
 	public static final String FIELD_END_DATE = "end_date";
 	public static final String FIELD_START_DATE = "start_date";
@@ -42,7 +42,7 @@ public class SolrStreamDAO extends StreamDAO implements SolrDAO {
 		doc.addField(FIELD_START_DATE, stream.getStartDate());
 		doc.addField(FIELD_END_DATE, stream.getEndDate());
 		doc.addField(FIELD_VENUE, stream.getVenue().getName());
-		doc.addField(FIELD_ADDRESS, stream.getVenue().getAddress());
+		doc.addField(FIELD_CITY, stream.getVenue().getCity());
 		doc.addField(FIELD_LATITUDE, stream.getVenue().getLatitude());
 		doc.addField(FIELD_LONGITUDE, stream.getVenue().getLongitude());
 
@@ -78,14 +78,13 @@ public class SolrStreamDAO extends StreamDAO implements SolrDAO {
 		solrBaseDAO.setSolrServer(solrServer);
 	}
 
-	public void addDoc(SolrInputDocument doc) throws SolrServerException,
-			IOException {
+	public void addDoc(SolrInputDocument doc) throws SolrServerException, IOException {
 		solrBaseDAO.addDoc(doc);
 	}
 
 	@Override
 	public void flush() throws IOException {
-		solrBaseDAO.flush();		
+		solrBaseDAO.flush();
 	}
 
 }

@@ -201,11 +201,11 @@ public class YoutubeRequester {
 		}
 
 		// Video title must contain stream title
-		boolean filterOne = vTitle.contains(sTitle);
+		boolean filterOne = vTitle.matches(".*\\b" + sTitle + "\\b.*");
 
 		// Title or description must contain venue name
 		boolean filterTwo = (vTitle.contains(venue)) || (vDescription.contains(venue));
 
-		return filterOne || filterTwo;
+		return filterOne && filterTwo;
 	}
 }

@@ -162,7 +162,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 					VenueDAO venueDAO = manager.getVenueDAO();
 
 					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.searchByAddress(venue.getAddress());
+					IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
 					if (persistentVenue == null) {
 						persistentVenue = venueDAO.create(venue);
 					}
@@ -187,7 +187,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 			throw new InternalServerException(e);
 		}
 	}
-	
+
 	public IStream search(final long id) throws InternalServerException {
 		try {
 			DAOManager manager = DAOManager.getInstance();
@@ -203,7 +203,7 @@ public class StreamController implements PageIterator<List<IStream>> {
 					IStream stream = streamDAO.search(id);
 					IVenue venue = venueDAO.search(stream.getVenue().getId());
 					stream.setVenue(venue);
-					
+
 					List<IMedia> media = mediaDAO.search(stream.getId());
 					stream.setMedia(media);
 

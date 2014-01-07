@@ -22,12 +22,22 @@ public class VenueBeanVenueBuilder implements GlueObjectBuilder<VenueBean, IVenu
 		venue.setName(bean.getEqNomEquipement().trim());
 
 		// Construct venue address
-		StringBuilder address = new StringBuilder().append(StringUtils.defaultString(bean.getNumero())).append(" ")
-				.append(StringUtils.defaultString(bean.getLibOff())).append(" ")
-				.append(StringUtils.defaultString(bean.getEqSecteur())).append(" ")
+
+		StringBuilder address = new StringBuilder();
+
+		// Is there a number?
+		String number = StringUtils.defaultString(bean.getNumero());
+		if (!"".equals(number)) {
+			number = number.replaceAll("^0+", "");
+			address.append(number).append(" ");
+		}
+		address.append(StringUtils.defaultString(bean.getLibOff())).append(" ")
+				.append(StringUtils.defaultString(bean.getIdSecteurPostal())).append(" ")
 				.append(StringUtils.defaultString(bean.getEqVille())).append(" ");
 		venue.setAddress(address.toString().trim());
 		venue.setCity(bean.getEqVille().trim());
+		venue.setLatitude(Double.parseDouble(bean.getYWgs84()));
+		venue.setLongitude(Double.parseDouble(bean.getXWgs84()));
 		return venue;
 	}
 }

@@ -120,9 +120,12 @@
    <field name="duration" type="tlong" indexed="true" stored="false"/>
    <field name="url" type="text_general" indexed="false" stored="true"/>
    <field name="venue" type="text_general" indexed="true" stored="true"/>
-   <field name="address" type="text_general" indexed="true" stored="true"/>
-   <field name="latitude" type="double" indexed="true" stored="true"/>
-   <field name="longitude" type="double" indexed="true" stored="true"/> 
+   <field name="city" type="text_general" indexed="true" stored="true"/>
+   <field name="latlng" type="location" indexed="true" stored="false" />
+   <!-- <field name="latlng_0_coordinate" type="tdouble" indexed="true" stored="true" />
+   <field name="latlng_1_coordinate" type="tdouble" indexed="true" stored="true" /> -->
+   <!--<field name="latitude" type="double" indexed="true" stored="true"/>
+   <field name="longitude" type="double" indexed="true" stored="true"/>-->
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
@@ -228,7 +231,7 @@
    <copyField source="title" dest="text"/>
    <copyField source="description" dest="text"/>
    <copyField source="venue" dest="text"/>
-   <copyField source="address" dest="text"/>
+   <copyField source="city" dest="text"/>
    <copyField source="category" dest="text"/>
 	
    <!-- Above, multiple source fields are copied to the [text] field. 

@@ -66,11 +66,9 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 			LOG.error("Format de date incorrect " + sdate + " " + edate);
 		}
 
-		// Description		
-		StringBuilder description = new StringBuilder()
-				.append(StringUtils.defaultString(bean.getDescriptifCourt()))
-				.append("\n")
-				.append(StringUtils.defaultString(bean.getHoraires()));
+		// Description
+		StringBuilder description = new StringBuilder().append(StringUtils.defaultString(bean.getDescriptifCourt()))
+				.append("\n").append(StringUtils.defaultString(bean.getHoraires()));
 
 		// Venue address
 		StringBuilder address = new StringBuilder().append(StringUtils.defaultString(bean.getLieuAdresse1()))
@@ -90,7 +88,7 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 
 		IStream stream = new Stream();
 		stream.setTitle(bean.getNomDeLaManifestation());
-		stream.setDescription(description);
+		stream.setDescription(description.toString().trim());
 		stream.setPublicc(true);
 		stream.setOpen(true);
 		stream.setStartDate(sdate.getTime());

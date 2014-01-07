@@ -25,6 +25,7 @@ CREATE TABLE VENUE (
 			latitude DECIMAL(10,8),
             longitude DECIMAL(10,8),
             url VARCHAR(2048),
+			city VARCHAR(50),
             PRIMARY KEY(id),
             UNIQUE (name, address)
 			);

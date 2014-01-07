@@ -59,11 +59,9 @@ public class ReadCVS {
 		GeocoderRequestBuilder geocoderRequestBuilder = new GeocoderRequestBuilder();
 		geocoderRequestBuilder.setLanguage("fr"); // Not sure about that
 
-		URL url = new URL(
-				"http://www.data.gouv.fr/var/download/258a71ec1cd4dc1d6264304de7ba5317.csv");
+		URL url = new URL("http://www.data.gouv.fr/var/download/258a71ec1cd4dc1d6264304de7ba5317.csv");
 
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(
-				url.openStream()))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
 
 			while ((line = br.readLine()) != null) {
 
@@ -143,26 +141,19 @@ public class ReadCVS {
 
 						StringBuilder sb = new StringBuilder();
 						// sb.append(fields[0]).append(", ");
-						sb.append(fields[5]).append(" ").append(fields[6])
-								.append(" ").append(fields[7]).append(" ")
-								.append(fields[8]).append(" ")
-								.append(fields[9]).append(" ")
-								.append(fields[10]).append(" ")
-								.append(fields[11]).append(" ")
+						sb.append(fields[5]).append(" ").append(fields[6]).append(" ").append(fields[7]).append(" ")
+								.append(fields[8]).append(" ").append(fields[9]).append(" ").append(fields[10])
+								.append(" ").append(fields[11]).append(" ")
 								/*
 								 * .append(fields[12]) .append(" ")
-								 */.append(fields[13]).append(" ")
-								.append(fields[14]).append(", ")
-								.append(fields[4]);
+								 */.append(fields[13]).append(" ").append(fields[14]).append(", ").append(fields[4]);
 
-						String address = sb.toString().trim()
-								.replaceAll("\\s+", " ");
+						String address = sb.toString().trim().replaceAll("\\s+", " ");
 
 						venue.setAddress(address);
 
 						// Search for an existing venue
-						IVenue persistentVenue = venueDAO.searchByAddress(venue
-								.getAddress());
+						IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
 						if (persistentVenue == null) {
 							// Geocoding: convert the address into geographic
 							// coordinates (latitude and longitude)
@@ -193,16 +184,11 @@ public class ReadCVS {
 						IStream stream = new Stream();
 						stream.setTitle(fields[18]);
 						StringBuilder description = new StringBuilder();
-						description.append("Nature de l'organisme: ")
-								.append(fields[17]).append("<br/>")
-								.append("Type d'évènement: ")
-								.append(fields[19]).append("<br/>")
-								.append("Thèmes: ").append(fields[20])
-								.append("<br/>").append("Horaires: ")
-								.append(fields[21]).append("<br/>")
-								.append("Tarifs: ").append(fields[22])
-								.append("<br/>").append("Conditions: ")
-								.append(fields[23]);
+						description.append("Nature de l'organisme: ").append(fields[17]).append("<br/>")
+								.append("Type d'évènement: ").append(fields[19]).append("<br/>").append("Thèmes: ")
+								.append(fields[20]).append("<br/>").append("Horaires: ").append(fields[21])
+								.append("<br/>").append("Tarifs: ").append(fields[22]).append("<br/>")
+								.append("Conditions: ").append(fields[23]);
 						stream.setDescription(description.toString());
 
 						Date startDate = format.parse(fields[33].trim());
