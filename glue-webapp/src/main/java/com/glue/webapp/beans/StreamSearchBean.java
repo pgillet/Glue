@@ -376,15 +376,19 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		String styleAttr;
 		if (javascriptSyntax) {
 			// JavaScript syntax
-			styleAttr = "this.style.borderBottom = '3px solid %s' ;";
+			styleAttr = "this.style.borderBottom = '%dpx solid %s' ;";
 		} else {
-			styleAttr = "border-bottom: 3px solid %s ;";
+			styleAttr = "border-bottom: %dpx solid %s ;";
 		}
+		int borderWidth;
 		if (getCatSelection().contains(cat) || onmouseover) {
-			styleAttr = String.format(styleAttr, Category.valueOf(cat).getColor());
+			borderWidth = 3;
 		} else {
-			styleAttr = String.format(styleAttr, "transparent");
+			borderWidth = 2;
 		}
+
+		styleAttr = String.format(styleAttr, borderWidth, Category.valueOf(cat)
+				.getColor());
 
 		return styleAttr;
 	}
