@@ -1,0 +1,56 @@
+PREREQUESITES: INSTALLS & ENVIRONMENT VARIABLES
+
+*** CAUTION: DO NOT USE PATHS WITH SPACES! ***
+
+- Set GLUE_CHECKOUT_DIR environment variable to a directory where you will checkout the sources
+- Install JDK 1.7 and set JAVA_HOME
+- Unzip Maven and set MAVEN_HOME
+- Unzip Tomee and set CATALINA_HOME
+- Install MySQL
+
+- [Windows] set MAVEN_OPTS -Dsolr.solr.home=%GLUE_CHECKOUT_DIR%\glue-search\target\cores
+- [Unix]    export MAVEN_OPTS=-Dsolr.solr.home=$GLUE_CHECKOUT_DIR/glue-search/target/cores
+
+- [Windows] set CATALINA_OPTS %MAVEN_OPTS%
+- [Unix]    export CATALINA_OPTS=$MAVEN_OPTS
+
+
+Modify $CATALINA_HOME/conf/tomcat-users.xml
+
+  <role rolename="tomcat"/>
+  <role rolename="tomee-admin" />
+  <user username="tomcat" password="DUMMY" roles="tomcat,tomee-admin,manager-gui,manager-script"/>
+
+
+Modify $USER_HOME/.m2/settings.xml
+  <server>
+       <id>tomcat</id>
+       <username>tomcat</username>
+       <password>DUMMY</password>
+  </server>
+
+
+***
+CHECKOUT SOURCES:
+Download & Unzip https://github.com/pgillet/Glue/archive/master.zip to $GLUE_CHECKOUT_DIR
+
+Better alternative for now: you can also install the GitHub client for Windows
+
+***
+Database:
+Run $GLUE_CHECKOUT_DIR/glue-webapp/sql/create.sql to create the database
+
+***
+RUNNING:
+Start Tomee: 
+$CATALINA_HOME/bin/catalina.sh start
+- [Windows] %CATALINA_HOME%\bin\catalina.bat start
+- [Unix]    $CATALINA_HOME/bin/catalina.sh start
+
+mvn clean install tomcat7:deploy -Dmaven.test.skip=true
+
+
+
+
+
+
