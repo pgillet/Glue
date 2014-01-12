@@ -18,8 +18,8 @@ public interface Similarable<T> {
 	 * It is strongly recommended, but <i>not</i> strictly required that
 	 * <tt>x.similarTo(y) ==
 	 * y.similarTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>. (This implies
-	 * that <tt>x.compareTo(y)</tt> must throw an exception iff
-	 * <tt>y.compareTo(x)</tt> throws an exception.)
+	 * that <tt>x.similarTo(y)</tt> must throw an exception iff
+	 * <tt>y.similarTo(x)</tt> throws an exception.)
 	 * <p>
 	 * 
 	 * @param o
