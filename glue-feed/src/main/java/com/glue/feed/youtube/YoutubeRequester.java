@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.glue.struct.IMedia;
 import com.glue.struct.IStream;
 import com.glue.struct.impl.Media;
@@ -27,9 +30,11 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 
 public class YoutubeRequester {
+	
+	static final Logger LOG = LoggerFactory.getLogger(YoutubeRequester.class);
 
 	/** Global instance properties filename. */
-	private static String PROPERTIES_FILENAME = "youtube.properties";
+	private static String PROPERTIES_FILENAME = "/com/glue/feed/youtube.properties";
 
 	/** Global instance of the HTTP transport. */
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -79,7 +84,7 @@ public class YoutubeRequester {
 		// youtube.properties
 		properties = new Properties();
 		try {
-			InputStream in = YoutubeRequester.class.getResourceAsStream("./" + PROPERTIES_FILENAME);
+			InputStream in = YoutubeRequester.class.getResourceAsStream(PROPERTIES_FILENAME);
 			properties.load(in);
 
 		} catch (IOException e) {
@@ -164,7 +169,7 @@ public class YoutubeRequester {
 			// for each videos, check similarity and create media
 			for (Video video : videosResponse.getItems()) {
 				if (checkSimilarity(stream, video)) {
-					System.out.println(video.getSnippet().getTitle());
+					LOG.info(video.getSnippet().getTitle());
 					medias.add(toMedia(video, stream));
 				}
 			}

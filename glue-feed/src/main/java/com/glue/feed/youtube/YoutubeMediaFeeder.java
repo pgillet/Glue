@@ -68,7 +68,7 @@ public class YoutubeMediaFeeder implements Job {
 				// Set venue
 				stream.setVenue(venueDAO.search(stream.getVenue().getId()));
 
-				System.out.println("Stream " + stream.getTitle());
+				LOG.info("Stream " + stream.getTitle());
 
 				// Search for videos for that stream
 				List<IMedia> videos = YoutubeRequester.getInstance().search(
@@ -80,11 +80,9 @@ public class YoutubeMediaFeeder implements Job {
 					// Url already in databases for that stream
 					if (!mediaDAO.exist(video)) {
 						mediaDAO.create(video);
-						System.out.println("Creation of media "
-								+ video.getUrl());
+						LOG.info("Creation of media " + video.getUrl());
 					} else {
-						System.out.println("Media " + video.getUrl()
-								+ " already stored");
+						LOG.info("Media " + video.getUrl() + " already stored");
 					}
 				}
 			}
