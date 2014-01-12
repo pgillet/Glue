@@ -21,6 +21,10 @@
 			<id>google-api-services</id>
 			<url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
 		</repository>
+		<repository>
+			<id>JHU</id>
+			<url>http://maven.mse.jhu.edu/m2repository</url>
+		</repository>
 	</repositories>
 
 	<build>
@@ -92,6 +96,14 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz-jobs</artifactId>
 			<version>2.2.1</version>
+		</dependency>
+		<!-- Library of Similarity metrics -->
+		<!-- http://sourceforge.net/projects/simmetrics/ -->
+		<!-- https://web.archive.org/web/20081224234350/http://www.dcs.shef.ac.uk/~sam/stringmetrics.html#needleman -->
+		<dependency>
+			<groupId>uk.ac.shef.wit</groupId>
+			<artifactId>simmetrics</artifactId>
+			<version>1.6.2</version>
 		</dependency>
 		<!-- Super CSV -->
 		<dependency>

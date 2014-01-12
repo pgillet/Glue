@@ -124,17 +124,22 @@ public class Venue implements IVenue, Serializable {
 		this.url = url;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
+	@Override
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Override
+	public String getCity() {
+		return city;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(latitude);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -145,11 +150,6 @@ public class Venue implements IVenue, Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -169,17 +169,19 @@ public class Venue implements IVenue, Serializable {
 		} else if (!address.equals(other.address)) {
 			return false;
 		}
-		if (id == null) {
-			if (other.id != null) {
+		if (city == null) {
+			if (other.city != null) {
 				return false;
 			}
-		} else if (!id.equals(other.id)) {
+		} else if (!city.equals(other.city)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude)) {
+		if (Double.doubleToLongBits(latitude) != Double
+				.doubleToLongBits(other.latitude)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude)) {
+		if (Double.doubleToLongBits(longitude) != Double
+				.doubleToLongBits(other.longitude)) {
 			return false;
 		}
 		if (name == null) {
@@ -199,25 +201,10 @@ public class Venue implements IVenue, Serializable {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Venue [name=" + name + ", latitude=" + latitude + ", longitude=" + longitude + ", address=" + address
-				+ ", url=" + url + "]";
+		return "Venue [name=" + name + ", latitude=" + latitude
+				+ ", longitude=" + longitude + ", address=" + address
+				+ ", url=" + url + ", city=" + city + "]";
 	}
-
-	@Override
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@Override
-	public String getCity() {
-		return city;
-	}
-
 }
