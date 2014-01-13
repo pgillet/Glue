@@ -97,6 +97,7 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, IStream> {
 		if (location != null && location.length() > 0) {
 			IVenue venue = new Venue();
 			venue.setName(location);
+			venue.setCity("Toulouse");
 			stream.setVenue(venue);
 		}
 
