@@ -49,7 +49,7 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, IStream> {
 		// Start date
 		String dateSource = record.startTime;
 		dateSource = dateSource.replace('h', ':');
-		
+
 		Date startDate = dateFormat.parse(dateSource);
 		stream.setStartDate(startDate.getTime());
 
@@ -85,7 +85,7 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, IStream> {
 
 		// Thumbnail path
 		String image = record.illustration;
-		if (image != null && image.length() > 0) {
+		if (image != null && image.length() > 0 && !"NULL".equals(image)) {
 			stream.setThumbPath("http://www.bibliotheque.toulouse.fr/" + image);
 		}
 
