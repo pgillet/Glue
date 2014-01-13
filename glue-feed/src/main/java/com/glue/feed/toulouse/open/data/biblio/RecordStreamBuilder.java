@@ -73,7 +73,12 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, IStream> {
 
 			endDate = cal.getTime();
 		}
-
+		
+		if (endDate.before(startDate)) {
+			// Ex: 14/01/2014 18h00 and 14/01/2014 00:00 as the end time is not
+			// significant
+			endDate = startDate;
+		}
 		stream.setEndDate(endDate.getTime());
 
 		// Tags
