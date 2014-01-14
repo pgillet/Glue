@@ -1,19 +1,16 @@
 package com.glue.feed.toulouse.bikini;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -47,6 +44,10 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, IStream> {
 		// Title
 		int index = msg.title.lastIndexOf(":");
 		String title = msg.title.substring(0, index).trim();
+		
+		// Abbreviates the title using ellipses if too long
+		int maxLen = 200;
+		title = StringUtils.abbreviate(title, maxLen);
 
 		// Begin date
 		String strdate = msg.title.substring(index + 1).trim();
@@ -55,17 +56,23 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, IStream> {
 		// Link
 		String url = msg.link;
 
+		// Example:
+		// "style : pop/rock<br>salle : Le Connexion Live (Toulouse - 31000)"
 		// Description
 		index = msg.description.lastIndexOf("<br>");
 		String description = msg.description.substring(0, index);
 
-		// Venue address
-		index = msg.description.lastIndexOf(":");
-		String address = msg.description.substring(index + 1).trim();
+		// Venue
+		index = msg.description.lastIndexOf("(");
+		String name = msg.description.substring(0, index);
+		String address = msg.description.substring(index + 1,
+				msg.description.length() - 1).trim();
 
-		// Venue name
-		index = address.lastIndexOf("(");
-		String name = address.substring(0, index).trim();
+		index = msg.description.lastIndexOf(":");
+		name = name.substring(index + 1).trim();
+
+		index = address.lastIndexOf("-");
+		String city = address.substring(0, index).trim();
 
 		// Get stream image
 		// TODO: waiting for glue-content
@@ -73,17 +80,17 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, IStream> {
 		Elements images = doc.select("#blocImage a img");
 		String imgUrl = images.attr("src");
 
-		URL imageUrl = new URL(imgUrl);
-		File imageFile = new File(imageUrl.getPath());
-		imageFile = new File(root, imageFile.getName());
-
-		System.out.println("Copying " + imageUrl + " to " + imageFile);
-		InputStream in = new BufferedInputStream(imageUrl.openStream());
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(
-				imageFile));
-		copy(in, out);
-		out.close();
-		in.close();
+//		URL imageUrl = new URL(imgUrl);
+//		File imageFile = new File(imageUrl.getPath());
+//		imageFile = new File(root, imageFile.getName());
+//
+//		LOG.info("Copying " + imageUrl + " to " + imageFile);
+//		InputStream in = new BufferedInputStream(imageUrl.openStream());
+//		OutputStream out = new BufferedOutputStream(new FileOutputStream(
+//				imageFile));
+//		copy(in, out);
+//		out.close();
+//		in.close();
 
 		IStream stream = new Stream();
 		stream.setTitle(title);
@@ -91,11 +98,12 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, IStream> {
 		stream.setUrl(url);
 		stream.setStartDate(date.getTime());
 		stream.setEndDate(date.getTime());
-		stream.setThumbPath(imageFile.getPath());
+		stream.setThumbPath(imgUrl);
 		stream.setCategory(Category.MUSIC);
 
 		IVenue venue = new Venue();
 		venue.setName(name);
+		venue.setCity(city);
 		venue.setAddress(address);
 		stream.setVenue(venue);
 

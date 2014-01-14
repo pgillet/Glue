@@ -21,13 +21,21 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.FeedParser;
+import com.glue.feed.error.ErrorDispatcher;
+import com.glue.feed.error.ErrorHandler;
+import com.glue.feed.error.ErrorLevel;
+import com.glue.feed.error.ErrorListener;
+import com.glue.feed.error.ErrorManager;
 import com.glue.feed.listener.DefaultFeedMessageListener;
 
-public class XMLFeedParser<T> implements FeedParser<T> {
+public class XMLFeedParser<T> implements ErrorHandler, ErrorManager,
+		FeedParser<T> {
 
 	static final Logger LOG = LoggerFactory.getLogger(XMLFeedParser.class);
 
 	private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<T>();
+
+	private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
 	XMLStreamReader xsr;
 	Class<T> clazz;
@@ -91,19 +99,18 @@ public class XMLFeedParser<T> implements FeedParser<T> {
 	 */
 	@Override
 	public void read() throws Exception {
+		int num = 0;
 		try {
 			while (xsr.hasNext()) {
 				T msg = next();
+				num++;
 				feedMessageListener.newMessage(msg);
 			}
-		} catch (XMLStreamException e) {
+		} catch (JAXBException | XMLStreamException e) {
 			LOG.error(e.getMessage(), e);
-			throw e;
-		} catch (JAXBException e) {
-			LOG.error(e.getMessage(), e);
-			throw e;
+			errorDispatcher.fireErrorEvent(ErrorLevel.ERROR, e.getMessage(), e,
+					"xml", num);
 		}
-
 	}
 
 	private void skipElements(Integer... elements) throws XMLStreamException {
@@ -130,6 +137,32 @@ public class XMLFeedParser<T> implements FeedParser<T> {
 	public void setFeedMessageListener(
 			FeedMessageListener<T> feedMessageListener) {
 		this.feedMessageListener = feedMessageListener;
+	}
+
+	@Override
+	public void flush() throws IOException {
+		errorDispatcher.flush();
+	}
+
+	@Override
+	public ErrorListener[] getErrorListeners() {
+		return errorDispatcher.getErrorListeners();
+	}
+
+	@Override
+	public void addErrorListener(ErrorListener l) {
+		errorDispatcher.addErrorListener(l);
+	}
+
+	@Override
+	public void removeErrorListener(ErrorListener l) {
+		errorDispatcher.removeErrorListener(l);
+	}
+
+	@Override
+	public void fireErrorEvent(ErrorLevel lvl, String message, Throwable cause,
+			String source, int lineNumber) {
+		errorDispatcher.fireErrorEvent(lvl, message, cause, source, lineNumber);
 	}
 
 }

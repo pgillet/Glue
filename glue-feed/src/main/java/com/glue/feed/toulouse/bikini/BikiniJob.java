@@ -1,4 +1,4 @@
-package com.glue.feed.toulouse.open.data.biblio;
+package com.glue.feed.toulouse.bikini;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,24 +21,12 @@ import com.glue.feed.listener.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 import com.glue.struct.IStream;
 
-/**
- * AGENDA DES MANIFESTATIONS DE LA BIBLIOTHÈQUE DE TOULOUSE.
- * 
- * Flux XML contenant tous les événements et animations en place au sein de la
- * Bibliothèque de Toulouse (Médiathèque José Cabanis, Bibliothèque d’Étude et
- * du Patrimoine de Périgord et les 22 bibliothèques de quartier)
- * 
- * @author pgillet
- * @see http
- *      ://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23577-
- *      agenda-des-manifestations-de-la-bibliotheque-de-toulouse
- */
-public class LibraryAgendaJob implements Job {
+public class BikiniJob implements Job {
 
-	static final Logger LOG = LoggerFactory.getLogger(LibraryAgendaJob.class);
+	static final Logger LOG = LoggerFactory.getLogger(BikiniJob.class);
 
 	// No arg constructor
-	public LibraryAgendaJob() {
+	public BikiniJob() {
 	}
 
 	@Override
@@ -46,8 +34,7 @@ public class LibraryAgendaJob implements Job {
 			throws JobExecutionException {
 
 		try {
-			URL url = new URL(
-					"http://www.bibliotheque.toulouse.fr/fluxEvents.xml");
+			URL url = new URL("http://lebikini.com/programmation/rss");
 			InputStream in0 = url.openStream();
 			InputStream in = GlueIOUtils.getDeferredInputStream(in0,
 					url.getFile());
@@ -55,16 +42,16 @@ public class LibraryAgendaJob implements Job {
 			Reader reader0 = new InputStreamReader(in, "UTF-8");
 			Reader reader = new BufferedReader(reader0);
 
-			XMLFeedParser<Record> parser = new XMLFeedParser<Record>(reader,
-					Record.class);
+			XMLFeedParser<Item> parser = new XMLFeedParser<Item>(reader,
+					Item.class);
 
 			final FeedMessageListener delegate = new StreamMessageListener();
-			final GlueObjectBuilder<Record, IStream> streamBuilder = new RecordStreamBuilder();
+			final GlueObjectBuilder<Item, IStream> streamBuilder = new ItemStreamBuilder();
 
-			parser.setFeedMessageListener(new FeedMessageListener<Record>() {
+			parser.setFeedMessageListener(new FeedMessageListener<Item>() {
 
 				@Override
-				public void newMessage(Record msg) throws Exception {
+				public void newMessage(Item msg) throws Exception {
 					IStream stream = streamBuilder.build(msg);
 					delegate.newMessage(stream);
 				}
@@ -74,7 +61,7 @@ public class LibraryAgendaJob implements Job {
 					delegate.close();
 				}
 			});
-			
+
 			parser.addErrorListener(new StoreErrorListener());
 
 			parser.read();
@@ -85,12 +72,10 @@ public class LibraryAgendaJob implements Job {
 			LOG.error(e.getMessage(), e);
 			throw new JobExecutionException(e);
 		}
-
 	}
 
 	public static void main(String[] args) throws JobExecutionException {
-		LibraryAgendaJob job = new LibraryAgendaJob();
+		BikiniJob job = new BikiniJob();
 		job.execute(null);
 	}
-
 }

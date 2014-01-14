@@ -25,6 +25,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.feed.toulouse.bikini.BikiniJob;
 import com.glue.feed.toulouse.open.data.biblio.LibraryAgendaJob;
 import com.glue.feed.toulouse.open.data.so.SoToulouseAgendaJob;
 import com.glue.feed.youtube.YoutubeMediaFeeder;
@@ -54,7 +55,7 @@ public class GlueFeed {
 			// "0 0/5 * * * ?"
 
 			// AGENDA DES MANIFESTATIONS CULTURELLES SO TOULOUSE
-			// Twice a week, every Tuesday and Friday at midnight
+			// Twice a week, every Tuesday and Friday at 12:00 am
 			JobDetail job = newJob(SoToulouseAgendaJob.class).withIdentity(
 					"SoToulouseAgenda", "Toulouse").build();
 			CronTrigger trigger = newTrigger()
@@ -77,6 +78,15 @@ public class GlueFeed {
 			trigger = newTrigger()
 					.withIdentity("LibraryAgendaTrigger", "Toulouse")
 					.withSchedule(cronSchedule("0 0 2 * * ?")).build();
+			scheduler.scheduleJob(job, trigger);
+			
+			// Le Bikini RSS feed
+			// Every Wednesday at 12:00 am
+			job = newJob(BikiniJob.class).withIdentity(
+					"Bikini", "Toulouse").build();
+			trigger = newTrigger()
+					.withIdentity("BikiniTrigger", "Toulouse")
+					.withSchedule(cronSchedule("0 0 0 ? * WED")).build();
 			scheduler.scheduleJob(job, trigger);
 
 		} catch (SchedulerException se) {
