@@ -27,7 +27,7 @@ CREATE TABLE VENUE (
             url VARCHAR(2048),
 			city VARCHAR(50),
             PRIMARY KEY(id),
-            UNIQUE (name, address)
+            UNIQUE (name, city)
 			);
 
 -- Stream table
