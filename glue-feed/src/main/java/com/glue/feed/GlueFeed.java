@@ -60,7 +60,7 @@ public class GlueFeed {
 					"SoToulouseAgenda", "Toulouse").build();
 			CronTrigger trigger = newTrigger()
 					.withIdentity("SoToulouseAgendaTrigger", "Toulouse")
-					.withSchedule(cronSchedule("0 0 0 ? * TUE,FRI")).build();
+					.withSchedule(cronSchedule("0 0 0 ? * MON,THU")).build();
 			scheduler.scheduleJob(job, trigger);
 
 			// YouTube feed
