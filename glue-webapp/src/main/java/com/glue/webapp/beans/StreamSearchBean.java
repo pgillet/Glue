@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import javax.faces.application.FacesMessage;
@@ -24,8 +23,6 @@ import com.glue.webapp.search.PageIterator;
 
 @ManagedBean
 public class StreamSearchBean implements PageIterator<Void>, Serializable {
-
-	private static final String ERROR_MESSAGE = "Holy guacamole! You got an error.";
 
 	private static final String PARAM_CAT = "cat";
 
@@ -145,15 +142,10 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	public void setConvertDate(DateTimeConverter convertDate) {
-		final String basename = "com.glue.messages.Messages";
 		final String key1 = "date_format_long";
 		// final String key2 = "time_format";
 
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
-				.getViewRoot().getLocale());
-
-		String dateFormat = bundle.getString(key1);
+		String dateFormat = FacesUtil.getString(key1);
 		// String timeFormat = bundle.getString(key2);
 
 		// convertDate.setPattern(dateFormat + " " + timeFormat);
@@ -210,7 +202,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.search();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 
 		return "stream-search";
@@ -238,10 +231,12 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.next();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 
 		return null;
@@ -269,10 +264,12 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.previous();
 		} catch (NoSuchElementException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 
 		return null;
@@ -286,7 +283,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.first();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 
 		return null;
@@ -300,7 +298,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			streams = streamController.last();
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 
 		return null;
@@ -406,7 +405,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 	}
 
@@ -423,7 +423,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		} catch (InternalServerException e) {
 			LOG.error(e.getMessage(), e);
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+			context.addMessage(null,
+					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
 	}
 

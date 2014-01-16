@@ -18,10 +18,6 @@ public class StreamItemBean {
 
 	static final Logger LOG = LoggerFactory.getLogger(StreamItemBean.class);
 
-	private static final String ERROR_MESSAGE = "Holy guacamole! You got an error.";
-
-	private static final String ERROR_MESSAGE_2 = "This stream does not exist";
-
 	@Inject
 	private StreamController streamController;
 
@@ -39,15 +35,20 @@ public class StreamItemBean {
 				item = streamController.search(Long.valueOf(id));
 
 				if (item == null) {
-					context.addMessage(null, new FacesMessage(ERROR_MESSAGE_2));
+					context.addMessage(
+							null,
+							new FacesMessage(FacesUtil
+									.getString("no.such.stream")));
 				}
 
 			} catch (NumberFormatException e) {
 				LOG.error(e.getMessage(), e);
-				context.addMessage(null, new FacesMessage(ERROR_MESSAGE_2));
+				context.addMessage(null,
+						new FacesMessage(FacesUtil.getString("no.such.stream")));
 			} catch (InternalServerException e) {
 				LOG.error(e.getMessage(), e);
-				context.addMessage(null, new FacesMessage(ERROR_MESSAGE));
+				context.addMessage(null,
+						new FacesMessage(FacesUtil.getString("error.generic")));
 			}
 		}
 	}

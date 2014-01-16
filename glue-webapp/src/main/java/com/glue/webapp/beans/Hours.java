@@ -7,13 +7,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 
 @ManagedBean
 @RequestScoped
@@ -29,14 +27,8 @@ public class Hours implements Serializable {
 		cal.setTimeInMillis(0); // Epoch
 
 		final int amount = 30;
-
-		final String basename = "com.glue.messages.Messages";
 		final String key = "time_format";
-
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = ResourceBundle.getBundle(basename, context
-				.getViewRoot().getLocale());
-		String timeFormat = bundle.getString(key);
+		String timeFormat = FacesUtil.getString(key);
 
 		DateFormat df = new SimpleDateFormat(timeFormat);
 		TimeZone tz = TimeZone.getTimeZone("UTC");
