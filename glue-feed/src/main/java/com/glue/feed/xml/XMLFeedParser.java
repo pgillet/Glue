@@ -100,16 +100,17 @@ public class XMLFeedParser<T> implements ErrorHandler, ErrorManager,
 	@Override
 	public void read() throws Exception {
 		int num = 0;
-		try {
-			while (xsr.hasNext()) {
+
+		while (xsr.hasNext()) {
+			try {
 				T msg = next();
 				num++;
 				feedMessageListener.newMessage(msg);
+			} catch (Exception e) {
+				LOG.error(e.getMessage(), e);
+				errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
+						e.getMessage(), e, "xml", num);
 			}
-		} catch (JAXBException | XMLStreamException e) {
-			LOG.error(e.getMessage(), e);
-			errorDispatcher.fireErrorEvent(ErrorLevel.ERROR, e.getMessage(), e,
-					"xml", num);
 		}
 	}
 
