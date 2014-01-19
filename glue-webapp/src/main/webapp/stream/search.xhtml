@@ -39,109 +39,108 @@
 						</div>
 					</div>
 				</c:if>
-				<c:if test="#{empty streamSearchBean.streams}">
-					<div class="row">
-						<div
-							class="col-md-6 col-md-offset-3 alert alert-warning alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert"
-								aria-hidden="true">&times;</button>
-							<h:outputText value="#{bundle.no_result_found}" />
-						</div>
+				
+				<div class="row glue-hr-bottom-border">
+					<div class="col-md-11 col-md-offset-1">
+						<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
+						<ui:repeat var="item" value="#{streamSearchBean.categories}">
+							<h:commandButton styleClass="btn text-muted glue-btn-cat"
+								style="#{streamSearchBean.getCategoryStyle(item.name, false, false)}"
+								onmouseover="#{streamSearchBean.getCategoryStyle(item.name, true, true)}"
+								onmouseout="#{streamSearchBean.getCategoryStyle(item.name, true, false)}"
+								value="#{bundle[item.name.toLowerCase()]}"
+								action="#{streamSearchBean.enableCategory}">
+								<f:param name="cat" value="#{item.name}"></f:param>
+								<f:ajax execute="@form" render="@form" />
+							</h:commandButton>
+						</ui:repeat>
 					</div>
-				</c:if>
+				</div>
+				<br />
 
-				<c:if test="#{not empty streamSearchBean.streams}">
-					<div class="row glue-hr-bottom-border">
-						<div class="col-md-11 col-md-offset-1">
-							<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
-							<ui:repeat var="item" value="#{streamSearchBean.categories}">
-								<h:commandButton styleClass="btn text-muted glue-btn-cat"
-									style="#{streamSearchBean.getCategoryStyle(item.name, false, false)}"
-									onmouseover="#{streamSearchBean.getCategoryStyle(item.name, true, true)}"
-									onmouseout="#{streamSearchBean.getCategoryStyle(item.name, true, false)}"
-									value="#{bundle[item.name.toLowerCase()]}"
-									action="#{streamSearchBean.enableCategory}">
-									<f:param name="cat" value="#{item.name}"></f:param>
-									<f:ajax execute="@form" render="@form" />
-								</h:commandButton>
-							</ui:repeat>
-						</div>
+				<div class="row">
+					<div class="col-md-6 col-md-offset-1">
+						<c:choose>
+							<c:when test="#{empty streamSearchBean.streams}">
+								<p>
+									<h:outputText value="#{bundle.no_result_found}" />
+								</p>
+							</c:when>
+							<c:otherwise>
+								<p>
+									<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
+								</p>
+							</c:otherwise>
+						</c:choose>
 					</div>
+				</div>
+				<br />
 
-					<br />
-					<div class="row">
-						<div class="col-md-6 col-md-offset-1">
-							<p class="text-muted">
-								<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
-							</p>
-						</div>
+				<div class="row">
+					<div class="col-xs-4 col-md-4 pull-right">
+						
+							<p:calendar styleClass="pull-right" value="#{streamSearchBean.startDate}" mode="inline"
+								id="inlineCal">
+								<p:ajax event="dateSelect"
+									listener="#{streamSearchBean.handleDateSelect}" update="@form" />
+							</p:calendar>
 					</div>
-					<br />
-
-					<div class="row">
-						<div class="col-xs-4 col-md-4 pull-right">
-							
-								<p:calendar styleClass="pull-right" value="#{streamSearchBean.startDate}" mode="inline"
-									id="inlineCal">
-									<p:ajax event="dateSelect"
-										listener="#{streamSearchBean.handleDateSelect}" update="@form" />
-								</p:calendar>
-						</div>
-						<div class="col-xs-12 col-sm-8 col-md-7 col-md-offset-1">
-							<ui:repeat var="stream" value="#{streamSearchBean.streams}"
-								varStatus="status">
-								<div class="row">
-									<div class="col-md-12">
-										<ul class="list-unstyled">
-											<li><h4>
-													<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
-												onclick="jsf.ajax.addOnEvent(scrollToTop);"> -->
-													<i class="fa fa-square"
-														style="color: #{stream.category.color};"></i>
-													<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
-												<f:ajax execute="@form" render="@form" />
-											</h:commandLink> -->
-													&#160; <strong><h:link includeViewParams="true"
-															value="#{stream.title}" outcome="/stream/item.xhtml">
-															<f:param name="id" value="#{stream.id}"></f:param>
-														</h:link> </strong>
-												</h4></li>
-											<li><p>#{stream.description}</p></li>
-											<li><h5>
-													<strong> <i class="fa fa-calendar text-muted"></i>&#160;
-														<ui:fragment
-															rendered="#{stream.startDate lt stream.endDate}">
-															<h:outputText value="#{bundle.stream_date_from} " />
-															<h:outputText value="#{stream.startDate}">
-																<f:convertDateTime
-																	binding="#{streamSearchBean.convertDate}" />
-															</h:outputText>
-															<h:outputText value=" #{bundle.stream_date_to} " />
-															<h:outputText value="#{stream.endDate}">
-																<f:convertDateTime
-																	binding="#{streamSearchBean.convertDate}" />
-															</h:outputText>
-														</ui:fragment> <ui:fragment
-															rendered="#{stream.startDate ge stream.endDate}">
-															<h:outputText value="#{stream.startDate}">
-																<f:convertDateTime
-																	binding="#{streamSearchBean.convertDate}" />
-															</h:outputText>
-														</ui:fragment></strong>
-												</h5></li>
-											<li><h5>
-													<span class="glyphicon glyphicon-map-marker text-muted"></span>
-													<strong>#{stream.venue.name}</strong> - <span
-														class="text-muted">#{stream.venue.address}</span>
-												</h5></li>
-										</ul>
-									</div>
+					<div class="col-xs-12 col-sm-8 col-md-7 col-md-offset-1">
+						<ui:repeat var="stream" value="#{streamSearchBean.streams}"
+							varStatus="status">
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="list-unstyled">
+										<li><h4>
+												<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
+											onclick="jsf.ajax.addOnEvent(scrollToTop);"> -->
+												<i class="fa fa-square"
+													style="color: #{stream.category.color};"></i>
+												<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
+											<f:ajax execute="@form" render="@form" />
+										</h:commandLink> -->
+												&#160; <strong><h:link includeViewParams="true"
+														value="#{stream.title}" outcome="/stream/item.xhtml">
+														<f:param name="id" value="#{stream.id}"></f:param>
+													</h:link> </strong>
+											</h4></li>
+										<li><p>#{stream.description}</p></li>
+										<li><h5>
+												<strong> <i class="fa fa-calendar text-muted"></i>&#160;
+													<ui:fragment
+														rendered="#{stream.startDate lt stream.endDate}">
+														<h:outputText value="#{bundle.stream_date_from} " />
+														<h:outputText value="#{stream.startDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+														<h:outputText value=" #{bundle.stream_date_to} " />
+														<h:outputText value="#{stream.endDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+													</ui:fragment> <ui:fragment
+														rendered="#{stream.startDate ge stream.endDate}">
+														<h:outputText value="#{stream.startDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+													</ui:fragment></strong>
+											</h5></li>
+										<li><h5>
+												<span class="glyphicon glyphicon-map-marker text-muted"></span>
+												<strong>#{stream.venue.name}</strong> - <span
+													class="text-muted">#{stream.venue.address}</span>
+											</h5></li>
+									</ul>
 								</div>
-								<br />
-	
-							</ui:repeat>
-						</div>
+							</div>
+							<br />
+						</ui:repeat>
 					</div>
+				</div>
+					
+				<c:if test="#{not empty streamSearchBean.streams}">
 
 					<div class="text-center ">
 						<ul class="pagination">
