@@ -1411,6 +1411,7 @@
             <str name="fl">title</str>
             <str name="qf">suggestions^30 suggestions_ng^50.0</str>
             <str name="pf">suggestions_edge^50.0</str>
+            <str name="mm">100%</str>
             <str name="debugQuery">false</str>
 	  </lst>
 	</requestHandler>
