@@ -53,6 +53,31 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 		this.solr = new HttpSolrServer(urlString);
 	}
 
+	public List<IStream> searchForAutoComplete(String q) throws InternalServerException {
+
+		List<? extends IStream> items = new ArrayList<IStream>();
+
+		SolrQuery query = new SolrQuery();
+
+		// Use this specific RequestHandler
+		query.setParam("qt", "/suggest");
+		query.setParam("q", q);
+
+		try {
+			QueryResponse rsp = solr.query(query);
+			items = rsp.getBeans(SolrStream.class);
+
+			// Get the total number of results
+			numFound = rsp.getResults().getNumFound();
+		} catch (SolrServerException e) {
+			LOG.error(e.getMessage(), e);
+			throw new InternalServerException(e);
+		}
+
+		return (List<IStream>) items;
+
+	}
+
 	@Override
 	public List<IStream> search() throws InternalServerException {
 

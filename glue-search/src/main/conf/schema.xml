@@ -134,6 +134,10 @@
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
    <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
+   
+   <field name="suggestions" type="text_suggest" indexed="true" stored="false" omitNorms="true" />
+   <field name="suggestions_edg" type="autocomplete_edge" indexed="true" stored="false" />
+   <field name="suggestions_ng" type="autocomplete_ngram" indexed="true" stored="false" omitNorms="true" />
 
    <!--
      Some fields such as popularity and manu_exact could be modified to
@@ -233,6 +237,11 @@
    <copyField source="venue" dest="text"/>
    <copyField source="city" dest="text"/>
    <copyField source="category" dest="text"/>
+   
+   <copyField source="title" dest="suggestions"/>
+   <copyField source="title" dest="suggestions_edg"/>
+   <copyField source="title" dest="suggestions_ng"/>
+
 	
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 
@@ -252,6 +261,81 @@
          Class names starting with "solr" refer to java classes in a
        standard package such as org.apache.solr.analysis
     -->
+    
+    <fieldType name="text_suggest" class="solr.TextField" positionIncrementGap="100">
+                        <analyzer type="index">
+                                <tokenizer class="solr.StandardTokenizerFactory"/>
+                                <filter class="solr.WordDelimiterFilterFactory" 
+                                            generateWordParts="1" 
+                                            generateNumberParts="1"
+                                            catenateWords="1"
+                                            catenateNumbers="1"
+                                            catenateAll="1"
+                                            splitOnCaseChange="1"
+                                            splitOnNumerics="1"
+                                            preserveOriginal="1"
+                                />
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                        </analyzer>
+                        <analyzer type="query">
+                                <tokenizer class="solr.StandardTokenizerFactory"/>
+                                <filter class="solr.WordDelimiterFilterFactory" 
+                                            generateWordParts="0" 
+                                            generateNumberParts="0"
+                                            catenateWords="0"
+                                            catenateNumbers="0"
+                                            catenateAll="0"
+                                            splitOnCaseChange="0"
+                                            splitOnNumerics="0"
+                                />
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                        </analyzer>
+                </fieldType>
+			    <!-- text_phonetic_do : Matches a phonetic version of the suggest text, for a fuzzy effect 
+                     Note that there are other phonetic algorithms as well, but this works pretty well
+                -->
+           		<fieldType name="text_phonetic_do" class="solr.TextField" positionIncrementGap="100">
+                        <analyzer>
+                                <tokenizer class="solr.StandardTokenizerFactory"/>
+                                <filter class="solr.DoubleMetaphoneFilterFactory" inject="false"/>
+                        </analyzer>
+                </fieldType>
+                <!-- autocomplete_edge : Will match from the left of the field, e.g. if the document field
+                     is "A brown fox" and the query is "A bro", it will match, but not "brown"
+                -->
+                <fieldType name="autocomplete_edge" class="solr.TextField">
+                        <analyzer type="index">
+                                <tokenizer class="solr.KeywordTokenizerFactory"/>
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="([\.,;:-_])" replacement=" " replace="all"/>
+                                <filter class="solr.EdgeNGramFilterFactory" maxGramSize="30" minGramSize="1"/>
+                        </analyzer>
+                        <analyzer type="query">
+                                <tokenizer class="solr.KeywordTokenizerFactory"/>
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="([\.,;:-_])" replacement=" " replace="all"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="^(.{30})(.*)?" replacement="$1" replace="all"/>
+                        </analyzer>
+                </fieldType>
+                <!-- autocomplete_ngram : Matches any word in the input field, with implicit right truncation.
+                     This means that the field "A brown fox" will be matched by query "bro".
+                     We use this to get partial matches, but these whould be boosted lower than exact and left-anchored
+                -->
+                <fieldType name="autocomplete_ngram" class="solr.TextField">
+                        <analyzer type="index">
+                                <tokenizer class="solr.StandardTokenizerFactory"/>
+                                <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                                <filter class="solr.EdgeNGramFilterFactory" maxGramSize="20" minGramSize="1"/>
+                        </analyzer>
+                        <analyzer type="query">
+                                <tokenizer class="solr.StandardTokenizerFactory"/>
+                                <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="0"/>
+                                <filter class="solr.LowerCaseFilterFactory"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="^(.{20})(.*)?" replacement="$1" replace="all"/>
+                        </analyzer>
+                </fieldType>
 
     <!-- The StrField type is not analyzed, but indexed/stored verbatim.
        It supports doc values but in that case the field needs to be
