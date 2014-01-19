@@ -80,7 +80,6 @@ public class FeedbackBean {
 			}
 		});
 		MimeMessage msg = new MimeMessage(session);
-		System.out.println(mailSession.getProperties());
 		try {
 			msg.setFrom(new InternetAddress("glue.contact@gmail.com"));
 			msg.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress("glue.contact@gmail.com"));

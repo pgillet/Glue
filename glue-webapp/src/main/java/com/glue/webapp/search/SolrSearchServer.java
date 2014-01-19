@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 		// Use this specific RequestHandler
 		query.setParam("qt", "/suggest");
-		query.setParam("q", q);
+		query.setParam("q",ClientUtils.escapeQueryChars(q));
 
 		try {
 			QueryResponse rsp = solr.query(query);
@@ -177,7 +178,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	 */
 	@Override
 	public void setQueryString(String queryString) {
-		this.queryString = queryString;
+		this.queryString = ClientUtils.escapeQueryChars(queryString);
 	}
 
 	/**

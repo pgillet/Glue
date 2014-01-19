@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import com.glue.struct.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.search.SearchEngine;
-import com.google.gson.Gson;
 
 // The Java class will be hosted at the URI path "/autocomplete"
 @Path("/autocomplete")
@@ -27,7 +26,7 @@ public class AutoCompleteResource {
 	// The Java method will produce content identified by the MIME Media
 	// type "text/plain"
 	@Produces(MediaType.APPLICATION_JSON)
-	public String run(@QueryParam("query") String query) {
+	public List<IStream> run(@QueryParam("query") String query) {
 		
 		// Ask solr
 		List<IStream> result = new ArrayList<IStream>();
@@ -41,15 +40,9 @@ public class AutoCompleteResource {
 			e.printStackTrace();
 		} finally {
 			if (result==null)
-				result = new ArrayList<IStream>();
+				return new ArrayList<IStream>();
 		}		
 		
-		// Construct Gson response
-		Gson gson = new Gson(); // Or use new GsonBuilder().create();
-
-		// Replace title with value : should be done in glue.js ...
-		String json = gson.toJson(result).replaceAll("\"title\"", "\"value\"");
-		return json;
-
+		return result;
 	}
 }
