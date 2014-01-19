@@ -5,7 +5,8 @@ function scrollToTop(data) {
 }
 
 $(document).ready(function() {
-    $('.typeahead').typeahead({                               
+    $('.typeahead')
+    .typeahead({                               
          name: "autocomplete",
          remote: {
         	url: '/glue/services/autocomplete?query=%QUERY',   
@@ -23,8 +24,10 @@ $(document).ready(function() {
          template: [
                     '<p>{{value}}</p>'
          ].join(''),
-         engine: Hogan
-    });    
-    //remote: 'http://localhost:8080/glue/services/autocomplete?query=%QUERY'
-    
+         engine: Hogan,
+    })
+    .on('typeahead:selected', function($e, datum){
+        //alert(datum["value"]);
+        document.getElementById("main_form:main_input").click();
+        });
 });

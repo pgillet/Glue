@@ -80,13 +80,13 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 
-			<h:form styleClass="navbar-form navbar-left" role="search">
+			<h:form id="main_form" styleClass="navbar-form navbar-left" role="search">
 				<div class="input-group" style="width: 400px;">
 					<!-- input-sm -->
 					<h:inputText styleClass="typeahead form-control"
 						p:placeholder="#{bundle.search}"
 						value="#{streamSearchBean.query}" />
-					<h:commandLink action="#{streamSearchBean.search}"
+					<h:commandLink id="main_input" action="#{streamSearchBean.search}"
 						styleClass="input-group-addon">
 						<span class="glue-info-badge" data-container="body"
 							data-placement="bottom" data-toggle="popover" title=""
