@@ -33,7 +33,6 @@ public class AutoCompleteResource {
 		try {
 			result = engine.searchForAutoComplete(query);
 			for (IStream stream : result) {
-				System.out.println(stream.getTitle());
 				stream.setTitle(stream.getTitle().toLowerCase());
 			}
 		} catch (InternalServerException e) {
