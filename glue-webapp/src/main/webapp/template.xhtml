@@ -80,13 +80,13 @@
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 
 			<div class="col-sm-4">
-			<h:form styleClass="navbar-form navbar-left" role="search">
+			<h:form id="main_form" styleClass="navbar-form navbar-left" role="search">
 					<div class="input-group">
 					<!-- input-sm -->
 					<h:inputText styleClass="typeahead form-control"
 						p:placeholder="#{bundle.search}"
 						value="#{streamSearchBean.query}" />
-					<h:commandLink action="#{streamSearchBean.search}"
+					<h:commandLink id="main_input" action="#{streamSearchBean.search}"
 						styleClass="input-group-addon">
 							<span class="glyphicon glyphicon-search text-muted"></span>
 					</h:commandLink>
