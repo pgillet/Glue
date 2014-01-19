@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.inject.Inject;
 
+import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	private double latitude;
 
 	private double longitude;
-
-	private Date startDate;
-
-	private Date endDate;
 
 	private DateTimeConverter convertDate;
 
@@ -111,7 +108,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 * @return the startDate
 	 */
 	public Date getStartDate() {
-		return startDate;
+		return streamController.getStartDate();
 	}
 
 	/**
@@ -119,14 +116,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 *            the startDate to set
 	 */
 	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+		streamController.setStartDate(startDate);
 	}
 
 	/**
 	 * @return the endDate
 	 */
 	public Date getEndDate() {
-		return endDate;
+		return streamController.getEndDate();
 	}
 
 	/**
@@ -134,7 +131,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	 *            the endDate to set
 	 */
 	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+		streamController.setEndDate(endDate);
 	}
 
 	public DateTimeConverter getConvertDate() {
@@ -205,9 +202,13 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 			context.addMessage(null,
 					new FacesMessage(FacesUtil.getString("error.generic")));
 		}
-
+		
 		return "stream-search";
 	}
+	
+	public void handleDateSelect(SelectEvent event) {
+		search();
+    }
 
 	@Override
 	public boolean hasNext() {

@@ -2,6 +2,7 @@ package com.glue.webapp.logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ public class StreamController implements PageIterator<List<IStream>> {
 	private long totalRows;
 
 	private String queryString;
+	private Date startDate;
+	private Date endDate;
 
 	private List<String> categories = new ArrayList<>();
 
@@ -56,6 +59,22 @@ public class StreamController implements PageIterator<List<IStream>> {
 	 */
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	/**
@@ -79,8 +98,8 @@ public class StreamController implements PageIterator<List<IStream>> {
 		// the properties that are actually indexed)
 		engine.setQueryString(queryString);
 		engine.setCategories(categories.toArray(new String[categories.size()]));
-		engine.setStartDate(null);
-		engine.setEndDate(null);
+		engine.setStartDate(startDate);
+		engine.setEndDate(endDate);
 		engine.setStart(start);
 		engine.setRows(rowsPerPage);
 

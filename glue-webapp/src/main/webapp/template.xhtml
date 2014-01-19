@@ -18,7 +18,6 @@
 	<h:outputStylesheet library="css" name="typeahead.js-bootstrap.css"
 		media="screen" />
 	<h:outputStylesheet library="css" name="glue.css" media="screen" />
-	<h:outputStylesheet library="css" name="datepicker.css" media="screen" />
 	<h:outputStylesheet library="css" name="font-awesome.min.css"
 		media="screen" />
 
@@ -80,23 +79,22 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 
+			<div class="col-sm-4">
 			<h:form styleClass="navbar-form navbar-left" role="search">
-				<div class="input-group" style="width: 400px;">
+					<div class="input-group">
 					<!-- input-sm -->
 					<h:inputText styleClass="typeahead form-control"
 						p:placeholder="#{bundle.search}"
 						value="#{streamSearchBean.query}" />
 					<h:commandLink action="#{streamSearchBean.search}"
 						styleClass="input-group-addon">
-						<span class="glue-info-badge" data-container="body"
-							data-placement="bottom" data-toggle="popover" title=""
-							data-content="Just hit the search button for a demo!"><span
-							class="glyphicon glyphicon-search text-muted"></span></span>
+							<span class="glyphicon glyphicon-search text-muted"></span>
 					</h:commandLink>
 				</div>
 				<h:commandButton action="#{streamSearchBean.search}"
 					style="display:none;" />
 			</h:form>
+			</div>
 
 			<ul class="nav navbar-nav navbar-left">
 				<li id="location" class="navbar-text"></li>
@@ -217,19 +215,16 @@
 	</div>
 	<!-- /container -->
 
-	<h:outputScript library="js" name="jquery.js" />
+	<!-- <h:outputScript library="js" name="jquery.js" /> -->
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
 	<h:outputScript library="js" name="bootstrap.min.js" />
 	<h:outputScript library="js" name="hogan.js" />
 	<h:outputScript library="js" name="typeahead.js" />
-	<!-- <script src="http://code.jquery.com/jquery.js"></script> -->
-	<!-- <script src="js/bootstrap.min.js"></script> -->
-	<h:outputScript library="js" name="bootstrap-datepicker.js" />
 	<h:outputScript library="js" name="glue.js" />
 
 	<h:outputScript>
 	$('input').popover({trigger: 'focus'});
 	$('.glue-info-badge').popover({trigger: 'hover'});
-    $('.form_date').datepicker({autoclose: true});
     </h:outputScript>
 	<h:outputScript>
 		$(document).ready(function(){
@@ -243,6 +238,8 @@
     		return false;
 		});
 	</h:outputScript>
-});
+
+	<ui:insert name="javascript"></ui:insert>
+
 </h:body>
 </html>

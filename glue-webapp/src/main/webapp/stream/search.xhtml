@@ -4,14 +4,15 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="../template.xhtml">
 		<ui:define name="content">
 
 			<h:form>
-
+			
 				<c:if test="#{not empty facesContext.messageList}">
 					<div class="row">
 						<div
@@ -54,7 +55,7 @@
 						</div>
 					</div>
 				</c:if>
-
+				
 				<ui:fragment rendered="#{not empty streamSearchBean.streams}">
 					<br />
 					<div class="row">
@@ -69,7 +70,6 @@
 
 				<!-- Reuse the properties from request to request -->
 				<h:inputHidden value="#{streamSearchBean.query}" />
-				<h:inputHidden value="#{streamSearchBean.startDate}" />
 				<h:inputHidden value="#{streamSearchBean.endDate}" />
 				<h:inputHidden value="#{streamSearchBean.latitude}" />
 				<h:inputHidden value="#{streamSearchBean.longitude}" />
@@ -81,59 +81,69 @@
 				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
 				<h:inputHidden value="#{streamSearchBean.totalRows}" />
 
-				<ui:repeat var="stream" value="#{streamSearchBean.streams}"
-					varStatus="status">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-1">
-							<ul class="list-unstyled">
-								<li><h4>
-										<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
+				<div class="row">
+					<div class="col-xs-4 col-md-4 pull-right">
+						<p:calendar styleClass="pull-right" value="#{streamSearchBean.startDate}" mode="inline"
+							id="inlineCal">
+							<p:ajax event="dateSelect"
+								listener="#{streamSearchBean.handleDateSelect}" update="@form" />
+						</p:calendar>
+					</div>
+					<div class="col-xs-12 col-sm-8 col-md-7 col-md-offset-1">
+						<ui:repeat var="stream" value="#{streamSearchBean.streams}"
+							varStatus="status">
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="list-unstyled">
+										<li><h4>
+												<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
 											onclick="jsf.ajax.addOnEvent(scrollToTop);"> -->
-										<i class="fa fa-square"
-											style="color:#{stream.category.color};"></i>
-										<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
+												<i class="fa fa-square"
+													style="color: #{stream.category.color};"></i>
+												<!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
 											<f:ajax execute="@form" render="@form" />
 										</h:commandLink> -->
-										&#160; <strong><h:link includeViewParams="true"
-												value="#{stream.title}" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-											</h:link> </strong>
-									</h4>
-								</li>
-								<li><p>#{stream.description}</p></li>
-								<li><h5>
-									 <strong>
-										<i class="fa fa-calendar text-muted"></i>&#160;
-											<ui:fragment rendered="#{stream.startDate lt stream.endDate}">
-												<h:outputText value="#{bundle.stream_date_from} " />
-												<h:outputText value="#{stream.startDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-												<h:outputText value=" #{bundle.stream_date_to} " />
-												<h:outputText value="#{stream.endDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-											</ui:fragment> <ui:fragment
-												rendered="#{stream.startDate ge stream.endDate}">
-												<h:outputText value="#{stream.startDate}">
-													<f:convertDateTime
-														binding="#{streamSearchBean.convertDate}" />
-												</h:outputText>
-											</ui:fragment></strong>
-									</h5></li>
-								<li><h5>
-										<span class="glyphicon glyphicon-map-marker text-muted"></span>
-										<strong>#{stream.venue.name}</strong> - <span
-											class="text-muted">#{stream.venue.address}</span>
-									</h5></li>
-							</ul>
-						</div>
-					</div>
-					<br />
+												&#160; <strong><h:link includeViewParams="true"
+														value="#{stream.title}" outcome="/stream/item.xhtml">
+														<f:param name="id" value="#{stream.id}"></f:param>
+													</h:link> </strong>
+											</h4></li>
+										<li><p>#{stream.description}</p></li>
+										<li><h5>
+												<strong> <i class="fa fa-calendar text-muted"></i>&#160;
+													<ui:fragment
+														rendered="#{stream.startDate lt stream.endDate}">
+														<h:outputText value="#{bundle.stream_date_from} " />
+														<h:outputText value="#{stream.startDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+														<h:outputText value=" #{bundle.stream_date_to} " />
+														<h:outputText value="#{stream.endDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+													</ui:fragment> <ui:fragment
+														rendered="#{stream.startDate ge stream.endDate}">
+														<h:outputText value="#{stream.startDate}">
+															<f:convertDateTime
+																binding="#{streamSearchBean.convertDate}" />
+														</h:outputText>
+													</ui:fragment></strong>
+											</h5></li>
+										<li><h5>
+												<span class="glyphicon glyphicon-map-marker text-muted"></span>
+												<strong>#{stream.venue.name}</strong> - <span
+													class="text-muted">#{stream.venue.address}</span>
+											</h5></li>
+									</ul>
+								</div>
+							</div>
+							<br />
 
-				</ui:repeat>
+						</ui:repeat>
+					</div>
+				</div>
 
 				<c:if test="#{not empty streamSearchBean.streams}">
 					<div class="text-center ">
@@ -170,6 +180,11 @@
 			</h:form>
 
 		</ui:define>
+
+		<ui:define name="javascript">
+			<h:outputScript library="js" name="primefaces-locales.js" />
+		</ui:define>
+
 	</ui:composition>
 </h:body>
 </html>

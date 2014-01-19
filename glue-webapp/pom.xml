@@ -124,6 +124,12 @@
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Primefaces -->
+		<dependency>  
+		    <groupId>org.primefaces</groupId>  
+		    <artifactId>primefaces</artifactId>  
+		    <version>4.0</version>  
+		</dependency>
 		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-persistence</artifactId>

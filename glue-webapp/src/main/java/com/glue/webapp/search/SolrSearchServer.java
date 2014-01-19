@@ -178,7 +178,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	 */
 	@Override
 	public void setQueryString(String queryString) {
-		this.queryString = ClientUtils.escapeQueryChars(queryString);
+		this.queryString = /*ClientUtils.escapeQueryChars(*/queryString/*)*/;
 	}
 
 	/**
