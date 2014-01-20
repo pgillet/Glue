@@ -60,18 +60,16 @@
 
 				<div class="row">
 					<div class="col-md-6 col-md-offset-1">
-						<c:choose>
-							<c:when test="#{empty streamSearchBean.streams}">
-								<p>
-									<h:outputText value="#{bundle.no_result_found}" />
-								</p>
-							</c:when>
-							<c:otherwise>
-								<p>
-									<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
-								</p>
-							</c:otherwise>
-						</c:choose>
+						<ui:fragment rendered="#{empty streamSearchBean.streams}">
+							<p>
+								<h:outputText value="#{bundle.no_result_found}" />
+							</p>
+						</ui:fragment>
+						<ui:fragment rendered="#{not empty streamSearchBean.streams}">
+							<p>
+								<h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
+							</p>
+						</ui:fragment>
 					</div>
 				</div>
 				<br />
