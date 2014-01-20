@@ -100,7 +100,9 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 
 		IVenue venue = new Venue();
 		venue.setName(name);
-		if (!"".equals(latitude) && !"".equals(longitude)) {
+		
+		if (StringUtils.isNotEmpty(latitude)
+				&& StringUtils.isNotEmpty(longitude)) {
 			double dlatitude = Double.parseDouble(latitude);
 			double dlongitude = Double.parseDouble(longitude);
 			venue.setLatitude(dlatitude);
