@@ -148,6 +148,12 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
+		<!-- Joda Time -->
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.3</version>
+		</dependency>
 		<!-- RESTful Web Services -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>

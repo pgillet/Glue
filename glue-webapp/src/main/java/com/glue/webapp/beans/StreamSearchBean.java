@@ -12,6 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.DateTimeZone;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,9 +209,53 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 		return "stream-search";
 	}
 	
-	public void handleDateSelect(SelectEvent event) {
-		search();
+	public void searchFrom(SelectEvent event) {
+		// Reset end date
+		setEndDate(null);
+		first();
     }
+	
+	public void searchToday() {
+		// TODO: Get the client time zone somehow
+		DateTime start = new DateTime(DateTimeZone.UTC);
+		start = start.withTimeAtStartOfDay();
+
+		DateTime end = start.plusDays(1);
+		
+		setStartDate(start.toDate());
+		setEndDate(end.toDate());
+		
+		first();
+	}
+	
+	public void searchNextWeekEnd() {
+		DateTime start = new DateTime(DateTimeZone.UTC);
+		if (start.getDayOfWeek() < DateTimeConstants.FRIDAY) {
+			start = start.withDayOfWeek(DateTimeConstants.FRIDAY);
+		}
+		start = start.withTimeAtStartOfDay();
+
+		DateTime end = start.plusWeeks(1);
+		end = end.withDayOfWeek(DateTimeConstants.MONDAY);
+		
+		setStartDate(start.toDate());
+		setEndDate(end.toDate());
+		
+		first();
+	}
+
+	public void searchWeek() {
+		DateTime start = new DateTime(DateTimeZone.UTC);
+		start = start.withTimeAtStartOfDay();
+
+		DateTime end = start.plusWeeks(1);
+		end = end.withDayOfWeek(DateTimeConstants.MONDAY);
+		
+		setStartDate(start.toDate());
+		setEndDate(end.toDate());
+		
+		first();
+	}	
 
 	@Override
 	public boolean hasNext() {
