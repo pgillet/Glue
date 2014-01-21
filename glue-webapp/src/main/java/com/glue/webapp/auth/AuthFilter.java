@@ -124,6 +124,7 @@ public class AuthFilter implements Filter {
 				authenticate(request, response);
 			}
 		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 			authenticate(request, response);
 		}
 	}
