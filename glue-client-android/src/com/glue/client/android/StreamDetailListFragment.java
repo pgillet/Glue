@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.glue.client.android.widget.SeparatedListAdapter;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
 
 public class StreamDetailListFragment extends ListFragment {
 

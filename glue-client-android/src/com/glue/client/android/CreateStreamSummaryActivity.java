@@ -15,7 +15,7 @@ import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.client.android.stream.StreamData;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 
 public class CreateStreamSummaryActivity extends FragmentActivity implements StreamDetailListFragment.Callbacks {
 
