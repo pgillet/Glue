@@ -14,9 +14,9 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.impl.Media;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.impl.Media;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;

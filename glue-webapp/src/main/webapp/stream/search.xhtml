@@ -12,10 +12,12 @@
 		<ui:define name="content">
 
 			<h:form>
-			
+
 				<!-- Reuse the properties from request to request -->
 				<h:inputHidden value="#{streamSearchBean.query}" />
-				<h:inputHidden value="#{streamSearchBean.endDate}" />
+				<h:inputHidden value="#{streamSearchBean.endDate}">
+					<f:convertDateTime pattern="#{bundle.date_format_jsf}" />
+				</h:inputHidden>
 				<h:inputHidden value="#{streamSearchBean.latitude}" />
 				<h:inputHidden value="#{streamSearchBean.longitude}" />
 				<h:inputHidden value="#{streamSearchBean.location}" />
@@ -25,7 +27,7 @@
 				<h:inputHidden value="#{streamSearchBean.start}" />
 				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
 				<h:inputHidden value="#{streamSearchBean.totalRows}" />
-			
+
 				<c:if test="#{not empty facesContext.messageList}">
 					<div class="row">
 						<div
@@ -39,7 +41,7 @@
 						</div>
 					</div>
 				</c:if>
-				
+
 				<div class="row glue-hr-bottom-border">
 					<div class="col-md-11 col-md-offset-1">
 						<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
@@ -75,14 +77,6 @@
 				<br />
 
 				<div class="row">
-					<div class="col-xs-4 col-md-4 pull-right">
-						
-							<p:calendar styleClass="pull-right" value="#{streamSearchBean.startDate}" mode="inline"
-								id="inlineCal">
-								<p:ajax event="dateSelect"
-									listener="#{streamSearchBean.handleDateSelect}" update="@form" />
-							</p:calendar>
-					</div>
 					<div class="col-xs-12 col-sm-8 col-md-7 col-md-offset-1">
 						<ui:repeat var="stream" value="#{streamSearchBean.streams}"
 							varStatus="status">
@@ -136,8 +130,34 @@
 							<br />
 						</ui:repeat>
 					</div>
+					<div class="col-xs-4 col-md-4">
+						<div class="pull-right">
+							<p:calendar value="#{streamSearchBean.startDate}" mode="inline"
+								id="inlineCal">
+								<p:ajax event="dateSelect"
+									listener="#{streamSearchBean.searchFrom}" update="@form" />
+							</p:calendar>
+							<ul class="nav nav-pills nav-stacked">
+								<li><h:commandButton styleClass="btn btn-link"
+										action="#{streamSearchBean.searchToday}"
+										value="#{bundle.today}">
+										<f:ajax execute="@form" render="@form" />
+									</h:commandButton></li>
+								<li><h:commandButton styleClass="btn btn-link"
+										action="#{streamSearchBean.searchNextWeekEnd}"
+										value="#{bundle.next_week_end}">
+										<f:ajax execute="@form" render="@form" />
+									</h:commandButton></li>
+								<li><h:commandButton styleClass="btn btn-link"
+										action="#{streamSearchBean.searchWeek}"
+										value="#{bundle.current_week}">
+										<f:ajax execute="@form" render="@form" />
+									</h:commandButton></li>
+							</ul>
+						</div>
+					</div>
 				</div>
-					
+
 				<c:if test="#{not empty streamSearchBean.streams}">
 
 					<div class="text-center ">

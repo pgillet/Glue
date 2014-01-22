@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.glue.struct.Category;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.InvitedParticipant;
-import com.glue.struct.impl.Stream;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.Category;
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.InvitedParticipant;
+import com.glue.domain.impl.Stream;
+import com.glue.domain.impl.Venue;
 
 /**
  * DAO for Stream operations.
