@@ -8,7 +8,7 @@ import javax.faces.context.FacesContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.impl.User;
+import com.glue.domain.impl.User;
 import com.glue.webapp.auth.LoginBean;
 import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;

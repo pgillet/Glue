@@ -18,7 +18,7 @@ import android.widget.ListView;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.client.android.adapter.StreamAdapter;
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 
 public class SearchableStreamActivity extends ListActivity {
 

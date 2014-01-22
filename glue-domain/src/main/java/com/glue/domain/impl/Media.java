@@ -1,10 +1,10 @@
-package com.glue.struct.impl;
+package com.glue.domain.impl;
 
 import java.io.Serializable;
 
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.IUser;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.IUser;
 
 public class Media implements IMedia, Serializable {
 

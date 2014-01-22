@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.glue</groupId>
-			<artifactId>glue-data-model</artifactId>
+			<artifactId>glue-domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

@@ -1,4 +1,4 @@
-package com.glue.struct.impl;
+package com.glue.domain.impl;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.glue.struct.Category;
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
+import com.glue.domain.Category;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
 
 public class Stream implements IStream, Serializable {
 

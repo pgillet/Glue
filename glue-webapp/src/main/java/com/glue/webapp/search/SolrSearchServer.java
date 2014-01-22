@@ -15,7 +15,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.logic.InternalServerException;
 
 /**

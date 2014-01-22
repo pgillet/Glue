@@ -15,9 +15,9 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
 import com.glue.feed.DataSourceManager;
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.MediaDAO;
 import com.glue.webapp.db.StreamDAO;

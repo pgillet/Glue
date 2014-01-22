@@ -19,8 +19,8 @@ import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.Category;
-import com.glue.struct.IStream;
+import com.glue.domain.Category;
+import com.glue.domain.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.search.PageIterator;

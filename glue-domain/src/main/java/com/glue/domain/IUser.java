@@ -1,4 +1,4 @@
-package com.glue.struct;
+package com.glue.domain;
 
 /**
  * An interface representing user.

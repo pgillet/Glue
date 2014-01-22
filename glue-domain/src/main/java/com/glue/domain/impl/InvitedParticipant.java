@@ -1,8 +1,8 @@
-package com.glue.struct.impl;
+package com.glue.domain.impl;
 
 import java.io.Serializable;
 
-import com.glue.struct.IInvitedParticipant;
+import com.glue.domain.IInvitedParticipant;
 
 public class InvitedParticipant implements IInvitedParticipant, Serializable {
 

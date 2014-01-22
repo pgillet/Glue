@@ -6,7 +6,7 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.db.StreamDAO;
 
 public class SolrStreamDAO extends StreamDAO implements SolrDAO {

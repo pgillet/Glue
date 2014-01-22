@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.glue.api.conf.Configuration;
 import com.glue.client.android.R;
 import com.glue.client.android.util.ImageDownloader;
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 
 public class StreamAdapter extends BaseAdapter {
 

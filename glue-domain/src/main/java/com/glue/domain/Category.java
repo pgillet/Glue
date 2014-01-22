@@ -1,4 +1,4 @@
-package com.glue.struct;
+package com.glue.domain;
 
 
 public enum Category {

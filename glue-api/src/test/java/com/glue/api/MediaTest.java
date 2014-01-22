@@ -13,8 +13,8 @@ import org.junit.Test;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
 
 public class MediaTest {
 

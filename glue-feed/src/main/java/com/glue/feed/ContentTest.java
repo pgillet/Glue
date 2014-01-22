@@ -21,6 +21,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.enums.CapabilityRenditions;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
@@ -60,6 +61,11 @@ public class ContentTest {
 			    + repository.getName() + ", with id: "
 			    + repository.getId());
 		
+		
+		if (session.getRepositoryInfo().getCapabilities().getRenditionsCapability()
+	            .equals(CapabilityRenditions.NONE)) {
+	        System.out.println("Repository does not support renditions");
+		}
 
 		// *** Creating a folder
 		Folder root = session.getRootFolder();
@@ -93,7 +99,7 @@ public class ContentTest {
 
 		// *** Listing the folder
 		int maxItemsPerPage = 5;
-		int skipCount = 10;
+		int skipCount = 0;
 
 		CmisObject object = session.getObject(session.createObjectId(newFolder
 				.getId()));
@@ -103,6 +109,26 @@ public class ContentTest {
 
 		ItemIterable<CmisObject> children = folder
 				.getChildren(operationContext);
+		
+//		for (CmisObject child : children) {
+//		    System.out.println("---------------------------------");
+//		    System.out.println("    Id:              " + child.getId());
+//		    System.out.println("    Name:            " + child.getName());
+//		    System.out.println("    Base Type:       " + child.getBaseTypeId());
+//		    System.out.println("    Property 'bla':  " + child.getPropertyValue("bla"));
+//
+//		    ObjectType type = child.getType();
+//		    System.out.println("    Type Id:          " + type.getId());
+//		    System.out.println("    Type Name:        " + type.getDisplayName());
+//		    System.out.println("    Type Query Name:  " + type.getQueryName());
+//
+//		    AllowableActions actions = child.getAllowableActions();
+//		    System.out.println("    canGetProperties: " + actions.getAllowableActions().contains(Action.CAN_GET_PROPERTIES));
+//		    System.out.println("    canDeleteObject:  " + actions.getAllowableActions().contains(Action.CAN_DELETE_OBJECT));
+//		}
+		
+		
+		
 		ItemIterable<CmisObject> page = children.skipTo(skipCount).getPage();
 
 		Iterator<CmisObject> pageItems = page.iterator();

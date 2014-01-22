@@ -1,8 +1,8 @@
-package com.glue.struct.impl;
+package com.glue.domain.impl;
 
 import java.io.Serializable;
 
-import com.glue.struct.IVenue;
+import com.glue.domain.IVenue;
 
 public class Venue implements IVenue, Serializable {
 

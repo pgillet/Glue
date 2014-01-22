@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
-import com.glue.struct.IUser;
+import com.glue.domain.IUser;
 
 public class UserTest {
 

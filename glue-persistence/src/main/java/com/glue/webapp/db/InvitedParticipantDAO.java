@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.glue.struct.impl.InvitedParticipant;
+import com.glue.domain.impl.InvitedParticipant;
 
 /**
  * DAO for User operations.

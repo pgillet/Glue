@@ -13,13 +13,13 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.domain.IStream;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.error.StoreErrorListener;
 import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.StreamMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
-import com.glue.struct.IStream;
 
 public class BikiniJob implements Job {
 

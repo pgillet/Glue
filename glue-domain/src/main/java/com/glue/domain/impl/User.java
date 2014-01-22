@@ -1,10 +1,10 @@
-package com.glue.struct.impl;
+package com.glue.domain.impl;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.glue.struct.IUser;
+import com.glue.domain.IUser;
 
 @XmlRootElement
 public class User implements IUser, Serializable {

@@ -3,8 +3,8 @@ package com.glue.feed.sim;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.AbstractStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Venue;
 
 public class VenueSimilarityMetric implements SimilarityMetric<IVenue> {
 

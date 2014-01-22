@@ -3,7 +3,7 @@ package com.glue.feed.nominatim;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glue.struct.IVenue;
+import com.glue.domain.IVenue;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;

@@ -14,10 +14,10 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.IUser;
-import com.glue.struct.IVenue;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.IUser;
+import com.glue.domain.IVenue;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.MediaDAO;

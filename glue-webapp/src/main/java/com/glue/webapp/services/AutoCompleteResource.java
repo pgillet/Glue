@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.search.SearchEngine;
 

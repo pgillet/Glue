@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Venue;
 
 public class VenueDAO extends AbstractDAO implements IDAO<IVenue> {
 

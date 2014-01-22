@@ -15,8 +15,8 @@ import org.junit.Test;
 import com.glue.api.application.Glue;
 import com.glue.api.application.GlueFactory;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IStream;
-import com.glue.struct.impl.Stream;
+import com.glue.domain.IStream;
+import com.glue.domain.impl.Stream;
 
 public class StreamTest {
 

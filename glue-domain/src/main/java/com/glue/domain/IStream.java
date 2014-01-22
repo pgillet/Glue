@@ -1,4 +1,4 @@
-package com.glue.struct;
+package com.glue.domain;
 
 import java.util.List;
 import java.util.Map;

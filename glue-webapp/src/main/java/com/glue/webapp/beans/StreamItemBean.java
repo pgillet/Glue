@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 

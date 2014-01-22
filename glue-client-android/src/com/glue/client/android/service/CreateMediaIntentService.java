@@ -14,8 +14,8 @@ import com.glue.api.application.GlueFactory;
 import com.glue.client.android.intent.IntentParams;
 import com.glue.client.android.receiver.CreateMediaReceiver;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IStream;
-import com.glue.struct.impl.Stream;
+import com.glue.domain.IStream;
+import com.glue.domain.impl.Stream;
 
 public class CreateMediaIntentService extends IntentService {
 

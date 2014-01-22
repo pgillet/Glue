@@ -11,11 +11,11 @@ import java.util.Date;
 
 import javax.sql.DataSource;
 
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Stream;
+import com.glue.domain.impl.Venue;
 import com.glue.feed.DataSourceManager;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Stream;
-import com.glue.struct.impl.Venue;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;

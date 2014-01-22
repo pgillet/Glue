@@ -27,7 +27,7 @@ import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.location.LocationConstants;
 import com.glue.client.android.stream.StreamData;
 import com.glue.client.android.utils.Utils;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.impl.Venue;
 
 public class CreateStreamLocationActivity extends LocationActivity implements TimeDialogListener {
 

@@ -29,11 +29,11 @@ import org.apache.http.protocol.BasicHttpContext;
 import com.glue.api.conf.Configuration;
 import com.glue.api.operations.StreamOperations;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.IUser;
-import com.glue.struct.impl.Media;
-import com.glue.struct.impl.User;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.IUser;
+import com.glue.domain.impl.Media;
+import com.glue.domain.impl.User;
 
 public class GlueImpl implements Glue {
 
