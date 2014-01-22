@@ -4,9 +4,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Venue;
 import com.glue.feed.GlueObjectBuilder;
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Venue;
 
 public class VenueBeanVenueBuilder implements GlueObjectBuilder<VenueBean, IVenue> {
 

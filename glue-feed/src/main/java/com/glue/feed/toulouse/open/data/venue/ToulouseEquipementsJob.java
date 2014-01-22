@@ -17,13 +17,13 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.domain.IVenue;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
 import com.glue.feed.io.FileExtensionFilter;
 import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.VenueMessageListener;
-import com.glue.struct.IVenue;
 
 /**
  * Read from a CSV file the list of cultural equipement in Toulouse and

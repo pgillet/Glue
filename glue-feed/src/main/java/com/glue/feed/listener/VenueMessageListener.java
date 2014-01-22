@@ -8,9 +8,9 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.domain.IVenue;
 import com.glue.feed.DataSourceManager;
 import com.glue.feed.FeedMessageListener;
-import com.glue.struct.IVenue;
 import com.glue.webapp.db.DAOCommand;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.VenueDAO;

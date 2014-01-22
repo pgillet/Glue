@@ -1,6 +1,6 @@
 package com.glue.feed.nominatim;
 
-import com.glue.struct.IVenue;
+import com.glue.domain.IVenue;
 
 public class NominatimVenueAdapter implements IVenue {
 
