@@ -22,7 +22,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.glue</groupId>
-				<artifactId>glue-data-model</artifactId>
+				<artifactId>glue-domain</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -148,7 +148,7 @@
 				<module>glue-api</module>
 				<module>glue-client-android</module>
 				<module>glue-content</module>
-				<module>glue-data-model</module>
+				<module>glue-domain</module>
 				<module>glue-persistence</module>
 				<module>glue-feed</module>
 				<module>glue-search</module>
