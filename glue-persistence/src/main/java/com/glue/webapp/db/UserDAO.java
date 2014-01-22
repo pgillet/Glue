@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.glue.struct.IUser;
-import com.glue.struct.impl.User;
+import com.glue.domain.IUser;
+import com.glue.domain.impl.User;
 
 /**
  * DAO for User operations.

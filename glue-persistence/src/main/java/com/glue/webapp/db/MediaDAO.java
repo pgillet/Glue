@@ -8,8 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glue.struct.IMedia;
-import com.glue.struct.impl.Media;
+import com.glue.domain.IMedia;
+import com.glue.domain.impl.Media;
 
 /**
  * DAO for Media operations.
