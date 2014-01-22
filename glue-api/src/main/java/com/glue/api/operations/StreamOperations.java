@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 
 public interface StreamOperations {
 

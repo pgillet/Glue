@@ -1,7 +1,7 @@
 package com.glue.api.operations;
 
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IUser;
+import com.glue.domain.IUser;
 
 public interface UserOperations {
 

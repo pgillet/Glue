@@ -7,10 +7,10 @@ import java.util.Set;
 
 import com.glue.api.operations.StreamOperations;
 import com.glue.exceptions.GlueException;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Stream;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Stream;
+import com.glue.domain.impl.Venue;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
