@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IUser;
-import com.glue.struct.IVenue;
-import com.glue.struct.impl.Stream;
-import com.glue.struct.impl.Venue;
+import com.glue.domain.IUser;
+import com.glue.domain.IVenue;
+import com.glue.domain.impl.Stream;
+import com.glue.domain.impl.Venue;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.logic.UserController;

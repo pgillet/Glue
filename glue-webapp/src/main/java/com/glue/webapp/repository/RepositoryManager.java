@@ -8,7 +8,7 @@ import javax.servlet.http.Part;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IMedia;
+import com.glue.domain.IMedia;
 
 public class RepositoryManager {
 

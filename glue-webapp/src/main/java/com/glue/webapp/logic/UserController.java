@@ -9,7 +9,7 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IUser;
+import com.glue.domain.IUser;
 import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.UserDAO;
 

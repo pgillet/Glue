@@ -6,10 +6,10 @@ import java.util.Set;
 
 import org.apache.solr.client.solrj.beans.Field;
 
-import com.glue.struct.Category;
-import com.glue.struct.IMedia;
-import com.glue.struct.IStream;
-import com.glue.struct.IVenue;
+import com.glue.domain.Category;
+import com.glue.domain.IMedia;
+import com.glue.domain.IStream;
+import com.glue.domain.IVenue;
 
 /**
  * A technical implementation of a Stream that adds @Field annotation allowing

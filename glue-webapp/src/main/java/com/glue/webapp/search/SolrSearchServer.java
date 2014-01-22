@@ -15,7 +15,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.logic.InternalServerException;
 
 /**
@@ -145,7 +145,13 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 			System.out.println("cat = " + constructCategoriesFilter());
 			query.addFilterQuery("category:" + constructCategoriesFilter());
 		}
-		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "]");
+		
+		// Square brackets [ ] denote an inclusive range query that matches
+		// values including the upper and/or lower bound.
+		// Curly brackets { } denote an exclusive range query that matches
+		// values between the upper and lower bounds, but excluding the upper
+		// and/or lower bounds themselves.
+		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "}");
 		query.setStart(start);
 		query.setRows(rows);
 		return query;

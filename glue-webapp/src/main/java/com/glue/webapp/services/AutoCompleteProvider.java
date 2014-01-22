@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
-import com.glue.struct.IStream;
+import com.glue.domain.IStream;
 import com.glue.webapp.search.SearchEngine;
 import com.glue.webapp.search.SolrSearchServer;
 import com.sun.jersey.api.core.HttpContext;

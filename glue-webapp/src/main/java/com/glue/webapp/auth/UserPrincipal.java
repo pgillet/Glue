@@ -2,7 +2,7 @@ package com.glue.webapp.auth;
 
 import java.security.Principal;
 
-import com.glue.struct.IUser;
+import com.glue.domain.IUser;
 
 public class UserPrincipal implements Principal, IUser {
 
