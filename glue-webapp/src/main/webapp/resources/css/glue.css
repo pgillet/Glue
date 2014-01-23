@@ -98,3 +98,8 @@ body { padding-top: 70px; }
 	        border-left: 0px;
 	        border-right: 0px;
 }
+
+/* To be used in conjunction with .fa-li to nicely mix Bootstrap icons with Font Awesome icons in unordered lists. */
+.glue-fa-li {
+	width: 2.142857142857143em !important;
+}
