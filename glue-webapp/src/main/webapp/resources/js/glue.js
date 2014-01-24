@@ -12,17 +12,19 @@ $(document).ready(function() {
         	url: '/glue/services/autocomplete?query=%QUERY',   
         	// need a "value" field ...
 	        filter: function(data) {
-	        	retval = [];
-	            for (var i = 0;  i < data.length;  i++) {
+	        	retval = [];	        	
+	            for (var i = 1;  i < data.length;  i++) {
 	                retval.push({
-	                	value: data[i].title
+	                	value: data[0] + data[i],
+	                	query: data[0],
+	                	comp: data[i]
 	                });
 	            }
 	            return retval;
 	        }
          },
          template: [
-                    '<p>{{value}}</p>'
+                    '<p>{{query}}<b>{{comp}}</b></p>'
          ].join(''),
          engine: Hogan,
     })

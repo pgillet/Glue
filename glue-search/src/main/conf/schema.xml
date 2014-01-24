@@ -135,8 +135,8 @@
         leading wildcard queries. -->
    <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
    
-   <field name="suggestions" type="text_suggest" indexed="true" stored="false" omitNorms="true" />
-   <field name="suggestions_edg" type="autocomplete_edge" indexed="true" stored="false" />
+   <field name="suggestions" type="text_suggest" indexed="true" stored="true" omitNorms="true" />
+   <field name="suggestions_edg" type="autocomplete_edge" indexed="true" stored="false" omitNorms="true" omitTermFreqAndPositions="true"/>
    <field name="suggestions_ng" type="autocomplete_ngram" indexed="true" stored="false" omitNorms="true" />
 
    <!--
@@ -196,11 +196,6 @@
 
    <dynamicField name="random_*" type="random" />
 
-   <!-- uncomment the following to ignore any fields that don't already match an existing 
-        field name or dynamic field, rather than reporting them as an error. 
-        alternately, change the type="ignored" to some other type e.g. "text" if you want 
-        unknown fields indexed and/or stored by default --> 
-   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
    
  </fields>
 
@@ -241,19 +236,10 @@
    <copyField source="title" dest="suggestions"/>
    <copyField source="title" dest="suggestions_edg"/>
    <copyField source="title" dest="suggestions_ng"/>
-
-	
-   <!-- Above, multiple source fields are copied to the [text] field. 
-	  Another way to map multiple source fields to the same 
-	  destination field is to use the dynamic field syntax. 
-	  copyField also supports a maxChars to copy setting.  -->
-	   
-   <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
-
-   <!-- copy name to alphaNameSort, a field designed for sorting by name -->
-   <!-- <copyField source="name" dest="alphaNameSort"/> -->
  
   <types>
+         
+      
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
        attribute and any other attributes determine the real
@@ -291,15 +277,7 @@
                                 <filter class="solr.LowerCaseFilterFactory"/>
                         </analyzer>
                 </fieldType>
-			    <!-- text_phonetic_do : Matches a phonetic version of the suggest text, for a fuzzy effect 
-                     Note that there are other phonetic algorithms as well, but this works pretty well
-                -->
-           		<fieldType name="text_phonetic_do" class="solr.TextField" positionIncrementGap="100">
-                        <analyzer>
-                                <tokenizer class="solr.StandardTokenizerFactory"/>
-                                <filter class="solr.DoubleMetaphoneFilterFactory" inject="false"/>
-                        </analyzer>
-                </fieldType>
+
                 <!-- autocomplete_edge : Will match from the left of the field, e.g. if the document field
                      is "A brown fox" and the query is "A bro", it will match, but not "brown"
                 -->
@@ -314,7 +292,8 @@
                                 <tokenizer class="solr.KeywordTokenizerFactory"/>
                                 <filter class="solr.LowerCaseFilterFactory"/>
                                 <filter class="solr.PatternReplaceFilterFactory" pattern="([\.,;:-_])" replacement=" " replace="all"/>
-                                <filter class="solr.PatternReplaceFilterFactory" pattern="^(.{30})(.*)?" replacement="$1" replace="all"/>
+                                <filter class="solr.PatternReplaceFilterFactory" pattern="^(.{30})(.*)?" replacement=" $1&quot;" replace="all"/>
+                                <!-- <filter class="solr.PatternReplaceFilterFactory" pattern="(.+)" replacement="&quot;$1&quot;" replace="all"/> -->
                         </analyzer>
                 </fieldType>
                 <!-- autocomplete_ngram : Matches any word in the input field, with implicit right truncation.
