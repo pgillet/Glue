@@ -37,15 +37,17 @@
 
 			<ui:fragment rendered="#{not empty streamItemBean.item}">
 				<div class="row">
-					<div class="col-md-2 col-md-offset-2">
-						<br />
-						<h:graphicImage name="glue-snail-white-blue-lg.svg" library="img"
-							alt="Glue snail" styleClass="img-responsive disabled"
-							style="height:100% \9; opacity:0.4; filter:alpha(opacity=40);"
-							title="#{bundle.image_not_available}" />
-						<!-- /* For IE8 and earlier */ -->
+					<div class="col-xs-4 col-sm-3 col-md-4">
+						<div class="pull-right">
+						<br /> <img src="#{streamItemBean.item.thumbPath}"
+							alt="#{streamItemBean.item.title}"
+							class="img-responsive" width="180" height="180"
+							title="#{streamItemBean.item.title}" />
+
+						<!-- <img src="http://localhost:8080/glue/services/images/thumbnails/1"></img> -->
+						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-xs-11 col-sm-8 col-md-6">
 						<ul class="fa-ul">
 							<li><h3 class="text-primary">
 									<span class="pull-right"><i
@@ -53,7 +55,7 @@
 										title="#{bundle.add_to_watchlist}"></i></span><strong>#{streamItemBean.item.title}</strong>
 								</h3></li>
 							<li><h4>
-									<strong> <i class="fa-li fa fa-calendar text-muted"></i>
+									<strong><i class="fa-li fa fa-calendar text-muted"></i>
 										<ui:fragment
 											rendered="#{streamItemBean.item.startDate lt streamItemBean.item.endDate}">
 											<h:outputText value="#{bundle.stream_date_from} " />
@@ -72,7 +74,8 @@
 										</ui:fragment></strong>
 								</h4></li>
 							<li><h4>
-									<span class="fa-li glyphicon glyphicon-map-marker text-muted"></span><strong>#{streamItemBean.item.venue.name}</strong>
+									<strong><span
+										class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>#{streamItemBean.item.venue.name}</strong>
 								</h4>
 								<h5>
 									<span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
