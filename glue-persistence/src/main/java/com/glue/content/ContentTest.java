@@ -1,11 +1,10 @@
-package com.glue.feed;
+package com.glue.content;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -13,7 +12,6 @@ import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.Repository;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -21,7 +19,6 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import org.apache.chemistry.opencmis.commons.enums.CapabilityRenditions;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
@@ -45,27 +42,27 @@ public class ContentTest {
 		params.put(SessionParameter.ATOMPUB_URL,
 				"http://localhost:8080/glue-content/atom");
 		params.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-		// params.put(SessionParameter.REPOSITORY_ID, "test");
+	params.put(SessionParameter.REPOSITORY_ID, "test");
 
 		// create session
-		// Session session = factory.createSession(params);
+		Session session = factory.createSession(params);
 
-		List<Repository> repositories = factory.getRepositories(params);
-		for (Repository r : repositories) {
-		    System.out.println("Found repository: " + r.getName());
-		}
-		
-		Repository repository = repositories.get(0);
-		Session session = repository.createSession();
-		System.out.println("Got a connection to repository: " 
-			    + repository.getName() + ", with id: "
-			    + repository.getId());
-		
-		
-		if (session.getRepositoryInfo().getCapabilities().getRenditionsCapability()
-	            .equals(CapabilityRenditions.NONE)) {
-	        System.out.println("Repository does not support renditions");
-		}
+//		List<Repository> repositories = factory.getRepositories(params);
+//		for (Repository r : repositories) {
+//		    System.out.println("Found repository: " + r.getName());
+//		}
+//		
+//		Repository repository = repositories.get(0);
+//		Session session = repository.createSession();
+//		System.out.println("Got a connection to repository: " 
+//			    + repository.getName() + ", with id: "
+//			    + repository.getId());
+//		
+//		
+//		if (session.getRepositoryInfo().getCapabilities().getRenditionsCapability()
+//	            .equals(CapabilityRenditions.NONE)) {
+//	        System.out.println("Repository does not support renditions");
+//		}
 
 		// *** Creating a folder
 		Folder root = session.getRootFolder();

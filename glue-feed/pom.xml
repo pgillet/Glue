@@ -10,13 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<!-- TODO: to be removed when org.apache.chemistry.opencmis:chemistry-opencmis-client-impl 
-		will be stable -->
 	<repositories>
-		<repository>
-			<id>Snapshots</id>
-			<url>https://repository.apache.org/content/groups/snapshots/</url>
-		</repository>
 		<repository>
 			<id>google-api-services</id>
 			<url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
@@ -126,11 +120,6 @@
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.7.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.chemistry.opencmis</groupId>
-			<artifactId>chemistry-opencmis-client-impl</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.geocoder-java</groupId>

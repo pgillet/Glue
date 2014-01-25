@@ -1,6 +1,5 @@
 package com.glue.webapp.logic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +22,6 @@ import com.glue.webapp.db.DAOManager;
 import com.glue.webapp.db.MediaDAO;
 import com.glue.webapp.db.StreamDAO;
 import com.glue.webapp.db.VenueDAO;
-import com.glue.webapp.repository.RepositoryManager;
 import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
@@ -191,11 +189,6 @@ public class StreamController implements PageIterator<List<IStream>> {
 
 					// Set user as administrator
 					streamDAO.joinAsAdmin(stream.getId(), admin.getId());
-
-					// Create associated directory
-					if (!RepositoryManager.createStream(stream.getId())) {
-						throw new IOException("Cannot create stream directory");
-					}
 
 					return null;
 				}

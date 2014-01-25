@@ -135,6 +135,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
+				<module>glue-content</module>
 				<module>glue-persistence</module>
 				<module>glue-search</module>
 				<module>glue-webapp</module>
