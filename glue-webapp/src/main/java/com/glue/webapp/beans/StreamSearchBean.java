@@ -28,452 +28,446 @@ import com.glue.webapp.search.PageIterator;
 @ManagedBean
 public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
-	private static final String PARAM_CAT = "cat";
+    private static final String PARAM_CAT = "cat";
 
-	static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
+    static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
-	@Inject
-	private StreamController streamController;
+    @Inject
+    private StreamController streamController;
 
-	private String location;
+    private DateTimeConverter convertDate;
 
-	private double latitude;
+    private Category[] categories = Category.values();
 
-	private double longitude;
+    private List<IStream> streams;
 
-	private DateTimeConverter convertDate;
-
-	private Category[] categories = Category.values();
-
-	private List<IStream> streams;
-
-	/**
-	 * @return the query
-	 */
-	public String getQuery() {
-		return streamController.getQueryString();
-	}
-
-	/**
-	 * @param query
-	 *            the query to set
-	 */
-	public void setQuery(String query) {
-		streamController.setQueryString(query);
-	}
-
-	/**
-	 * @return the location
-	 */
-	public String getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location
-	 *            the location to set
-	 */
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
-	}
-
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return streamController.getStartDate();
-	}
-
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		streamController.setStartDate(startDate);
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return streamController.getEndDate();
-	}
-
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		streamController.setEndDate(endDate);
-	}
-
-	public DateTimeConverter getConvertDate() {
-		return convertDate;
-	}
-
-	public void setConvertDate(DateTimeConverter convertDate) {
-		final String key1 = "date_format_long";
-		// final String key2 = "time_format";
-
-		String dateFormat = FacesUtil.getString(key1);
-		// String timeFormat = bundle.getString(key2);
-
-		// convertDate.setPattern(dateFormat + " " + timeFormat);
-		convertDate.setPattern(dateFormat);
-
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-		convertDate.setTimeZone(tz);
-
-		this.convertDate = convertDate;
-	}
-
-	/**
-	 * @return the streams
-	 */
-	public List<IStream> getStreams() {
-		return streams;
-	}
-
-	/**
-	 * @return the categories
-	 */
-	public Category[] getCategories() {
-		return categories;
-	}
-
-	/**
-	 * @return the catSelection
-	 */
-	public List<String> getCatSelection() {
-		return streamController.getCategories();
-	}
-
-	/**
-	 * @param catSelection
-	 *            the catSelection to set
-	 */
-	public void setCatSelection(List<String> catSelection) {
-		streamController.setCategories(catSelection);
-	}
-
-	/**
-	 * @param streams
-	 *            the streams to set
-	 */
-	public void setStreams(List<IStream> streams) {
-		this.streams = streams;
-	}
-
-	public String search() {
-
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		try {
-			streams = streamController.search();
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
-		
-		return "stream-search";
-	}
-	
-	public void searchFrom(SelectEvent event) {
-		// Reset end date
-		setEndDate(null);
-		first();
+    /**
+     * @return the query
+     */
+    public String getQuery() {
+	return streamController.getQueryString();
     }
-	
-	public void searchToday() {
-		// TODO: Get the client time zone somehow
-		DateTime start = new DateTime(DateTimeZone.UTC);
-		start = start.withTimeAtStartOfDay();
 
-		DateTime end = start.plusDays(1);
-		
-		setStartDate(start.toDate());
-		setEndDate(end.toDate());
-		
-		first();
-	}
-	
-	public void searchNextWeekEnd() {
-		DateTime start = new DateTime(DateTimeZone.UTC);
-		if (start.getDayOfWeek() < DateTimeConstants.FRIDAY) {
-			start = start.withDayOfWeek(DateTimeConstants.FRIDAY);
-		}
-		start = start.withTimeAtStartOfDay();
+    /**
+     * @param query
+     *            the query to set
+     */
+    public void setQuery(String query) {
+	streamController.setQueryString(query);
+    }
 
-		DateTime end = start.plusWeeks(1);
-		end = end.withDayOfWeek(DateTimeConstants.MONDAY);
-		
-		setStartDate(start.toDate());
-		setEndDate(end.toDate());
-		
-		first();
-	}
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+	return streamController.getLocation();
+    }
 
-	public void searchWeek() {
-		DateTime start = new DateTime(DateTimeZone.UTC);
-		start = start.withTimeAtStartOfDay();
+    /**
+     * @param location
+     *            the location to set
+     */
+    public void setLocation(String location) {
+	streamController.setLocation(location);
+    }
 
-		DateTime end = start.plusWeeks(1);
-		end = end.withDayOfWeek(DateTimeConstants.MONDAY);
-		
-		setStartDate(start.toDate());
-		setEndDate(end.toDate());
-		
-		first();
-	}	
+    /**
+     * @return the latitude
+     */
+    public double getLatitude() {
+	return streamController.getLatitude();
+    }
 
-	@Override
-	public boolean hasNext() {
-		return streamController.hasNext();
-	}
+    /**
+     * @param latitude
+     *            the latitude to set
+     */
+    public void setLatitude(double latitude) {
+	streamController.setLatitude(latitude);
+    }
 
-	/**
-	 * For EL access.
-	 * 
-	 * @return
-	 */
-	public boolean isNext() {
-		return hasNext();
-	}
+    /**
+     * @return the longitude
+     */
+    public double getLongitude() {
+	return streamController.getLongitude();
+    }
 
-	@Override
-	public Void next() {
-		FacesContext context = FacesContext.getCurrentInstance();
+    /**
+     * @param longitude
+     *            the longitude to set
+     */
+    public void setLongitude(double longitude) {
+	streamController.setLongitude(longitude);
+    }
 
-		try {
-			streams = streamController.next();
-		} catch (NoSuchElementException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
+    /**
+     * @return the startDate
+     */
+    public Date getStartDate() {
+	return streamController.getStartDate();
+    }
 
-		return null;
-	}
+    /**
+     * @param startDate
+     *            the startDate to set
+     */
+    public void setStartDate(Date startDate) {
+	streamController.setStartDate(startDate);
+    }
 
-	@Override
-	public boolean hasPrevious() {
-		return streamController.hasPrevious();
-	}
+    /**
+     * @return the endDate
+     */
+    public Date getEndDate() {
+	return streamController.getEndDate();
+    }
 
-	/**
-	 * For EL access.
-	 * 
-	 * @return
-	 */
-	public boolean isPrevious() {
-		return hasPrevious();
-	}
+    /**
+     * @param endDate
+     *            the endDate to set
+     */
+    public void setEndDate(Date endDate) {
+	streamController.setEndDate(endDate);
+    }
 
-	@Override
-	public Void previous() {
-		FacesContext context = FacesContext.getCurrentInstance();
+    public DateTimeConverter getConvertDate() {
+	return convertDate;
+    }
 
-		try {
-			streams = streamController.previous();
-		} catch (NoSuchElementException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
+    public void setConvertDate(DateTimeConverter convertDate) {
+	final String key1 = "date_format_long";
+	// final String key2 = "time_format";
 
-		return null;
-	}
+	String dateFormat = FacesUtil.getString(key1);
+	// String timeFormat = bundle.getString(key2);
 
-	@Override
-	public Void first() {
-		FacesContext context = FacesContext.getCurrentInstance();
+	// convertDate.setPattern(dateFormat + " " + timeFormat);
+	convertDate.setPattern(dateFormat);
 
-		try {
-			streams = streamController.first();
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
+	TimeZone tz = TimeZone.getTimeZone("UTC");
+	convertDate.setTimeZone(tz);
 
-		return null;
-	}
+	this.convertDate = convertDate;
+    }
 
-	@Override
-	public Void last() {
-		FacesContext context = FacesContext.getCurrentInstance();
+    /**
+     * @return the streams
+     */
+    public List<IStream> getStreams() {
+	return streams;
+    }
 
-		try {
-			streams = streamController.last();
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
+    /**
+     * @return the categories
+     */
+    public Category[] getCategories() {
+	return categories;
+    }
 
-		return null;
-	}
+    /**
+     * @return the catSelection
+     */
+    public List<String> getCatSelection() {
+	return streamController.getCategories();
+    }
 
-	@Override
-	public Void get(int pageNumber) throws NoSuchElementException {
-		// TODO Not yet implemented
-		return null;
-	}
+    /**
+     * @param catSelection
+     *            the catSelection to set
+     */
+    public void setCatSelection(List<String> catSelection) {
+	streamController.setCategories(catSelection);
+    }
 
-	@Override
-	public int getStart() {
-		return streamController.getStart();
-	}
+    /**
+     * @param streams
+     *            the streams to set
+     */
+    public void setStreams(List<IStream> streams) {
+	this.streams = streams;
+    }
 
-	@Override
-	public void setStart(int start) {
-		streamController.setStart(start);
+    public String search() {
 
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	try {
+	    streams = streamController.search();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	@Override
-	public int getRowsPerPage() {
-		return streamController.getRowsPerPage();
+	return "stream-search";
+    }
+
+    public void searchFrom(SelectEvent event) {
+	// Reset end date
+	setEndDate(null);
+	first();
+    }
+
+    public void searchToday() {
+	// TODO: Get the client time zone somehow
+	DateTime start = new DateTime(DateTimeZone.UTC);
+	start = start.withTimeAtStartOfDay();
+
+	DateTime end = start.plusDays(1);
+
+	setStartDate(start.toDate());
+	setEndDate(end.toDate());
+
+	first();
+    }
+
+    public void searchNextWeekEnd() {
+	DateTime start = new DateTime(DateTimeZone.UTC);
+	if (start.getDayOfWeek() < DateTimeConstants.FRIDAY) {
+	    start = start.withDayOfWeek(DateTimeConstants.FRIDAY);
+	}
+	start = start.withTimeAtStartOfDay();
+
+	DateTime end = start.plusWeeks(1);
+	end = end.withDayOfWeek(DateTimeConstants.MONDAY);
+
+	setStartDate(start.toDate());
+	setEndDate(end.toDate());
+
+	first();
+    }
+
+    public void searchWeek() {
+	DateTime start = new DateTime(DateTimeZone.UTC);
+	start = start.withTimeAtStartOfDay();
+
+	DateTime end = start.plusWeeks(1);
+	end = end.withDayOfWeek(DateTimeConstants.MONDAY);
+
+	setStartDate(start.toDate());
+	setEndDate(end.toDate());
+
+	first();
+    }
+
+    @Override
+    public boolean hasNext() {
+	return streamController.hasNext();
+    }
+
+    /**
+     * For EL access.
+     * 
+     * @return
+     */
+    public boolean isNext() {
+	return hasNext();
+    }
+
+    @Override
+    public Void next() {
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	try {
+	    streams = streamController.next();
+	} catch (NoSuchElementException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	@Override
-	public void setRowsPerPage(int rows) {
-		streamController.setRowsPerPage(rows);
+	return null;
+    }
+
+    @Override
+    public boolean hasPrevious() {
+	return streamController.hasPrevious();
+    }
+
+    /**
+     * For EL access.
+     * 
+     * @return
+     */
+    public boolean isPrevious() {
+	return hasPrevious();
+    }
+
+    @Override
+    public Void previous() {
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	try {
+	    streams = streamController.previous();
+	} catch (NoSuchElementException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	@Override
-	public long getTotalRows() {
-		return streamController.getTotalRows();
+	return null;
+    }
+
+    @Override
+    public Void first() {
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	try {
+	    streams = streamController.first();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	/**
-	 * For pagination control from request to request.
-	 */
-	public void setTotalRows(long totalRows) {
-		streamController.setTotalRows(totalRows);
+	return null;
+    }
+
+    @Override
+    public Void last() {
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	try {
+	    streams = streamController.last();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	@Override
-	public int getPageIndex() {
-		return streamController.getPageIndex();
+	return null;
+    }
+
+    @Override
+    public Void get(int pageNumber) throws NoSuchElementException {
+	// TODO Not yet implemented
+	return null;
+    }
+
+    @Override
+    public int getStart() {
+	return streamController.getStart();
+    }
+
+    @Override
+    public void setStart(int start) {
+	streamController.setStart(start);
+
+    }
+
+    @Override
+    public int getRowsPerPage() {
+	return streamController.getRowsPerPage();
+    }
+
+    @Override
+    public void setRowsPerPage(int rows) {
+	streamController.setRowsPerPage(rows);
+    }
+
+    @Override
+    public long getTotalRows() {
+	return streamController.getTotalRows();
+    }
+
+    /**
+     * For pagination control from request to request.
+     */
+    public void setTotalRows(long totalRows) {
+	streamController.setTotalRows(totalRows);
+    }
+
+    @Override
+    public int getPageIndex() {
+	return streamController.getPageIndex();
+    }
+
+    @Override
+    public int getTotalPages() {
+	return streamController.getTotalPages();
+    }
+
+    /**
+     * Returns the CSS styles to apply to the given category selector.
+     * 
+     * @param cat
+     *            the category name
+     * @param javascriptSyntax
+     *            a boolean telling whether the method should return the
+     *            JavaScript syntax or not
+     * @param onmouseover
+     *            a boolean telling whether the method should return the CSS
+     *            styles to be applied when the pointer is moved onto the
+     *            element (onMouseOver attribute) or away from it (onMouseOut
+     *            attribute). This parameter is ignored if javascriptSyntax is
+     *            set to false.
+     * @return
+     */
+    public String getCategoryStyle(String cat, boolean javascriptSyntax,
+	    boolean onmouseover) {
+	String styleAttr;
+	if (javascriptSyntax) {
+	    // JavaScript syntax
+	    styleAttr = "this.style.borderBottom = '%dpx solid %s' ;";
+	} else {
+	    styleAttr = "border-bottom: %dpx solid %s ;";
+	}
+	int borderWidth;
+	if (getCatSelection().contains(cat) || onmouseover) {
+	    borderWidth = 3;
+	} else {
+	    borderWidth = 2;
 	}
 
-	@Override
-	public int getTotalPages() {
-		return streamController.getTotalPages();
+	styleAttr = String.format(styleAttr, borderWidth, Category.valueOf(cat)
+		.getColor());
+
+	return styleAttr;
+    }
+
+    public void enableCategory() {
+	String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+	LOG.debug("Toggle category = " + cat);
+
+	if (!getCatSelection().remove(cat)) {
+	    getCatSelection().add(cat);
 	}
 
-	/**
-	 * Returns the CSS styles to apply to the given category selector.
-	 * 
-	 * @param cat
-	 *            the category name
-	 * @param javascriptSyntax
-	 *            a boolean telling whether the method should return the
-	 *            JavaScript syntax or not
-	 * @param onmouseover
-	 *            a boolean telling whether the method should return the CSS
-	 *            styles to be applied when the pointer is moved onto the
-	 *            element (onMouseOver attribute) or away from it (onMouseOut
-	 *            attribute). This parameter is ignored if javascriptSyntax is
-	 *            set to false.
-	 * @return
-	 */
-	public String getCategoryStyle(String cat, boolean javascriptSyntax,
-			boolean onmouseover) {
-		String styleAttr;
-		if (javascriptSyntax) {
-			// JavaScript syntax
-			styleAttr = "this.style.borderBottom = '%dpx solid %s' ;";
-		} else {
-			styleAttr = "border-bottom: %dpx solid %s ;";
-		}
-		int borderWidth;
-		if (getCatSelection().contains(cat) || onmouseover) {
-			borderWidth = 3;
-		} else {
-			borderWidth = 2;
-		}
-
-		styleAttr = String.format(styleAttr, borderWidth, Category.valueOf(cat)
-				.getColor());
-
-		return styleAttr;
+	try {
+	    streams = streamController.first();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
+    }
 
-	public void enableCategory() {
-		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
-		LOG.debug("Toggle category = " + cat);
+    public void selectCategory() {
+	String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+	LOG.debug("Select category = " + cat);
 
-		if (!getCatSelection().remove(cat)) {
-			getCatSelection().add(cat);
-		}
+	// Select only the chosen category
+	getCatSelection().clear();
+	getCatSelection().add(cat);
 
-		try {
-			streams = streamController.first();
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
+	try {
+	    streams = streamController.first();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
-
-	public void selectCategory() {
-		String cat = FacesUtil.getRequestParameter(PARAM_CAT);
-		LOG.debug("Select category = " + cat);
-
-		// Select only the chosen category
-		getCatSelection().clear();
-		getCatSelection().add(cat);
-
-		try {
-			streams = streamController.first();
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null,
-					new FacesMessage(FacesUtil.getString("error.generic")));
-		}
-	}
+    }
 
 }

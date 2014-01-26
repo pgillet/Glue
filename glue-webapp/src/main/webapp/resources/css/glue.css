@@ -103,3 +103,11 @@ body { padding-top: 70px; }
 .glue-fa-li {
 	width: 2.142857142857143em !important;
 }
+
+.glue-glyphicon-btn {
+	padding: 9px 12px;
+}
+
+.glue-glyphicon-btn-lg {
+	padding: 9px 20px;
+}

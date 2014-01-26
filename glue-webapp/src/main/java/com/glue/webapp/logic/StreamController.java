@@ -27,305 +27,340 @@ import com.glue.webapp.search.SearchEngine;
 
 public class StreamController implements PageIterator<List<IStream>> {
 
-	static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
+    static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
-	@Inject
-	private SearchEngine<IStream> engine;
+    @Inject
+    private SearchEngine<IStream> engine;
 
-	private int start;
+    private int start;
 
-	private int rowsPerPage = PageIterator.DEFAULT_ROWS;
+    private int rowsPerPage = PageIterator.DEFAULT_ROWS;
 
-	private long totalRows;
+    private long totalRows;
 
-	private String queryString;
-	private Date startDate;
-	private Date endDate;
+    private String queryString;
+    private Date startDate;
+    private Date endDate;
+    private String location;
+    private double latitude;
+    private double longitude;
 
-	private List<String> categories = new ArrayList<>();
+    private List<String> categories = new ArrayList<>();
 
-	/**
-	 * @return the queryString
-	 */
-	public String getQueryString() {
-		return queryString;
+    /**
+     * @return the queryString
+     */
+    public String getQueryString() {
+	return queryString;
+    }
+
+    /**
+     * @param queryString
+     *            the queryString to set
+     */
+    public void setQueryString(String queryString) {
+	this.queryString = queryString;
+    }
+
+    public Date getStartDate() {
+	return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+	this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+	return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+	this.endDate = endDate;
+    }
+
+    public String getLocation() {
+	return location;
+    }
+
+    public void setLocation(String location) {
+	this.location = location;
+    }
+
+    public double getLatitude() {
+	return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+	this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+	return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+	this.longitude = longitude;
+    }
+
+    /**
+     * @return the categories
+     */
+    public List<String> getCategories() {
+	return categories;
+    }
+
+    /**
+     * @param categories
+     *            the categories to set
+     */
+    public void setCategories(List<String> categories) {
+	this.categories = categories;
+    }
+
+    public List<IStream> search() throws InternalServerException {
+
+	// The underlying search engine returns only partial streams (i.e. only
+	// the properties that are actually indexed)
+	engine.setQueryString(queryString);
+	engine.setCategories(categories.toArray(new String[categories.size()]));
+	engine.setStartDate(startDate);
+	engine.setEndDate(endDate);
+	engine.setStart(start);
+	engine.setRows(rowsPerPage);
+
+	List<IStream> temp = engine.search();
+
+	// Stores the total number of found results
+	totalRows = engine.getNumFound();
+
+	final List<Long> ids = new ArrayList<Long>();
+
+	for (IStream stream : temp) {
+	    ids.add(stream.getId());
 	}
 
-	/**
-	 * @param queryString
-	 *            the queryString to set
-	 */
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
+	try {
+	    DAOManager manager = DAOManager.getInstance();
+	    List<IStream> streams = manager
+		    .transaction(new DAOCommand<List<IStream>>() {
 
-	public Date getStartDate() {
-		return startDate;
-	}
+			@Override
+			public List<IStream> execute(DAOManager manager)
+				throws Exception {
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+			    // Store venues to avoid repetitive SQL requests
+			    Map<Long, IVenue> m = new HashMap<Long, IVenue>();
 
-	public Date getEndDate() {
-		return endDate;
-	}
+			    StreamDAO streamDAO = manager.getStreamDAO();
+			    VenueDAO venueDAO = manager.getVenueDAO();
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+			    List<IStream> items = streamDAO.searchInList(ids
+				    .toArray(new Long[ids.size()]));
 
-	/**
-	 * @return the categories
-	 */
-	public List<String> getCategories() {
-		return categories;
-	}
+			    for (IStream stream : items) {
 
-	/**
-	 * @param categories
-	 *            the categories to set
-	 */
-	public void setCategories(List<String> categories) {
-		this.categories = categories;
-	}
+				IVenue persistentVenue = m.get(stream
+					.getVenue().getId());
+				if (persistentVenue == null) { // Not stored yet
+				    persistentVenue = venueDAO.search(stream
+					    .getVenue().getId());
 
-	public List<IStream> search() throws InternalServerException {
-
-		// The underlying search engine returns only partial streams (i.e. only
-		// the properties that are actually indexed)
-		engine.setQueryString(queryString);
-		engine.setCategories(categories.toArray(new String[categories.size()]));
-		engine.setStartDate(startDate);
-		engine.setEndDate(endDate);
-		engine.setStart(start);
-		engine.setRows(rowsPerPage);
-
-		List<IStream> temp = engine.search();
-
-		// Stores the total number of found results
-		totalRows = engine.getNumFound();
-
-		final List<Long> ids = new ArrayList<Long>();
-
-		for (IStream stream : temp) {
-			ids.add(stream.getId());
-		}
-
-		try {
-			DAOManager manager = DAOManager.getInstance();
-			List<IStream> streams = manager.transaction(new DAOCommand<List<IStream>>() {
-
-				@Override
-				public List<IStream> execute(DAOManager manager) throws Exception {
-
-					// Store venues to avoid repetitive SQL requests
-					Map<Long, IVenue> m = new HashMap<Long, IVenue>();
-
-					StreamDAO streamDAO = manager.getStreamDAO();
-					VenueDAO venueDAO = manager.getVenueDAO();
-
-					List<IStream> items = streamDAO.searchInList(ids.toArray(new Long[ids.size()]));
-
-					for (IStream stream : items) {
-
-						IVenue persistentVenue = m.get(stream.getVenue().getId());
-						if (persistentVenue == null) { // Not stored yet
-							persistentVenue = venueDAO.search(stream.getVenue().getId());
-
-							// Store the persistent venue into the map
-							m.put(persistentVenue.getId(), persistentVenue);
-						}
-
-						// Replace the dummy venue with the
-						// persistent one
-						stream.setVenue(persistentVenue);
-					}
-
-					return items;
+				    // Store the persistent venue into the map
+				    m.put(persistentVenue.getId(),
+					    persistentVenue);
 				}
 
-			});
+				// Replace the dummy venue with the
+				// persistent one
+				stream.setVenue(persistentVenue);
+			    }
 
-			return streams;
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
+			    return items;
+			}
+
+		    });
+
+	    return streams;
+	} catch (NamingException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
+	}
+    }
+
+    /**
+     * This method should be moved in another controller dedicated to stream
+     * creation.
+     * 
+     * @param stream
+     * @param venue
+     * @param admin
+     * @throws InternalServerException
+     */
+    public void createStream(final IStream stream, final IVenue venue,
+	    final IUser admin) throws InternalServerException {
+	try {
+	    DAOManager manager = DAOManager.getInstance();
+
+	    manager.transaction(new DAOCommand<Void>() {
+
+		@Override
+		public Void execute(DAOManager manager) throws Exception {
+		    StreamDAO streamDAO = manager.getStreamDAO();
+		    VenueDAO venueDAO = manager.getVenueDAO();
+
+		    // Search for an existing venue
+		    IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
+		    if (persistentVenue == null) {
+			persistentVenue = venueDAO.create(venue);
+		    }
+
+		    stream.setVenue(persistentVenue);
+		    streamDAO.create(stream);
+
+		    // Set user as administrator
+		    streamDAO.joinAsAdmin(stream.getId(), admin.getId());
+
+		    return null;
 		}
+	    });
+
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
 	}
+    }
 
-	/**
-	 * This method should be moved in another controller dedicated to stream
-	 * creation.
-	 * 
-	 * @param stream
-	 * @param venue
-	 * @param admin
-	 * @throws InternalServerException
-	 */
-	public void createStream(final IStream stream, final IVenue venue, final IUser admin)
-			throws InternalServerException {
-		try {
-			DAOManager manager = DAOManager.getInstance();
+    public IStream search(final long id) throws InternalServerException {
+	try {
+	    DAOManager manager = DAOManager.getInstance();
+	    IStream stream = manager.transaction(new DAOCommand<IStream>() {
 
-			manager.transaction(new DAOCommand<Void>() {
+		@Override
+		public IStream execute(DAOManager manager) throws Exception {
 
-				@Override
-				public Void execute(DAOManager manager) throws Exception {
-					StreamDAO streamDAO = manager.getStreamDAO();
-					VenueDAO venueDAO = manager.getVenueDAO();
+		    StreamDAO streamDAO = manager.getStreamDAO();
+		    VenueDAO venueDAO = manager.getVenueDAO();
+		    MediaDAO mediaDAO = manager.getMediaDAO();
 
-					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
-					if (persistentVenue == null) {
-						persistentVenue = venueDAO.create(venue);
-					}
+		    IStream stream = streamDAO.search(id);
+		    IVenue venue = venueDAO.search(stream.getVenue().getId());
+		    stream.setVenue(venue);
 
-					stream.setVenue(persistentVenue);
-					streamDAO.create(stream);
+		    List<IMedia> media = mediaDAO.search(stream.getId());
+		    stream.setMedia(media);
 
-					// Set user as administrator
-					streamDAO.joinAsAdmin(stream.getId(), admin.getId());
-
-					return null;
-				}
-			});
-
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		}
-	}
-
-	public IStream search(final long id) throws InternalServerException {
-		try {
-			DAOManager manager = DAOManager.getInstance();
-			IStream stream = manager.transaction(new DAOCommand<IStream>() {
-
-				@Override
-				public IStream execute(DAOManager manager) throws Exception {
-
-					StreamDAO streamDAO = manager.getStreamDAO();
-					VenueDAO venueDAO = manager.getVenueDAO();
-					MediaDAO mediaDAO = manager.getMediaDAO();
-
-					IStream stream = streamDAO.search(id);
-					IVenue venue = venueDAO.search(stream.getVenue().getId());
-					stream.setVenue(venue);
-
-					List<IMedia> media = mediaDAO.search(stream.getId());
-					stream.setMedia(media);
-
-					return stream;
-				}
-
-			});
-
-			return stream;
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		}
-	}
-
-	@Override
-	public boolean hasNext() {
-		return getPageIndex() < (getTotalPages() - 1);
-	}
-
-	@Override
-	public List<IStream> next() throws InternalServerException, NoSuchElementException {
-		if (!hasNext()) {
-			throw new NoSuchElementException();
+		    return stream;
 		}
 
-		start += rowsPerPage;
-		return search();
+	    });
+
+	    return stream;
+	} catch (NamingException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
+	}
+    }
+
+    @Override
+    public boolean hasNext() {
+	return getPageIndex() < (getTotalPages() - 1);
+    }
+
+    @Override
+    public List<IStream> next() throws InternalServerException,
+	    NoSuchElementException {
+	if (!hasNext()) {
+	    throw new NoSuchElementException();
 	}
 
-	@Override
-	public boolean hasPrevious() {
-		return getPageIndex() > 0;
+	start += rowsPerPage;
+	return search();
+    }
+
+    @Override
+    public boolean hasPrevious() {
+	return getPageIndex() > 0;
+    }
+
+    @Override
+    public List<IStream> previous() throws InternalServerException,
+	    NoSuchElementException {
+	if (!hasPrevious()) {
+	    throw new NoSuchElementException();
 	}
 
-	@Override
-	public List<IStream> previous() throws InternalServerException, NoSuchElementException {
-		if (!hasPrevious()) {
-			throw new NoSuchElementException();
-		}
+	start -= rowsPerPage;
+	return search();
+    }
 
-		start -= rowsPerPage;
-		return search();
+    @Override
+    public List<IStream> first() throws InternalServerException {
+	start = 0;
+	return search();
+    }
+
+    @Override
+    public List<IStream> last() throws InternalServerException {
+	start = (getTotalPages() - 1) * rowsPerPage; // last page index
+	return search();
+    }
+
+    @Override
+    public List<IStream> get(int pageNumber) throws NoSuchElementException {
+	// TODO Not yet implemented!
+	return null;
+    }
+
+    @Override
+    public int getStart() {
+	return start;
+    }
+
+    @Override
+    public void setStart(int start) {
+	this.start = start;
+    }
+
+    @Override
+    public int getRowsPerPage() {
+	return rowsPerPage;
+    }
+
+    @Override
+    public void setRowsPerPage(int rowsPerPage) {
+	this.rowsPerPage = rowsPerPage;
+    }
+
+    @Override
+    public long getTotalRows() {
+	return totalRows;
+    }
+
+    /**
+     * For pagination control from request to request.
+     */
+    public void setTotalRows(long totalRows) {
+	this.totalRows = totalRows;
+    }
+
+    @Override
+    public int getPageIndex() {
+	return start / rowsPerPage;
+    }
+
+    @Override
+    public int getTotalPages() {
+	int num = (int) totalRows / rowsPerPage;
+	if (totalRows % rowsPerPage > 0) {
+	    num++;
 	}
 
-	@Override
-	public List<IStream> first() throws InternalServerException {
-		start = 0;
-		return search();
-	}
-
-	@Override
-	public List<IStream> last() throws InternalServerException {
-		start = (getTotalPages() - 1) * rowsPerPage; // last page index
-		return search();
-	}
-
-	@Override
-	public List<IStream> get(int pageNumber) throws NoSuchElementException {
-		// TODO Not yet implemented!
-		return null;
-	}
-
-	@Override
-	public int getStart() {
-		return start;
-	}
-
-	@Override
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	@Override
-	public int getRowsPerPage() {
-		return rowsPerPage;
-	}
-
-	@Override
-	public void setRowsPerPage(int rowsPerPage) {
-		this.rowsPerPage = rowsPerPage;
-	}
-
-	@Override
-	public long getTotalRows() {
-		return totalRows;
-	}
-
-	/**
-	 * For pagination control from request to request.
-	 */
-	public void setTotalRows(long totalRows) {
-		this.totalRows = totalRows;
-	}
-
-	@Override
-	public int getPageIndex() {
-		return start / rowsPerPage;
-	}
-
-	@Override
-	public int getTotalPages() {
-		int num = (int) totalRows / rowsPerPage;
-		if (totalRows % rowsPerPage > 0) {
-			num++;
-		}
-
-		return num;
-	}
+	return num;
+    }
 }
