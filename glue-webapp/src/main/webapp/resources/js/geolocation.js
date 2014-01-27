@@ -49,15 +49,17 @@ function setPosition(lat, lng, position) {
 	inputLat.value = lat;
 	inputLng.value = lng;
 	inputLocation.value = position;
-	console.log("lat = " + lat);
-	console.log("lng = " + lng);
-	console.log("position = " + position);
+	console.log("lat = " + lat + ", long = " + lng + ", city = " + position);
 }
 
 function showError(error) {
 	switch (error.code) {
 	case error.PERMISSION_DENIED:
 		console.log("User denied the request for Geolocation.");
+		var btn = document.getElementById("btnLocation");
+		btn.title = "Glue has been blocked from tracking your location. Clear your settings to re-enable the user location.";
+		// btn.disabled = "disabled";
+		btn.innerHTML = "<span class=\"glyphicon glyphicon-warning-sign text-muted\"></span>";
 		break;
 	case error.POSITION_UNAVAILABLE:
 		console.warn("Location information is unavailable.");
