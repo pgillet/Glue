@@ -1,14 +1,18 @@
 var inputLocation;
 var inputLat;
 var inputLng;
+var bounds;
 var geocoder;
-var autocomplete;
+var autocompleteService;
+var placesService;
+// var autocomplete;
 
-function getCurrentPosition() {
-	inputLocation = document.getElementById("inputLocation");
+function initGeolocation() {
+	inputLocation = /** @type {HTMLInputElement} */
+	document.getElementById("inputLocation");
 	inputLat = document.getElementById("inputLat");
 	inputLng = document.getElementById("inputLng");
-	
+
 	geocoder = new google.maps.Geocoder();
 
 	if (navigator.geolocation) {
@@ -18,12 +22,18 @@ function getCurrentPosition() {
 	}
 
 	// SearchBox vs Autocomplete ?
-	// var input = /** @type {HTMLInputElement} */
-	// (document.getElementById('inputLocation'));
-	// autocomplete = new google.maps.places.Autocomplete(input);
+	// autocomplete = new google.maps.places.Autocomplete(inputLocation);
+
+	// Get autocomplete predictions programmatically from the autocomplete
+	// service
+	autocompleteService = new google.maps.places.AutocompleteService();
+
+	var dummy = /** @type {HTMLDivElement} */
+	document.createElement("dummy");
+	placesService = new google.maps.places.PlacesService(dummy);
 }
 
-function showPosition(lat, lng, position) {
+function setPosition(lat, lng, position) {
 	inputLat.value = lat;
 	inputLng.value = lng;
 	inputLocation.value = position;
@@ -57,7 +67,7 @@ function successFunction(position) {
 	codeLatLng(lat, lng);
 
 	// For later address suggestion
-	// configureAutocomplete(lat, lng);
+	configureAutocomplete(lat, lng);
 }
 
 // Configure the service to provide Place predictions within the area centered
@@ -70,8 +80,8 @@ function configureAutocomplete(lat, lng) {
 		center : latLng,
 		radius : radius
 	});
-	var bounds = circle.getBounds();
-	autocomplete.setBounds(bounds);
+	bounds = circle.getBounds();
+	// autocomplete.setBounds(bounds);
 }
 
 function codeLatLng(lat, lng) {
@@ -85,7 +95,7 @@ function codeLatLng(lat, lng) {
 					function(results, status) {
 						if (status == google.maps.GeocoderStatus.OK) {
 							// console.log(results);
-							if (results[1]) {
+							if (results[0]) {
 								// formatted address
 								// console.log(results[0].formatted_address);
 								// find country name
@@ -106,7 +116,7 @@ function codeLatLng(lat, lng) {
 									}
 								}
 								// city data
-								showPosition(lat, lng, city.long_name);
+								setPosition(lat, lng, city.long_name);
 								// console.log(city.short_name + " " +
 								// city.long_name);
 
@@ -119,4 +129,49 @@ function codeLatLng(lat, lng) {
 					});
 }
 
-google.maps.event.addDomListener(window, 'load', getCurrentPosition);
+function predictLocation() {
+	// TODO: call getQueryPredictions method instead of getPlacePredictions ?
+
+	// TODO: add types property ?
+	// types Array.<string> The types of predictions to be returned. Four types
+	// are supported: 'establishment' for businesses, 'geocode' for addresses,
+	// '(regions)' for administrative regions and '(cities)' for localities. If
+	// nothing is specified, all types are returned.
+
+	autocompleteService.getPlacePredictions({
+		input : inputLocation.value,
+		bounds : bounds,
+		offset : 3
+	}, autocompleteCallback);
+}
+
+function autocompleteCallback(predictions, status) {
+	if (status != google.maps.places.PlacesServiceStatus.OK) {
+		console.error(status);
+		return;
+	}
+
+	// for ( var i = 0, prediction; prediction = predictions[i]; i++) {
+	// console.log("Description = " + prediction.description);
+	// }
+
+	if (predictions[0]) {
+		placesService.getDetails({
+			reference : predictions[0].reference
+		}, placesCallback);
+	}
+}
+
+function placesCallback(placeResult, status) {
+	if (status != google.maps.places.PlacesServiceStatus.OK) {
+		console.error(status);
+		return;
+	}
+
+	var latLng = placeResult.geometry.location;
+
+	// We keep the user input
+	setPosition(latLng.lat(), latLng.lng(), inputLocation.value);
+}
+
+google.maps.event.addDomListener(window, 'load', initGeolocation);

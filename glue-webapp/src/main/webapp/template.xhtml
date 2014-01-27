@@ -91,14 +91,15 @@
 					<div class="input-group" style="width: 196px;">
 						<span class="input-group-btn">
 							<button class="btn btn-default glue-glyphicon-btn" type="button"
-								onclick="getCurrentPosition()"
+								onclick="initGeolocation()"
 								title="#{bundle.current_position}">
 								<span class="glyphicon glyphicon-map-marker text-muted"></span>
 							</button>
 						</span>
 						<h:inputText id="inputLocation" styleClass="form-control"
 							p:placeholder="#{bundle.location}"
-							value="#{streamSearchBean.location}"></h:inputText>
+							value="#{streamSearchBean.location}"
+							onkeypress="predictLocation()"></h:inputText>
 					</div>
 				</div>
 				<div class="form-group">
