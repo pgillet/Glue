@@ -7,19 +7,11 @@ var autocompleteService;
 var placesService;
 // var autocomplete;
 
-function initGeolocation() {
+function initialize() {
 	inputLocation = /** @type {HTMLInputElement} */
 	document.getElementById("inputLocation");
 	inputLat = document.getElementById("inputLat");
 	inputLng = document.getElementById("inputLng");
-
-	geocoder = new google.maps.Geocoder();
-
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(successFunction, showError);
-	} else {
-		console.warn("Geolocation is not supported by this browser.");
-	}
 
 	// SearchBox vs Autocomplete ?
 	// autocomplete = new google.maps.places.Autocomplete(inputLocation);
@@ -31,6 +23,26 @@ function initGeolocation() {
 	var dummy = /** @type {HTMLDivElement} */
 	document.createElement("dummy");
 	placesService = new google.maps.places.PlacesService(dummy);
+
+	if (inputLocation.value) {
+		// Location already set
+		return;
+	}
+
+	geocoder = new google.maps.Geocoder();
+
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(successFunction, showError);
+	} else {
+		console.warn("Geolocation is not supported by this browser.");
+	}
+}
+
+function getCurrentPosition() {
+	// Reset location
+	setPosition('', '', '');
+	// Reinit
+	initialize();
 }
 
 function setPosition(lat, lng, position) {
@@ -130,6 +142,10 @@ function codeLatLng(lat, lng) {
 }
 
 function predictLocation() {
+
+	// Clean
+	setPosition('', '', inputLocation.value);
+
 	// TODO: call getQueryPredictions method instead of getPlacePredictions ?
 
 	// TODO: add types property ?
@@ -174,4 +190,4 @@ function placesCallback(placeResult, status) {
 	setPosition(latLng.lat(), latLng.lng(), inputLocation.value);
 }
 
-google.maps.event.addDomListener(window, 'load', initGeolocation);
+google.maps.event.addDomListener(window, 'load', initialize);
