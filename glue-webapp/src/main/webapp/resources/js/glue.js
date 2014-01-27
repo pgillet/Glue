@@ -4,6 +4,7 @@ function scrollToTop(data) {
     }
 }
 
+// Twitter typehead
 $(document).ready(function() {
     $('.typeahead')
     .typeahead({                               
@@ -37,3 +38,12 @@ $(document).ready(function() {
         }
     });
 });
+
+//Location field
+$('#inputLocation').on('input.inputLocation').keypress(function (e) {
+	predictLocation();
+	if (e.which == 13) {
+    	return myfaces.oam.submitForm('main_form','search_input');
+    }
+});
+	
