@@ -1,11 +1,13 @@
 package com.glue.webapp.search;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -26,240 +28,289 @@ import com.glue.webapp.logic.InternalServerException;
  */
 public class SolrSearchServer implements SearchEngine<IStream> {
 
-	static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
+    static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
-	private String queryString;
+    private String queryString;
 
-	private String[] categories;
+    private String[] categories;
 
-	private Date startDate;
+    private Date startDate;
 
-	private Date endDate;
+    private Date endDate;
 
-	private int start;
+    private int start;
 
-	private int rows;
+    private int rows;
 
-	private long numFound;
+    private long numFound;
 
-	private static final String END_DATE_FIELD = "end_date";
+    private double latitude;
 
-	private final String DEFAULT_Q = "*:*";
+    private double longitude;
 
-	private SolrServer solr;
+    private String location;
 
-	public SolrSearchServer() {
-		String urlString = "http://localhost:8080/solr"; // TODO: should be
-															// configurable
-		this.solr = new HttpSolrServer(urlString);
+    private static final String END_DATE_FIELD = "end_date";
+
+    private static final String START_DATE_FIELD = "start_date";
+
+    private final String DEFAULT_Q = "*:*";
+
+    private String finalQuery;
+
+    private SolrServer solr;
+
+    public SolrSearchServer() {
+	String urlString = "http://localhost:8080/solr"; // TODO: should be
+							 // configurable
+	this.solr = new HttpSolrServer(urlString);
+    }
+
+    public List<IStream> searchForAutoComplete(String q)
+	    throws InternalServerException {
+
+	List<? extends IStream> items = new ArrayList<IStream>();
+
+	SolrQuery query = new SolrQuery();
+
+	// Use this specific RequestHandler
+	query.setParam("qt", "/suggest");
+	query.setParam("q", ClientUtils.escapeQueryChars(q));
+
+	try {
+	    QueryResponse rsp = solr.query(query);
+	    items = rsp.getBeans(SolrStream.class);
+
+	    // Get the total number of results
+	    numFound = rsp.getResults().getNumFound();
+	} catch (SolrServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
 	}
 
-	public List<IStream> searchForAutoComplete(String q) throws InternalServerException {
+	return (List<IStream>) items;
+    }
 
-		List<? extends IStream> items = new ArrayList<IStream>();
+    @Override
+    public List<IStream> search() throws InternalServerException {
 
-		SolrQuery query = new SolrQuery();
+	List<? extends IStream> items = new ArrayList<IStream>();
 
-		// Use this specific RequestHandler
-		query.setParam("qt", "/suggest");
-		query.setParam("q",ClientUtils.escapeQueryChars(q));
+	SolrQuery query = constructSolrQuery();
 
-		try {
-			QueryResponse rsp = solr.query(query);
-			items = rsp.getBeans(SolrStream.class);
+	try {
+	    QueryResponse rsp = solr.query(query);
+	    items = rsp.getBeans(SolrStream.class);
 
-			// Get the total number of results
-			numFound = rsp.getResults().getNumFound();
-		} catch (SolrServerException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		}
-
-		return (List<IStream>) items;
-
+	    // Get the total number of results
+	    numFound = rsp.getResults().getNumFound();
+	} catch (SolrServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new InternalServerException(e);
 	}
 
-	@Override
-	public List<IStream> search() throws InternalServerException {
+	return (List<IStream>) items;
+    }
 
-		List<? extends IStream> items = new ArrayList<IStream>();
+    private SolrQuery constructSolrQuery() {
+	SolrQuery query = new SolrQuery();
 
-		SolrQuery query = constructSolrQuery();
+	// Add location to query if no lat/lon parameter
+	boolean addLocation = false;
 
-		try {
-			QueryResponse rsp = solr.query(query);
-			items = rsp.getBeans(SolrStream.class);
+	// Get dates
+	String from = ((startDate != null) ? Long.toString(startDate.getTime())
+		: "*");
+	String to = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
 
-			// Get the total number of results
-			numFound = rsp.getResults().getNumFound();
-		} catch (SolrServerException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		}
+	// If no begin date, begin is equal to "today"
+	if ("*".equals(from)) {
+	    // Search from the current date by default
+	    TimeZone tz = TimeZone.getTimeZone("UTC");
+	    Calendar cal = Calendar.getInstance(tz);
+	    // reset hour, minutes, seconds and millis
+	    cal.set(Calendar.HOUR_OF_DAY, 0);
+	    cal.set(Calendar.MINUTE, 0);
+	    cal.set(Calendar.SECOND, 0);
+	    cal.set(Calendar.MILLISECOND, 0);
+	    from = Long.toString(cal.getTimeInMillis());
+	}
+	// From format sould be = 2000-01-01T00:00:00Z
+	// http://wiki.apache.org/solr/FunctionQuery#ms
+	SimpleDateFormat simpleDate = new SimpleDateFormat(
+		"yyyy-MM-dd'T'hh:mm:ss'Z'");
 
-		return (List<IStream>) items;
+	query.setQuery("{!boost b=$bfunction v=$qq}");
+	query.add(
+		"bfunction",
+		"recip(abs(ms("
+			+ simpleDate.format(new Date(Long.valueOf(from)))
+			+ ",start_date)),3.16e-11,1,1)");
+
+	// Location filtering
+	if (getLatitude() != 0 && getLongitude() != 0) {
+	    query.addFilterQuery("{!geofilt sfield=latlng}");
+	    query.add("pt", getLatitude() + "," + getLongitude());
+	    query.add("d", "50");
+	} else if (!StringUtils.isEmpty(location)) {
+	    addLocation = true;
 	}
 
-	private SolrQuery constructSolrQuery() {
-		SolrQuery query = new SolrQuery();
-
-		// Get dates
-		String begin = ((startDate != null) ? Long.toString(startDate.getTime()) : "*");
-		String end = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
-
-		if (isFullQuery()) {
-
-			// Specific boost calculation for empty queries
-			query.setQuery("{!boost b=$bfunction v=$qq}");
-
-			// If no begin date, begin is equal to "today"
-			if ("*".equals(begin)) {
-				// Search from the current date by default
-				TimeZone tz = TimeZone.getTimeZone("UTC");
-				Calendar cal = Calendar.getInstance(tz);
-				// reset hour, minutes, seconds and millis
-				cal.set(Calendar.HOUR_OF_DAY, 0);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.SECOND, 0);
-				cal.set(Calendar.MILLISECOND, 0);
-				begin = Long.toString(cal.getTimeInMillis());
-			}
-
-			// 5.787037e-10 = 1 / (30 days)
-			// 3.8580247e-11 = 1 / (300 days)
-			// product of 2 functions =
-			// 1 - end_date close to today
-			// 2 - start_date has already started
-			query.add("bfunction",
-					"product(recip(abs(ms(NOW/DAY,end_date)),5.787037e-10,1,1),recip(ms(start_date,NOW/DAY),3.8580247e-11,1,2))");
-			query.add("qq", DEFAULT_Q);
-
-		}
-
-		// If we are looking for something specific, no boost!
-		else {
-			query.setQuery(queryString);
-			// query.addSort(END_DATE_FIELD, ORDER.desc);
-		}
-		if (categories != null && categories.length > 0) {
-			System.out.println("cat = " + constructCategoriesFilter());
-			query.addFilterQuery("category:" + constructCategoriesFilter());
-		}
-		
-		// Square brackets [ ] denote an inclusive range query that matches
-		// values including the upper and/or lower bound.
-		// Curly brackets { } denote an exclusive range query that matches
-		// values between the upper and lower bounds, but excluding the upper
-		// and/or lower bounds themselves.
-		query.addFilterQuery(END_DATE_FIELD + ":[" + begin + " TO " + end + "}");
-		query.setStart(start);
-		query.setRows(rows);
-		return query;
+	if (categories != null && categories.length > 0) {
+	    System.out.println("cat = " + constructCategoriesFilter());
+	    query.addFilterQuery("category:" + constructCategoriesFilter());
 	}
 
-	/**
-	 * Return true if the query criteria in null or * or *:*
-	 * 
-	 * @param query
-	 * @return
-	 */
-	private boolean isFullQuery() {
-		return (queryString == null)
-				|| ("".equals(queryString) || ("*".equals(queryString)) || ("*:*").equals(queryString));
-	}
+	// Square brackets [ ] denote an inclusive range query that matches
+	// values including the upper and/or lower bound.
+	// Curly brackets { } denote an exclusive range query that matches
+	// values between the upper and lower bounds, but excluding the upper
+	// and/or lower bounds themselves.
+	query.addFilterQuery(START_DATE_FIELD + ":[*" + " TO " + to + "}");
+	query.addFilterQuery(END_DATE_FIELD + ":[" + from + " TO " + "*]");
+	// query.addSort(START_DATE_FIELD, ORDER.desc);
+	query.setStart(start);
+	query.setRows(rows);
 
-	@Override
-	public long getNumFound() {
-		return numFound;
+	if (isFullQuery()) {
+	    finalQuery = DEFAULT_Q;
 	}
+	if (addLocation) {
+	    finalQuery = queryString + " city:" + location;
+	}
+	query.add("qq", finalQuery);
+	return query;
+    }
 
-	@Override
-	public String getQueryString() {
-		return queryString;
-	}
+    /**
+     * Return true if the query criteria in null or * or *:*
+     * 
+     * @param query
+     * @return
+     */
+    private boolean isFullQuery() {
+	return (queryString == null)
+		|| ("".equals(queryString) || ("*".equals(queryString)) || ("*:*")
+			.equals(queryString));
+    }
 
-	/**
-	 * @param queryString
-	 *            the queryString to set
-	 */
-	@Override
-	public void setQueryString(String queryString) {
-		this.queryString = queryString == null ? "" : ClientUtils.escapeQueryChars(queryString);
-	}
+    @Override
+    public long getNumFound() {
+	return numFound;
+    }
 
-	/**
-	 * @return the categories
-	 */
-	public String[] getCategories() {
-		return categories;
-	}
+    @Override
+    public String getQueryString() {
+	return queryString;
+    }
 
-	/**
-	 * @param categories
-	 *            the categories to set
-	 */
-	public void setCategories(String[] categories) {
-		this.categories = categories;
-	}
+    /**
+     * @param queryString
+     *            the queryString to set
+     */
+    @Override
+    public void setQueryString(String queryString) {
+	this.queryString = queryString == null ? "" : ClientUtils
+		.escapeQueryChars(queryString);
+    }
 
-	@Override
-	public Date getStartDate() {
-		return startDate;
-	}
+    /**
+     * @return the categories
+     */
+    public String[] getCategories() {
+	return categories;
+    }
 
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	@Override
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    /**
+     * @param categories
+     *            the categories to set
+     */
+    public void setCategories(String[] categories) {
+	this.categories = categories;
+    }
 
-	@Override
-	public Date getEndDate() {
-		return endDate;
-	}
+    @Override
+    public Date getStartDate() {
+	return startDate;
+    }
 
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	@Override
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    /**
+     * @param startDate
+     *            the startDate to set
+     */
+    @Override
+    public void setStartDate(Date startDate) {
+	this.startDate = startDate;
+    }
 
-	@Override
-	public int getStart() {
-		return start;
-	}
+    @Override
+    public Date getEndDate() {
+	return endDate;
+    }
 
-	@Override
-	public void setStart(int start) {
-		this.start = start;
-	}
+    /**
+     * @param endDate
+     *            the endDate to set
+     */
+    @Override
+    public void setEndDate(Date endDate) {
+	this.endDate = endDate;
+    }
 
-	@Override
-	public int getRows() {
-		return rows;
-	}
+    @Override
+    public int getStart() {
+	return start;
+    }
 
-	@Override
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
+    @Override
+    public void setStart(int start) {
+	this.start = start;
+    }
 
-	private String constructCategoriesFilter() {
-		String result = "";
-		// Add first category
-		if (categories.length > 0) {
-			result += categories[0];
-		}
-		// For each other categories
-		for (int i = 1; i < categories.length; i++) {
-			result += " or " + categories[i];
-		}
-		return result;
+    @Override
+    public int getRows() {
+	return rows;
+    }
+
+    @Override
+    public void setRows(int rows) {
+	this.rows = rows;
+    }
+
+    public double getLatitude() {
+	return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+	this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+	return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+	this.longitude = longitude;
+    }
+
+    public String getLocation() {
+	return location;
+    }
+
+    public void setLocation(String location) {
+	this.location = location;
+    }
+
+    private String constructCategoriesFilter() {
+	String result = "";
+	// Add first category
+	if (categories.length > 0) {
+	    result += categories[0];
 	}
+	// For each other categories
+	for (int i = 1; i < categories.length; i++) {
+	    result += " or " + categories[i];
+	}
+	return result;
+    }
 }

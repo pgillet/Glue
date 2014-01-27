@@ -127,6 +127,9 @@ public class StreamController implements PageIterator<List<IStream>> {
 	engine.setEndDate(endDate);
 	engine.setStart(start);
 	engine.setRows(rowsPerPage);
+	engine.setLatitude(latitude);
+	engine.setLongitude(longitude);
+	engine.setLocation(location);
 
 	List<IStream> temp = engine.search();
 
