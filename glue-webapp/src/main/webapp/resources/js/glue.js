@@ -29,7 +29,11 @@ $(document).ready(function() {
          engine: Hogan,
     })
     .on('typeahead:selected', function($e, datum){
-        //alert(datum["value"]);
-        document.getElementById("main_form:main_input").click();
-        });
+    	return myfaces.oam.submitForm('main_form','search_input');
+        })
+    .on('input.typeahead').keypress(function (e) {
+        if (e.which == 13) {
+        	return myfaces.oam.submitForm('main_form','search_input');
+        }
+    });
 });
