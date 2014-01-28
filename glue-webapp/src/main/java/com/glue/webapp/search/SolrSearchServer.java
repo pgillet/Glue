@@ -56,8 +56,6 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
     private final String DEFAULT_Q = "*:*";
 
-    private String finalQuery;
-
     private SolrServer solr;
 
     public SolrSearchServer() {
@@ -114,6 +112,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
     private SolrQuery constructSolrQuery() {
 	SolrQuery query = new SolrQuery();
+	query.setParam("qt", "/stream_select");
 
 	// Add location to query if no lat/lon parameter
 	boolean addLocation = false;
@@ -140,15 +139,15 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	SimpleDateFormat simpleDate = new SimpleDateFormat(
 		"yyyy-MM-dd'T'hh:mm:ss'Z'");
 
-	query.setQuery("{!boost b=$bfunction v=$qq}");
-	query.add(
-		"bfunction",
+	// Boost streams
+	query.setParam(
+		"bf",
 		"recip(abs(ms("
 			+ simpleDate.format(new Date(Long.valueOf(from)))
 			+ ",start_date)),3.16e-11,1,1)");
 
 	// Location filtering
-	if (getLatitude() != 0 && getLongitude() != 0) {
+	if ((getLatitude() != 0 || getLongitude() != 0)) {
 	    query.addFilterQuery("{!geofilt sfield=latlng}");
 	    query.add("pt", getLatitude() + "," + getLongitude());
 	    query.add("d", "50");
@@ -156,9 +155,11 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	    addLocation = true;
 	}
 
+	// Category filtering
 	if (categories != null && categories.length > 0) {
 	    System.out.println("cat = " + constructCategoriesFilter());
-	    query.addFilterQuery("category:" + constructCategoriesFilter());
+	    query.addFilterQuery("category:(" + constructCategoriesFilter()
+		    + ")");
 	}
 
 	// Square brackets [ ] denote an inclusive range query that matches
@@ -168,17 +169,17 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	// and/or lower bounds themselves.
 	query.addFilterQuery(START_DATE_FIELD + ":[*" + " TO " + to + "}");
 	query.addFilterQuery(END_DATE_FIELD + ":[" + from + " TO " + "*]");
-	// query.addSort(START_DATE_FIELD, ORDER.desc);
 	query.setStart(start);
 	query.setRows(rows);
 
+	String finalQuery = queryString;
 	if (isFullQuery()) {
 	    finalQuery = DEFAULT_Q;
 	}
 	if (addLocation) {
-	    finalQuery = queryString + " city:" + location;
+	    finalQuery = finalQuery + " city:" + location;
 	}
-	query.add("qq", finalQuery);
+	query.setParam("q", finalQuery);
 	return query;
     }
 
@@ -309,7 +310,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	}
 	// For each other categories
 	for (int i = 1; i < categories.length; i++) {
-	    result += " or " + categories[i];
+	    result += " " + categories[i];
 	}
 	return result;
     }
