@@ -1,4 +1,4 @@
-body { padding-top: 70px; }
+body { padding-top: 50px; }
 
 .glue-brand {
 	font-size: 38px;
@@ -11,6 +11,7 @@ body { padding-top: 70px; }
 
 /* Wrapper for page content to push down footer */
 #glue-wrap {
+	margin-top: 20px;
 	min-height: 450px;
 	height: auto;
 }
