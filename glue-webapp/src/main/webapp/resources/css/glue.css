@@ -24,19 +24,25 @@ body { padding-top: 70px; }
 	padding-bottom: 28px;
 }
 
+.glue-jumbotron h1,.glue-jumbotron .h1 {
+	font-size: 48px;
+	line-height: 80%;
+	margin: 0;
+	padding: 0;
+}
+
+.glue-jumbotron h3,.glue-jumbotron .h3 {
+	margin-bottom: 0;
+}
+
 .glue-jumbotron-tlse {
 	background-image: url(#{     resource [     'img:Toulouse_Capitole_Night_Wikimedia_Commons_bw.jpg' ]});
+	background-position: 50% 40%;
 }
 
 .glue-jumbotron-panel {
 	background-color: rgba(234, 81, 19, 0.6);
 	color: white;
-}
-
-.glue-tightened-text {
-	margin: 0;
-	padding: 0;
-	line-height: 70%
 }
 
 .glue-circled-text {
