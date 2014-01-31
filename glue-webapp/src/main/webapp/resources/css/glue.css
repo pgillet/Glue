@@ -17,7 +17,7 @@ body { padding-top: 50px; }
 }
 
 .glue-jumbotron {
-	background-image: url(#{     resource [     'img:Empire-State-Building-view.JPG' ]});
+	background-image: url(#{     resource [     'img:crowd-concert-arms-raised.jpg' ]});
 	background-repeat:no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -27,36 +27,11 @@ body { padding-top: 50px; }
 
 .glue-jumbotron h1,.glue-jumbotron .h1 {
 	font-size: 48px;
-	line-height: 80%;
-	margin: 0;
-	padding: 0;
-}
-
-.glue-jumbotron h3,.glue-jumbotron .h3 {
-	margin-bottom: 0;
-}
-
-.glue-jumbotron-tlse {
-	background-image: url(#{     resource [     'img:Toulouse_Capitole_Night_Wikimedia_Commons_bw.jpg' ]});
-	background-position: 50% 40%;
 }
 
 .glue-jumbotron-panel {
-	background-color: rgba(234, 81, 19, 0.6);
+	background-color: transparent;
 	color: white;
-}
-
-.glue-circled-text {
-	background: #005a9c;
-	color: #ffffff;
-	width: 250px;
-	height: 250px;
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.glue-text-justified {
-	text-align: justify;
 }
 
 .glue-label {
