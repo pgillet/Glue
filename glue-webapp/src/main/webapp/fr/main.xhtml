@@ -12,14 +12,12 @@
 	<ui:composition template="../stream/search.xhtml">
 		<ui:define name="header">
 
-			<div id="info" class="jumbotron glue-jumbotron glue-jumbotron-tlse">
+			<div id="info" class="jumbotron glue-jumbotron">
 
 				<div class="container">
 
 					<div class="row">
-						<div class="col-md-5 col-md-offset-1 col-sm-12 col-xs-12">
-
-
+						<div class="col-md-9 col-sm-12 col-xs-12">
 							<div id="carousel-example-generic" class="carousel slide">
 								<!-- Indicators -->
 								<ol class="carousel-indicators">
@@ -36,13 +34,7 @@
 												<h1>
 													<strong>Les événements qui nous rassemblent</strong>
 												</h1>
-												<h3>
-													<span> <i class="fa fa-users"></i> <span
-														class="glyphicon glyphicon-map-marker"></span> <span
-														class="glyphicon glyphicon-time"></span>
-													</span>
-												</h3>
-												<br />
+												<br /><br />
 											</div>
 											<!-- <h:graphicImage name="glue-snail-white.svg" library="img"
 									alt="Glue snail" styleClass="img-responsive"
@@ -55,13 +47,7 @@
 												<h1>
 													<strong>Les événements qui vous ressemblent</strong>
 												</h1>
-												<h3>
-													<span> <i class="fa fa-users"></i> <span
-														class="glyphicon glyphicon-map-marker"></span> <span
-														class="glyphicon glyphicon-time"></span>
-													</span>
-												</h3>
-												<br />
+												<br /><br />
 											</div>
 										</div>
 									</div>
@@ -77,11 +63,13 @@
 						</div>
 
 						<div
-							class="col-md-3 col-md-offset-2 col-sm-12 col-xs-12 pull-right">
+							class="col-md-3 col-sm-12 col-xs-12 pull-right">
 							<ul class="list-unstyled">
-								<li><a href="https://twitter.com/data_glue"
-									class="twitter-follow-button" data-show-count="false">Follow
-										@data_glue</a> <script>
+								<li><p>
+										<a href="https://twitter.com/data_glue"
+											class="twitter-follow-button" data-show-count="false">Follow
+											@data_glue</a>
+										<script>
 											!function(d, s, id) {
 												var js, fjs = d
 														.getElementsByTagName(s)[0], p = /^http:/
@@ -99,21 +87,28 @@
 											}
 													(document, 'script',
 															'twitter-wjs');
-										</script></li>
-								<li><div class="fb-like"
+										</script>
+									</p></li>
+								<li><p>
+									<div class="fb-like"
 										data-href="https://www.facebook.com/dataglue" data-width="132"
 										data-height="20" data-colorscheme="light"
 										data-layout="button_count" data-action="like"
-										data-show-faces="true" data-send="false"></div></li>
-								<li><a href="mailto:glue.contact@gmail.com"
-									class="btn btn-primary btn-xs"><span
-										class="glyphicon glyphicon-envelope"></span> Contactez-nous</a></li>
-								<li><br />
+										data-show-faces="true" data-send="false"></div>
+									</p></li>
+								<li><p>
+										<a href="mailto:glue.contact@gmail.com"
+											class="btn btn-primary btn-xs"><span
+											class="glyphicon glyphicon-envelope"></span> Contactez-nous</a>
+									</p></li>
+								<li><p>
+										<br />
 									<h3>
 										<span class="label label-danger"><em>Beta</em></span><span
 											class="label glue-label"><span class="text-danger">bientôt
 												disponible!</span></span>
-									</h3></li>
+									</h3>
+									</p></li>
 							</ul>
 
 
