@@ -9,20 +9,25 @@
 <h:body>
 	<ui:composition>
 		<footer>
-		<small>
-			<ul class="nav navbar-nav navbar-left">
-				<li class="disabled"><a href="#">&#169; Glue 2014</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><h:form>
-						<h:selectOneMenu styleClass="navbar-btn form-control input-small"
+		<div class="row">
+			<div class="col-xs-10 col-sm-10 col-md-10">
+				<p class="text-muted navbar-text">
+					<small>&#169; Glue 2014</small>
+				</p>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2">
+				<h:form>
+					<div class="btn-group pull-right">
+						<h:selectOneMenu styleClass="btn btn-default dropdown-toggle"
 							value="#{languageBean.language}" onchange="submit()"
 							valueChangeListener="#{languageBean.countryLocaleCodeChanged}">
 							<f:selectItems value="#{languageBean.locales}" />
 						</h:selectOneMenu>
-					</h:form></li>
-			</ul>
-		</small></footer>
+					</div>
+				</h:form>
+			</div>
+		</div>
+		</footer>
 	</ui:composition>
 </h:body>
 </html>
