@@ -41,9 +41,12 @@ $(document).ready(function() {
 
 //Location field
 $('#inputLocation').on('input.inputLocation').keypress(function (e) {
-	predictLocation();
 	if (e.which == 13) {
-    	return myfaces.oam.submitForm('main_form','search_input');
+		 codeAddress();
     }
+});
+
+$('#inputLocation').on('input.inputLocation').change(function (e) {
+	codeAddress0(undefined);
 });
 	
