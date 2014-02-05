@@ -85,7 +85,7 @@
 				<h:inputHidden id="inputLat" value="#{streamSearchBean.latitude}" />
 				<h:inputHidden id="inputLng" value="#{streamSearchBean.longitude}" />
 				<div class="form-group">
-					<h:inputText styleClass="typeahead form-control"
+					<h:inputText styleClass="typeahead form-control" style="min-width: 300px;"
 						p:placeholder="#{bundle.search}" value="#{streamSearchBean.query}" />
 				</div>
 				<div class="form-group">
@@ -138,9 +138,13 @@
 								</ul></li>
 						</c:when>
 						<c:otherwise>
-							<li><h:link value="#{bundle.sign_in}" outcome="login" /></li>
-							<li><h:link value="#{bundle.sign_up}" outcome="register" /></li>
-						</c:otherwise>
+						<li><h:link value="#{bundle.sign_in}" outcome="login"
+								class="navbar-text" disabled="true"
+								title="#{bundle.feature_not_available}" /></li>
+						<li><h:link value="#{bundle.sign_up}" outcome="register"
+								class="navbar-text" disabled="true"
+								title="#{bundle.feature_not_available}" /></li>
+					</c:otherwise>
 					</c:choose>
 				</ul>
 			</h:form>

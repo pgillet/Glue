@@ -417,19 +417,24 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	String styleAttr;
 	if (javascriptSyntax) {
 	    // JavaScript syntax
-	    styleAttr = "this.style.borderBottom = '%dpx solid %s' ;";
+	    styleAttr = "this.style.paddingBottom = '%dpx'; this.style.borderBottom = '%dpx solid %s' ;";
 	} else {
-	    styleAttr = "border-bottom: %dpx solid %s ;";
+	    styleAttr = "padding-bottom: %dpx; border-bottom: %dpx solid %s ;";
 	}
+	// We compensate for the height of the border with the padding and vice
+	// versa
 	int borderWidth;
+	int paddingBottom;
 	if (getCatSelection().contains(cat) || onmouseover) {
-	    borderWidth = 3;
+	    paddingBottom = 3;
+	    borderWidth = 5;
 	} else {
+	    paddingBottom = 6;
 	    borderWidth = 2;
 	}
 
-	styleAttr = String.format(styleAttr, borderWidth, Category.valueOf(cat)
-		.getColor());
+	styleAttr = String.format(styleAttr, paddingBottom, borderWidth,
+		Category.valueOf(cat).getColor());
 
 	return styleAttr;
     }
