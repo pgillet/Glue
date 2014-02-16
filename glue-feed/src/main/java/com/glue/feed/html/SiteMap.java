@@ -1,5 +1,11 @@
 package com.glue.feed.html;
 
+/**
+ * An object that describes a site map accessible for Web scraping.
+ * 
+ * @author pgillet
+ * 
+ */
 public class SiteMap {
 
     public static final int LINK_DISABLED = 0;
