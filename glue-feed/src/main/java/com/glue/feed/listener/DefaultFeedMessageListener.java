@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
-import com.glue.feed.xml.XMLFeedParser;
 
 /**
  * A simple listener that logs an INFO message.
@@ -17,7 +16,8 @@ import com.glue.feed.xml.XMLFeedParser;
  */
 public class DefaultFeedMessageListener<T> implements FeedMessageListener<T> {
 
-	static final Logger LOG = LoggerFactory.getLogger(XMLFeedParser.class);
+    static final Logger LOG = LoggerFactory
+	    .getLogger(DefaultFeedMessageListener.class);
 
 	@Override
 	public void newMessage(T msg) throws Exception {

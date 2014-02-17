@@ -1,6 +1,5 @@
 package com.glue.feed.html.demo;
 
-import com.glue.feed.html.HTMLFeedParser;
 import com.glue.feed.html.PaginatedListStrategy;
 import com.glue.feed.html.SiteMap;
 import com.glue.feed.html.SiteMapBuilder;
@@ -73,13 +72,14 @@ public class VisitorDemo {
 		.next("strong.journal-article-page-number + a.journal-article-page-number")
 		.last("div#nextpage:not(:has(a))").build();
 
-	VisitorStrategy strategy = new PaginatedListStrategy(siteMap);
-	// strategy.visit();
+	// Peniche Didascalie
+	// Tout public
+	siteMap = new SiteMapBuilder(
+		"http://www.penichedidascalie.com/Tout-Public").list(
+		"div.nav_spectacles > div.date").build();
 
-	// Test mapping
-	String baseUri = "http://www.lebikini.com/programmation/concert/119020-outsiders-festival-day-4-night-runner-w-pharoahe-monch-live-dj-boogie-blind-gones-the-mayday-greg-otist-la-dynamo-dimanche-16-fevrier-2014-toulouse.html";
-	HTMLFeedParser parser = new HTMLFeedParser<>(BikiniEvent.class, baseUri);
-	parser.read();
+	VisitorStrategy strategy = new PaginatedListStrategy(siteMap);
+	strategy.visit();
 
 	System.out.println("All right");
 
