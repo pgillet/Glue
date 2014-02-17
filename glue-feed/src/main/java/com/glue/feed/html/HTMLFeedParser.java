@@ -13,6 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.FeedParser;
+import com.glue.feed.error.ErrorDispatcher;
+import com.glue.feed.error.ErrorHandler;
+import com.glue.feed.error.ErrorLevel;
+import com.glue.feed.error.ErrorListener;
+import com.glue.feed.error.ErrorManager;
+import com.glue.feed.listener.DefaultFeedMessageListener;
 
 /**
  * Annotation-based HTML to Object Mapper using JSoup Parser.
@@ -21,25 +27,57 @@ import com.glue.feed.FeedParser;
  * 
  * @param <T>
  */
-public class HTMLFeedParser<T> implements FeedParser<T> {
+public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
+	FeedParser<T>, VisitorListener {
 
     static final Logger LOG = LoggerFactory.getLogger(HTMLFeedParser.class);
+
+    private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<T>();
+
+    private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
     private final Class<T> classModel;
     private final String baseUri;
 
+    private VisitorStrategy visitorStrategy;
+
     // Pass in the class Java bean that will contain the mapped data from the
     // HTML source
-    public HTMLFeedParser(final Class<T> classModel, final String baseUri) {
+    // public HTMLFeedParser(final Class<T> classModel, final String baseUri) {
+    // this.classModel = classModel;
+    // this.baseUri = baseUri;
+    // }
+
+    /**
+     * Pass in the class Java bean that will contain the mapped data from the
+     * HTML source. The HTML source is described within the given site map, and
+     * is traversed according to a PaginatedListStrategy.
+     * 
+     * @param classModel
+     * @param siteMap
+     */
+    public HTMLFeedParser(Class<T> classModel, SiteMap siteMap) {
 	this.classModel = classModel;
-	this.baseUri = baseUri;
+	this.baseUri = siteMap.getBaseUri();
+	this.visitorStrategy = new PaginatedListStrategy(siteMap);
+	this.visitorStrategy.setVisitorListener(this);
+    }
+
+    @Override
+    public void read() throws Exception {
+	visitorStrategy.visit();
+    }
+
+    @Override
+    public void processLink(String uri) throws Exception {
+	T obj = parse(uri);
+	feedMessageListener.newMessage(obj);
     }
 
     // Main method that will translate HTML to object
-    @Override
-    public void read() throws Exception {
+    public T parse(final String uri) throws Exception {
 	try {
-	    Element rootElem = Jsoup.connect(baseUri).get();
+	    Element rootElem = Jsoup.connect(uri).get();
 	    T model = this.classModel.newInstance();
 
 	    // Check if Selector annotation is present at the class level
@@ -78,10 +116,13 @@ public class HTMLFeedParser<T> implements FeedParser<T> {
 		}
 	    }
 
-	    LOG.info(model.toString());
+	    return model;
 
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);
+	    fireErrorEvent(ErrorLevel.ERROR, e.getMessage(), e, baseUri, -1);
+	    // To throw or not to throw, that is the question in an interative
+	    // process.
 	    throw e;
 	}
     }
@@ -136,13 +177,11 @@ public class HTMLFeedParser<T> implements FeedParser<T> {
 
 	    // Check which value annotation is present and retrieve data
 	    // depending on the type of annotation
-	    if (m.isAnnotationPresent(TextValue.class)) {
-		return elem.text();
-	    } else if (m.isAnnotationPresent(HtmlValue.class)) {
+	    if (m.isAnnotationPresent(HtmlValue.class)) {
 		return elem.html();
 	    } else if (m.isAnnotationPresent(AttributeValue.class)) {
 		return elem.attr(m.getAnnotation(AttributeValue.class).name());
-	    } else {
+	    } else /* if (m.isAnnotationPresent(TextValue.class)) */{
 		// Default: text value
 		return elem.text();
 	    }
@@ -153,14 +192,45 @@ public class HTMLFeedParser<T> implements FeedParser<T> {
 
     @Override
     public FeedMessageListener<T> getFeedMessageListener() {
-	// TODO Auto-generated method stub
-	return null;
+	return feedMessageListener;
+    }
+
+    public void setFeedMessageListener(
+	    FeedMessageListener<T> feedMessageListener) {
+	this.feedMessageListener = feedMessageListener;
     }
 
     @Override
     public void close() throws IOException {
-	// TODO Auto-generated method stub
+	flush();
+	feedMessageListener.close();
+    }
 
+    @Override
+    public void flush() throws IOException {
+	errorDispatcher.flush();
+    }
+
+    @Override
+    public ErrorListener[] getErrorListeners() {
+	return errorDispatcher.getErrorListeners();
+    }
+
+    @Override
+    public void addErrorListener(ErrorListener l) {
+	errorDispatcher.addErrorListener(l);
+
+    }
+
+    @Override
+    public void removeErrorListener(ErrorListener l) {
+	errorDispatcher.removeErrorListener(l);
+    }
+
+    @Override
+    public void fireErrorEvent(ErrorLevel lvl, String message, Throwable cause,
+	    String source, int lineNumber) {
+	errorDispatcher.fireErrorEvent(lvl, message, cause, source, lineNumber);
     }
 
 }

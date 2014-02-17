@@ -1,6 +1,5 @@
 package com.glue.feed.html;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.jsoup.Jsoup;
@@ -17,12 +16,14 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
     private SiteMap siteMap;
 
+    private VisitorListener visitorListener;
+
     public PaginatedListStrategy(SiteMap siteMap) {
 	this.siteMap = siteMap;
     }
 
     @Override
-    public void visit() throws IOException {
+    public void visit() throws Exception {
 	String baseUri = siteMap.getBaseUri();
 	Document doc = Jsoup.connect(baseUri).get();
 
@@ -53,6 +54,10 @@ public class PaginatedListStrategy implements VisitorStrategy {
 		if (elem != null) {
 		    String linkHref = elem.attr("abs:href");
 		    LOG.info("Item link = " + linkHref);
+		    // Notify listener
+		    if (visitorListener != null) {
+			visitorListener.processLink(linkHref);
+		    }
 		}
 	    }
 
@@ -87,6 +92,15 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 	} while (nextPage);
 
+    }
+
+    public VisitorListener getVisitorListener() {
+	return visitorListener;
+    }
+
+    @Override
+    public void setVisitorListener(VisitorListener visitorListener) {
+	this.visitorListener = visitorListener;
     }
 
 }

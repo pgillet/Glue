@@ -3,6 +3,8 @@ package com.glue.feed.html;
 /**
  * An object that describes a site map accessible for Web scraping.
  * 
+ * @see SiteMapBuilder
+ * 
  * @author pgillet
  * 
  */
