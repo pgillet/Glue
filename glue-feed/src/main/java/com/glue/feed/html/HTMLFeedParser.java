@@ -136,13 +136,11 @@ public class HTMLFeedParser<T> implements FeedParser<T> {
 
 	    // Check which value annotation is present and retrieve data
 	    // depending on the type of annotation
-	    if (m.isAnnotationPresent(TextValue.class)) {
-		return elem.text();
-	    } else if (m.isAnnotationPresent(HtmlValue.class)) {
+	    if (m.isAnnotationPresent(HtmlValue.class)) {
 		return elem.html();
 	    } else if (m.isAnnotationPresent(AttributeValue.class)) {
 		return elem.attr(m.getAnnotation(AttributeValue.class).name());
-	    } else {
+	    } else /* if (m.isAnnotationPresent(TextValue.class)) */{
 		// Default: text value
 		return elem.text();
 	    }
