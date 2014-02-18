@@ -22,8 +22,9 @@ public class SiteMapBuilder {
     }
 
     /**
-     * Sets the Selector CSS query that should match the unambiguous ancestor of
-     * the link to the next page, if any.
+     * Required for multiple pages listing multiple events (pagination). Sets
+     * the Selector CSS query that should match the unambiguous ancestor of the
+     * link to the next page, if any.
      * 
      * @param cssQuery
      *            a Selector CSS-like query
@@ -39,7 +40,10 @@ public class SiteMapBuilder {
 
     /**
      * Sets the Selector CSS query that specifies the end of pagination
-     * condition. The last page is reached when elements match the given
+     * condition when multiple pages list multiple events. This setting is
+     * complementary to {@link #next(String)} but not necessary, as the last
+     * page is reached either when there are no more elements matching the
+     * {@link #next(String)} condition, or when elements match the given
      * selector.
      * 
      * @param cssQuery
@@ -55,10 +59,11 @@ public class SiteMapBuilder {
     }
 
     /**
-     * Sets the Selector CSS query that should match the list items in one page.
-     * The selector may directly include the <a> element with the link to the
-     * item page, or designate its unambiguous ancestor. Otherwise, the selector
-     * designates the start element where a bean can be mapped.
+     * Required for pages listing multiple events. Sets the Selector CSS query
+     * that should match the list items in one page. The selector may directly
+     * include the <a> element with the link to the event details page, or
+     * designate its unambiguous ancestor. Otherwise, the selector designates
+     * the start element where a bean can be mapped.
      * 
      * @param cssQuery
      *            a Selector CSS-like query

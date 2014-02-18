@@ -44,13 +44,10 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 	    Iterator<Element> iter = list.iterator();
 	    while (iter.hasNext()) {
+		// Link to the event details page
 		Element elem = iter.next();
+		elem = elem.select("a").first();
 
-		if (!"a".equals(elem.tagName())) {
-		    // Find the first child <a> element that descend from given
-		    // ancestor
-		    elem = elem.select("a").first();
-		}
 		if (elem != null) {
 		    String linkHref = elem.attr("abs:href");
 		    LOG.info("Item link = " + linkHref);
@@ -81,8 +78,8 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 		if (nextPage) {
 		    // Load the next page
-		    Element pageElem = pages.next();
-		    Element link = pageElem.select("a").first();
+		    Element link = pages.next();
+		    link = link.select("a").first();
 		    if (link != null) {
 			String linkHref = link.attr("abs:href");
 			doc = Jsoup.connect(linkHref).get();
