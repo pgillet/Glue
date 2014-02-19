@@ -58,7 +58,7 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
      */
     public HTMLFeedParser(Class<T> classModel, SiteMap siteMap) {
 	this.classModel = classModel;
-	this.baseUri = siteMap.getBaseUri();
+	this.baseUri = siteMap.getFrontUrl();
 	this.visitorStrategy = new PaginatedListStrategy(siteMap);
 	this.visitorStrategy.setVisitorListener(this);
     }

@@ -15,7 +15,8 @@ public class VisitorDemo {
 	// Clutch Mag
 	SiteMap siteMap = new SiteMapBuilder(
 		"http://www.clutchmag.fr/agenda?date=ce_mois&type_evenement=tous")
-		.list("table.tab-evenements tr h3")
+		// .list("table.tab-evenements tr h3")
+		.url("http://www.clutchmag.fr/evenement/")
 		.next("div.pagination li.next")
 		// End of data condition
 		// li element with class "next" and also "disabled"
@@ -25,8 +26,9 @@ public class VisitorDemo {
 
 	// Le Bikini
 	siteMap = new SiteMapBuilder(
-		"http://www.lebikini.com/programmation/index/date/new").list(
-		"tr.lignespectacle h2").build();
+		"http://www.lebikini.com/programmation/index/date/new")
+	// .list("tr.lignespectacle h2")
+		.url("http://www.lebikini.com/programmation/concert/").build();
 
 	// Le Connexion
 	siteMap = new SiteMapBuilder(
@@ -44,17 +46,21 @@ public class VisitorDemo {
 
 	// Théâtre du Grand Rond
 	siteMap = new SiteMapBuilder(
-		"http://www.grand-rond.org/index.php/grandrond/programmation?cat_id=1")
-		.list("td a.savoir_plus:containsOwn(En savoir plus)").build();
+		"http://www.grand-rond.org/index.php/grandrond/programmation")
+		// .list("td a.savoir_plus:containsOwn(En savoir plus)")
+		.url("http://www.grand-rond.org/index.php/grandrond/spectacle?")
+		.build();
 
 	// Le Bijou
 	siteMap = new SiteMapBuilder(
-		"http://www.le-bijou.net/programmation.html").list(
-		"div.evenement > a:not(:containsOwn(RÉSERVER))").build();
+		"http://www.le-bijou.net/programmation.html")
+	// .list("div.evenement > a:not(:containsOwn(RÉSERVER))")
+		.url("http://www.le-bijou.net/spectacle/").build();
 
 	// Orchestre National du Capitole de Toulouse
-	siteMap = new SiteMapBuilder("http://onct.toulouse.fr/agenda").list(
-		"div.event").build();
+	siteMap = new SiteMapBuilder("http://onct.toulouse.fr/agenda")
+	// .list("div.event")
+		.url("http://onct.toulouse.fr/spectacles/-/spectacle/").build();
 
 	// Le Mandala
 	siteMap = new SiteMapBuilder(
@@ -66,7 +72,8 @@ public class VisitorDemo {
 	// Cultures Toulouse
 	siteMap = new SiteMapBuilder(
 		"http://culture.toulouse.fr/web/guest/agenda")
-		.list("div.info-event a.link-event")
+		// .list("div.info-event a.link-event")
+		.url("http://culture.toulouse.fr/web/guest/agenda/-/agenda/event/")
 		// finds sibling <a> element immediately preceded by sibling
 		// <strong> element designing the current page
 		.next("strong.journal-article-page-number + a.journal-article-page-number")

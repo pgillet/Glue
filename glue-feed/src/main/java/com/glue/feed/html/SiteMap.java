@@ -16,7 +16,9 @@ public class SiteMap {
 
     public static final int DEFAULT_MAX_PAGES = 50;
 
-    private String baseUri;
+    private String frontUrl;
+
+    private URLFilter urlFilter;
 
     private String listSelector;
 
@@ -26,8 +28,8 @@ public class SiteMap {
 
     private int maxPages = DEFAULT_MAX_PAGES;
 
-    public SiteMap(String baseUri) {
-	this.baseUri = baseUri;
+    public SiteMap(String frontUrl) {
+	this.frontUrl = frontUrl;
     }
 
     public String getListSelector() {
@@ -54,8 +56,16 @@ public class SiteMap {
 	this.maxPages = maxPages;
     }
 
-    public String getBaseUri() {
-	return baseUri;
+    public String getFrontUrl() {
+	return frontUrl;
+    }
+
+    public URLFilter getUrlFilter() {
+	return urlFilter;
+    }
+
+    public void setUrlFilter(URLFilter urlFilter) {
+	this.urlFilter = urlFilter;
     }
 
     public String getEndOfDataCondition() {

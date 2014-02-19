@@ -1,6 +1,6 @@
 package com.glue.feed.html;
 
-import java.util.Iterator;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +16,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
     private SiteMap siteMap;
 
-    private VisitorListener visitorListener;
+    private VisitorListener visitorListener = new DefaultVisitorListener();
 
     public PaginatedListStrategy(SiteMap siteMap) {
 	this.siteMap = siteMap;
@@ -24,7 +24,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
     @Override
     public void visit() throws Exception {
-	String baseUri = siteMap.getBaseUri();
+	String baseUri = siteMap.getFrontUrl();
 	Document doc = Jsoup.connect(baseUri).get();
 
 	boolean nextPage = false;
@@ -34,25 +34,25 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	    numPage++;
 	    LOG.info("Page number  = " + numPage);
 
-	    // Elements that match the list selector
-	    Elements list = doc.select(siteMap.getListSelector());
-	    if (list.isEmpty()) {
-		// One of the end of data conditions
-		// TODO: should be composable!
-		break;
-	    }
-
-	    Iterator<Element> iter = list.iterator();
-	    while (iter.hasNext()) {
-		// Link to the event details page
-		Element elem = iter.next();
-		elem = elem.select("a").first();
-
-		if (elem != null) {
-		    String linkHref = elem.attr("abs:href");
-		    LOG.info("Item link = " + linkHref);
+	    // A base URL for event details page
+	    URLFilter filter = siteMap.getUrlFilter();
+	    if (filter != null) {
+		Set<String> linkHrefs = HTMLUtils.listLinks(doc, filter);
+		for (String linkHref : linkHrefs) {
 		    // Notify listener
-		    if (visitorListener != null) {
+		    visitorListener.processLink(linkHref);
+		}
+
+	    } else {
+		// Elements that match the list selector
+		Elements elems = doc.select(siteMap.getListSelector());
+
+		for (Element elem : elems) {
+		    // Link to the event details page
+		    String linkHref = HTMLUtils.firstLink(elem);
+
+		    if (linkHref != null) {
+			// Notify listener
 			visitorListener.processLink(linkHref);
 		    }
 		}
@@ -61,9 +61,9 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	    // Pagination
 	    // Elements that match the end of data condition
 	    if (siteMap.getEndOfDataCondition() != null) {
-		Elements lastElems = doc
-			.select(siteMap.getEndOfDataCondition());
-		if (!lastElems.isEmpty()) {
+		Elements lastPageElems = doc.select(siteMap
+			.getEndOfDataCondition());
+		if (!lastPageElems.isEmpty()) {
 		    // We reached the last page
 		    break;
 		}
@@ -71,17 +71,19 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 	    // Elements that match the next page selector
 	    if (siteMap.getNextPageSelector() != null) {
-		Elements pageElems = doc.select(siteMap.getNextPageSelector());
-		Iterator<Element> pages = pageElems.iterator();
+		Elements nextPageElems = doc.select(siteMap
+			.getNextPageSelector());
 
-		nextPage = pages.hasNext();
+		// The link to the next page is the first matching element: we
+		// ignore the case where there is a link for each individual
+		// page, with no link to the next page
+		Element nextPageElem = nextPageElems.first();
+		nextPage = (nextPageElem != null);
 
 		if (nextPage) {
 		    // Load the next page
-		    Element link = pages.next();
-		    link = link.select("a").first();
-		    if (link != null) {
-			String linkHref = link.attr("abs:href");
+		    String linkHref = HTMLUtils.firstLink(nextPageElem);
+		    if (linkHref != null) {
 			doc = Jsoup.connect(linkHref).get();
 		    }
 		}
