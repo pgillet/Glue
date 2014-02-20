@@ -30,8 +30,6 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
 
     private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
-    private Class<T> classModel;
-
     private VisitorStrategy visitorStrategy;
     private HTMLMappingStrategy<T> mappingStrategy;
 
@@ -44,7 +42,6 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
      * @param siteMap
      */
     public HTMLFeedParser(Class<T> classModel, SiteMap siteMap) {
-	this.classModel = classModel;
 	this.visitorStrategy = new PaginatedListStrategy(siteMap);
 	this.visitorStrategy.setVisitorListener(this);
 
