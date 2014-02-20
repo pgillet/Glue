@@ -12,14 +12,20 @@ public class SiteMapBuilder {
 
     private SiteMap siteMap;
 
+    protected SiteMapBuilder() {
+    }
+
     /**
      * Constructs a new builder for a SiteMap object. The given url is typically
      * the link to the first page of list items.
      * 
      * @param frontUrl
      */
-    public SiteMapBuilder(String frontUrl) {
-	this.siteMap = new SiteMap(frontUrl);
+    public static SiteMapBuilder newSiteMap(String frontUrl) {
+	SiteMapBuilder builder = new SiteMapBuilder();
+	builder.siteMap = new SiteMap(frontUrl);
+	
+	return builder;
     }
 
     /**
@@ -99,7 +105,7 @@ public class SiteMapBuilder {
     }
 
     /**
-     * Sets the filter used to filter all the links to event details pages.
+     * Sets the filter to select all the links to event details pages.
      * 
      * @param filter
      *            an URL filter
