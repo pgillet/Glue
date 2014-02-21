@@ -1,20 +1,26 @@
 package com.glue.feed.html.demo;
 
+import static com.glue.feed.html.SiteMapBuilder.newSiteMap;
+
 import com.glue.feed.html.HTMLFeedParser;
 import com.glue.feed.html.SiteMap;
-import com.glue.feed.html.SiteMapBuilder;
 
+/**
+ * Demonstration of the AnnotationMappingStrategy.
+ * 
+ * @see ScrapingDemo2
+ * 
+ * @author pgillet
+ * 
+ */
 public class ScrapingDemo {
 
     public static void main(String[] args) throws Exception {
 
 	// 1st step: describe the structure of your web site
-	SiteMap siteMap = new SiteMapBuilder(
+	SiteMap siteMap = newSiteMap(
 		"http://www.penichedidascalie.com/Tout-Public").list(
 		"div.nav_spectacles > div.date").build();
-
-	// Voir aussi la liste des spectacles pour jeune public
-	// http://www.penichedidascalie.com/Theatre-jeune-public
 
 	// 2nd step: define your java bean. The HTML page for an event will be
 	// mapped to this bean.
@@ -47,7 +53,6 @@ public class ScrapingDemo {
 	// });
 
 	parser.read();
-
 	parser.close();
 
 	System.out.println("We're done here.");

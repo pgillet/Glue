@@ -1,5 +1,6 @@
 package com.glue.feed.html;
 
+
 /**
  * A builder for SiteMap objects.
  * 
@@ -11,19 +12,26 @@ public class SiteMapBuilder {
 
     private SiteMap siteMap;
 
-    /**
-     * Constructs a new builder for a SiteMap object. The given uri is typically
-     * the link to the first page of list items.
-     * 
-     * @param baseUri
-     */
-    public SiteMapBuilder(String baseUri) {
-	this.siteMap = new SiteMap(baseUri);
+    protected SiteMapBuilder() {
     }
 
     /**
-     * Sets the Selector CSS query that should match the unambiguous ancestor of
-     * the link to the next page, if any.
+     * Constructs a new builder for a SiteMap object. The given url is typically
+     * the link to the first page of list items.
+     * 
+     * @param frontUrl
+     */
+    public static SiteMapBuilder newSiteMap(String frontUrl) {
+	SiteMapBuilder builder = new SiteMapBuilder();
+	builder.siteMap = new SiteMap(frontUrl);
+	
+	return builder;
+    }
+
+    /**
+     * Required for multiple pages listing multiple events (pagination). Sets
+     * the Selector CSS query that should match the unambiguous ancestor of the
+     * link to the next page, if any.
      * 
      * @param cssQuery
      *            a Selector CSS-like query
@@ -39,7 +47,10 @@ public class SiteMapBuilder {
 
     /**
      * Sets the Selector CSS query that specifies the end of pagination
-     * condition. The last page is reached when elements match the given
+     * condition when multiple pages list multiple events. This setting is
+     * complementary to {@link #next(String)} but not necessary, as the last
+     * page is reached either when there are no more elements matching the
+     * {@link #next(String)} condition, or when elements match the given
      * selector.
      * 
      * @param cssQuery
@@ -55,10 +66,13 @@ public class SiteMapBuilder {
     }
 
     /**
-     * Sets the Selector CSS query that should match the list items in one page.
-     * The selector may directly include the <a> element with the link to the
-     * item page, or designate its unambiguous ancestor. Otherwise, the selector
-     * designates the start element where a bean can be mapped.
+     * Either {@link #list(String)} or {@link #url(String)} or
+     * {@link #url(URLFilter)} is required for pages listing multiple events.
+     * Sets the Selector CSS query that should match the links to event details
+     * in one page. The selector may directly include the link to the event
+     * details page ( <code><a></code> element), or designate its unambiguous
+     * ancestor. Otherwise, the selector designates the start element where a
+     * bean can be mapped.
      * 
      * @param cssQuery
      *            a Selector CSS-like query
@@ -69,6 +83,37 @@ public class SiteMapBuilder {
      */
     public SiteMapBuilder list(String cssQuery) {
 	siteMap.setListSelector(cssQuery);
+	return this;
+    }
+
+    /**
+     * Sets the base URL with which all links to event details pages should
+     * start with.
+     * 
+     * <p>
+     * If the given URL is not absolute, it is resolved against the front URL.
+     * </p>
+     * 
+     * @param baseUrl
+     *            the base URL for all event details pages
+     * @return this builder
+     * @see #url(URLFilter)
+     */
+    public SiteMapBuilder url(String baseUrl) {
+	url(new BaseURLFilter(baseUrl));
+	return this;
+    }
+
+    /**
+     * Sets the filter to select all the links to event details pages.
+     * 
+     * @param filter
+     *            an URL filter
+     * @return this builder
+     * @see #url(String)
+     */
+    public SiteMapBuilder url(URLFilter filter) {
+	siteMap.setUrlFilter(filter);
 	return this;
     }
 
