@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 public class HTMLUtils {
@@ -58,7 +60,22 @@ public class HTMLUtils {
     }
 
     public static String selectHtml(String query, Element root) {
-	return StringUtils.trimToNull(root.select(query).html());
+	String bodyHtml = StringUtils.trimToNull(root.select(query).html());
+	
+	if(bodyHtml != null){
+	    bodyHtml = cleanHtml(bodyHtml);
+	}
+
+	return bodyHtml;
+    }
+
+
+    /**
+     * Sanitizes HTML from input HTML, by parsing input HTML and filtering it
+     * through a basic white-list of permitted tags and attributes.
+     */
+    public static String cleanHtml(String bodyHtml) {
+	return Jsoup.clean(bodyHtml, Whitelist.basic());
     }
 
 }
