@@ -4,10 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
+import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
+
 public class HTMLUtils {
+
+    private static final HtmlCompressor compressor = new HtmlCompressor();
 
     public static Set<String> listLinks(Element rootElem, URLFilter filter) {
 
@@ -58,7 +64,29 @@ public class HTMLUtils {
     }
 
     public static String selectHtml(String query, Element root) {
-	return StringUtils.trimToNull(root.select(query).html());
+	String bodyHtml = StringUtils.trimToNull(root.select(query).html());
+	
+	if(bodyHtml != null){
+	    // Clean
+	    bodyHtml = cleanHtml(bodyHtml);
+	}
+
+	return bodyHtml;
+    }
+
+    /**
+     * Sanitizes HTML from input HTML, by parsing input HTML and filtering it
+     * through a basic white-list of permitted tags and attributes.
+     * Additionally, the resulting HTML is minified.
+     */
+    public static String cleanHtml(String str) {
+	String bodyHtml = Jsoup.clean(str, Whitelist.basic());
+
+	// Then compress
+	compressor.setRemoveIntertagSpaces(true);
+	bodyHtml = compressor.compress(bodyHtml);
+
+	return bodyHtml;
     }
 
 }

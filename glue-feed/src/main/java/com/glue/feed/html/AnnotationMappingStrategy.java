@@ -4,6 +4,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -123,7 +124,13 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
 	    // Check which value annotation is present and retrieve data
 	    // depending on the type of annotation
 	    if (m.isAnnotationPresent(HtmlValue.class)) {
-		return elem.html();
+		// TODO: The following code snippet may be factorized in
+		// HTMLUtils if often used
+		String bodyHtml = StringUtils.trimToNull(elem.html());
+		if (bodyHtml != null) {
+		    bodyHtml = HTMLUtils.cleanHtml(bodyHtml);
+		}
+		return bodyHtml;
 	    } else if (m.isAnnotationPresent(AttributeValue.class)) {
 		return elem.attr(m.getAnnotation(AttributeValue.class).name());
 	    } else /* if (m.isAnnotationPresent(TextValue.class)) */{
