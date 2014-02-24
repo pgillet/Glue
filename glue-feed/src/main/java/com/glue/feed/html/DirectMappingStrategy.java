@@ -75,7 +75,10 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 	    }
 	}
 
-	stream.setPrice(HTMLUtils.selectText(details.getPrice(), doc));
+	String priceQuery = details.getPrice();
+	if (priceQuery != null) {
+	    stream.setPrice(HTMLUtils.selectText(priceQuery, doc));
+	}
 
 	String venueNameQuery = details.getVenueName();
 	if (venueNameQuery != null) {
