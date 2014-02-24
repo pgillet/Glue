@@ -14,306 +14,316 @@ import com.glue.domain.impl.Venue;
 
 public class StreamData implements IStream {
 
-	private long id;
+    private long id;
 
-	private String title;
+    private String title;
 
-	private String description;
+    private String summary;
 
-	private String url;
+    private String description;
 
-	private boolean publicc;
+    private String url;
 
-	private boolean open = true;
+    private boolean publicc;
 
-	private Set<String> tags;
+    private boolean open = true;
 
-	private Map<String, String> invitedParticipants = new HashMap<String, String>();
+    private Set<String> tags;
 
-	private String sharedSecretQuestion;
+    private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
-	private String sharedSecretAnswer;
+    private String sharedSecretQuestion;
 
-	private boolean shouldRequestToParticipate;
+    private String sharedSecretAnswer;
 
-	private long startDate = new Date().getTime();
+    private boolean shouldRequestToParticipate;
 
-	private long endDate;
+    private long startDate = new Date().getTime();
 
-	private IVenue venue = new Venue();
+    private long endDate;
 
-	private int nbOfParticipant;
+    private IVenue venue = new Venue();
 
-	private String thumbPath;
+    private int nbOfParticipant;
 
-	private Category category;
+    private String thumbPath;
 
-	private String price;
-	
-	private List<IMedia> media;
+    private Category category;
 
-	private static StreamData instance = new StreamData();
+    private String price;
 
-	private StreamData() {
-	}
+    private List<IMedia> media;
 
-	public static StreamData getInstance() {
-		return instance;
-	}
+    private static StreamData instance = new StreamData();
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    private StreamData() {
+    }
 
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public static StreamData getInstance() {
+	return instance;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+	return title;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param title
+     *            the title to set
+     */
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
+    public String getSummary() {
+	return summary;
+    }
 
-	/**
-	 * @param url
-	 *            the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setSummary(String summary) {
+	this.summary = summary;
+    }
 
-	/**
-	 * @return the mPublic
-	 */
-	public boolean isPublicc() {
-		return publicc;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+	return description;
+    }
 
-	/**
-	 * @param mPublic
-	 *            the mPublic to set
-	 */
-	public void setPublicc(boolean mPublic) {
-		this.publicc = mPublic;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
-	/**
-	 * @return the open
-	 */
-	public boolean isOpen() {
-		return open;
-	}
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+	return url;
+    }
 
-	/**
-	 * @param open
-	 *            the open to set
-	 */
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
+    /**
+     * @param url
+     *            the url to set
+     */
+    public void setUrl(String url) {
+	this.url = url;
+    }
 
-	/**
-	 * @return the tags
-	 */
-	public Set<String> getTags() {
-		return tags;
-	}
+    /**
+     * @return the mPublic
+     */
+    public boolean isPublicc() {
+	return publicc;
+    }
 
-	/**
-	 * @param guests
-	 *            the guests to set
-	 */
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
+    /**
+     * @param mPublic
+     *            the mPublic to set
+     */
+    public void setPublicc(boolean mPublic) {
+	this.publicc = mPublic;
+    }
 
-	/**
-	 * @return the invitedParticipants
-	 */
-	public Map<String, String> getInvitedParticipants() {
-		return invitedParticipants;
-	}
+    /**
+     * @return the open
+     */
+    public boolean isOpen() {
+	return open;
+    }
 
-	/**
-	 * @param invitedParticipants
-	 *            the invitedParticipants to set
-	 */
-	public void setInvitedParticipants(Map<String, String> invitedParticipants) {
-		this.invitedParticipants = invitedParticipants;
-	}
+    /**
+     * @param open
+     *            the open to set
+     */
+    public void setOpen(boolean open) {
+	this.open = open;
+    }
 
-	/**
-	 * @return the sharedSecretQuestion
-	 */
-	public String getSharedSecretQuestion() {
-		return sharedSecretQuestion;
-	}
+    /**
+     * @return the tags
+     */
+    public Set<String> getTags() {
+	return tags;
+    }
 
-	/**
-	 * @param sharedSecretQuestion
-	 *            the sharedSecretQuestion to set
-	 */
-	public void setSharedSecretQuestion(String sharedSecretQuestion) {
-		this.sharedSecretQuestion = sharedSecretQuestion;
-	}
+    /**
+     * @param guests
+     *            the guests to set
+     */
+    public void setTags(Set<String> tags) {
+	this.tags = tags;
+    }
 
-	/**
-	 * @return the sharedSecretAnswer
-	 */
-	public String getSharedSecretAnswer() {
-		return sharedSecretAnswer;
-	}
+    /**
+     * @return the invitedParticipants
+     */
+    public Map<String, String> getInvitedParticipants() {
+	return invitedParticipants;
+    }
 
-	/**
-	 * @param sharedSecretAnswer
-	 *            the sharedSecretAnswer to set
-	 */
-	public void setSharedSecretAnswer(String sharedSecretAnswer) {
-		this.sharedSecretAnswer = sharedSecretAnswer;
-	}
+    /**
+     * @param invitedParticipants
+     *            the invitedParticipants to set
+     */
+    public void setInvitedParticipants(Map<String, String> invitedParticipants) {
+	this.invitedParticipants = invitedParticipants;
+    }
 
-	/**
-	 * @return the shouldRequestToParticipate
-	 */
-	public boolean isShouldRequestToParticipate() {
-		return shouldRequestToParticipate;
-	}
+    /**
+     * @return the sharedSecretQuestion
+     */
+    public String getSharedSecretQuestion() {
+	return sharedSecretQuestion;
+    }
 
-	/**
-	 * @param shouldRequestToParticipate
-	 *            the shouldRequestToParticipate to set
-	 */
-	public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
-		this.shouldRequestToParticipate = shouldRequestToParticipate;
-	}
+    /**
+     * @param sharedSecretQuestion
+     *            the sharedSecretQuestion to set
+     */
+    public void setSharedSecretQuestion(String sharedSecretQuestion) {
+	this.sharedSecretQuestion = sharedSecretQuestion;
+    }
 
-	/**
-	 * @return the startDate
-	 */
-	public long getStartDate() {
-		return startDate;
-	}
+    /**
+     * @return the sharedSecretAnswer
+     */
+    public String getSharedSecretAnswer() {
+	return sharedSecretAnswer;
+    }
 
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	public void setStartDate(long startDate) {
-		this.startDate = startDate;
-	}
+    /**
+     * @param sharedSecretAnswer
+     *            the sharedSecretAnswer to set
+     */
+    public void setSharedSecretAnswer(String sharedSecretAnswer) {
+	this.sharedSecretAnswer = sharedSecretAnswer;
+    }
 
-	/**
-	 * @return the endDate
-	 */
-	public long getEndDate() {
-		return endDate;
-	}
+    /**
+     * @return the shouldRequestToParticipate
+     */
+    public boolean isShouldRequestToParticipate() {
+	return shouldRequestToParticipate;
+    }
 
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	public void setEndDate(long endDate) {
-		this.endDate = endDate;
-	}
+    /**
+     * @param shouldRequestToParticipate
+     *            the shouldRequestToParticipate to set
+     */
+    public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
+	this.shouldRequestToParticipate = shouldRequestToParticipate;
+    }
 
-	/**
-	 * @return the venue
-	 */
-	public IVenue getVenue() {
-		return venue;
-	}
+    /**
+     * @return the startDate
+     */
+    public long getStartDate() {
+	return startDate;
+    }
 
-	/**
-	 * @param venue
-	 *            the venue to set
-	 */
-	public void setVenue(IVenue venue) {
-		this.venue = venue;
-	}
+    /**
+     * @param startDate
+     *            the startDate to set
+     */
+    public void setStartDate(long startDate) {
+	this.startDate = startDate;
+    }
 
-	@Override
-	public long getId() {
-		return id;
-	}
+    /**
+     * @return the endDate
+     */
+    public long getEndDate() {
+	return endDate;
+    }
 
-	@Override
-	public void setId(long id) {
-		this.id = id;
-	}
+    /**
+     * @param endDate
+     *            the endDate to set
+     */
+    public void setEndDate(long endDate) {
+	this.endDate = endDate;
+    }
 
-	@Override
-	public int getNumberOfParticipant() {
-		return nbOfParticipant;
-	}
+    /**
+     * @return the venue
+     */
+    public IVenue getVenue() {
+	return venue;
+    }
 
-	@Override
-	public void setNumberOfParticipant(int nbOfParticipant) {
-		this.nbOfParticipant = nbOfParticipant;
-	}
+    /**
+     * @param venue
+     *            the venue to set
+     */
+    public void setVenue(IVenue venue) {
+	this.venue = venue;
+    }
 
-	@Override
-	public String getThumbPath() {
-		return thumbPath;
-	}
+    @Override
+    public long getId() {
+	return id;
+    }
 
-	@Override
-	public void setThumbPath(String path) {
-		this.thumbPath = path;
-	}
+    @Override
+    public void setId(long id) {
+	this.id = id;
+    }
 
-	@Override
-	public Category getCategory() {
-		return category;
-	}
+    @Override
+    public int getNumberOfParticipant() {
+	return nbOfParticipant;
+    }
 
-	@Override
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+    @Override
+    public void setNumberOfParticipant(int nbOfParticipant) {
+	this.nbOfParticipant = nbOfParticipant;
+    }
 
-	@Override
-	public String getPrice() {
-		return price;
-	}
+    @Override
+    public String getThumbPath() {
+	return thumbPath;
+    }
 
-	@Override
-	public void setPrice(String price) {
-		this.price = price;
-	}
-	
-	@Override
-	public List<IMedia> getMedia() {
-		return media;
-	}
+    @Override
+    public void setThumbPath(String path) {
+	this.thumbPath = path;
+    }
 
-	@Override
-	public void setMedia(List<IMedia> media) {
-		this.media = media;
-	}
+    @Override
+    public Category getCategory() {
+	return category;
+    }
+
+    @Override
+    public void setCategory(Category category) {
+	this.category = category;
+    }
+
+    @Override
+    public String getPrice() {
+	return price;
+    }
+
+    @Override
+    public void setPrice(String price) {
+	this.price = price;
+    }
+
+    @Override
+    public List<IMedia> getMedia() {
+	return media;
+    }
+
+    @Override
+    public void setMedia(List<IMedia> media) {
+	this.media = media;
+    }
 
 }

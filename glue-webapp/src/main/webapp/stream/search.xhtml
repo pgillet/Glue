@@ -133,7 +133,7 @@
 														<f:param name="id" value="#{stream.id}"></f:param>
 													</h:link> </strong>
 											</h4></li>
-										<li><p>#{stream.description}</p></li>
+										<li><p><h:outputText value="#{stream.summary}" escape="false" /></p></li>
 										<li><h5>
 												<strong> <i class="fa-li fa fa-calendar text-muted"></i>
 													<ui:fragment

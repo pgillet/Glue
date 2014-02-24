@@ -14,314 +14,325 @@ import com.glue.domain.IVenue;
 
 public class Stream implements IStream, Serializable {
 
-	private static final long serialVersionUID = -7751127081320950633L;
+    private static final long serialVersionUID = -7751127081320950633L;
 
-	private long id;
+    private long id;
 
-	private String title;
+    private String title;
 
-	private String description;
+    private String summary;
 
-	private String url;
+    private String description;
 
-	private boolean publicc;
+    private String url;
 
-	private boolean open = true;
+    private boolean publicc;
 
-	private Map<String, String> invitedParticipants = new HashMap<String, String>();
+    private boolean open = true;
 
-	private String sharedSecretQuestion;
+    private Map<String, String> invitedParticipants = new HashMap<String, String>();
 
-	private String sharedSecretAnswer;
+    private String sharedSecretQuestion;
 
-	private boolean shouldRequestToParticipate;
+    private String sharedSecretAnswer;
 
-	private long startDate = Calendar.getInstance().getTimeInMillis();
+    private boolean shouldRequestToParticipate;
 
-	private long endDate;
+    private long startDate = Calendar.getInstance().getTimeInMillis();
 
-	private Set<String> tags;
+    private long endDate;
 
-	private int numberOfParticipant;
+    private Set<String> tags;
 
-	private String thumbPath;
+    private int numberOfParticipant;
 
-	private IVenue venue;
+    private String thumbPath;
 
-	private Category category;
+    private IVenue venue;
 
-	private String price;
-	
-	private List<IMedia> media;
+    private Category category;
 
-	public Stream() {
-	}
+    private String price;
 
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
-	}
+    private List<IMedia> media;
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
+    public Stream() {
+    }
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    /**
+     * @return the id
+     */
+    public long getId() {
+	return id;
+    }
 
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(long id) {
+	this.id = id;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+	return title;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param title
+     *            the title to set
+     */
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
+    public String getSummary() {
+	return summary;
+    }
 
-	/**
-	 * @param url
-	 *            the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setSummary(String summary) {
+	this.summary = summary;
+    }
 
-	/**
-	 * @return the invitedParticipants
-	 */
-	public Map<String, String> getInvitedParticipants() {
-		return invitedParticipants;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+	return description;
+    }
 
-	/**
-	 * @param invitedParticipants
-	 *            the invitedParticipants to set
-	 */
-	public void setInvitedParticipants(Map<String, String> invitedParticipants) {
-		this.invitedParticipants = invitedParticipants;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
-	/**
-	 * @return the sharedSecretQuestion
-	 */
-	public String getSharedSecretQuestion() {
-		return sharedSecretQuestion;
-	}
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+	return url;
+    }
 
-	/**
-	 * @param sharedSecretQuestion
-	 *            the sharedSecretQuestion to set
-	 */
-	public void setSharedSecretQuestion(String sharedSecretQuestion) {
-		this.sharedSecretQuestion = sharedSecretQuestion;
-	}
+    /**
+     * @param url
+     *            the url to set
+     */
+    public void setUrl(String url) {
+	this.url = url;
+    }
 
-	/**
-	 * @return the sharedSecretAnswer
-	 */
-	public String getSharedSecretAnswer() {
-		return sharedSecretAnswer;
-	}
+    /**
+     * @return the invitedParticipants
+     */
+    public Map<String, String> getInvitedParticipants() {
+	return invitedParticipants;
+    }
 
-	/**
-	 * @param sharedSecretAnswer
-	 *            the sharedSecretAnswer to set
-	 */
-	public void setSharedSecretAnswer(String sharedSecretAnswer) {
-		this.sharedSecretAnswer = sharedSecretAnswer;
-	}
+    /**
+     * @param invitedParticipants
+     *            the invitedParticipants to set
+     */
+    public void setInvitedParticipants(Map<String, String> invitedParticipants) {
+	this.invitedParticipants = invitedParticipants;
+    }
 
-	/**
-	 * @return the startDate
-	 */
-	public long getStartDate() {
-		return startDate;
-	}
+    /**
+     * @return the sharedSecretQuestion
+     */
+    public String getSharedSecretQuestion() {
+	return sharedSecretQuestion;
+    }
 
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	public void setStartDate(long startDate) {
-		this.startDate = startDate;
-	}
+    /**
+     * @param sharedSecretQuestion
+     *            the sharedSecretQuestion to set
+     */
+    public void setSharedSecretQuestion(String sharedSecretQuestion) {
+	this.sharedSecretQuestion = sharedSecretQuestion;
+    }
 
-	/**
-	 * @return the endDate
-	 */
-	public long getEndDate() {
-		return endDate;
-	}
+    /**
+     * @return the sharedSecretAnswer
+     */
+    public String getSharedSecretAnswer() {
+	return sharedSecretAnswer;
+    }
 
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	public void setEndDate(long endDate) {
-		this.endDate = endDate;
-	}
+    /**
+     * @param sharedSecretAnswer
+     *            the sharedSecretAnswer to set
+     */
+    public void setSharedSecretAnswer(String sharedSecretAnswer) {
+	this.sharedSecretAnswer = sharedSecretAnswer;
+    }
 
-	public boolean isPublicc() {
-		return publicc;
-	}
+    /**
+     * @return the startDate
+     */
+    public long getStartDate() {
+	return startDate;
+    }
 
-	public void setPublicc(boolean publicc) {
-		this.publicc = publicc;
-	}
+    /**
+     * @param startDate
+     *            the startDate to set
+     */
+    public void setStartDate(long startDate) {
+	this.startDate = startDate;
+    }
 
-	public boolean isOpen() {
-		return open;
-	}
+    /**
+     * @return the endDate
+     */
+    public long getEndDate() {
+	return endDate;
+    }
 
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
+    /**
+     * @param endDate
+     *            the endDate to set
+     */
+    public void setEndDate(long endDate) {
+	this.endDate = endDate;
+    }
 
-	public boolean isShouldRequestToParticipate() {
-		return shouldRequestToParticipate;
-	}
+    public boolean isPublicc() {
+	return publicc;
+    }
 
-	public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
-		this.shouldRequestToParticipate = shouldRequestToParticipate;
-	}
+    public void setPublicc(boolean publicc) {
+	this.publicc = publicc;
+    }
 
-	@Override
-	public Set<String> getTags() {
-		return tags;
-	}
+    public boolean isOpen() {
+	return open;
+    }
 
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
+    public void setOpen(boolean open) {
+	this.open = open;
+    }
 
-	@Override
-	public int getNumberOfParticipant() {
-		return numberOfParticipant;
-	}
+    public boolean isShouldRequestToParticipate() {
+	return shouldRequestToParticipate;
+    }
 
-	@Override
-	public void setNumberOfParticipant(int nbOfParticipant) {
-		this.numberOfParticipant = nbOfParticipant;
-	}
+    public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
+	this.shouldRequestToParticipate = shouldRequestToParticipate;
+    }
 
-	@Override
-	public String getThumbPath() {
-		return thumbPath;
-	}
+    @Override
+    public Set<String> getTags() {
+	return tags;
+    }
 
-	@Override
-	public void setThumbPath(String path) {
-		this.thumbPath = path;
-	}
+    public void setTags(Set<String> tags) {
+	this.tags = tags;
+    }
 
-	/**
-	 * @return the venue
-	 */
-	@Override
-	public IVenue getVenue() {
-		return venue;
-	}
+    @Override
+    public int getNumberOfParticipant() {
+	return numberOfParticipant;
+    }
 
-	/**
-	 * @param venue
-	 *            the venue to set
-	 */
-	@Override
-	public void setVenue(IVenue venue) {
-		this.venue = venue;
-	}
+    @Override
+    public void setNumberOfParticipant(int nbOfParticipant) {
+	this.numberOfParticipant = nbOfParticipant;
+    }
 
-	@Override
-	public Category getCategory() {
-		return category;
-	}
+    @Override
+    public String getThumbPath() {
+	return thumbPath;
+    }
 
-	@Override
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+    @Override
+    public void setThumbPath(String path) {
+	this.thumbPath = path;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Stream [title=" + title + ", description=" + description + ", url=" + url + ", publicc=" + publicc
-				+ ", open=" + open + ", startDate=" + startDate + ", endDate=" + endDate + "]";
-	}
+    /**
+     * @return the venue
+     */
+    @Override
+    public IVenue getVenue() {
+	return venue;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
+    /**
+     * @param venue
+     *            the venue to set
+     */
+    @Override
+    public void setVenue(IVenue venue) {
+	this.venue = venue;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Stream other = (Stream) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
+    @Override
+    public Category getCategory() {
+	return category;
+    }
 
-	@Override
-	public String getPrice() {
-		return price;
-	}
+    @Override
+    public void setCategory(Category category) {
+	this.category = category;
+    }
 
-	@Override
-	public void setPrice(String price) {
-		this.price = price;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return "Stream [title=" + title + ", description=" + description
+		+ ", url=" + url + ", publicc=" + publicc + ", open=" + open
+		+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
+    }
 
-	@Override
-	public List<IMedia> getMedia() {
-		return media;
-	}
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (int) (id ^ (id >>> 32));
+	return result;
+    }
 
-	@Override
-	public void setMedia(List<IMedia> media) {
-		this.media = media;
-	}
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Stream other = (Stream) obj;
+	if (id != other.id)
+	    return false;
+	return true;
+    }
+
+    @Override
+    public String getPrice() {
+	return price;
+    }
+
+    @Override
+    public void setPrice(String price) {
+	this.price = price;
+    }
+
+    @Override
+    public List<IMedia> getMedia() {
+	return media;
+    }
+
+    @Override
+    public void setMedia(List<IMedia> media) {
+	this.media = media;
+    }
 }

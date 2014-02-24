@@ -6,182 +6,193 @@ import java.util.Set;
 
 public interface IStream {
 
-	long getId();
+    long getId();
 
-	void setId(long id);
+    void setId(long id);
 
-	/**
-	 * Returns the title of this stream.
-	 * 
-	 * @return a String
-	 */
-	String getTitle();
+    /**
+     * Returns the title of this stream.
+     * 
+     * @return a String
+     */
+    String getTitle();
 
-	void setTitle(String title);
+    void setTitle(String title);
 
-	/**
-	 * Returns the description of this stream.
-	 * 
-	 * @return a String
-	 */
-	String getDescription();
+    /**
+     * Returns the summary of this stream.
+     * 
+     * @return a String
+     */
+    String getSummary();
 
-	void setDescription(String description);
+    void setSummary(String summary);
 
-	/**
-	 * Returns the link to this stream.
-	 * 
-	 * @return a String
-	 */
-	String getUrl();
+    /**
+     * Returns the description of this stream.
+     * 
+     * @return a String
+     */
+    String getDescription();
 
-	void setUrl(String url);
+    void setDescription(String description);
 
-	/**
-	 * Tells whether this stream is public or private. Private by default.
-	 * 
-	 * <p>
-	 * Only participants and guests can watch a private stream.
-	 * </p>
-	 * 
-	 * @return true if public, false otherwise
-	 */
-	boolean isPublicc();
+    /**
+     * Returns the link to this stream.
+     * 
+     * @return a String
+     */
+    String getUrl();
 
-	void setPublicc(boolean publicc);
+    void setUrl(String url);
 
-	/**
-	 * Tells whether this stream is open or closed for contribution. Open by
-	 * default.
-	 * 
-	 * <p>
-	 * Anyone can participate to an open stream, while only invited people can
-	 * participate to a closed stream.
-	 * </p>
-	 * 
-	 * @return true if open, false otherwise
-	 */
-	boolean isOpen();
+    /**
+     * Tells whether this stream is public or private. Private by default.
+     * 
+     * <p>
+     * Only participants and guests can watch a private stream.
+     * </p>
+     * 
+     * @return true if public, false otherwise
+     */
+    boolean isPublicc();
 
-	void setOpen(boolean open);
+    void setPublicc(boolean publicc);
 
-	/**
-	 * Returns a a set of tags.
-	 * 
-	 * @return a Set of tags.
-	 */
-	Set<String> getTags();
+    /**
+     * Tells whether this stream is open or closed for contribution. Open by
+     * default.
+     * 
+     * <p>
+     * Anyone can participate to an open stream, while only invited people can
+     * participate to a closed stream.
+     * </p>
+     * 
+     * @return true if open, false otherwise
+     */
+    boolean isOpen();
 
-	void setTags(Set<String> tags);
+    void setOpen(boolean open);
 
-	/**
-	 * Returns a map that maps the email addresses of the persons invited to
-	 * participate to this stream to their names.
-	 * 
-	 * @return a Map that maps Strings to Strings, or an empty Map if none.
-	 */
-	Map<String, String> getInvitedParticipants();
+    /**
+     * Returns a a set of tags.
+     * 
+     * @return a Set of tags.
+     */
+    Set<String> getTags();
 
-	void setInvitedParticipants(Map<String, String> ip);
+    void setTags(Set<String> tags);
 
-	/**
-	 * Returns the shared secret question.
-	 * 
-	 * @return a String, or null if none is set
-	 */
-	String getSharedSecretQuestion();
+    /**
+     * Returns a map that maps the email addresses of the persons invited to
+     * participate to this stream to their names.
+     * 
+     * @return a Map that maps Strings to Strings, or an empty Map if none.
+     */
+    Map<String, String> getInvitedParticipants();
 
-	void setSharedSecretQuestion(String question);
+    void setInvitedParticipants(Map<String, String> ip);
 
-	/**
-	 * Returns the shared secret answer.
-	 * 
-	 * @return a String, or null if none is set
-	 */
-	String getSharedSecretAnswer();
+    /**
+     * Returns the shared secret question.
+     * 
+     * @return a String, or null if none is set
+     */
+    String getSharedSecretQuestion();
 
-	void setSharedSecretAnswer(String answer);
+    void setSharedSecretQuestion(String question);
 
-	/**
-	 * Tells whether or not users must request the administrator of this stream
-	 * in order to participate.
-	 * 
-	 * @return true if users users must request the administrator to
-	 *         participate, false otherwise
-	 */
-	boolean isShouldRequestToParticipate();
+    /**
+     * Returns the shared secret answer.
+     * 
+     * @return a String, or null if none is set
+     */
+    String getSharedSecretAnswer();
 
-	void setShouldRequestToParticipate(boolean request);
+    void setSharedSecretAnswer(String answer);
 
-	/**
-	 * Returns the start date of this stream. Should be the current date and
-	 * time by default.
-	 * 
-	 * @return
-	 */
-	long getStartDate();
+    /**
+     * Tells whether or not users must request the administrator of this stream
+     * in order to participate.
+     * 
+     * @return true if users users must request the administrator to
+     *         participate, false otherwise
+     */
+    boolean isShouldRequestToParticipate();
 
-	void setStartDate(long date);
+    void setShouldRequestToParticipate(boolean request);
 
-	/**
-	 * Returns the end date of this stream.
-	 * 
-	 * @return
-	 */
-	long getEndDate();
+    /**
+     * Returns the start date of this stream. Should be the current date and
+     * time by default.
+     * 
+     * @return
+     */
+    long getStartDate();
 
-	void setEndDate(long date);
+    void setStartDate(long date);
 
-	/**
-	 * Returns the number of participant of this stream.
-	 * 
-	 * @return the number of participant
-	 */
-	int getNumberOfParticipant();
+    /**
+     * Returns the end date of this stream.
+     * 
+     * @return
+     */
+    long getEndDate();
 
-	void setNumberOfParticipant(int nbOfParticipant);
+    void setEndDate(long date);
 
-	/**
-	 * Returns the path to the thumbnail of the stream
-	 * 
-	 * @return the path of the thumbnail
-	 */
-	String getThumbPath();
+    /**
+     * Returns the number of participant of this stream.
+     * 
+     * @return the number of participant
+     */
+    int getNumberOfParticipant();
 
-	void setThumbPath(String path);
+    void setNumberOfParticipant(int nbOfParticipant);
 
-	void setVenue(IVenue venue);
+    /**
+     * Returns the path to the thumbnail of the stream
+     * 
+     * @return the path of the thumbnail
+     */
+    String getThumbPath();
 
-	IVenue getVenue();
+    void setThumbPath(String path);
 
-	/**
-	 * Return the category.
-	 * 
-	 * @return the category.
-	 */
-	Category getCategory();
+    void setVenue(IVenue venue);
 
-	void setCategory(Category category);
+    IVenue getVenue();
 
-	/**
-	 * Returns event price.
-	 * 
-	 * @return an event price.
-	 */
-	String getPrice();
+    /**
+     * Return the category.
+     * 
+     * @return the category.
+     */
+    Category getCategory();
 
-	void setPrice(String price);
-	
-	/**
-	 * Returns the media related to this stream
-	 * @return
-	 */
-	List<IMedia> getMedia();
-	
-	/**
-	 * Sets the media related to this stream.
-	 * @param media
-	 */
-	void setMedia(List<IMedia> media);
+    void setCategory(Category category);
+
+    /**
+     * Returns event price.
+     * 
+     * @return an event price.
+     */
+    String getPrice();
+
+    void setPrice(String price);
+
+    /**
+     * Returns the media related to this stream
+     * 
+     * @return
+     */
+    List<IMedia> getMedia();
+
+    /**
+     * Sets the media related to this stream.
+     * 
+     * @param media
+     */
+    void setMedia(List<IMedia> media);
 
 }

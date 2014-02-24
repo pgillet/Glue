@@ -4,7 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -102,6 +105,12 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 	    // Get the total number of results
 	    numFound = rsp.getResults().getNumFound();
+
+	    // Highlighting
+	    if (!isFullQuery()) {
+		summarize((List<IStream>) items, rsp);
+	    }
+
 	} catch (SolrServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    throw new InternalServerException(e);
@@ -110,8 +119,64 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	return (List<IStream>) items;
     }
 
+    @Override
+    public Map<Long, IStream> searchAsMap() throws InternalServerException {
+	List<IStream> items = search();
+	Map<Long, IStream> m = new HashMap<>();
+	for (IStream item : items) {
+	    m.put(item.getId(), item);
+	}
+	
+	return m;
+    }
+
+    /**
+     * Constructs a summary made of highlighted snippets for each item in the
+     * query response.
+     * 
+     * @param items
+     */
+    protected void summarize(List<IStream> items, QueryResponse rsp) {
+
+	Iterator<IStream> iter = items.iterator();
+
+	while (iter.hasNext()) {
+	    IStream item = iter.next();
+
+	    Map<String, List<String>> highlights = rsp.getHighlighting().get(
+		    Long.toString(item.getId()));
+
+	    if (highlights != null) {
+		List<String> snippets = highlights.get("description");
+		if (snippets != null) {
+
+		    StringBuilder sb = new StringBuilder();
+		    final String ellipsis = "...";
+
+		    for (String snippet : snippets) {
+			sb.append(snippet);
+			sb.append(ellipsis);
+		    }
+		    item.setSummary(sb.toString());
+		}
+	    }
+	}
+    }
+
     private SolrQuery constructSolrQuery() {
 	SolrQuery query = new SolrQuery();
+
+	// Highlighting
+	if (!isFullQuery()) {
+	    query.setHighlight(true);
+	    query.addHighlightField("description"); // param hl.fl
+	    query.setHighlightSnippets(2); // Default 1
+	    query.setHighlightSimplePre("<strong>");
+	    query.setHighlightSimplePost("</strong>");
+	    // query.setHighlightFragsize(100); // Default
+	    // query.setHighlightRequireFieldMatch(false); // Default
+	}
+
 	query.setParam("qt", "/stream_select");
 
 	// Add location to query if no lat/lon parameter

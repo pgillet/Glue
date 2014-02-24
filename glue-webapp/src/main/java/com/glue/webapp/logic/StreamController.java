@@ -6,10 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.WordUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +30,10 @@ import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
 public class StreamController implements PageIterator<List<IStream>> {
+
+    private static final String ELLIPSIS = "...";
+
+    private static final int SUMMARY_LIMIT = 200;
 
     static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
@@ -131,16 +139,13 @@ public class StreamController implements PageIterator<List<IStream>> {
 	engine.setLongitude(longitude);
 	engine.setLocation(location);
 
-	List<IStream> temp = engine.search();
+	final Map<Long, IStream> m = (Map<Long, IStream>) engine
+		.searchAsMap();
 
 	// Stores the total number of found results
 	totalRows = engine.getNumFound();
 
-	final List<Long> ids = new ArrayList<Long>();
-
-	for (IStream stream : temp) {
-	    ids.add(stream.getId());
-	}
+	final Set<Long> ids = m.keySet();
 
 	try {
 	    DAOManager manager = DAOManager.getInstance();
@@ -182,6 +187,19 @@ public class StreamController implements PageIterator<List<IStream>> {
 			}
 
 		    });
+
+	    // Highlighting
+	    for (IStream stream : streams) {
+		String summary = m.get(stream.getId()).getSummary();
+		if (summary == null) {
+		    String html = stream.getDescription();
+		    // Keep only text nodes: all HTML will be stripped.
+		    String onlytext = Jsoup.clean(html, Whitelist.none());
+		    summary = WordUtils.abbreviate(onlytext,
+			    SUMMARY_LIMIT, -1, ELLIPSIS);
+		}
+		stream.setSummary(summary);
+	    }
 
 	    return streams;
 	} catch (NamingException e) {

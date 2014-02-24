@@ -2,6 +2,7 @@ package com.glue.webapp.search;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.glue.webapp.logic.InternalServerException;
 
@@ -26,6 +27,17 @@ public interface SearchEngine<T> {
      *             the search engine
      */
     List<T> search() throws InternalServerException;
+
+    /**
+     * Returns a map for which the <code>Map.values()</code> are the elements
+     * returned by {@link #search()} in the given order, and each key is the id
+     * of the corresponding value.
+     * 
+     * @return a map mapping the id on each value in the collection returned by
+     *         {@link #search()}
+     * @throws InternalServerException
+     */
+    Map<?, T> searchAsMap() throws InternalServerException;
 
     /**
      * Returns the query string.
