@@ -2,7 +2,7 @@ package com.glue.feed.opennlp.dates;
 
 import java.util.List;
 
-public class DateHolderFactory {
+public class HolderFactory {
 
     public static DateHolder create(String type, List<String> value,
 	    EventDateManager dateManager) {

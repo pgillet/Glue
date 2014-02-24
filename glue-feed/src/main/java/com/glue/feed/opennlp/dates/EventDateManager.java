@@ -26,7 +26,7 @@ public class EventDateManager {
 
 	    currentSpan = sp;
 
-	    DateHolder holder = DateHolderFactory.create(sp.getType(),
+	    DateHolder holder = HolderFactory.create(sp.getType(),
 		    tokens.subList(sp.getStart(), sp.getEnd()), this);
 
 	    // Is it a valid holder?
