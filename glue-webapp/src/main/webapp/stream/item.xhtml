@@ -63,16 +63,16 @@
 											rendered="#{streamItemBean.item.startDate lt streamItemBean.item.endDate}">
 											<h:outputText value="#{bundle.stream_date_from} " />
 											<h:outputText value="#{streamItemBean.item.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 											<h:outputText value=" #{bundle.stream_date_to} " />
 											<h:outputText value="#{streamItemBean.item.endDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 										</ui:fragment> <ui:fragment
 											rendered="#{streamItemBean.item.startDate ge streamItemBean.item.endDate}">
 											<h:outputText value="#{streamItemBean.item.startDate}">
-												<f:convertDateTime binding="#{streamSearchBean.convertDate}" />
+												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 										</ui:fragment></strong>
 								</h4></li>

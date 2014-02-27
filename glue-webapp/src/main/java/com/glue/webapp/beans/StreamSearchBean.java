@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.TimeZone;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
@@ -29,17 +27,40 @@ import com.glue.webapp.search.PageIterator;
 public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private static final String PARAM_CAT = "cat";
+    private static final String PARAM_DISPLAY = "display";
 
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
     @Inject
     private StreamController streamController;
 
-    private DateTimeConverter convertDate;
-
     private Category[] categories = Category.values();
 
     private List<IStream> streams;
+
+    private enum Display {
+	LIST, TABLE, MAP
+    };
+
+    private Display display = Display.LIST; // Default
+
+    public String getDisplay() {
+	return display.name();
+    }
+
+    public void setDisplay(String display) {
+	this.display = Display.valueOf(display.toUpperCase());
+    }
+
+    public void toggleDisplay() {
+	String param = FacesUtil.getRequestParameter(PARAM_DISPLAY);
+	setDisplay(param);
+	LOG.debug("Toggle display = " + display);
+
+	if (streams == null) {
+	    search();
+	}
+    }
 
     /**
      * @return the query
@@ -129,26 +150,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      */
     public void setEndDate(Date endDate) {
 	streamController.setEndDate(endDate);
-    }
-
-    public DateTimeConverter getConvertDate() {
-	return convertDate;
-    }
-
-    public void setConvertDate(DateTimeConverter convertDate) {
-	final String key1 = "date_format_long";
-	// final String key2 = "time_format";
-
-	String dateFormat = FacesUtil.getString(key1);
-	// String timeFormat = bundle.getString(key2);
-
-	// convertDate.setPattern(dateFormat + " " + timeFormat);
-	convertDate.setPattern(dateFormat);
-
-	TimeZone tz = TimeZone.getTimeZone("UTC");
-	convertDate.setTimeZone(tz);
-
-	this.convertDate = convertDate;
     }
 
     /**

@@ -78,7 +78,7 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 				.append(StringUtils.defaultString(bean.getCommune()));
 
 		// Venue name
-		String name = bean.getLieuNom().toUpperCase();
+		String name = bean.getLieuNom();
 
 		// Venue latitude
 		String latitude = bean.getGooglemapLatitude();
@@ -121,10 +121,10 @@ public class EventBeanStreamBuilder implements GlueObjectBuilder<EventBean, IStr
 			 * .getResults().get(0).getFormattedAddress()); }
 			 */
 		}
-		venue.setAddress(address.toString().trim().toUpperCase());
+		venue.setAddress(address.toString().trim());
 
 		venue.setUrl(removeUrlExceptions(bean.getRéservationSiteInternet()));
-		venue.setCity(StringUtils.defaultString(bean.getCommune()).toUpperCase());
+		venue.setCity(StringUtils.defaultString(bean.getCommune()));
 		stream.setVenue(venue);
 
 		return stream;

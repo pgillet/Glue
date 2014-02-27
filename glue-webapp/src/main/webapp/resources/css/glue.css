@@ -93,3 +93,9 @@ body { padding-top: 50px; }
 .glue-glyphicon-btn-lg {
 	padding: 9px 20px;
 }
+
+.table td {
+	white-space: nowrap; 
+	overflow: hidden; 
+	text-overflow: ellipsis;
+}
