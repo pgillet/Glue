@@ -106,9 +106,15 @@
       trailing underscores (e.g. _version_) are reserved.
    -->
        
-   <!-- points to the root document of a block of nested documents -->
+   <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
+      or Solr won't start. _version_ and update log are required for SolrCloud
+   --> 
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+   
+   <!-- points to the root document of a block of nested documents. Required for nested
+      document support, may be removed otherwise
+   -->
    <field name="_root_" type="string" indexed="true" stored="false"/>  
-   <field name="_version_" type="long" indexed="true" stored="true"/>  
        
    <!-- Glue fields -->     
    <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
@@ -127,6 +133,12 @@
    <!--<field name="latitude" type="double" indexed="true" stored="true"/>
    <field name="longitude" type="double" indexed="true" stored="true"/>-->
 
+   <!-- Main body of document extracted by SolrCell.
+        NOTE: This field is not indexed by default, since it is also copied to "text"
+        using copyField below. This is to save space. Use this field for returning and
+        highlighting document content. Use the "text" field to search the content. -->
+   <field name="content" type="text_general" indexed="false" stored="true" multiValued="true"/>
+   
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true" omitNorms="true" omitTermFreqAndPositions="true"/>
@@ -196,6 +208,11 @@
 
    <dynamicField name="random_*" type="random" />
 
+   <!-- uncomment the following to ignore any fields that don't already match an existing 
+        field name or dynamic field, rather than reporting them as an error. 
+        alternately, change the type="ignored" to some other type e.g. "text" if you want 
+        unknown fields indexed and/or stored by default --> 
+   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
    
  </fields>
 
@@ -233,10 +250,23 @@
    <copyField source="city" dest="text"/>
    <copyField source="category" dest="text"/>
    
+   <!-- Copy the price into a currency enabled field (default USD) -->
+   <!-- <copyField source="price" dest="price_c"/> -->
+   
    <copyField source="title" dest="suggestions"/>
    <copyField source="title" dest="suggestions_edg"/>
    <copyField source="title" dest="suggestions_ng"/>
  
+  <!-- Above, multiple source fields are copied to the [text] field. 
+	  Another way to map multiple source fields to the same 
+	  destination field is to use the dynamic field syntax. 
+	  copyField also supports a maxChars to copy setting.  -->
+	   
+   <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
+
+   <!-- copy name to alphaNameSort, a field designed for sorting by name -->
+   <!-- <copyField source="name" dest="alphaNameSort"/> -->
+  
   <types>
          
       
@@ -781,6 +811,18 @@
         <!-- for any non-CJK -->
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.CJKBigramFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- Kurdish -->
+    <fieldType name="text_ckb" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SoraniNormalizationFilterFactory"/>
+        <!-- for any latin text -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_ckb.txt"/>
+        <filter class="solr.SoraniStemFilterFactory"/>
       </analyzer>
     </fieldType>
 

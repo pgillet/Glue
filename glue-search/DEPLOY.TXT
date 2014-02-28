@@ -1,1 +1,6 @@
 -Dsolr.solr.home=/home/pgillet/git/Glue/glue-search/target/cores
+
+in Development environment, add also -Dsolr.allow.unsafe.resourceloading=true to allow SolrResourceLoader 
+loading files from outside the instance's directory, for instance to visualize 
+/home/pgillet/git/Glue/glue-search/target/classes/db-data-config.xml and to import data with this 
+configuration file in the Solr admin Web interface.
