@@ -93,6 +93,8 @@ public class TestDateExtraction {
 
 	analyze("- Du 18 février au 27 mars 2014");
 
+	analyze("Conte clownesque en duo, une création 2012 en coproduction des Compagnies la Caravole et kOikadi. du jeudi 6 au dimanche 9 mars à 10h30 et 16h45. Une tanière sous une tempête de neige en plein été, un \"Loup\" devenu végétarien, un \"Rouge\" petit Chaperon et pot de colle sont les ingrédients de cette rencontre où les questions se posent : la peur aide-t-elle à grandir, le nem nourrit il son Loup, les médias sont-ils neutres, que fera \"Rouge\" à sa retraite, que vient faire Pinocchio dans cette histoire, comment devenir soi-même, est-ce la fin des contes et pourquoi toute cette neige un 02 juillet !");
+
     }
 
     private static void analyze(String str) {

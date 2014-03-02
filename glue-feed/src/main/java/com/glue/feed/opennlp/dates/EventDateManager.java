@@ -101,7 +101,7 @@ public class EventDateManager {
 	// all
 	// event date previously closed
 	// samedi 15 et dimanche 17 à 17H30 et 18H15
-	if (previousSpan.getType().equals("hour")) {
+	if (previousSpan != null && previousSpan.getType().equals("hour")) {
 
 	    for (EventDate eDate : lastEventDatesClosed) {
 		EventDate newEventDate = EventDate.duplicate(eDate);
