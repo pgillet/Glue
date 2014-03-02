@@ -6,7 +6,7 @@ import java.util.List;
 /**
  *  performer object.
  * <p>
- * Use the PerformerOperations class to manipulate
+ * 
  * 
  * 
  * 
@@ -145,7 +145,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer events. Use the EventOperations class to manipulate
+     * Set the performer events. 
      * 
      * 
      * Performer)
@@ -186,7 +186,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer links. Use the PerformerOperations class to manipulate
+     * Set the performer links. 
      * 
      * 
      * Link)
@@ -265,7 +265,7 @@ public class Performer {
     }
 
     /**
-     * List of performer tags. Use the PerformerOperations class to manipulate
+     * List of performer tags. 
      * 
      * 
      * List)
@@ -310,7 +310,7 @@ public class Performer {
     }
 
     /**
-     * Set the withdrawn note. Use the PerformerOperations class to manipulate
+     * Set the withdrawn note. 
      * 
      * 
      * String)
@@ -332,7 +332,7 @@ public class Performer {
     }
 
     /**
-     * Set the properties. Use the PerformerOperations class to manipulate
+     * Set the properties. 
      * 
      * 
      * Property)

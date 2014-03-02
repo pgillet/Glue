@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Event class.
  * <p>
- * Use the EventOperations class to manipulate
+ * 
  * 
  * 
  * 
@@ -366,7 +366,7 @@ public class Event {
     }
 
     /**
-     * Delete the event. Use the EventOperations class to manipulate
+     * Delete the event. 
      * 
      * 
      * @param withdrawn
@@ -386,7 +386,7 @@ public class Event {
     }
 
     /**
-     * Set the withdrawn note. Use the EventOperations class to manipulate
+     * Set the withdrawn note. 
      * 
      * 
      * @param withdrawnNote
@@ -406,7 +406,7 @@ public class Event {
     }
 
     /**
-     * Set event links. Use the EventOperations class to manipulate
+     * Set event links. 
      * 
      * 
      * @param links
@@ -426,7 +426,7 @@ public class Event {
     }
 
     /**
-     * Set the event comments. Use the EventOperations class to manipulate
+     * Set the event comments. 
      * 
      * 
      * Comment)
@@ -475,7 +475,7 @@ public class Event {
     }
 
     /**
-     * List of images to set. Use the EventOperations class to manipulate
+     * List of images to set. 
      * 
      * 
      * @param images
@@ -495,7 +495,7 @@ public class Event {
     }
 
     /**
-     * Set the list of event tags. Use the EventOperations class to manipulate
+     * Set the list of event tags. 
      * 
      * 
      * @param tags
@@ -515,7 +515,7 @@ public class Event {
     }
 
     /**
-     * Set the event properties. Use the EventOperations class to manipulate
+     * Set the event properties. 
      * 
      * 
      * Property)
@@ -537,7 +537,7 @@ public class Event {
     }
 
     /**
-     * Set the event categories. Use the EventOperations class to manipulate
+     * Set the event categories. 
      * 
      * 
      * @param categories
