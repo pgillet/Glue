@@ -26,15 +26,15 @@ public class Event {
     private String title;
 
     /**
-     * Event URL
-     */
-    private String url;
-
-    /**
      * Description
      * 
      */
     private String description;
+
+    /**
+     * Event URL
+     */
+    private String url;
 
     /**
      * Event start time
@@ -50,13 +50,11 @@ public class Event {
     /**
      * Timezone of the event in Olson format
      */
-
     private String olsonPath;
 
     /**
      * Whether the event is an all-day event
      */
-
     private boolean allDay = false;
 
     /**
@@ -75,11 +73,6 @@ public class Event {
     private boolean withdrawn;
 
     private String withdrawnNote;
-
-    /**
-     * Privacy of the event. "1" is public
-     */
-    private int privacy = 1;
 
     /**
      * List of parent events
@@ -104,12 +97,6 @@ public class Event {
      */
 
     private List<Comment> comments;
-
-    /**
-     * Event trackbacks
-     */
-
-    private List<Trackback> trackbacks;
 
     /**
      * Performers for the event
@@ -475,25 +462,6 @@ public class Event {
     }
 
     /**
-     * Trackback URLs to the event
-     * 
-     * @return the trackbacks
-     */
-    public List<Trackback> getTrackbacks() {
-	return trackbacks;
-    }
-
-    /**
-     * Set the trackback URLs.
-     * 
-     * @param trackbacks
-     *            the trackbacks to set
-     */
-    public void setTrackbacks(List<Trackback> trackbacks) {
-	this.trackbacks = trackbacks;
-    }
-
-    /**
      * List of images for the event
      * 
      * @return the images
@@ -597,25 +565,6 @@ public class Event {
      */
     public void setGoing(List<User> going) {
 	this.going = going;
-    }
-
-    /**
-     * Event privacy. 1 is Public, 2 is Private
-     * 
-     * @return the privacy
-     */
-    public int getPrivacy() {
-	return privacy;
-    }
-
-    /**
-     * Set the event privacy. 1 is Public, 2 is Private
-     * 
-     * @param privacy
-     *            the privacy to set
-     */
-    public void setPrivacy(int privacy) {
-	this.privacy = privacy;
     }
 
     /**

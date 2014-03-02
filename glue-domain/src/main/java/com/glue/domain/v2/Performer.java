@@ -26,12 +26,6 @@ public class Performer {
     private String name;
 
     /**
-     * Whether the performer is human or not
-     */
-
-    private boolean human;
-
-    /**
      * Short performer bio
      */
 
@@ -42,24 +36,6 @@ public class Performer {
      */
 
     private String longBio;
-
-    /**
-     * Number of demands for the performer
-     */
-
-    private int demandCount;
-
-    /**
-     * Number of users who have joined each demand
-     */
-
-    private int demandMemberCount;
-
-    /**
-     * Number of future events this performer has
-     */
-
-    private int eventCount;
 
     /**
      * Date performer was created
@@ -160,65 +136,6 @@ public class Performer {
     }
 
     /**
-     * Return performer demand count
-     * 
-     * @return the demandCount
-     */
-    public int getDemandCount() {
-	return demandCount;
-    }
-
-    /**
-     * Set the performer demand count
-     * 
-     * @param demandCount
-     *            the demandCount to set
-     */
-    public void setDemandCount(int demandCount) {
-	this.demandCount = demandCount;
-    }
-
-    /**
-     * Total number of demand members
-     * 
-     * @return the demandMemberCount
-     */
-    public int getDemandMemberCount() {
-	return demandMemberCount;
-    }
-
-    /**
-     * Total number of demand members. This is a calculated field, setting the
-     * field will have no effect
-     * 
-     * @param demandMemberCount
-     *            the demandMemberCount to set
-     */
-    public void setDemandMemberCount(int demandMemberCount) {
-	this.demandMemberCount = demandMemberCount;
-    }
-
-    /**
-     * Number of performer events
-     * 
-     * @return the eventCount
-     */
-    public int getEventCount() {
-	return eventCount;
-    }
-
-    /**
-     * Number of performer events. This is a calculated field, setting the field
-     * will have no effect
-     * 
-     * @param eventCount
-     *            the eventCount to set
-     */
-    public void setEventCount(int eventCount) {
-	this.eventCount = eventCount;
-    }
-
-    /**
      * List of performer events
      * 
      * @return the events
@@ -238,25 +155,6 @@ public class Performer {
      */
     public void setEvents(List<Event> events) {
 	this.events = events;
-    }
-
-    /**
-     * Whether the performer is human or not
-     * 
-     * @return the human
-     */
-    public boolean isHuman() {
-	return human;
-    }
-
-    /**
-     * Set whether the performer is human or not
-     * 
-     * @param human
-     *            the human to set
-     */
-    public void setHuman(boolean human) {
-	this.human = human;
     }
 
     /**

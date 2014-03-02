@@ -18,8 +18,6 @@ public class Venue {
 
     private String type;
 
-    private int display;
-
     private String address;
 
     private String city;
@@ -40,8 +38,6 @@ public class Venue {
 
     private double longitude;
 
-    private int privacy = 1;
-
     private String url;
 
     private String urlType;
@@ -57,8 +53,6 @@ public class Venue {
     private List<Link> links;
 
     private List<Comment> comments;
-
-    private List<Trackback> trackbacks;
 
     private List<Property> properties;
 
@@ -115,25 +109,6 @@ public class Venue {
      */
     public void setCity(String venueCity) {
 	this.city = venueCity;
-    }
-
-    /**
-     * Set the display property
-     * 
-     * @return the venueDisplay
-     */
-    public int getDisplay() {
-	return display;
-    }
-
-    /**
-     * Set the display property
-     * 
-     * @param venueDisplay
-     *            the venueDisplay to set
-     */
-    public void setDisplay(int venueDisplay) {
-	this.display = venueDisplay;
     }
 
     /**
@@ -444,25 +419,6 @@ public class Venue {
     }
 
     /**
-     * List of venue trackbacks
-     * 
-     * @return the trackbacks
-     */
-    public List<Trackback> getTrackbacks() {
-	return trackbacks;
-    }
-
-    /**
-     * List of venue trackbacks
-     * 
-     * @param trackbacks
-     *            the trackbacks to set
-     */
-    public void setTrackbacks(List<Trackback> trackbacks) {
-	this.trackbacks = trackbacks;
-    }
-
-    /**
      * Venue properties
      * 
      * @return the properties
@@ -498,25 +454,6 @@ public class Venue {
      */
     public void setDescription(String description) {
 	this.description = description;
-    }
-
-    /**
-     * Venue privacy
-     * 
-     * @return the privacy
-     */
-    public int getPrivacy() {
-	return privacy;
-    }
-
-    /**
-     * Set the venue privacy
-     * 
-     * @param privacy
-     *            the privacy to set
-     */
-    public void setPrivacy(int privacy) {
-	this.privacy = privacy;
     }
 
     /**

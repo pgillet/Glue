@@ -15,7 +15,7 @@ public class Comment {
      * Comment ID
      */
 
-    private int id;
+    private String id;
 
     /**
      * Comment text
@@ -49,7 +49,7 @@ public class Comment {
      * 
      * @return the id
      */
-    public int getId() {
+    public String getId() {
 	return id;
     }
 
@@ -59,7 +59,7 @@ public class Comment {
      * @param id
      *            the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
 	this.id = id;
     }
 
