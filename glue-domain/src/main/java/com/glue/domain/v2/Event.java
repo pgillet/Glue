@@ -5,143 +5,124 @@ import java.util.List;
 
 /**
  * Event class.
- * <p>
- * 
- * 
- * 
- * 
- * 
  */
 public class Event {
 
     /**
      * Event ID.
      */
-
     private String id;
 
     /**
-     * Event title
+     * Event title.
      */
     private String title;
 
     /**
-     * Description
-     * 
+     * Description.
      */
     private String description;
 
     /**
-     * Event URL
+     * Event URL.
      */
     private String url;
 
     /**
-     * Event start time
+     * Event start time.
      */
-
     protected Date startTime;
 
     /**
-     * Event end time. Not all events have end times
+     * Event end time. Not all events have end times.
      */
     private Date stopTime;
 
     /**
-     * Timezone of the event in Olson format
+     * Timezone of the event.
      */
-    private String olsonPath;
+    private String timeZone;
 
     /**
-     * Whether the event is an all-day event
+     * Whether the event is an all-day event.
      */
     private boolean allDay = false;
 
     /**
-     * Whether the event is free
+     * Whether the event is free.
      */
     private boolean free = false;
 
     /**
-     * Event price
+     * Event price.
      */
     private String price;
 
     /**
-     * Whether the event is withdrawn (deleted)
+     * Whether the event is withdrawn (deleted).
      */
     private boolean withdrawn;
 
     private String withdrawnNote;
 
     /**
-     * List of parent events
+     * Parent event.
      */
-
-    private List<Event> parents;
+    private Event parent;
 
     /**
-     * List of child events
+     * List of child events.
      */
-
     private List<Event> children;
 
     /**
-     * List of links
+     * List of links.
      */
-
     private List<Link> links;
 
     /**
-     * Event comments
+     * Event comments.
      */
-
     private List<Comment> comments;
 
     /**
-     * Performers for the event
+     * Performers for the event.
      */
-
     private List<Performer> performers;
 
     /**
-     * MultipleImages
+     * Images.
      */
-
     private List<Image> images;
-
-    /**
-     * SingleImage
-     */
-
-    private List<Image> singleImageList;
 
     /**
      * List f tags
      */
-
     private List<Tag> tags;
 
     /**
      * Event properties
      */
-
     private List<Property> properties;
 
     /**
      * Users watching or going to the event
      */
-
     private List<User> going;
 
     private List<Category> categories;
 
+    private boolean reference;
+
     private Venue venue;
 
     /**
-     * Return the venue from the given information. If a venue object does not
-     * yet exist, but an SVID or venue name is present, a venue object will be
-     * constructed from this data and returned
+     * Date event was created.
+     */
+    private Date created;
+
+    /**
+     * Return the venue from the given information.
      * 
      * @return The Venue Object
      */
@@ -150,7 +131,7 @@ public class Event {
     }
 
     /**
-     * Whether the event is all day or not
+     * Whether the event is all day or not.
      * 
      * @return the allDay
      */
@@ -159,7 +140,7 @@ public class Event {
     }
 
     /**
-     * Whether the event is all day or not
+     * Whether the event is all day or not.
      * 
      * @param allDay
      *            the allDay to set
@@ -169,7 +150,7 @@ public class Event {
     }
 
     /**
-     * Event description
+     * Event description.
      * 
      * @return the description
      */
@@ -178,7 +159,7 @@ public class Event {
     }
 
     /**
-     * Event description
+     * Event description.
      * 
      * @param description
      *            the description to set
@@ -188,7 +169,7 @@ public class Event {
     }
 
     /**
-     * The event SEID
+     * The event ID.
      * 
      * @return the id
      */
@@ -197,7 +178,7 @@ public class Event {
     }
 
     /**
-     * The event ID
+     * The event ID.
      * 
      * @param id
      *            the id to set
@@ -207,7 +188,7 @@ public class Event {
     }
 
     /**
-     * Event start time
+     * Event start time.
      * 
      * @return the startTime
      */
@@ -216,7 +197,7 @@ public class Event {
     }
 
     /**
-     * Event start time
+     * Event start time.
      * 
      * @param startTime
      *            the startTime to set
@@ -226,7 +207,7 @@ public class Event {
     }
 
     /**
-     * Event stop time
+     * Event stop time.
      * 
      * @return the stopTime
      */
@@ -235,7 +216,7 @@ public class Event {
     }
 
     /**
-     * Event stop time
+     * Event stop time.
      * 
      * @param stopTime
      *            the stopTime to set
@@ -245,7 +226,7 @@ public class Event {
     }
 
     /**
-     * Event title
+     * Event title.
      * 
      * @return the title
      */
@@ -254,7 +235,7 @@ public class Event {
     }
 
     /**
-     * Event URL
+     * Event URL.
      * 
      * @return the URL
      */
@@ -263,7 +244,7 @@ public class Event {
     }
 
     /**
-     * Title of the event
+     * Title of the event.
      * 
      * @param title
      *            the title to set
@@ -273,7 +254,7 @@ public class Event {
     }
 
     /**
-     * Venue for the event
+     * Venue for the event.
      * 
      * @param venue
      *            the venue to set
@@ -283,7 +264,7 @@ public class Event {
     }
 
     /**
-     * Event children
+     * Event children.
      * 
      * @return the children
      */
@@ -292,7 +273,7 @@ public class Event {
     }
 
     /**
-     * Event children
+     * Event children.
      * 
      * @param children
      *            the children to set
@@ -302,7 +283,7 @@ public class Event {
     }
 
     /**
-     * Whether the event is free or not
+     * Whether the event is free or not.
      * 
      * @return the free
      */
@@ -319,26 +300,26 @@ public class Event {
     }
 
     /**
-     * Return parent events
+     * Return the parent event.
      * 
-     * @return the parents
+     * @return the parent
      */
-    public List<Event> getParents() {
-	return parents;
+    public Event getParent() {
+	return parent;
     }
 
     /**
-     * Set parent events
+     * Set the parent event.
      * 
-     * @param parents
-     *            the parents to set
+     * @param parent
+     *            the parent to set
      */
-    public void setParents(List<Event> parents) {
-	this.parents = parents;
+    public void setParent(Event parent) {
+	this.parent = parent;
     }
 
     /**
-     * Price of the event
+     * Price of the event.
      * 
      * @return the price
      */
@@ -347,7 +328,7 @@ public class Event {
     }
 
     /**
-     * Set the event price
+     * Set the event price.
      * 
      * @param price
      *            the price to set
@@ -357,7 +338,7 @@ public class Event {
     }
 
     /**
-     * Whether the event is withdrawn (or deleted) or not
+     * Whether the event is withdrawn (or deleted) or not.
      * 
      * @return the withdrawn
      */
@@ -366,8 +347,7 @@ public class Event {
     }
 
     /**
-     * Delete the event. 
-     * 
+     * Delete the event.
      * 
      * @param withdrawn
      *            the withdrawn to set
@@ -377,7 +357,7 @@ public class Event {
     }
 
     /**
-     * Get the withdrawn note
+     * Get the withdrawn note.
      * 
      * @return the withdrawnNote
      */
@@ -386,8 +366,7 @@ public class Event {
     }
 
     /**
-     * Set the withdrawn note. 
-     * 
+     * Set the withdrawn note.
      * 
      * @param withdrawnNote
      *            the withdrawnNote to set
@@ -397,7 +376,7 @@ public class Event {
     }
 
     /**
-     * List of event links
+     * List of event links.
      * 
      * @return the links
      */
@@ -406,8 +385,7 @@ public class Event {
     }
 
     /**
-     * Set event links. 
-     * 
+     * Set event links.
      * 
      * @param links
      *            the links to set
@@ -417,7 +395,7 @@ public class Event {
     }
 
     /**
-     * Return event comments
+     * Return event comments.
      * 
      * @return the comments
      */
@@ -426,10 +404,7 @@ public class Event {
     }
 
     /**
-     * Set the event comments. 
-     * 
-     * 
-     * Comment)
+     * Set the event comments.
      * 
      * @param comments
      *            the comments to set
@@ -439,7 +414,7 @@ public class Event {
     }
 
     /**
-     * Get the list of performers for the event
+     * Get the list of performers for the event.
      * 
      * @return the performers
      */
@@ -448,11 +423,7 @@ public class Event {
     }
 
     /**
-     * Set the list of event performers. Use the EventOperations class to
-     * manipulate
-     * 
-     * 
-     * Performer)
+     * Set the list of event performers.
      * 
      * @param performers
      *            the performers to set
@@ -462,21 +433,16 @@ public class Event {
     }
 
     /**
-     * List of images for the event
+     * List of images for the event.
      * 
      * @return the images
      */
     public List<Image> getImages() {
-	if (singleImageList != null) {
-	    return singleImageList;
-	} else {
-	    return images;
-	}
+	return images;
     }
 
     /**
-     * List of images to set. 
-     * 
+     * List of images to set.
      * 
      * @param images
      *            the images to set
@@ -486,7 +452,7 @@ public class Event {
     }
 
     /**
-     * Return the list of event tags
+     * Return the list of event tags.
      * 
      * @return the tags
      */
@@ -495,8 +461,7 @@ public class Event {
     }
 
     /**
-     * Set the list of event tags. 
-     * 
+     * Set the list of event tags.
      * 
      * @param tags
      *            the tags to set
@@ -506,7 +471,7 @@ public class Event {
     }
 
     /**
-     * A list of event properites
+     * A list of event properties.
      * 
      * @return the properties
      */
@@ -515,10 +480,7 @@ public class Event {
     }
 
     /**
-     * Set the event properties. 
-     * 
-     * 
-     * Property)
+     * Set the event properties.
      * 
      * @param properties
      *            the properties to set
@@ -537,7 +499,7 @@ public class Event {
     }
 
     /**
-     * Set the event categories. 
+     * Set the event categories.
      * 
      * 
      * @param categories
@@ -548,7 +510,7 @@ public class Event {
     }
 
     /**
-     * List of users going to the event
+     * List of users going to the event.
      * 
      * @return the going
      */
@@ -557,8 +519,7 @@ public class Event {
     }
 
     /**
-     * Set the users going to the event. Use the UserOperations class to
-     * manipulate
+     * Set the users going to the event.
      * 
      * @param going
      *            the going to set
@@ -568,21 +529,59 @@ public class Event {
     }
 
     /**
-     * The timezone olson path for the event
+     * The timezone for the event.
      * 
-     * @return the olsonPath
+     * @return the timeZone
      */
-    public String getOlsonPath() {
-	return olsonPath;
+    public String getTimeZone() {
+	return timeZone;
     }
 
     /**
-     * The timezone olson path for the event
+     * The timezone for the event.
      * 
-     * @param olsonPath
-     *            the olsonPath to set
+     * @param timeZone
+     *            the timeZone to set
      */
-    public void setOlsonPath(String olsonPath) {
-	this.olsonPath = olsonPath;
+    public void setTimeZone(String timeZone) {
+	this.timeZone = timeZone;
+    }
+
+    /**
+     * Date event was created.
+     * 
+     * @return the created
+     */
+    public Date getCreated() {
+	return created;
+    }
+
+    /**
+     * Date event was created.
+     * 
+     * @param created
+     *            the created to set
+     */
+    public void setCreated(Date created) {
+	this.created = created;
+    }
+
+    /**
+     * Whether this event is the reference.
+     * 
+     * @return the reference
+     */
+    public boolean isReference() {
+	return reference;
+    }
+
+    /**
+     * Whether this event is the reference.
+     * 
+     * @param reference
+     *            the reference to set
+     */
+    public void setReference(boolean reference) {
+	this.reference = reference;
     }
 }

@@ -4,31 +4,23 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *  performer object.
- * <p>
- * 
- * 
- * 
- * 
- * 
+ * Performer object.
  */
-
 public class Performer {
 
     /**
-     * Performer ID
+     * Performer ID.
      */
     private String id;
 
     /**
-     * Performer name
+     * Performer name.
      */
     private String name;
 
     /**
-     * Short performer bio
+     * Short performer bio.
      */
-
     private String shortBio;
 
     /**
@@ -38,12 +30,12 @@ public class Performer {
     private String longBio;
 
     /**
-     * Date performer was created
+     * Date performer was created.
      */
     private Date created;
 
     /**
-     * Username that created the performer
+     * Username that created the performer.
      */
     private String creator;
 
@@ -75,7 +67,7 @@ public class Performer {
     }
 
     /**
-     * List of performer comments
+     * List of performer comments.
      * 
      * @return the comments
      */
@@ -84,11 +76,7 @@ public class Performer {
     }
 
     /**
-     * List of performer comments. Use the PerformerOperations class to
-     * manipulate
-     * 
-     * 
-     * Comment)
+     * List of performer comments.
      * 
      * @param comments
      *            the comments to set
@@ -98,7 +86,7 @@ public class Performer {
     }
 
     /**
-     * Date performer was created
+     * Date performer was created.
      * 
      * @return the created
      */
@@ -107,7 +95,7 @@ public class Performer {
     }
 
     /**
-     * Date performer was created
+     * Date performer was created.
      * 
      * @param created
      *            the created to set
@@ -117,7 +105,7 @@ public class Performer {
     }
 
     /**
-     * Get the creator of the performer
+     * Get the creator of the performer.
      * 
      * @return the creator
      */
@@ -126,7 +114,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer creator
+     * Set the performer creator.
      * 
      * @param creator
      *            the creator to set
@@ -136,7 +124,7 @@ public class Performer {
     }
 
     /**
-     * List of performer events
+     * List of performer events.
      * 
      * @return the events
      */
@@ -145,10 +133,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer events. 
-     * 
-     * 
-     * Performer)
+     * Set the performer events.
      * 
      * @param events
      *            the events to set
@@ -158,7 +143,7 @@ public class Performer {
     }
 
     /**
-     * List the performer images
+     * List the performer images.
      * 
      * @return the images
      */
@@ -167,7 +152,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer images
+     * Set the performer images.
      * 
      * @param images
      *            the images to set
@@ -177,7 +162,7 @@ public class Performer {
     }
 
     /**
-     * Return a list of performer links
+     * Return a list of performer links.
      * 
      * @return the links
      */
@@ -186,10 +171,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer links. 
-     * 
-     * 
-     * Link)
+     * Set the performer links.
      * 
      * @param links
      *            the links to set
@@ -199,7 +181,7 @@ public class Performer {
     }
 
     /**
-     * Performer long bio
+     * Performer long bio.
      * 
      * @return the longBio
      */
@@ -208,7 +190,7 @@ public class Performer {
     }
 
     /**
-     * Performer long bio
+     * Performer long bio.
      * 
      * @param longBio
      *            the longBio to set
@@ -218,7 +200,7 @@ public class Performer {
     }
 
     /**
-     * Performer name
+     * Performer name.
      * 
      * @return the name
      */
@@ -227,7 +209,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer name
+     * Set the performer name.
      * 
      * @param name
      *            the name to set
@@ -237,7 +219,7 @@ public class Performer {
     }
 
     /**
-     * Set the performer short bio
+     * Set the performer short bio.
      * 
      * @return the shortBio
      */
@@ -246,7 +228,7 @@ public class Performer {
     }
 
     /**
-     * Performer short bio
+     * Performer short bio.
      * 
      * @param shortBio
      *            the shortBio to set
@@ -256,7 +238,7 @@ public class Performer {
     }
 
     /**
-     * List of performer tags
+     * List of performer tags.
      * 
      * @return the tags
      */
@@ -265,10 +247,7 @@ public class Performer {
     }
 
     /**
-     * List of performer tags. 
-     * 
-     * 
-     * List)
+     * List of performer tags.
      * 
      * @param tags
      *            the tags to set
@@ -278,7 +257,7 @@ public class Performer {
     }
 
     /**
-     * Whether the performer is withdrawn
+     * Whether the performer is withdrawn.
      * 
      * @return the withdrawn
      */
@@ -287,11 +266,7 @@ public class Performer {
     }
 
     /**
-     * Whether the performer is withdrawn. Use the PerformerOperations class to
-     * manipulate
-     * 
-     * 
-     * String)
+     * Whether the performer is withdrawn.
      * 
      * @param withdrawn
      *            the withdrawn to set
@@ -301,7 +276,7 @@ public class Performer {
     }
 
     /**
-     * Return the withdrawn note
+     * Return the withdrawn note.
      * 
      * @return the withdrawnNote
      */
@@ -323,7 +298,7 @@ public class Performer {
     }
 
     /**
-     * Return the properites
+     * Return the properties.
      * 
      * @return the properties
      */
@@ -332,12 +307,7 @@ public class Performer {
     }
 
     /**
-     * Set the properties. 
-     * 
-     * 
-     * Property)
-     * 
-     * Property)
+     * Set the properties.
      * 
      * @param properties
      *            the properties to set

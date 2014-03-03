@@ -1,26 +1,23 @@
 package com.glue.domain.v2;
 
 /**
- * The category object
- * 
- * 
- * 
+ * The category object.
  */
 
 public class Category {
 
     /**
-     * Category ID
+     * Category ID.
      */
     private String id;
 
     /**
-     * Category Name
+     * Category Name.
      */
     private String name;
 
     /**
-     * Return the category ID
+     * Return the category ID.
      * 
      * @return the id
      */
@@ -29,7 +26,7 @@ public class Category {
     }
 
     /**
-     * Set the category ID
+     * Set the category ID.
      * 
      * @param id
      *            the id to set
@@ -39,7 +36,7 @@ public class Category {
     }
 
     /**
-     * Get the category name
+     * Get the category name.
      * 
      * @return the name
      */
@@ -48,7 +45,7 @@ public class Category {
     }
 
     /**
-     * Set the category name
+     * Set the category name.
      * 
      * @param name
      *            the name to set

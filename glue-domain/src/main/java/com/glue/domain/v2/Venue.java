@@ -1,12 +1,10 @@
 package com.glue.domain.v2;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * Venue object
- * 
- * 
- * 
+ * Venue object.
  */
 public class Venue {
 
@@ -40,11 +38,9 @@ public class Venue {
 
     private String url;
 
-    private String urlType;
-
     private String geocodeType;
 
-    private List<Venue> parents;
+    private Venue parent;
 
     private List<Venue> children;
 
@@ -57,6 +53,15 @@ public class Venue {
     private List<Property> properties;
 
     private List<Tag> tags;
+
+    /**
+     * Date venue was created
+     */
+    private Date created;
+
+    private String timeZone;
+
+    private boolean reference;
 
     /**
      * @return the id
@@ -74,7 +79,7 @@ public class Venue {
     }
 
     /**
-     * Street address of the venue
+     * Street address of the venue.
      * 
      * @return the venueAddress
      */
@@ -83,7 +88,7 @@ public class Venue {
     }
 
     /**
-     * Street address of the venue
+     * Street address of the venue.
      * 
      * @param venueAddress
      *            the venueAddress to set
@@ -93,7 +98,7 @@ public class Venue {
     }
 
     /**
-     * City of the venue
+     * City of the venue.
      * 
      * @return the venueCity
      */
@@ -102,7 +107,7 @@ public class Venue {
     }
 
     /**
-     * Set the city
+     * Set the city.
      * 
      * @param venueCity
      *            the venueCity to set
@@ -112,7 +117,7 @@ public class Venue {
     }
 
     /**
-     * Name of the venue
+     * Name of the venue.
      * 
      * @return the venueName
      */
@@ -121,7 +126,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue name
+     * Set the venue name.
      * 
      * @param venueName
      *            the venueName to set
@@ -131,7 +136,7 @@ public class Venue {
     }
 
     /**
-     * Type of venue
+     * Type of venue.
      * 
      * @return the venueType
      */
@@ -140,7 +145,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue type
+     * Set the venue type.
      * 
      * @param venueType
      *            the venueType to set
@@ -150,7 +155,7 @@ public class Venue {
     }
 
     /**
-     * Country the venue is in
+     * Country the venue is in.
      * 
      * @return the country
      */
@@ -169,7 +174,7 @@ public class Venue {
     }
 
     /**
-     * Three letter country abbreviation
+     * Three letter country abbreviation.
      * 
      * @return the countryThreeLetterAbbreviation
      */
@@ -178,7 +183,7 @@ public class Venue {
     }
 
     /**
-     * Three letter country abbreviation
+     * Three letter country abbreviation.
      * 
      * @param countryThreeLetterAbbreviation
      *            the countryThreeLetterAbbreviation to set
@@ -189,7 +194,7 @@ public class Venue {
     }
 
     /**
-     * 2-letter country abbreviation
+     * 2-letter country abbreviation.
      * 
      * @return the countryTwoLetterAbbreviation
      */
@@ -198,7 +203,7 @@ public class Venue {
     }
 
     /**
-     * 2-letter abbreviation
+     * 2-letter abbreviation.
      * 
      * @param countryTwoLetterAbbreviation
      *            the countryTwoLetterAbbreviation to set
@@ -209,7 +214,7 @@ public class Venue {
     }
 
     /**
-     * Geocode type for the venue
+     * Geocode type for the venue.
      * 
      * @return the geocodeType
      */
@@ -218,8 +223,7 @@ public class Venue {
     }
 
     /**
-     * Geocode type of the venue. Note: this property should not be set by
-     * external users
+     * Geocode type of the venue.
      * 
      * @param geocodeType
      *            the geocodeType to set
@@ -229,7 +233,7 @@ public class Venue {
     }
 
     /**
-     * Latitude
+     * Latitude.
      * 
      * @return the latitude
      */
@@ -238,7 +242,7 @@ public class Venue {
     }
 
     /**
-     * Latitude
+     * Latitude.
      * 
      * @param latitude
      *            the latitude to set
@@ -248,7 +252,7 @@ public class Venue {
     }
 
     /**
-     * Longitude
+     * Longitude.
      * 
      * @return the longitude
      */
@@ -257,7 +261,7 @@ public class Venue {
     }
 
     /**
-     * Longitude
+     * Longitude.
      * 
      * @param longitude
      *            the longitude to set
@@ -267,7 +271,7 @@ public class Venue {
     }
 
     /**
-     * Venue postal code
+     * Venue postal code.
      * 
      * @return the postalCode
      */
@@ -276,7 +280,7 @@ public class Venue {
     }
 
     /**
-     * Postal code
+     * Postal code.
      * 
      * @param postalCode
      *            the postalCode to set
@@ -286,7 +290,7 @@ public class Venue {
     }
 
     /**
-     * Region of the venue
+     * Region of the venue.
      * 
      * @return the region
      */
@@ -295,7 +299,7 @@ public class Venue {
     }
 
     /**
-     * Venue Region
+     * Venue Region.
      * 
      * @param region
      *            the region to set
@@ -305,7 +309,7 @@ public class Venue {
     }
 
     /**
-     * Region abbreviation
+     * Region abbreviation.
      * 
      * @return the regionAbbreviation
      */
@@ -314,7 +318,7 @@ public class Venue {
     }
 
     /**
-     * Region abbreviation
+     * Region abbreviation.
      * 
      * @param regionAbbreviation
      *            the regionAbbreviation to set
@@ -324,7 +328,7 @@ public class Venue {
     }
 
     /**
-     * List of child venues
+     * List of child venues.
      * 
      * @return the children
      */
@@ -333,7 +337,7 @@ public class Venue {
     }
 
     /**
-     * Set the child venues
+     * Set the child venues.
      * 
      * @param children
      *            the children to set
@@ -343,7 +347,7 @@ public class Venue {
     }
 
     /**
-     * Venue comments
+     * Venue comments.
      * 
      * @return the comments
      */
@@ -352,7 +356,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue comments
+     * Set the venue comments.
      * 
      * @param comments
      *            the comments to set
@@ -362,7 +366,7 @@ public class Venue {
     }
 
     /**
-     * List of events at the venue
+     * List of events at the venue.
      * 
      * @return the events
      */
@@ -371,7 +375,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue event list
+     * Set the venue event list.
      * 
      * @param events
      *            the events to set
@@ -381,7 +385,7 @@ public class Venue {
     }
 
     /**
-     * List of web links
+     * List of web links.
      * 
      * @return the links
      */
@@ -390,7 +394,7 @@ public class Venue {
     }
 
     /**
-     * List of web links
+     * List of web links.
      * 
      * @param links
      *            the links to set
@@ -400,26 +404,26 @@ public class Venue {
     }
 
     /**
-     * Parent venues
+     * Parent venue.
      * 
-     * @return the parents
+     * @return the parent
      */
-    public List<Venue> getParents() {
-	return parents;
+    public Venue getParent() {
+	return parent;
     }
 
     /**
-     * Set the parent venues
+     * Set the parent venue.
      * 
-     * @param parents
-     *            the parents to set
+     * @param parent
+     *            the parent to set
      */
-    public void setParents(List<Venue> parents) {
-	this.parents = parents;
+    public void setParent(Venue parent) {
+	this.parent = parent;
     }
 
     /**
-     * Venue properties
+     * Venue properties.
      * 
      * @return the properties
      */
@@ -428,7 +432,7 @@ public class Venue {
     }
 
     /**
-     * List of venue properties
+     * List of venue properties.
      * 
      * @param properties
      *            the properties to set
@@ -438,7 +442,7 @@ public class Venue {
     }
 
     /**
-     * Venue description
+     * Venue description.
      * 
      * @return the description
      */
@@ -447,7 +451,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue description
+     * Set the venue description.
      * 
      * @param description
      *            the description to set
@@ -457,7 +461,7 @@ public class Venue {
     }
 
     /**
-     * Venue URL
+     * Venue URL.
      * 
      * @return the url
      */
@@ -466,7 +470,7 @@ public class Venue {
     }
 
     /**
-     * Set the venue URL
+     * Set the venue URL.
      * 
      * @param url
      *            the url to set
@@ -476,26 +480,7 @@ public class Venue {
     }
 
     /**
-     * URL type
-     * 
-     * @return the urlType
-     */
-    public String getUrlType() {
-	return urlType;
-    }
-
-    /**
-     * URL type
-     * 
-     * @param urlType
-     *            the urlType to set
-     */
-    public void setUrlType(String urlType) {
-	this.urlType = urlType;
-    }
-
-    /**
-     * List of venue tags
+     * List of venue tags.
      * 
      * @return the tags
      */
@@ -504,13 +489,68 @@ public class Venue {
     }
 
     /**
-     * Set the venue tags
+     * Set the venue tags.
      * 
      * @param tags
      *            the tags to set
      */
     public void setTags(List<Tag> tags) {
 	this.tags = tags;
+    }
+
+    /**
+     * Date performer was created.
+     * 
+     * @return the created
+     */
+    public Date getCreated() {
+	return created;
+    }
+
+    /**
+     * Date performer was created.
+     * 
+     * @param created
+     *            the created to set
+     */
+    public void setCreated(Date created) {
+	this.created = created;
+    }
+
+    /**
+     * The timezone for the venue.
+     * 
+     * @return the timeZone
+     */
+    public String getTimeZone() {
+	return timeZone;
+    }
+
+    /**
+     * @param timeZone
+     *            the timeZone to set
+     */
+    public void setTimeZone(String timeZone) {
+	this.timeZone = timeZone;
+    }
+
+    /**
+     * Whether this venue is the reference.
+     * 
+     * @return the reference
+     */
+    public boolean isReference() {
+	return reference;
+    }
+
+    /**
+     * Whether this venue is the reference.
+     * 
+     * @param reference
+     *            the reference to set
+     */
+    public void setReference(boolean reference) {
+	this.reference = reference;
     }
 
 }

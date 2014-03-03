@@ -2,10 +2,7 @@ package com.glue.domain.v2;
 
 /**
  * Each image contains several image items. These are specific image
- * characteristics
- * 
- * 
- * 
+ * characteristics.
  */
 
 public class ImageItem {

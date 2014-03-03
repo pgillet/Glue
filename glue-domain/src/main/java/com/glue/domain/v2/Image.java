@@ -1,42 +1,37 @@
 package com.glue.domain.v2;
 
 /**
- * Image object
- * 
- * 
- * 
+ * Image object.
  */
-
 public class Image {
 
     /**
-     * Id of the image
+     * Id of the image.
      */
     private String id;
 
     /**
-     * Image caption
+     * Image caption.
      */
     private String caption;
 
     /**
-     * USer who created the images
+     * USer who created the images.
      */
     private String creator;
 
     /**
-     * Image source
+     * Image source.
      */
     private String source;
 
     /**
      * Whether this is the default/sticky image or not
      */
-
     private boolean sticky;
 
     /**
-     * Image URL
+     * Image URL.
      */
     private String url;
 

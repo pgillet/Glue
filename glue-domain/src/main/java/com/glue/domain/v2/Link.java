@@ -3,78 +3,55 @@ package com.glue.domain.v2;
 import java.util.Date;
 
 /**
- * Implementation of the Link object
- * 
- * 
- * 
+ * Implementation of the Link object.
  */
-
 public class Link {
 
     /**
-     * Link ID
+     * Link ID.
      */
-
     private int id;
 
     /**
-     * Link URL
+     * Link URL.
      */
     private String url;
 
     /**
-     * Type of link
+     * Type of link.
      */
-
     private LinkType type;
 
     private String typeString;
 
     /**
-     * Link description
+     * Link description.
      */
     private String description;
 
     /**
-     * User who created the link
+     * User who created the link.
      */
     private String username;
 
     /**
-     * Time the link was created
+     * Time the link was created.
      */
-    private Date createdTime;
+    private Date created;
 
-    public enum LinkType {
-	INFO(1), BOX_OFFICE(2), NEWS(3), REVIEW(4), SPONSOR(5), TICKETS(6), CHAT(
-		8), BLOG(15), OFFICIAL_SITE(17), PODCAST(18), WEBCAST(14), WEBSITE(
-		19), OTHER(16);
-
-	private int typeId;
-
-	private LinkType(int typeId) {
-	    this.typeId = typeId;
-	}
-
-	public int asInteger() {
-	    return typeId;
-	}
-
+    /**
+     * @return the created
+     */
+    public Date getCreated() {
+	return created;
     }
 
     /**
-     * @return the createdTime
+     * @param created
+     *            the created to set
      */
-    public Date getCreatedTime() {
-	return createdTime;
-    }
-
-    /**
-     * @param createdTime
-     *            the createdTime to set
-     */
-    public void setCreatedTime(Date createdTime) {
-	this.createdTime = createdTime;
+    public void setCreated(Date created) {
+	this.created = created;
     }
 
     /**

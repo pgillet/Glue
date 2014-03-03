@@ -3,40 +3,40 @@ package com.glue.domain.v2;
 import java.util.Date;
 
 /**
- * Comment Object
- * 
- * 
- * 
+ * Comment Object.
  */
-
 public class Comment {
 
     /**
-     * Comment ID
+     * Comment ID.
      */
-
     private String id;
 
     /**
-     * Comment text
+     * Comment text.
      */
     private String text;
 
     /**
-     * Username who generated the comment
+     * Username who generated the comment.
      */
     private String username;
 
-    private Date time;
+    private Comment parent;
 
     /**
-     * Create a new comment
+     * Date comment was created.
+     */
+    private Date created;
+
+    /**
+     * Create a new comment.
      */
     public Comment() {
     }
 
     /**
-     * Create a comment with the given text
+     * Create a comment with the given text.
      * 
      * @param text
      */
@@ -45,7 +45,7 @@ public class Comment {
     }
 
     /**
-     * Return comment ID
+     * Return comment ID.
      * 
      * @return the id
      */
@@ -54,7 +54,7 @@ public class Comment {
     }
 
     /**
-     * Set comment ID
+     * Set comment ID.
      * 
      * @param id
      *            the id to set
@@ -64,7 +64,7 @@ public class Comment {
     }
 
     /**
-     * Return comment text
+     * Return comment text.
      * 
      * @return the text
      */
@@ -73,7 +73,7 @@ public class Comment {
     }
 
     /**
-     * Set comment text
+     * Set comment text.
      * 
      * @param text
      *            the text to set
@@ -83,22 +83,22 @@ public class Comment {
     }
 
     /**
-     * Get the time the comment was made
+     * Get the time the comment was made.
      * 
      * @return the time
      */
-    public Date getTime() {
-	return time;
+    public Date getCreated() {
+	return created;
     }
 
     /**
-     * Set the comment time
+     * Set the comment time.
      * 
      * @param time
      *            the time to set
      */
-    public void setTime(Date time) {
-	this.time = time;
+    public void setCreated(Date created) {
+	this.created = created;
     }
 
     /**
@@ -118,6 +118,25 @@ public class Comment {
      */
     public void setUsername(String username) {
 	this.username = username;
+    }
+
+    /**
+     * The parent comment.
+     * 
+     * @return the parent
+     */
+    public Comment getParent() {
+	return parent;
+    }
+
+    /**
+     * The parent comment.
+     * 
+     * @param parent
+     *            the parent to set
+     */
+    public void setParent(Comment parent) {
+	this.parent = parent;
     }
 
 }
