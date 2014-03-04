@@ -1,36 +1,55 @@
 package com.glue.domain.v2;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Event class.
  */
+@Entity
 public class Event {
 
     /**
      * Event ID.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
      * Event title.
      */
+    @Column(nullable = false)
     private String title;
 
     /**
      * Description.
      */
+    @Column(length = 2000)
     private String description;
 
     /**
      * Event URL.
      */
+    @Column(length = 2048)
     private String url;
 
     /**
      * Event start time.
      */
+    @Column(nullable = false)
     protected Date startTime;
 
     /**
@@ -68,52 +87,70 @@ public class Event {
     /**
      * Parent event.
      */
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
     private Event parent;
 
     /**
      * List of child events.
      */
-    private List<Event> children;
+    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Event> children = new ArrayList<>();
 
     /**
      * List of links.
      */
-    private List<Link> links;
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Link> links = new ArrayList<>();
 
     /**
      * Event comments.
      */
-    private List<Comment> comments;
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Comment> comments = new ArrayList<>();
 
     /**
      * Performers for the event.
      */
-    private List<Performer> performers;
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE }, mappedBy = "events")
+    private List<Performer> performers = new ArrayList<>();
 
     /**
      * Images.
      */
-    private List<Image> images;
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Image> images = new ArrayList<>();
 
     /**
-     * List f tags
+     * List of tags
      */
-    private List<Tag> tags;
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Tag> tags = new ArrayList<>();
 
     /**
-     * Event properties
+     * Event properties.
      */
-    private List<Property> properties;
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Property> properties = new ArrayList<>();
 
     /**
      * Users watching or going to the event
      */
-    private List<User> going;
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE }, mappedBy = "going")
+    private List<User> going = new ArrayList<>();
 
-    private List<Category> categories;
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Category> categories = new ArrayList<>();
 
-    private boolean reference;
+    private boolean reference = false;
 
+    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE }, optional = false)
     private Venue venue;
 
     /**

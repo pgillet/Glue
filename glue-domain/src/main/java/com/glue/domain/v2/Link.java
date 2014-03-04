@@ -2,27 +2,38 @@ package com.glue.domain.v2;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Implementation of the Link object.
  */
+@Entity
 public class Link {
 
     /**
      * Link ID.
      */
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
     /**
      * Link URL.
      */
+    @Column(nullable = false, length = 2048)
     private String url;
 
     /**
      * Type of link.
      */
+    @Enumerated(EnumType.STRING)
     private LinkType type;
-
-    private String typeString;
 
     /**
      * Link description.
@@ -72,7 +83,7 @@ public class Link {
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
 	return id;
     }
 
@@ -80,18 +91,15 @@ public class Link {
      * @param id
      *            the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
 	this.id = id;
     }
 
     /**
      * @return the type
      */
-    public int getType() {
-	if (typeString != null) {
-	    this.type = LinkType.valueOf(typeString.toUpperCase());
-	}
-	return type.asInteger();
+    public LinkType getType() {
+	return type;
     }
 
     /**
@@ -100,7 +108,6 @@ public class Link {
      */
     public void setType(LinkType type) {
 	this.type = type;
-	typeString = type.toString();
     }
 
     /**

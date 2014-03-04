@@ -2,26 +2,42 @@ package com.glue.domain.v2;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 /**
  * Comment Object.
  */
+@Entity
 public class Comment {
 
     /**
      * Comment ID.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
      * Comment text.
      */
+    @Column(nullable = false, length = 2000)
     private String text;
 
     /**
-     * Username who generated the comment.
+     * Username who generated the comment. TODO: Strong relationship to User
+     * instead ?
      */
+    @Column(nullable = false)
     private String username;
 
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE }, optional = true)
     private Comment parent;
 
     /**

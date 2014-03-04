@@ -12,10 +12,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<repositories>
-	    <!-- TODO: to be removed when org.apache.chemistry.opencmis:chemistry-opencmis-client-impl 
-		will be stable -->
+		<!-- TODO: to be removed when org.apache.chemistry.opencmis:chemistry-opencmis-client-impl 
+			will be stable -->
 		<repository>
 			<id>Snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots/</url>
@@ -24,15 +24,16 @@
 
 	<properties>
 		<mysql.version>5.1.26</mysql.version>
+		<openjpa.version>2.3.0</openjpa.version>
 	</properties>
 
 
 	<dependencies>
-	    <dependency>
+		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-domain</artifactId>
 		</dependency>
-	    <dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
@@ -44,6 +45,13 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
+		</dependency>
+		<!-- OpenJPA -->
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa-all</artifactId>
+			<version>${openjpa.version}</version>
+			<!-- <scope>provided</scope> -->
 		</dependency>
 		<!-- SolrJ -->
 		<dependency>
@@ -63,4 +71,116 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<configuration>
+					<files>
+						<!-- Profile dependant properties file -->
+						<file>../glue_${build.profile.id}.properties</file>
+					</files>
+				</configuration>
+				<executions>
+					<!-- Load properties for the default lifecycle -->
+					<execution>
+						<id>default-lifecycle-properties</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.goldin</groupId>
+				<artifactId>copy-maven-plugin</artifactId>
+				<version>0.2.5</version>
+				<executions>
+					<execution>
+						<id>copy-persistence-config</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<!-- Copy persistence.xml and applies properties filtering -->
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+									<targetPath>${project.basedir}/target/classes</targetPath>
+									<preservePath>true</preservePath>
+									<includes>
+										<include>META-INF/persistence.xml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openjpa.version}</version>
+				<configuration>
+					<persistenceXmlFile>${project.basedir}/target/classes/META-INF/persistence.xml</persistenceXmlFile>
+					<sqlFile>${project.basedir}/scripts/create.sql</sqlFile>
+					<!-- Comment this to create the file with CREATE TABLE statements -->
+					<skip>true</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sql</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>sql</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.openjpa
+										</groupId>
+										<artifactId>
+											openjpa-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.3.0,)
+										</versionRange>
+										<goals>
+											<goal>sql</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
 </project>

@@ -1,17 +1,21 @@
 package com.glue.domain.v2;
 
-/**
- * Several EVDB objects contain properties
- * 
- * 
- * 
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+/**
+ * Several persistent objects contain properties
+ */
+@Entity
 public class Property {
 
     /**
      * Property ID
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     /**

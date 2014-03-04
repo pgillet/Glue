@@ -1,21 +1,35 @@
 package com.glue.domain.v2;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  * Performer object.
  */
+@Entity
 public class Performer {
 
     /**
      * Performer ID.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
      * Performer name.
      */
+    @Column(nullable = false)
     private String name;
 
     /**
@@ -26,7 +40,7 @@ public class Performer {
     /**
      * Long performer bio
      */
-
+    @Column(length = 2000)
     private String longBio;
 
     /**
@@ -46,17 +60,43 @@ public class Performer {
 
     private String withdrawnNote;
 
+    /**
+     * List of links.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
     private List<Link> links;
 
-    private List<Comment> comments;
+    /**
+     * Performer comments.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Comment> comments = new ArrayList<>();
 
-    private List<Event> events;
+    /**
+     * Event for the performer.
+     */
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Event> events = new ArrayList<>();
 
-    private List<Image> images;
+    /**
+     * Images.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Image> images = new ArrayList<>();
 
-    private List<Tag> tags;
+    /**
+     * List of tags
+     */
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Tag> tags = new ArrayList<>();
 
-    private List<Property> properties;
+    /**
+     * Performer properties.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Property> properties = new ArrayList<>();
 
     public String getId() {
 	return id;

@@ -1,14 +1,21 @@
 package com.glue.domain.v2;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * The category object.
  */
-
+@Entity
 public class Category {
 
     /**
      * Category ID.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**

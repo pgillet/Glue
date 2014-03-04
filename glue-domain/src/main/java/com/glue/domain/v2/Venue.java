@@ -1,15 +1,30 @@
 package com.glue.domain.v2;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Venue object.
  */
+@Entity
 public class Venue {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -36,23 +51,58 @@ public class Venue {
 
     private double longitude;
 
+    @Column(length = 2048)
     private String url;
 
     private String geocodeType;
 
+    /**
+     * Parent venue.
+     */
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
     private Venue parent;
 
-    private List<Venue> children;
+    /**
+     * List of child venues.
+     */
+    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Venue> children = new ArrayList<>();
 
-    private List<Event> events;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venue", orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
 
-    private List<Link> links;
+    /**
+     * List of links.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Link> links = new ArrayList<>();
 
-    private List<Comment> comments;
+    /**
+     * Venue comments.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Comment> comments = new ArrayList<>();
 
-    private List<Property> properties;
+    /**
+     * Images.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Image> images = new ArrayList<>();
 
-    private List<Tag> tags;
+    /**
+     * Venue properties.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private List<Property> properties = new ArrayList<>();
+
+    /**
+     * List of tags
+     */
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
+    private List<Tag> tags = new ArrayList<>();
 
     /**
      * Date venue was created
@@ -61,7 +111,7 @@ public class Venue {
 
     private String timeZone;
 
-    private boolean reference;
+    private boolean reference = false;
 
     /**
      * @return the id

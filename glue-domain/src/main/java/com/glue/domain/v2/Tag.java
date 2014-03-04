@@ -1,38 +1,41 @@
 package com.glue.domain.v2;
 
-/**
- * Tag object implementation
- * 
- * 
- * 
- */
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+/**
+ * Tag object implementation.
+ */
+@Entity
 public class Tag {
 
     /**
-     * Tag ID
+     * Tag ID.
      */
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
-     * Tag title
+     * Tag title.
      */
     private String title;
 
     /**
-     * Tag owner
+     * Tag owner.
      */
     private String owner;
 
     /**
-     * Creates a tag
+     * Creates a tag.
      */
     public Tag() {
     }
 
     /**
-     * Creates a tag
+     * Creates a tag.
      * 
      * @param title
      *            Title element

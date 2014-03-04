@@ -3,79 +3,79 @@ package com.glue.domain.v2;
 import java.util.Date;
 import java.util.List;
 
-/**
- *  user object
- * 
- * 
- * 
- */
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+/**
+ * User object.
+ */
+@Entity
+@Table(name = "Glue_User")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
-     * Username
+     * Username.
      */
     private String username;
 
     /**
-     * Only used by event methods to return the status of user for the event,
-     * whether the user is watching or going
+     * Password.
      */
-
-    private String eventWatchingGoingStatus;
+    private String password;
 
     /**
-     * User bio
+     * Mail address.
      */
-    private String bio;
+    @Column(nullable = false)
+    private String email;
 
     /**
-     * User hometown
+     * User hometown.
      */
     private String hometown;
 
     /**
-     * First Name
+     * First Name.
      */
-
     private String firstName;
 
     /**
-     * Last name
+     * Last name.
      */
-
     private String lastName;
 
     /**
-     * Interests
+     * Interests.
      */
     private String interests;
 
     /**
-     * Registration date
+     * Registration date.
      */
     private Date registrationDate;
 
-    private String reputation;
-
     /**
-     * Links about the user
+     * Links about the user.
      */
-
+    @OneToMany(cascade = { CascadeType.ALL })
     private List<Link> links;
 
     /**
-     * User images
+     * List of events the user is either watching or going;
      */
-
-    private List<Image> images;
-
-    /**
-     * List of events the user is either watching or going
-     */
-
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+	    CascadeType.REFRESH, CascadeType.MERGE })
     private List<Event> going;
 
     public String getId() {
@@ -87,41 +87,18 @@ public class User {
     }
 
     /**
-     * User bio
-     * 
-     * @return the bio
+     * @return the email
      */
-    public String getBio() {
-	return bio;
+    public String getEmail() {
+	return email;
     }
 
     /**
-     * Set the user bio
-     * 
-     * @param bio
-     *            the bio to set
+     * @param email
+     *            the email to set
      */
-    public void setBio(String bio) {
-	this.bio = bio;
-    }
-
-    /**
-     * Get the users watching going status for an event
-     * 
-     * @return the eventWatchingGoingStatus
-     */
-    public String getEventWatchingGoingStatus() {
-	return eventWatchingGoingStatus;
-    }
-
-    /**
-     * For events, get the users watching status
-     * 
-     * @param eventWatchingGoingStatus
-     *            the eventWatchingGoingStatus to set
-     */
-    public void setEventWatchingGoingStatus(String eventWatchingGoingStatus) {
-	this.eventWatchingGoingStatus = eventWatchingGoingStatus;
+    public void setEmail(String email) {
+	this.email = email;
     }
 
     /**
@@ -179,25 +156,6 @@ public class User {
      */
     public void setHometown(String hometown) {
 	this.hometown = hometown;
-    }
-
-    /**
-     * User images
-     * 
-     * @return the images
-     */
-    public List<Image> getImages() {
-	return images;
-    }
-
-    /**
-     * User images
-     * 
-     * @param images
-     *            the images to set
-     */
-    public void setImages(List<Image> images) {
-	this.images = images;
     }
 
     /**
@@ -277,25 +235,6 @@ public class User {
     }
 
     /**
-     * User reputation
-     * 
-     * @return the reputation
-     */
-    public String getReputation() {
-	return reputation;
-    }
-
-    /**
-     * User reputation
-     * 
-     * @param reputation
-     *            the reputation to set
-     */
-    public void setReputation(String reputation) {
-	this.reputation = reputation;
-    }
-
-    /**
      * User name
      * 
      * @return the username
@@ -312,6 +251,21 @@ public class User {
      */
     public void setUsername(String username) {
 	this.username = username;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+	return password;
+    }
+
+    /**
+     * @param password
+     *            the password to set
+     */
+    public void setPassword(String password) {
+	this.password = password;
     }
 
 }

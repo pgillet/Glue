@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+	<persistence-unit name="gluedb" >
+		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
+
+		<class>com.glue.domain.v2.Category</class>
+		<class>com.glue.domain.v2.Comment</class>
+		<class>com.glue.domain.v2.Event</class>
+		<class>com.glue.domain.v2.Image</class>
+		<class>com.glue.domain.v2.ImageItem</class>
+		<class>com.glue.domain.v2.Link</class>
+		<class>com.glue.domain.v2.Performer</class>
+		<class>com.glue.domain.v2.Property</class>
+		<class>com.glue.domain.v2.Tag</class>
+		<class>com.glue.domain.v2.User</class>
+		<class>com.glue.domain.v2.Venue</class>
+
+		<validation-mode>NONE</validation-mode>
+
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="${glue.db.jdbc.driver}" />
+			<property name="javax.persistence.jdbc.url" value="${glue.db.jdbc.url}" />
+			<property name="javax.persistence.jdbc.user" value="${glue.db.user}" />
+			<property name="javax.persistence.jdbc.password" value="${glue.db.password}" />
+
+			<property name="openjpa.DataCache" value="true" />
+			<property name="openjpa.RemoteCommitProvider" value="sjvm" />
+			<property name="openjpa.InitializeEagerly" value="true" />
+
+			<property name="openjpa.DynamicEnhancementAgent" value="false" />
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
+
+			<!-- Foreign Keys -->
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
+			<property name="openjpa.jdbc.MappingDefaults"
+				value="ForeignKeyDeleteAction=restrict, JoinForeignKeyDeleteAction=restrict" />
+			
+			<property name="openjpa.jdbc.QuerySQLCache" value="true(EnableStatistics=true)" />
+
+		</properties>
+	</persistence-unit>
+
+</persistence>

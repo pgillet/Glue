@@ -1,13 +1,24 @@
 package com.glue.domain.v2;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 /**
  * Image object.
  */
+@Entity
 public class Image {
 
     /**
      * Id of the image.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     /**
@@ -16,7 +27,7 @@ public class Image {
     private String caption;
 
     /**
-     * USer who created the images.
+     * User who created the images.
      */
     private String creator;
 
@@ -33,6 +44,7 @@ public class Image {
     /**
      * Image URL.
      */
+    @Column(length = 2048)
     private String url;
 
     /**
@@ -48,31 +60,37 @@ public class Image {
     /**
      * Small image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem small;
 
     /**
      * Medium image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem medium;
 
     /**
      * Large image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem large;
 
     /**
      * Block image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem block;
 
     /**
      * Thumb image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem thumb;
 
     /**
      * Original image
      */
+    @OneToOne(cascade = { CascadeType.ALL })
     private ImageItem original;
 
     /**
