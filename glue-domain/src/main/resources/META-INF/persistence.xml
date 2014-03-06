@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+	<!-- This dummy persistence.xml is only present to process Application model 
+		classes and enhance them by running Open JPA Enhancer tool (See the POM). 
+		The actual persitence.xml file is under glue-persistence/src/main/resource/META-INF -->
+	<persistence-unit name="gluedb" />
+
+</persistence>
