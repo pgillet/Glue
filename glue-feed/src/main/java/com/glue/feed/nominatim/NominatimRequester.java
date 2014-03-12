@@ -3,7 +3,7 @@ package com.glue.feed.nominatim;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glue.domain.IVenue;
+import com.glue.domain.Venue;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
@@ -28,9 +28,9 @@ public class NominatimRequester {
 		ressource = client.resource(BASE_URL);
 	}
 
-	public List<IVenue> getVenues(String query) {
+	public List<Venue> getVenues(String query) {
 
-		List<IVenue> result = new ArrayList<>();
+		List<Venue> result = new ArrayList<>();
 
 		List<NominatimVenue> venues = ressource
 				.path(SEARCH)

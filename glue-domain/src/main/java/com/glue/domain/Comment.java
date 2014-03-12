@@ -1,4 +1,4 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import java.util.Date;
 

@@ -1,32 +1,64 @@
 package com.glue.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-public enum Category {
-	MUSIC("#3a87ad"), PERFORMING_ART("#b94a48"), SPORT("#468847"), CONFERENCE("#c09853"), EXHIBITION("#ef7c00"), OTHER(
-			"#bd1789");
+/**
+ * The category object.
+ */
+@Entity
+public class Category {
 
-	private final String color;
+    /**
+     * Category ID.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
-	Category(String color) {
-		this.color = color;
-	}
+    /**
+     * Category Name.
+     */
+    private String name;
 
-	/**
-	 * For EL access.
-	 * 
-	 * @return
-	 */
-	public String getName() {
-		return name();
-	}
+    /**
+     * Return the category ID.
+     * 
+     * @return the id
+     */
+    public String getId() {
+	return id;
+    }
 
-	/**
-	 * Returns the hexadecimal representation of the color associated with this
-	 * category.
-	 * 
-	 * @return
-	 */
-	public String getColor() {
-		return color;
-	}
+    /**
+     * Set the category ID.
+     * 
+     * @param id
+     *            the id to set
+     */
+    public void setId(String id) {
+	this.id = id;
+    }
+
+    /**
+     * Get the category name.
+     * 
+     * @return the name
+     */
+    public String getName() {
+	return name;
+    }
+
+    /**
+     * Set the category name.
+     * 
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name) {
+	this.name = name;
+    }
+
 }

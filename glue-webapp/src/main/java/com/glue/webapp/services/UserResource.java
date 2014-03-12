@@ -20,97 +20,96 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IUser;
-import com.glue.domain.impl.User;
+import com.glue.domain.User;
 import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.UserController;
 
 @Path("/users")
 public class UserResource {
-	
-	static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
-	@Context
-	SecurityContext securityContext;
+    static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
-	@Context
-	UriInfo uriInfo;
+    @Context
+    SecurityContext securityContext;
 
-	// TODO: should probably use Dependency Injection here!
-	UserController userController = new UserController();
+    @Context
+    UriInfo uriInfo;
 
-	public UserResource() {
+    // TODO: should probably use Dependency Injection here!
+    UserController userController = new UserController();
+
+    public UserResource() {
+    }
+
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createUser(User user) {
+
+	try {
+	    userController.createUser(user);
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new WebApplicationException(e,
+		    Response.Status.INTERNAL_SERVER_ERROR);
+	} catch (AlreadyExistsException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new WebApplicationException(e, Response
+		    .status(Response.Status.CONFLICT).entity(e.getMessage())
+		    /*
+		     * .type(MediaType. TEXT_PLAIN)
+		     */.build());
 	}
 
-	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createUser(User user) {
+	UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+	URI userUri = ub.path(String.valueOf(user.getId())).build();
 
-		try {
-			userController.createUser(user);
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			throw new WebApplicationException(e,
-					Response.Status.INTERNAL_SERVER_ERROR);
-		} catch (AlreadyExistsException e) {
-			LOG.error(e.getMessage(), e);
-			throw new WebApplicationException(e, Response
-					.status(Response.Status.CONFLICT).entity(e.getMessage())
-					/*
-					 * .type(MediaType. TEXT_PLAIN)
-					 */.build());
-		}
+	return Response.created(userUri).entity(user).build();
+    }
 
-		UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-		URI userUri = ub.path(String.valueOf(user.getId())).build();
+    @POST
+    @Path("/{userid}")
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@PathParam("userid") String userId, User user) {
 
-		return Response.created(userUri).entity(user).build();
+	User authenticatedUser = (User) securityContext.getUserPrincipal();
+
+	if (authenticatedUser != null
+		&& userId.equals(authenticatedUser.getId())) {
+
+	    try {
+		user.setId(userId);
+		// TODO: should encrypt password
+		userController.updateUser(user);
+
+		return Response.ok().build();
+	    } catch (InternalServerException e) {
+		LOG.error(e.getMessage(), e);
+		throw new WebApplicationException(e,
+			Response.Status.INTERNAL_SERVER_ERROR);
+	    }
 	}
 
-	@POST
-	@Path("/{userid}")
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUser(@PathParam("userid") String userId, User user) {
+	return Response.status(Status.FORBIDDEN).build();
+    }
 
-		IUser authenticatedUser = (IUser) securityContext.getUserPrincipal();
+    @GET
+    @Path("/{userid}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public User getUser(@PathParam("userid") String userId) {
+	try {
+	    User user = (User) userController.getUser(userId);
+	    // Password obfuscation
+	    user.setPassword("***"); // TODO: should be hidden ahead ?
 
-		if (authenticatedUser != null
-				&& userId.equals(Long.toString(authenticatedUser.getId()))) {
-
-			try {
-				user.setId(Long.valueOf(userId));
-				// TODO: should encrypt password
-				userController.updateUser(user);
-
-				return Response.ok().build();
-			} catch (InternalServerException e) {
-				LOG.error(e.getMessage(), e);
-				throw new WebApplicationException(e,
-						Response.Status.INTERNAL_SERVER_ERROR);
-			}
-		}
-
-		return Response.status(Status.FORBIDDEN).build();
+	    return user;
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new WebApplicationException(e,
+		    Response.Status.INTERNAL_SERVER_ERROR);
 	}
-
-	@GET
-	@Path("/{userid}")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public User getUser(@PathParam("userid") String userId) {
-		try {
-			User user = (User) userController.getUser(userId);
-			// Password obfuscation
-			user.setPassword("***"); // TODO: should be hidden ahead ?
-
-			return user;
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			throw new WebApplicationException(e,
-					Response.Status.INTERNAL_SERVER_ERROR);
-		}
-	}
+    }
 
 }

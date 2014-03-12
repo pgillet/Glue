@@ -1,8 +1,10 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +20,8 @@ import javax.persistence.OneToOne;
  * Venue object.
  */
 @Entity
+// @NamedQueries({ @NamedQuery(name = "findDuplicate", query =
+// "SELECT v FROM Venue v WHERE v.name = :name AND v.city = :city") })
 public class Venue {
 
     @Id
@@ -77,7 +81,7 @@ public class Venue {
      * List of links.
      */
     @OneToMany(cascade = { CascadeType.ALL })
-    private List<Link> links = new ArrayList<>();
+    private Set<Link> links = new HashSet<>();
 
     /**
      * Venue comments.
@@ -439,7 +443,7 @@ public class Venue {
      * 
      * @return the links
      */
-    public List<Link> getLinks() {
+    public Set<Link> getLinks() {
 	return links;
     }
 
@@ -449,7 +453,7 @@ public class Venue {
      * @param links
      *            the links to set
      */
-    public void setLinks(List<Link> links) {
+    public void setLinks(Set<Link> links) {
 	this.links = links;
     }
 

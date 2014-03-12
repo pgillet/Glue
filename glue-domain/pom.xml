@@ -25,8 +25,9 @@
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openjpa.version}</version>
 				<configuration>
-					<includes>**/domain/v2/*.class</includes>
+					<includes>**/domain/*.class</includes>
 					<enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+					<persistenceXmlFile>src/main/resources/META-INF/dummy.xml</persistenceXmlFile>
 					<!-- Comment this to process Application model classes and enhances 
 						them by running Open JPA Enhancer tool -->
 					<!-- <skip>true</skip> -->

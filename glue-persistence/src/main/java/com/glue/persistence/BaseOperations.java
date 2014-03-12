@@ -2,13 +2,13 @@ package com.glue.persistence;
 
 import java.util.List;
 
-import com.glue.domain.v2.Category;
-import com.glue.domain.v2.Comment;
-import com.glue.domain.v2.Image;
-import com.glue.domain.v2.Link;
-import com.glue.domain.v2.Performer;
-import com.glue.domain.v2.Property;
-import com.glue.domain.v2.Tag;
+import com.glue.domain.Category;
+import com.glue.domain.Comment;
+import com.glue.domain.Image;
+import com.glue.domain.Link;
+import com.glue.domain.Performer;
+import com.glue.domain.Property;
+import com.glue.domain.Tag;
 
 public interface BaseOperations {
 

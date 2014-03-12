@@ -1,130 +1,80 @@
 package com.glue.webapp.logic;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingException;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IUser;
-import com.glue.webapp.db.DAOManager;
-import com.glue.webapp.db.UserDAO;
+import com.glue.domain.User;
+import com.glue.persistence.UserDAO;
 
 public class UserController {
-	
-	static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-	public void createUser(IUser user) throws InternalServerException,
-			AlreadyExistsException {
-		DAOManager manager = null;
+    static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+    @Inject
+    private UserDAO userDAO;
 
-		try {
-			manager = DAOManager.getInstance();
-			UserDAO userDAO = manager.getUserDAO();
+    public void createUser(User user) throws InternalServerException,
+	    AlreadyExistsException {
 
-			IUser other = userDAO.search(user.getMailAddress());
-			if (other != null) {
-				throw new AlreadyExistsException("User already exists");
-			}
+	try {
 
-			userDAO.create(user);
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (SQLException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} finally {
-			if (manager != null) {
-				manager.closeConnectionQuietly();
-			}
-		}
+	    User other = userDAO.findByEmail(user.getEmail());
+	    if (other != null) {
+		throw new AlreadyExistsException("User already exists");
+	    }
+
+	    userDAO.create(user);
+
+	} finally {
+	}
+    }
+
+    public void updateUser(User user) throws InternalServerException {
+	try {
+	    userDAO.update(user);
+	} finally {
+	}
+    }
+
+    public User getUser(String userId) throws InternalServerException {
+	User user = null;
+
+	try {
+	    user = userDAO.find(userId);
+	} finally {
 	}
 
-	public void updateUser(IUser user) throws InternalServerException {
-		DAOManager manager = null;
+	return user;
+    }
 
-		try {
-			manager = DAOManager.getInstance();
-			UserDAO userDAO = manager.getUserDAO();
-			userDAO.update(user);
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (SQLException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} finally {
-			if (manager != null) {
-				manager.closeConnectionQuietly();
-			}
+    /**
+     * Returns a list of users from the given email addresses. A registered user
+     * might not exist for every address.
+     * 
+     * @param mailingList
+     * @return
+     * @throws InternalServerException
+     */
+    public List<User> getUsers(String[] addresses)
+	    throws InternalServerException {
+	List<User> users = new ArrayList<User>();
+
+	try {
+	    for (String address : addresses) {
+		User user = userDAO.findByEmail(address);
+		if (user != null) {
+		    // Registered user
+		    users.add(user);
 		}
+	    }
+	} finally {
 	}
 
-	public IUser getUser(String userId) throws InternalServerException {
-		IUser user = null;
-		DAOManager manager = null;
-
-		try {
-			manager = DAOManager.getInstance();
-			UserDAO userDAO = manager.getUserDAO();
-
-			user = userDAO.search(Long.valueOf(userId));
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (SQLException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} finally {
-			if (manager != null) {
-				manager.closeConnectionQuietly();
-			}
-		}
-
-		return user;
-	}
-
-	/**
-	 * Returns a list of users from the given email addresses. A registered user
-	 * might not exist for every address.
-	 * 
-	 * @param mailingList
-	 * @return
-	 * @throws InternalServerException
-	 */
-	public List<IUser> getUsers(String[] addresses)
-			throws InternalServerException {
-		List<IUser> users = new ArrayList<IUser>();
-		DAOManager manager = null;
-
-		try {
-			manager = DAOManager.getInstance();
-			UserDAO userDAO = manager.getUserDAO();
-
-			for (String address : addresses) {
-				IUser user = userDAO.search(address);
-				if (user != null) {
-					// Registered user
-					users.add(user);
-				}
-			}
-		} catch (NamingException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} catch (SQLException e) {
-			LOG.error(e.getMessage(), e);
-			throw new InternalServerException(e);
-		} finally {
-			if (manager != null) {
-				manager.closeConnectionQuietly();
-			}
-		}
-
-		return users;
-	}
+	return users;
+    }
 
 }

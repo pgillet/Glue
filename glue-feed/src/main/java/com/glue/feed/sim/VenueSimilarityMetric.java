@@ -3,13 +3,12 @@ package com.glue.feed.sim;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.AbstractStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
-import com.glue.domain.IVenue;
-import com.glue.domain.impl.Venue;
+import com.glue.domain.Venue;
 
-public class VenueSimilarityMetric implements SimilarityMetric<IVenue> {
+public class VenueSimilarityMetric implements SimilarityMetric<Venue> {
 
 	@Override
-	public float getSimilarity(IVenue v1, IVenue v2) {
+	public float getSimilarity(Venue v1, Venue v2) {
 
 		float nameWeight = 0.45f;
 		float cityWeight = 0.30f;
@@ -38,38 +37,38 @@ public class VenueSimilarityMetric implements SimilarityMetric<IVenue> {
 
 	// Example
 	public static void main(String[] args) {
-		IVenue v1 = new Venue();
+		Venue v1 = new Venue();
 		v1.setName("Bikini");
 		v1.setCity("Ramonville-Saint-Agne");
 		v1.setAddress("rue Théodore Monod, 31520 Ramonville-Saint-Agne");
 
-		IVenue v2 = new Venue();
+		Venue v2 = new Venue();
 		v2.setName("Le Bikini");
 		v2.setCity("Ramonville St-Agne");
 		v2.setAddress("rue Théodore Monod, 31520 Ramonville-St-Agne");
 
-		IVenue v3 = new Venue();
+		Venue v3 = new Venue();
 		v3.setName("Le Bikini");
 		v3.setCity("Ramonville");
 		v3.setAddress("Le Bikini, Rue Giotto, Ramonville, Ramonville-Saint-Agne, Toulouse, Haute-Garonne, Midi-Pyrénées, 31520, France métropolitaine");
 
-		IVenue v4 = new Venue();
+		Venue v4 = new Venue();
 		v4.setName("Le Bikini");
 		v4.setCity("Toulouse");
 		v4.setAddress("31000 Toulouse");
 
-		IVenue v5 = new Venue();
+		Venue v5 = new Venue();
 		v5.setName("La Dynamo");
 		v5.setCity("Toulouse");
 		v5.setAddress("Rue Amélie 31000 Toulouse");
 
-		IVenue[] venues = new IVenue[] { v1, v2, v3, v4, v5 };
+		Venue[] venues = new Venue[] { v1, v2, v3, v4, v5 };
 
 		for (int i = 0; i < venues.length; i++) {
 			System.out.println("v" + i + " = " + getDescription(venues[i]));
 		}
 
-		SimilarityMetric<IVenue> metric = new VenueSimilarityMetric();
+		SimilarityMetric<Venue> metric = new VenueSimilarityMetric();
 
 		for (int i = 0; i < venues.length; i++) {
 			for (int j = 0; j < venues.length; j++) {
@@ -82,7 +81,7 @@ public class VenueSimilarityMetric implements SimilarityMetric<IVenue> {
 
 	}
 
-	public static String getDescription(IVenue venue) {
+	public static String getDescription(Venue venue) {
 		return "Venue [name=" + venue.getName() + ", city=" + venue.getCity()
 				+ ", address=" + venue.getAddress()
 				/*

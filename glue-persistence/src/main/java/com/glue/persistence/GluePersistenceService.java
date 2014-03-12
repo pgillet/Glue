@@ -6,41 +6,33 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContextType;
 
+/**
+ * A persistence service with an application-managed entity manager.
+ * 
+ * @author pgillet
+ * 
+ */
 public class GluePersistenceService extends PersistenceService {
 
-    private static final String PERSISTENCE_UNIT = "gluedb";
-
-    // private static final Map<String, PersistenceService> _services = new
-    // HashMap<String, PersistenceService>();
+    public static final String PERSISTENCE_UNIT = "gluedb";
 
     private static GluePersistenceService _service;
 
-    protected EventDAO eventDAO = new EventDAO();
-    protected VenueDAO venueDAO = new VenueDAO();
-    protected PerformerDAO performerDAO = new PerformerDAO();
-    protected UserDAO userDAO = new UserDAO();
+    private EventDAO eventDAO = new EventDAO();
+    private VenueDAO venueDAO = new VenueDAO();
+    private PerformerDAO performerDAO = new PerformerDAO();
+    private UserDAO userDAO = new UserDAO();
 
     protected GluePersistenceService(String unit, EntityManagerFactory emf,
 	    boolean managed, PersistenceContextType scope) {
 	super(unit, emf, managed, scope);
     }
 
-    // public synchronized static PersistenceService getService(String unit) {
-    // return getService(unit, null);
-    // }
-    //
-    // public synchronized static PersistenceService getService(String unit,
-    // Map<String, Object> config) {
-    // PersistenceService service = _services.get(unit);
-    // if (service == null) {
-    // EntityManagerFactory emf = Persistence.createEntityManagerFactory(
-    // unit, config);
-    // service = new GluePersistenceService(unit, emf, false,
-    // PersistenceContextType.TRANSACTION);
-    // _services.put(unit, service);
-    // }
-    // return service;
-    // }
+    protected GluePersistenceService() {
+	this(PERSISTENCE_UNIT, Persistence
+		.createEntityManagerFactory(PERSISTENCE_UNIT), false,
+		PersistenceContextType.TRANSACTION);
+    }
 
     public synchronized static GluePersistenceService getService() {
 	return getService(null);

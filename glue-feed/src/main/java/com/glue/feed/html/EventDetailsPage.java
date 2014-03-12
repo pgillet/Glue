@@ -55,7 +55,7 @@ public class EventDetailsPage {
 	return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartTime(String startDate) {
 	this.startDate = startDate;
     }
 

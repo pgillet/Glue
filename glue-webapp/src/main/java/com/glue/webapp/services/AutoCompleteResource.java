@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.search.SearchEngine;
 
@@ -27,7 +27,7 @@ public class AutoCompleteResource {
 	static final Logger LOG = LoggerFactory.getLogger(AutoCompleteResource.class);
 
 	@Context
-	private SearchEngine<IStream> engine;
+	private SearchEngine<Event> engine;
 
 	// The Java method will process HTTP GET requests
 	@GET
@@ -44,13 +44,13 @@ public class AutoCompleteResource {
 			List<String> queryWords = Arrays.asList(StringUtils.split(query));
 	
 			// Ask solr
-			List<IStream> streams = new ArrayList<IStream>();
+			List<Event> events = new ArrayList<Event>();
 			try {
-				streams = engine.searchForAutoComplete(query);
+				events = engine.searchForAutoComplete(query);
 				query = query.trim();
 				results.add(query);
-				for (IStream stream : streams) {
-					String response = extractResponse(queryWords, stream.getTitle().toLowerCase());
+				for (Event event : events) {
+					String response = extractResponse(queryWords, event.getTitle().toLowerCase());
 					LOG.debug(response);
 					if (!"".equals(response) && response.contains(query)) {
 						results.add(rtrim(response.substring(query.length())));

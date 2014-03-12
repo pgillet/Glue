@@ -5,13 +5,20 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 public abstract class AbstractDAO<T> implements GenericDAO<T> {
 
+    /**
+     * If container-managed, the entity manager will be automatically injected.
+     * If application-managed, the entity manager is set with
+     * {@link #setEntityManager(EntityManager)}.
+     */
+    @PersistenceContext(unitName = GluePersistenceService.PERSISTENCE_UNIT)
     protected EntityManager em;
 
-    private Class<T> type;
+    protected Class<T> type;
 
     public AbstractDAO() {
         Type t = getClass().getGenericSuperclass();

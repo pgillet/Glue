@@ -4,11 +4,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IVenue;
-import com.glue.domain.impl.Venue;
+import com.glue.domain.Venue;
 import com.glue.feed.GlueObjectBuilder;
 
-public class VenueBeanVenueBuilder implements GlueObjectBuilder<VenueBean, IVenue> {
+public class VenueBeanVenueBuilder implements GlueObjectBuilder<VenueBean, Venue> {
 
 	static final Logger LOG = LoggerFactory.getLogger(VenueBeanVenueBuilder.class);
 
@@ -16,9 +15,9 @@ public class VenueBeanVenueBuilder implements GlueObjectBuilder<VenueBean, IVenu
 	}
 
 	@Override
-	public IVenue build(VenueBean bean) throws Exception {
+	public Venue build(VenueBean bean) throws Exception {
 
-		IVenue venue = new Venue();
+		Venue venue = new Venue();
 		venue.setName(bean.getEqNomEquipement().trim());
 
 		// Construct venue address

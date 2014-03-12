@@ -30,7 +30,7 @@ public class ContentManager {
     private Session session;
 
     private VenueCAO venueCAO = new VenueCAO();
-    private StreamCAO streamCAO = new StreamCAO();
+    private EventCAO eventCAO = new EventCAO();
 
     public VenueCAO getVenueCAO() {
 	if (venueCAO.getSession() == null) {
@@ -39,11 +39,11 @@ public class ContentManager {
 	return venueCAO;
     }
 
-    public StreamCAO getStreamCAO() {
-	if (streamCAO.getSession() == null) {
-	    streamCAO.setSession(getSession());
+    public EventCAO getEventCAO() {
+	if (eventCAO.getSession() == null) {
+	    eventCAO.setSession(getSession());
 	}
-	return streamCAO;
+	return eventCAO;
     }
 
     protected Session getSession() {

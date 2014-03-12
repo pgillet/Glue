@@ -13,7 +13,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.error.StoreErrorListener;
@@ -46,14 +46,14 @@ public class BikiniJob implements Job {
 					Item.class);
 
 			final FeedMessageListener delegate = new StreamMessageListener();
-			final GlueObjectBuilder<Item, IStream> streamBuilder = new ItemStreamBuilder();
+			final GlueObjectBuilder<Item, Event> eventBuilder = new ItemStreamBuilder();
 
 			parser.setFeedMessageListener(new FeedMessageListener<Item>() {
 
 				@Override
 				public void newMessage(Item msg) throws Exception {
-					IStream stream = streamBuilder.build(msg);
-					delegate.newMessage(stream);
+					Event event = eventBuilder.build(msg);
+					delegate.newMessage(event);
 				}
 
 				@Override

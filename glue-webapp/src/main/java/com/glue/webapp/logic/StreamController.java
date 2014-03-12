@@ -9,7 +9,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang.WordUtils;
 import org.jsoup.Jsoup;
@@ -17,19 +18,25 @@ import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IMedia;
-import com.glue.domain.IStream;
-import com.glue.domain.IUser;
-import com.glue.domain.IVenue;
-import com.glue.webapp.db.DAOCommand;
-import com.glue.webapp.db.DAOManager;
-import com.glue.webapp.db.MediaDAO;
-import com.glue.webapp.db.StreamDAO;
-import com.glue.webapp.db.VenueDAO;
+import com.glue.domain.Event;
+import com.glue.domain.Venue;
+import com.glue.persistence.EventDAO;
+import com.glue.persistence.GluePersistenceService;
+import com.glue.persistence.VenueDAO;
 import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
-public class StreamController implements PageIterator<List<IStream>> {
+public class StreamController implements
+	PageIterator<List<Event>> {
+
+    @PersistenceContext(unitName = GluePersistenceService.PERSISTENCE_UNIT)
+    private EntityManager em;
+
+    @Inject
+    private EventDAO eventDAO;
+
+    @Inject
+    private VenueDAO venueDAO;
 
     private static final String ELLIPSIS = "...";
 
@@ -38,7 +45,7 @@ public class StreamController implements PageIterator<List<IStream>> {
     static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
     @Inject
-    private SearchEngine<IStream> engine;
+    private SearchEngine<Event> engine;
 
     private int start;
 
@@ -125,13 +132,13 @@ public class StreamController implements PageIterator<List<IStream>> {
 	this.categories = categories;
     }
 
-    public List<IStream> search() throws InternalServerException {
+    public List<Event> search() throws InternalServerException {
 
 	// The underlying search engine returns only partial streams (i.e. only
 	// the properties that are actually indexed)
 	engine.setQueryString(queryString);
 	engine.setCategories(categories.toArray(new String[categories.size()]));
-	engine.setStartDate(startDate);
+	engine.setStartTime(startDate);
 	engine.setEndDate(endDate);
 	engine.setStart(start);
 	engine.setRows(rowsPerPage);
@@ -139,72 +146,51 @@ public class StreamController implements PageIterator<List<IStream>> {
 	engine.setLongitude(longitude);
 	engine.setLocation(location);
 
-	final Map<Long, IStream> m = (Map<Long, IStream>) engine
-		.searchAsMap();
+	final Map<String, Event> me = (Map<String, Event>) engine.searchAsMap();
 
 	// Stores the total number of found results
 	totalRows = engine.getNumFound();
 
-	final Set<Long> ids = m.keySet();
+	final Set<String> ids = me.keySet();
 
 	try {
-	    DAOManager manager = DAOManager.getInstance();
-	    List<IStream> streams = manager
-		    .transaction(new DAOCommand<List<IStream>>() {
 
-			@Override
-			public List<IStream> execute(DAOManager manager)
-				throws Exception {
+	    // Store venues to avoid repetitive SQL requests
+	    Map<String, Venue> mv = new HashMap<String, Venue>();
 
-			    // Store venues to avoid repetitive SQL requests
-			    Map<Long, IVenue> m = new HashMap<Long, IVenue>();
+	    List<Event> events = eventDAO.findAll(ids);
 
-			    StreamDAO streamDAO = manager.getStreamDAO();
-			    VenueDAO venueDAO = manager.getVenueDAO();
+	    for (Event event : events) {
 
-			    List<IStream> items = streamDAO.searchInList(ids
-				    .toArray(new Long[ids.size()]));
+		Venue persistentVenue = mv.get(event.getVenue().getId());
+		if (persistentVenue == null) { // Not stored yet
+		    persistentVenue = venueDAO.find(
+			    event.getVenue().getId());
 
-			    for (IStream stream : items) {
-
-				IVenue persistentVenue = m.get(stream
-					.getVenue().getId());
-				if (persistentVenue == null) { // Not stored yet
-				    persistentVenue = venueDAO.search(stream
-					    .getVenue().getId());
-
-				    // Store the persistent venue into the map
-				    m.put(persistentVenue.getId(),
-					    persistentVenue);
-				}
-
-				// Replace the dummy venue with the
-				// persistent one
-				stream.setVenue(persistentVenue);
-			    }
-
-			    return items;
-			}
-
-		    });
-
-	    // Highlighting
-	    for (IStream stream : streams) {
-		String summary = m.get(stream.getId()).getSummary();
-		if (summary == null) {
-		    String html = stream.getDescription();
-		    // Keep only text nodes: all HTML will be stripped.
-		    String onlytext = Jsoup.clean(html, Whitelist.none());
-		    summary = WordUtils.abbreviate(onlytext,
-			    SUMMARY_LIMIT, -1, ELLIPSIS);
+		    // Store the persistent venue into the map
+		    mv.put(persistentVenue.getId(), persistentVenue);
 		}
-		stream.setSummary(summary);
+
+		// Replace the dummy venue with the
+		// persistent one
+		event.setVenue(persistentVenue);
 	    }
 
-	    return streams;
-	} catch (NamingException e) {
-	    LOG.error(e.getMessage(), e);
-	    throw new InternalServerException(e);
+	    // Highlighting
+	    for (Event event : events) {
+		String summary = me.get(event.getId()).getSummary();
+		if (summary == null) {
+		    String html = event.getDescription();
+		    // Keep only text nodes: all HTML will be stripped.
+		    String onlytext = Jsoup.clean(html, Whitelist.none());
+		    summary = WordUtils.abbreviate(onlytext, SUMMARY_LIMIT, -1,
+			    ELLIPSIS);
+		}
+		event.setSummary(summary);
+	    }
+
+	    return events;
+
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);
 	    throw new InternalServerException(e);
@@ -212,76 +198,57 @@ public class StreamController implements PageIterator<List<IStream>> {
     }
 
     /**
-     * This method should be moved in another controller dedicated to stream
+     * This method should be moved in another controller dedicated to event
      * creation.
      * 
-     * @param stream
+     * @param event
      * @param venue
      * @param admin
      * @throws InternalServerException
      */
-    public void createStream(final IStream stream, final IVenue venue,
-	    final IUser admin) throws InternalServerException {
+    public void createEvent(final Event event) throws InternalServerException {
 	try {
-	    DAOManager manager = DAOManager.getInstance();
+	    // Begin transaction ?
 
-	    manager.transaction(new DAOCommand<Void>() {
+	    Venue venue = event.getVenue();
+	    if (venue == null) {
+		throw new IllegalArgumentException(
+			"Events without a venue are not allowed");
+	    }
 
-		@Override
-		public Void execute(DAOManager manager) throws Exception {
-		    StreamDAO streamDAO = manager.getStreamDAO();
-		    VenueDAO venueDAO = manager.getVenueDAO();
+	    // Search for an existing venue
+	    Venue persistentVenue = venueDAO.findDuplicate(venue);
+	    if (persistentVenue == null) {
+		LOG.info("Inserting " + venue);
+		persistentVenue = venueDAO.create(venue);
+	    } else {
+		LOG.info("Venue already exists = " + venue);
+	    }
+	    event.setVenue(persistentVenue);
 
-		    // Search for an existing venue
-		    IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
-		    if (persistentVenue == null) {
-			persistentVenue = venueDAO.create(venue);
-		    }
+	    if (!eventDAO.hasDuplicate(event)) {
+		LOG.info("Inserting " + event);
+		eventDAO.update(event);
 
-		    stream.setVenue(persistentVenue);
-		    streamDAO.create(stream);
+	    } else {
+		LOG.info("Event already exists = " + event);
+	    }
 
-		    // Set user as administrator
-		    streamDAO.joinAsAdmin(stream.getId(), admin.getId());
-
-		    return null;
-		}
-	    });
-
+	    // End transaction ?
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);
+	    // Rollback ?
 	    throw new InternalServerException(e);
+	} finally {
+
 	}
     }
 
-    public IStream search(final long id) throws InternalServerException {
+    public Event search(final String id) throws InternalServerException {
 	try {
-	    DAOManager manager = DAOManager.getInstance();
-	    IStream stream = manager.transaction(new DAOCommand<IStream>() {
+	    Event event = eventDAO.find(id);
 
-		@Override
-		public IStream execute(DAOManager manager) throws Exception {
-
-		    StreamDAO streamDAO = manager.getStreamDAO();
-		    VenueDAO venueDAO = manager.getVenueDAO();
-		    MediaDAO mediaDAO = manager.getMediaDAO();
-
-		    IStream stream = streamDAO.search(id);
-		    IVenue venue = venueDAO.search(stream.getVenue().getId());
-		    stream.setVenue(venue);
-
-		    List<IMedia> media = mediaDAO.search(stream.getId());
-		    stream.setMedia(media);
-
-		    return stream;
-		}
-
-	    });
-
-	    return stream;
-	} catch (NamingException e) {
-	    LOG.error(e.getMessage(), e);
-	    throw new InternalServerException(e);
+	    return event;
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);
 	    throw new InternalServerException(e);
@@ -294,7 +261,7 @@ public class StreamController implements PageIterator<List<IStream>> {
     }
 
     @Override
-    public List<IStream> next() throws InternalServerException,
+    public List<Event> next() throws InternalServerException,
 	    NoSuchElementException {
 	if (!hasNext()) {
 	    throw new NoSuchElementException();
@@ -310,7 +277,7 @@ public class StreamController implements PageIterator<List<IStream>> {
     }
 
     @Override
-    public List<IStream> previous() throws InternalServerException,
+    public List<Event> previous() throws InternalServerException,
 	    NoSuchElementException {
 	if (!hasPrevious()) {
 	    throw new NoSuchElementException();
@@ -321,19 +288,19 @@ public class StreamController implements PageIterator<List<IStream>> {
     }
 
     @Override
-    public List<IStream> first() throws InternalServerException {
+    public List<Event> first() throws InternalServerException {
 	start = 0;
 	return search();
     }
 
     @Override
-    public List<IStream> last() throws InternalServerException {
+    public List<Event> last() throws InternalServerException {
 	start = (getTotalPages() - 1) * rowsPerPage; // last page index
 	return search();
     }
 
     @Override
-    public List<IStream> get(int pageNumber) throws NoSuchElementException {
+    public List<Event> get(int pageNumber) throws NoSuchElementException {
 	// TODO Not yet implemented!
 	return null;
     }

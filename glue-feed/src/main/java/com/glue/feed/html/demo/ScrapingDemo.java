@@ -28,13 +28,13 @@ public class ScrapingDemo {
 	HTMLFeedParser<DidascalieEvent> parser = new HTMLFeedParser<>(
 		DidascalieEvent.class, siteMap);
 
-	// 3rd step: Define how to transform a DidascalieEvent object to a IStream object
+	// 3rd step: Define how to transform a DidascalieEvent object to a Event object
 	// Here, we use the DefaultFeedMessageListener defined in the parser
 	// that simply prints the bean on
 	// the console
 
 	// final FeedMessageListener delegate = new StreamMessageListener();
-	// final GlueObjectBuilder<DidascalieEvent, IStream> streamBuilder =
+	// final GlueObjectBuilder<DidascalieEvent, Event> streamBuilder =
 	// ...;
 	//
 	// parser.setFeedMessageListener(new
@@ -42,7 +42,7 @@ public class ScrapingDemo {
 	//
 	// @Override
 	// public void newMessage(DidascalieEvent msg) throws Exception {
-	// IStream stream = streamBuilder.build(msg);
+	// Event stream = streamBuilder.build(msg);
 	// delegate.newMessage(stream);
 	// }
 	//

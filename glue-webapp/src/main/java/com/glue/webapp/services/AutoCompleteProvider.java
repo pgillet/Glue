@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.webapp.search.SearchEngine;
 import com.glue.webapp.search.SolrSearchServer;
 import com.sun.jersey.api.core.HttpContext;
@@ -28,11 +28,11 @@ public class AutoCompleteProvider implements InjectableProvider<Context, Type>{
     }
 
 	@Override
-	public Injectable<SearchEngine<IStream>> getInjectable(ComponentContext componentContext, Context context, Type type) {
+	public Injectable<SearchEngine<Event>> getInjectable(ComponentContext componentContext, Context context, Type type) {
 
-		return new AbstractHttpContextInjectable<SearchEngine<IStream>>() {
+		return new AbstractHttpContextInjectable<SearchEngine<Event>>() {
 			@Override
-			public SearchEngine<IStream> getValue(HttpContext arg0) {
+			public SearchEngine<Event> getValue(HttpContext arg0) {
 				return new SolrSearchServer();
 			}
 		};

@@ -5,10 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.glue.domain.v2.Category;
-import com.glue.domain.v2.Event;
-import com.glue.domain.v2.Performer;
-import com.glue.domain.v2.Venue;
+import com.glue.domain.Category;
+import com.glue.domain.Event;
+import com.glue.domain.Performer;
+import com.glue.domain.Venue;
 
 public class TestPersistence {
 
@@ -16,7 +16,7 @@ public class TestPersistence {
      * @param args
      */
     public static void main(String[] args) {
-	GluePersistenceService svc = GluePersistenceService.getService();
+	GluePersistenceService svc = new GluePersistenceService();
 	EventDAO eventDAO = svc.getEventDAO();
 	
 	Event event = new Event();
@@ -52,6 +52,7 @@ public class TestPersistence {
 
 	svc.begin();
 
+	venue = svc.getVenueDAO().create(venue);
 	Event persistentEvent = eventDAO.create(event);
 
 	svc.commit();

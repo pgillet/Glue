@@ -90,12 +90,12 @@
 
 				<div class="row">
 					<div class="col-md-6 col-md-offset-1">
-						<ui:fragment rendered="#{empty streamSearchBean.streams}">
+						<ui:fragment rendered="#{empty streamSearchBean.events}">
 							<p>
 								<h:outputText value="#{bundle.no_result_found}" />
 							</p>
 						</ui:fragment>
-						<ui:fragment rendered="#{not empty streamSearchBean.streams}">
+						<ui:fragment rendered="#{not empty streamSearchBean.events}">
 							<p class="text-muted">
 								<small><h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
 								</small>
@@ -145,7 +145,7 @@
 					</div>
 				</div>
 
-				<!-- <ui:fragment rendered="#{not empty streamSearchBean.streams}"> -->
+				<!-- <ui:fragment rendered="#{not empty streamSearchBean.events}"> -->
 
 					<div class="text-center ">
 						<ul class="pagination">

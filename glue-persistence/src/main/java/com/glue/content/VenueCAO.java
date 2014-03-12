@@ -4,7 +4,7 @@ import org.apache.chemistry.opencmis.client.api.Folder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IVenue;
+import com.glue.domain.Venue;
 
 public class VenueCAO extends AbstractCAO {
 
@@ -24,7 +24,7 @@ public class VenueCAO extends AbstractCAO {
      *            there's no folder for the venue
      * @return the folder for the given venue
      */
-    public Folder getFolder(IVenue venue, boolean create) {
+    public Folder getFolder(Venue venue, boolean create) {
 
 	String path = getPath(venue).getPath();
 
@@ -41,7 +41,7 @@ public class VenueCAO extends AbstractCAO {
      * @return the folder for the given venue, or <code>null</code> if it does
      *         not exist
      */
-    public Folder getFolder(IVenue venue) {
+    public Folder getFolder(Venue venue) {
 	return getFolder(venue, false);
     }
 
@@ -51,8 +51,8 @@ public class VenueCAO extends AbstractCAO {
      * @param venue
      * @return
      */
-    protected CmisPath getPath(IVenue venue) {
-	return new CmisPath(true, venue.getCity(), Long.toString(venue.getId()));
+    protected CmisPath getPath(Venue venue) {
+	return new CmisPath(true, venue.getCity(), venue.getId());
     }
 
 }

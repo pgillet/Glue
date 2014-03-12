@@ -124,12 +124,12 @@
 				<configuration>
 					<sqlFile>${project.basedir}/scripts/create.sql</sqlFile>
 					<!-- Comment this to create or update the file with CREATE TABLE statements -->
-					<skip>true</skip>
+					<!-- <skip>true</skip> -->
 				</configuration>
 				<executions>
 					<execution>
 						<id>sql</id>
-						<phase>process-resources</phase>
+						<phase>process-classes</phase>
 						<goals>
 							<goal>sql</goal>
 						</goals>

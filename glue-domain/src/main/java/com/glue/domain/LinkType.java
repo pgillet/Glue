@@ -1,4 +1,4 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 public enum LinkType {
     OFFICIAL_SITE(1), PODCAST(2), WEBCAST(3), WEBSITE(4);

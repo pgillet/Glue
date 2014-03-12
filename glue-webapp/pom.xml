@@ -133,6 +133,12 @@
 		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-persistence</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.openjpa</groupId>
+					<artifactId>openjpa-all</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>

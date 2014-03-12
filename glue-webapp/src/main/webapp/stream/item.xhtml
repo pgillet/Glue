@@ -41,8 +41,8 @@
 						<div class="pull-right">
 						<br />
 							<ui:fragment
-								rendered="#{not empty streamItemBean.item.thumbPath}">
-								<img src="#{streamItemBean.item.thumbPath}"
+								rendered="#{not empty streamItemBean.item.images[0].thumb.url}">
+								<img src="#{streamItemBean.item.images[0].thumb.url}"
 									alt="#{streamItemBean.item.title}" class="img-responsive"
 									width="180" height="180" title="#{streamItemBean.item.title}" />
 							</ui:fragment>
@@ -60,18 +60,18 @@
 							<li><h4>
 									<strong><i class="fa-li fa fa-calendar text-muted"></i>
 										<ui:fragment
-											rendered="#{streamItemBean.item.startDate lt streamItemBean.item.endDate}">
+											rendered="#{streamItemBean.item.startTime lt streamItemBean.item.stopTime}">
 											<h:outputText value="#{bundle.stream_date_from} " />
-											<h:outputText value="#{streamItemBean.item.startDate}">
+											<h:outputText value="#{streamItemBean.item.startTime}">
 												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 											<h:outputText value=" #{bundle.stream_date_to} " />
-											<h:outputText value="#{streamItemBean.item.endDate}">
+											<h:outputText value="#{streamItemBean.item.stopTime}">
 												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 										</ui:fragment> <ui:fragment
-											rendered="#{streamItemBean.item.startDate ge streamItemBean.item.endDate}">
-											<h:outputText value="#{streamItemBean.item.startDate}">
+											rendered="#{streamItemBean.item.startTime ge streamItemBean.item.stopTime}">
+											<h:outputText value="#{streamItemBean.item.startTime}">
 												<f:convertDateTime pattern="#{bundle.date_format_long}" />
 											</h:outputText>
 										</ui:fragment></strong>
@@ -92,7 +92,7 @@
 							<li><div class="text-muted">
 									<span class="pull-left"><c:choose>
 											<c:when
-												test="#{session.lastAccessedTime lt streamItemBean.item.startDate}">
+												test="#{session.lastAccessedTime lt streamItemBean.item.startTime}">
 												<small>318 <h:outputText
 														value="#{bundle.people_are_going}"></h:outputText></small>
 												<i class="fa fa-bar-chart-o fa-lg disabled"></i>

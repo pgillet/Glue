@@ -43,7 +43,7 @@ public class EventDetailsPageBuilder {
     }
 
     public EventDetailsPageBuilder withStartDate(String cssQuery) {
-	details.setStartDate(cssQuery);
+	details.setStartTime(cssQuery);
 	return this;
     }
 

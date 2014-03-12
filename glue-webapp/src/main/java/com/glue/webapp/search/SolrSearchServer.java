@@ -2,13 +2,11 @@ package com.glue.webapp.search;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -20,7 +18,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.webapp.logic.InternalServerException;
 
 /**
@@ -29,7 +27,11 @@ import com.glue.webapp.logic.InternalServerException;
  * @author pgillet
  * 
  */
-public class SolrSearchServer implements SearchEngine<IStream> {
+public class SolrSearchServer implements SearchEngine<Event> {
+
+    private static final String SOLR_DATE_PATTERN = "yyyy-MM-dd'T'hh:mm:ss'Z'";
+
+    private SimpleDateFormat df = new SimpleDateFormat(SOLR_DATE_PATTERN);
 
     static final Logger LOG = LoggerFactory.getLogger(SolrSearchServer.class);
 
@@ -53,9 +55,9 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
     private String location;
 
-    private static final String END_DATE_FIELD = "end_date";
+    private static final String FIELD_STOP_TIME = "stopTime";
 
-    private static final String START_DATE_FIELD = "start_date";
+    private static final String FIELD_START_TIME = "startTime";
 
     private final String DEFAULT_Q = "*:*";
 
@@ -67,10 +69,10 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	this.solr = new HttpSolrServer(urlString);
     }
 
-    public List<IStream> searchForAutoComplete(String q)
+    public List<Event> searchForAutoComplete(String q)
 	    throws InternalServerException {
 
-	List<? extends IStream> items = new ArrayList<IStream>();
+	List<? extends Event> items = new ArrayList<Event>();
 
 	SolrQuery query = new SolrQuery();
 
@@ -89,13 +91,13 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	    throw new InternalServerException(e);
 	}
 
-	return (List<IStream>) items;
+	return (List<Event>) items;
     }
 
     @Override
-    public List<IStream> search() throws InternalServerException {
+    public List<Event> search() throws InternalServerException {
 
-	List<? extends IStream> items = new ArrayList<IStream>();
+	List<? extends Event> items = new ArrayList<Event>();
 
 	SolrQuery query = constructSolrQuery();
 
@@ -108,7 +110,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 
 	    // Highlighting
 	    if (!isFullQuery()) {
-		summarize((List<IStream>) items, rsp);
+		summarize((List<Event>) items, rsp);
 	    }
 
 	} catch (SolrServerException e) {
@@ -116,17 +118,17 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	    throw new InternalServerException(e);
 	}
 
-	return (List<IStream>) items;
+	return (List<Event>) items;
     }
 
     @Override
-    public Map<Long, IStream> searchAsMap() throws InternalServerException {
-	List<IStream> items = search();
-	Map<Long, IStream> m = new HashMap<>();
-	for (IStream item : items) {
+    public Map<String, Event> searchAsMap() throws InternalServerException {
+	List<Event> items = search();
+	Map<String, Event> m = new HashMap<>();
+	for (Event item : items) {
 	    m.put(item.getId(), item);
 	}
-	
+
 	return m;
     }
 
@@ -136,15 +138,15 @@ public class SolrSearchServer implements SearchEngine<IStream> {
      * 
      * @param items
      */
-    protected void summarize(List<IStream> items, QueryResponse rsp) {
+    protected void summarize(List<Event> items, QueryResponse rsp) {
 
-	Iterator<IStream> iter = items.iterator();
+	Iterator<Event> iter = items.iterator();
 
 	while (iter.hasNext()) {
-	    IStream item = iter.next();
+	    Event item = iter.next();
 
 	    Map<String, List<String>> highlights = rsp.getHighlighting().get(
-		    Long.toString(item.getId()));
+		    item.getId());
 
 	    if (highlights != null) {
 		List<String> snippets = highlights.get("description");
@@ -177,39 +179,20 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	    // query.setHighlightRequireFieldMatch(false); // Default
 	}
 
-	query.setParam("qt", "/stream_select");
+	query.setParam("qt", "/event_select");
 
 	// Add location to query if no lat/lon parameter
 	boolean addLocation = false;
 
 	// Get dates
-	String from = ((startDate != null) ? Long.toString(startDate.getTime())
-		: "*");
-	String to = ((endDate != null) ? Long.toString(endDate.getTime()) : "*");
+	String from = ((startDate != null) ? df.format(startDate) : "NOW");
+	String to = ((endDate != null) ? df.format(endDate) : "*");
 
-	// If no begin date, begin is equal to "today"
-	if ("*".equals(from)) {
-	    // Search from the current date by default
-	    TimeZone tz = TimeZone.getTimeZone("UTC");
-	    Calendar cal = Calendar.getInstance(tz);
-	    // reset hour, minutes, seconds and millis
-	    cal.set(Calendar.HOUR_OF_DAY, 0);
-	    cal.set(Calendar.MINUTE, 0);
-	    cal.set(Calendar.SECOND, 0);
-	    cal.set(Calendar.MILLISECOND, 0);
-	    from = Long.toString(cal.getTimeInMillis());
-	}
-	// From format sould be = 2000-01-01T00:00:00Z
+	// From format should be = 2000-01-01T00:00:00Z
 	// http://wiki.apache.org/solr/FunctionQuery#ms
-	SimpleDateFormat simpleDate = new SimpleDateFormat(
-		"yyyy-MM-dd'T'hh:mm:ss'Z'");
-
 	// Boost streams
-	query.setParam(
-		"bf",
-		"recip(abs(ms("
-			+ simpleDate.format(new Date(Long.valueOf(from)))
-			+ ",start_date)),3.16e-11,1,1)");
+	query.setParam("bf", "recip(abs(ms(" + from + "," + FIELD_START_TIME
+		+ ")),3.16e-11,1,1)");
 
 	// Location filtering
 	if ((getLatitude() != 0 || getLongitude() != 0)) {
@@ -232,8 +215,8 @@ public class SolrSearchServer implements SearchEngine<IStream> {
 	// Curly brackets { } denote an exclusive range query that matches
 	// values between the upper and lower bounds, but excluding the upper
 	// and/or lower bounds themselves.
-	query.addFilterQuery(START_DATE_FIELD + ":[*" + " TO " + to + "}");
-	query.addFilterQuery(END_DATE_FIELD + ":[" + from + " TO " + "*]");
+	query.addFilterQuery(FIELD_START_TIME + ":[*" + " TO " + to + "}");
+	query.addFilterQuery(FIELD_STOP_TIME + ":[" + from + " TO " + "*]");
 	query.setStart(start);
 	query.setRows(rows);
 
@@ -305,7 +288,7 @@ public class SolrSearchServer implements SearchEngine<IStream> {
      *            the startDate to set
      */
     @Override
-    public void setStartDate(Date startDate) {
+    public void setStartTime(Date startDate) {
 	this.startDate = startDate;
     }
 

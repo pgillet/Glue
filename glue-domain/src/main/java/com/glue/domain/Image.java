@@ -1,4 +1,4 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

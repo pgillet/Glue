@@ -2,16 +2,39 @@ package com.glue.persistence;
 
 import java.util.List;
 
-import com.glue.domain.v2.Category;
-import com.glue.domain.v2.Comment;
-import com.glue.domain.v2.Image;
-import com.glue.domain.v2.Link;
-import com.glue.domain.v2.Performer;
-import com.glue.domain.v2.Property;
-import com.glue.domain.v2.Tag;
-import com.glue.domain.v2.Venue;
+import javax.persistence.Query;
+
+import com.glue.domain.Category;
+import com.glue.domain.Comment;
+import com.glue.domain.Image;
+import com.glue.domain.Link;
+import com.glue.domain.Performer;
+import com.glue.domain.Property;
+import com.glue.domain.Tag;
+import com.glue.domain.Venue;
 
 public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
+
+    public VenueDAO() {
+	super();
+    }
+
+    public Venue findDuplicate(Venue v) {
+
+	Query query = em
+		.createQuery(
+			"SELECT v FROM Venue v WHERE v.name = :name AND v.city = :city",
+			type).setParameter("name", v.getName())
+		.setParameter("city", v.getCity());
+
+	Venue other = PersistenceHelper.getSingleResultOrNull(query);
+
+	return other;
+    }
+
+    public boolean hasDuplicate(Venue venue) {
+	return (findDuplicate(venue) != null);
+    }
 
     @Override
     public void addCategory(String id, Category category) {
@@ -126,6 +149,5 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 	// TODO Auto-generated method stub
 
     }
-
 
 }

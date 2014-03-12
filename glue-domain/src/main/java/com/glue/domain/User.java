@@ -1,7 +1,9 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,12 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * User object.
  */
 @Entity
 @Table(name = "Glue_User")
+@XmlRootElement
 public class User {
 
     @Id
@@ -32,12 +36,13 @@ public class User {
     /**
      * Password.
      */
+    @Column(nullable = false)
     private String password;
 
     /**
      * Mail address.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     /**
@@ -69,7 +74,7 @@ public class User {
      * Links about the user.
      */
     @OneToMany(cascade = { CascadeType.ALL })
-    private List<Link> links;
+    private Set<Link> links = new HashSet<>();
 
     /**
      * List of events the user is either watching or going;
@@ -201,7 +206,7 @@ public class User {
      * 
      * @return the links
      */
-    public List<Link> getLinks() {
+    public Set<Link> getLinks() {
 	return links;
     }
 
@@ -211,7 +216,7 @@ public class User {
      * @param links
      *            the links to set
      */
-    public void setLinks(List<Link> links) {
+    public void setLinks(Set<Link> links) {
 	this.links = links;
     }
 
@@ -256,6 +261,7 @@ public class User {
     /**
      * @return the password
      */
+    // @XmlTransient
     public String getPassword() {
 	return password;
     }

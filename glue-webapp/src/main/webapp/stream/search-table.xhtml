@@ -20,7 +20,7 @@
 					</tr>
 				</thead> -->
 				<tbody>
-					<ui:repeat var="stream" value="#{streamSearchBean.streams}"
+					<ui:repeat var="stream" value="#{streamSearchBean.events}"
 						varStatus="status">
 						<tr>
 							<td style="width: 20px;"><i class="fa fa-square"
@@ -31,17 +31,17 @@
 										<f:param name="id" value="#{stream.id}"></f:param>
 									</h:link></small></td>
 							<td style="width: 20%;"><small><ui:fragment
-										rendered="#{stream.startDate lt stream.endDate}">
+										rendered="#{stream.startTime lt stream.stopTime}">
 										<h:outputText value="#{bundle.stream_date_from} " />
-										<h:outputText value="#{stream.startDate}">
+										<h:outputText value="#{stream.startTime}">
 											<f:convertDateTime pattern="#{bundle.date_format_short}" />
 										</h:outputText>
 										<h:outputText value=" #{bundle.stream_date_to} " />
-										<h:outputText value="#{stream.endDate}">
+										<h:outputText value="#{stream.stopTime}">
 											<f:convertDateTime pattern="#{bundle.date_format_short}" />
 										</h:outputText>
-									</ui:fragment> <ui:fragment rendered="#{stream.startDate ge stream.endDate}">
-										<h:outputText value="#{stream.startDate}">
+									</ui:fragment> <ui:fragment rendered="#{stream.startTime ge stream.stopTime}">
+										<h:outputText value="#{stream.startTime}">
 											<f:convertDateTime pattern="#{bundle.date_format_short}" />
 										</h:outputText>
 									</ui:fragment></small></td>

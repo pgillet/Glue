@@ -17,7 +17,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IVenue;
+import com.glue.domain.Venue;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
@@ -54,14 +54,14 @@ public class ToulouseEquipementsJob implements Job {
 					Charset.forName("UTF-8")));
 			CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader, VenueBean.class);
 
-			final FeedMessageListener<IVenue> delegate = new VenueMessageListener();
-			final GlueObjectBuilder<VenueBean, IVenue> venueBuilder = new VenueBeanVenueBuilder();
+			final FeedMessageListener<Venue> delegate = new VenueMessageListener();
+			final GlueObjectBuilder<VenueBean, Venue> venueBuilder = new VenueBeanVenueBuilder();
 
 			parser.setFeedMessageListener(new FeedMessageListener<VenueBean>() {
 
 				@Override
 				public void newMessage(VenueBean msg) throws Exception {
-					IVenue venue = venueBuilder.build(msg);
+					Venue venue = venueBuilder.build(msg);
 					delegate.newMessage(venue);
 				}
 

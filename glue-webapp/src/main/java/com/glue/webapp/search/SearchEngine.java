@@ -65,7 +65,7 @@ public interface SearchEngine<T> {
      * 
      * @param startDate
      */
-    void setStartDate(Date startDate);
+    void setStartTime(Date startDate);
 
     /**
      * Returns the end date.

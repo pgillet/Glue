@@ -16,7 +16,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
@@ -61,15 +61,15 @@ public class SoToulouseAgendaJob implements Job {
 			CSVFeedParser<EventBean> parser = new CSVFeedParser<>(reader,
 					EventBean.class);
 
-			final FeedMessageListener<IStream> delegate = new StreamMessageListener();
-			final GlueObjectBuilder<EventBean, IStream> streamBuilder = new EventBeanStreamBuilder();
+			final FeedMessageListener<Event> delegate = new StreamMessageListener();
+			final GlueObjectBuilder<EventBean, Event> eventBuilder = new EventBeanStreamBuilder();
 
 			parser.setFeedMessageListener(new FeedMessageListener<EventBean>() {
 
 				@Override
 				public void newMessage(EventBean msg) throws Exception {
-					IStream stream = streamBuilder.build(msg);
-					delegate.newMessage(stream);
+					Event event = eventBuilder.build(msg);
+					delegate.newMessage(event);
 				}
 
 				@Override

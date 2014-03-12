@@ -1,24 +1,35 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  * Event class.
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "findAll", query = "SELECT e FROM Event e WHERE e.id IN :ids"),
+	@NamedQuery(name = "findDuplicate", query = "SELECT e FROM Event e WHERE e.title = :title AND e.startTime = :startTime AND e.venue.id = :venueId"),
+	@NamedQuery(name = "findBetween", query = "SELECT e FROM Event e WHERE e.stopTime BETWEEN :start AND :end") })
 public class Event {
 
     /**
@@ -39,6 +50,9 @@ public class Event {
      */
     @Column(length = 2000)
     private String description;
+
+    @Transient
+    private String summary;
 
     /**
      * Event URL.
@@ -102,7 +116,7 @@ public class Event {
      * List of links.
      */
     @OneToMany(cascade = { CascadeType.ALL })
-    private List<Link> links = new ArrayList<>();
+    private Set<Link> links = new HashSet<>();
 
     /**
      * Event comments.
@@ -143,13 +157,16 @@ public class Event {
 	    CascadeType.REFRESH, CascadeType.MERGE }, mappedBy = "going")
     private List<User> going = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private EventCategory category;
+
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
     private List<Category> categories = new ArrayList<>();
 
     private boolean reference = false;
 
-    @ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
+    @ManyToOne(cascade = { CascadeType.DETACH, /* CascadeType.PERSIST, */
 	    CascadeType.REFRESH, CascadeType.MERGE }, optional = false)
     private Venue venue;
 
@@ -203,6 +220,40 @@ public class Event {
      */
     public void setDescription(String description) {
 	this.description = description;
+    }
+
+    /**
+     * @return the summary
+     */
+    public String getSummary() {
+	return summary;
+    }
+
+    /**
+     * @param summary
+     *            the summary to set
+     */
+    public void setSummary(String summary) {
+	this.summary = summary;
+    }
+
+    /**
+     * Event URL.
+     * 
+     * @return the url
+     */
+    public String getUrl() {
+	return url;
+    }
+
+    /**
+     * Event URL.
+     * 
+     * @param url
+     *            the url to set
+     */
+    public void setUrl(String url) {
+	this.url = url;
     }
 
     /**
@@ -269,15 +320,6 @@ public class Event {
      */
     public String getTitle() {
 	return title;
-    }
-
-    /**
-     * Event URL.
-     * 
-     * @return the URL
-     */
-    public String getURL() {
-	return url;
     }
 
     /**
@@ -417,7 +459,7 @@ public class Event {
      * 
      * @return the links
      */
-    public List<Link> getLinks() {
+    public Set<Link> getLinks() {
 	return links;
     }
 
@@ -427,7 +469,7 @@ public class Event {
      * @param links
      *            the links to set
      */
-    public void setLinks(List<Link> links) {
+    public void setLinks(Set<Link> links) {
 	this.links = links;
     }
 
@@ -524,6 +566,21 @@ public class Event {
      */
     public void setProperties(List<Property> properties) {
 	this.properties = properties;
+    }
+
+    /**
+     * @return the category
+     */
+    public EventCategory getCategory() {
+	return category;
+    }
+
+    /**
+     * @param category
+     *            the category to set
+     */
+    public void setCategory(EventCategory category) {
+	this.category = category;
     }
 
     /**

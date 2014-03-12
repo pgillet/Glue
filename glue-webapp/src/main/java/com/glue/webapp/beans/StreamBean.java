@@ -1,376 +1,234 @@
 package com.glue.webapp.beans;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IUser;
-import com.glue.domain.IVenue;
-import com.glue.domain.impl.Stream;
-import com.glue.domain.impl.Venue;
+import com.glue.domain.Event;
+import com.glue.domain.Tag;
+import com.glue.domain.User;
+import com.glue.domain.Venue;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.logic.UserController;
 
 @ManagedBean
-public class StreamBean /* implements IStream */{
-	
-	static final Logger LOG = LoggerFactory.getLogger(StreamBean.class);
+public class StreamBean {
 
-	// TODO: should probably use Dependency Injection here!
-	StreamController streamController = new StreamController();
-	UserController userController = new UserController();
+    static final Logger LOG = LoggerFactory.getLogger(StreamBean.class);
 
-	private String title;
+    @Inject
+    StreamController streamController;
+    UserController userController = new UserController();
 
-	private String description;
+    private String title;
 
-	private boolean publicc;
+    private String description;
 
-	private boolean open = true;
+    private Date startDate;
 
-	private String invitedParticipants;
+    private Date endDate;
 
-	private String invitedGuests;
+    private double latitude;
 
-	private String sharedSecretQuestion;
+    private double longitude;
 
-	private String sharedSecretAnswer;
+    private String address;
 
-	private boolean shouldRequestToParticipate;
+    private Set<String> tags;
 
-	private Date startDate;
+    private String thumbPath;
 
-	private Date endDate;
+    public StreamBean() {
+	Calendar calendar = Calendar.getInstance();
+	startDate = calendar.getTime();
+	calendar.add(Calendar.HOUR_OF_DAY, 2);
+	endDate = calendar.getTime();
+    }
 
-	private double latitude;
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+	return title;
+    }
 
-	private double longitude;
+    /**
+     * @param title
+     *            the title to set
+     */
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	private String address;
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+	return description;
+    }
 
-	private Set<String> tags;
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
-	private int numberOfParticipant;
+    /**
+     * @return the startDate
+     */
+    public Date getStartDate() {
+	return startDate;
+    }
 
-	private String thumbPath;
+    /**
+     * @param startDate
+     *            the startDate to set
+     */
+    public void setStartTime(Date startDate) {
+	this.startDate = startDate;
+    }
 
-	public StreamBean() {
-		Calendar calendar = Calendar.getInstance();
-		startDate = calendar.getTime();
-		calendar.add(Calendar.HOUR_OF_DAY, 2);
-		endDate = calendar.getTime();
+    /**
+     * @return the endDate
+     */
+    public Date getEndDate() {
+	return endDate;
+    }
+
+    /**
+     * @param endDate
+     *            the endDate to set
+     */
+    public void setEndDate(Date endDate) {
+	this.endDate = endDate;
+    }
+
+    /**
+     * @return the latitude
+     */
+    public double getLatitude() {
+	return latitude;
+    }
+
+    /**
+     * @param latitude
+     *            the latitude to set
+     */
+    public void setLatitude(double latitude) {
+	this.latitude = latitude;
+    }
+
+    /**
+     * @return the longitude
+     */
+    public double getLongitude() {
+	return longitude;
+    }
+
+    /**
+     * @param longitude
+     *            the longitude to set
+     */
+    public void setLongitude(double longitude) {
+	this.longitude = longitude;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+	return address;
+    }
+
+    /**
+     * @param address
+     *            the address to set
+     */
+    public void setAddress(String address) {
+	this.address = address;
+    }
+
+    /**
+     * @return the tags
+     */
+    public Set<String> getTags() {
+	return tags;
+    }
+
+    /**
+     * @param tags
+     *            the tags to set
+     */
+    public void setTags(Set<String> tags) {
+	this.tags = tags;
+    }
+
+    /**
+     * @return the thumbPath
+     */
+    public String getThumbPath() {
+	return thumbPath;
+    }
+
+    /**
+     * @param thumbPath
+     *            the thumbPath to set
+     */
+    public void setThumbPath(String thumbPath) {
+	this.thumbPath = thumbPath;
+    }
+
+    public String create() {
+
+	FacesContext context = FacesContext.getCurrentInstance();
+	HttpServletRequest request = (HttpServletRequest) context
+		.getExternalContext().getRequest();
+
+	User authenticatedUser = (User) request.getUserPrincipal();
+
+	Event event = new Event();
+	event.setDescription(description);
+	event.setStartTime(startDate);
+	event.setStopTime(endDate);
+
+	List<Tag> l = new ArrayList<>();
+	for (String str : tags) {
+	    Tag tag = new Tag();
+	    tag.setTitle(str);
+	    l.add(tag);
 	}
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
+	event.setTags(l);
+
+	event.setTitle(title);
+
+	Venue venue = new Venue();
+	venue.setAddress(address);
+	venue.setLatitude(latitude);
+	venue.setLongitude(longitude);
+
+	try {
+	    streamController.createEvent(event);
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    context.addMessage(null, new FacesMessage(e.getMessage()));
 	}
 
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the publicc
-	 */
-	public boolean isPublicc() {
-		return publicc;
-	}
-
-	/**
-	 * @param publicc
-	 *            the publicc to set
-	 */
-	public void setPublicc(boolean publicc) {
-		this.publicc = publicc;
-	}
-
-	/**
-	 * @return the open
-	 */
-	public boolean isOpen() {
-		return open;
-	}
-
-	/**
-	 * @param open
-	 *            the open to set
-	 */
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
-
-	/**
-	 * @return the invitedParticipants
-	 */
-	public String getInvitedParticipants() {
-		return invitedParticipants;
-	}
-
-	/**
-	 * @param invitedParticipants
-	 *            the invitedParticipants to set
-	 */
-	public void setInvitedParticipants(String invitedParticipants) {
-		this.invitedParticipants = invitedParticipants;
-	}
-
-	/**
-	 * @return the invitedGuests
-	 */
-	public String getInvitedGuests() {
-		return invitedGuests;
-	}
-
-	/**
-	 * @param invitedGuests
-	 *            the invitedGuests to set
-	 */
-	public void setInvitedGuests(String invitedGuests) {
-		this.invitedGuests = invitedGuests;
-	}
-
-	/**
-	 * @return the sharedSecretQuestion
-	 */
-	public String getSharedSecretQuestion() {
-		return sharedSecretQuestion;
-	}
-
-	/**
-	 * @param sharedSecretQuestion
-	 *            the sharedSecretQuestion to set
-	 */
-	public void setSharedSecretQuestion(String sharedSecretQuestion) {
-		this.sharedSecretQuestion = sharedSecretQuestion;
-	}
-
-	/**
-	 * @return the sharedSecretAnswer
-	 */
-	public String getSharedSecretAnswer() {
-		return sharedSecretAnswer;
-	}
-
-	/**
-	 * @param sharedSecretAnswer
-	 *            the sharedSecretAnswer to set
-	 */
-	public void setSharedSecretAnswer(String sharedSecretAnswer) {
-		this.sharedSecretAnswer = sharedSecretAnswer;
-	}
-
-	/**
-	 * @return the shouldRequestToParticipate
-	 */
-	public boolean isShouldRequestToParticipate() {
-		return shouldRequestToParticipate;
-	}
-
-	/**
-	 * @param shouldRequestToParticipate
-	 *            the shouldRequestToParticipate to set
-	 */
-	public void setShouldRequestToParticipate(boolean shouldRequestToParticipate) {
-		this.shouldRequestToParticipate = shouldRequestToParticipate;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * @param startDate
-	 *            the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @param endDate
-	 *            the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
-	}
-
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * @param address
-	 *            the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	/**
-	 * @return the tags
-	 */
-	public Set<String> getTags() {
-		return tags;
-	}
-
-	/**
-	 * @param tags
-	 *            the tags to set
-	 */
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
-
-	/**
-	 * @return the numberOfParticipant
-	 */
-	public int getNumberOfParticipant() {
-		return numberOfParticipant;
-	}
-
-	/**
-	 * @param numberOfParticipant
-	 *            the numberOfParticipant to set
-	 */
-	public void setNumberOfParticipant(int numberOfParticipant) {
-		this.numberOfParticipant = numberOfParticipant;
-	}
-
-	/**
-	 * @return the thumbPath
-	 */
-	public String getThumbPath() {
-		return thumbPath;
-	}
-
-	/**
-	 * @param thumbPath
-	 *            the thumbPath to set
-	 */
-	public void setThumbPath(String thumbPath) {
-		this.thumbPath = thumbPath;
-	}
-
-	public String create() {
-
-		FacesContext context = FacesContext.getCurrentInstance();
-		HttpServletRequest request = (HttpServletRequest) context
-				.getExternalContext().getRequest();
-
-		IUser authenticatedUser = (IUser) request.getUserPrincipal();
-
-		Stream stream = new Stream();
-		stream.setDescription(description);
-		stream.setEndDate(endDate.getTime());
-		stream.setOpen(open);
-		stream.setPublicc(publicc);
-		stream.setSharedSecretAnswer(sharedSecretAnswer);
-		stream.setSharedSecretQuestion(sharedSecretQuestion);
-		stream.setShouldRequestToParticipate(shouldRequestToParticipate);
-		stream.setStartDate(startDate.getTime());
-		stream.setTags(tags);
-		stream.setThumbPath(thumbPath);
-		stream.setTitle(title);
-		
-		IVenue venue = new Venue();
-		venue.setAddress(address);
-		venue.setLatitude(latitude);
-		venue.setLongitude(longitude);
-
-		try {
-			String[] addresses = invitedParticipants.split("\\s+,\\s+");
-			// List<IUser> users = userController.getUsers(addresses);
-			Map<String, String> m = new LinkedHashMap<String, String>();
-			// For now, we cannot know the name associated to a mail address
-			// unless we integrate contact API from various mail services.
-			for (String address : addresses) {
-				m.put(address, null);
-			}
-			stream.setInvitedParticipants(m);
-
-			streamController.createStream(stream, venue, authenticatedUser);
-		} catch (InternalServerException e) {
-			LOG.error(e.getMessage(), e);
-			context.addMessage(null, new FacesMessage(e.getMessage()));
-		}
-
-		return "main";
-	}
+	return "main";
+    }
 
 }

@@ -117,12 +117,12 @@
    <field name="_root_" type="string" indexed="true" stored="false"/>  
        
    <!-- Glue fields -->     
-   <field name="id" type="long" indexed="true" stored="true" required="true" multiValued="false" /> 
+   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
    <field name="title" type="text_general" indexed="true" stored="true" multiValued="false"/>
    <field name="description" type="text_general" indexed="true" stored="true"/>
    <field name="category" type="text_general" indexed="true" stored="true"/>
-   <field name="start_date" type="tlong" indexed="true" stored="true"/>
-   <field name="end_date" type="tlong" indexed="true" stored="true"/>
+   <field name="startTime" type="tdate" indexed="true" stored="true"/>
+   <field name="stopTime" type="tdate" indexed="true" stored="true"/>
    <field name="duration" type="tlong" indexed="true" stored="false"/>
    <field name="url" type="text_general" indexed="false" stored="true"/>
    <field name="venue" type="text_general" indexed="true" stored="true"/>

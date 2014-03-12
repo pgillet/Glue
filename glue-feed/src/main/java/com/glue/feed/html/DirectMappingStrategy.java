@@ -9,12 +9,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.glue.domain.IStream;
-import com.glue.domain.IVenue;
-import com.glue.domain.impl.Stream;
-import com.glue.domain.impl.Venue;
+import com.glue.domain.Event;
+import com.glue.domain.Image;
+import com.glue.domain.ImageItem;
+import com.glue.domain.Venue;
 
-public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
+public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 
     private EventDetailsPage details;
 
@@ -23,7 +23,7 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
     }
 
     @Override
-    public IStream parse(String url) throws Exception {
+    public Event parse(String url) throws Exception {
 
 	Element doc = Jsoup.connect(url).get();
 
@@ -34,11 +34,11 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 	    }
 	}
 
-	IStream stream = new Stream();
+	Event event = new Event();
 
-	stream.setUrl(url);
-	stream.setTitle(HTMLUtils.selectText(details.getTitle(), doc));
-	stream.setDescription(HTMLUtils.selectHtml(details.getDescription(),
+	event.setUrl(url);
+	event.setTitle(HTMLUtils.selectText(details.getTitle(), doc));
+	event.setDescription(HTMLUtils.selectHtml(details.getDescription(),
 		doc));
 
 	String datePattern = details.getDatePattern();
@@ -52,14 +52,14 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 	    String startSource = HTMLUtils.selectText(details.getStartDate(),
 		    doc);
 	    Date startDate = df.parse(startSource);
-	    stream.setStartDate(startDate.getTime());
+	    event.setStartTime(startDate);
 
 	    String endDateQuery = details.getEndDate();
 	    if (endDateQuery != null) {
 		String endSource = HTMLUtils.selectText(endDateQuery, doc);
 		if (endSource != null) {
 		    Date endDate = df.parse(endSource);
-		    stream.setEndDate(endDate.getTime());
+		    event.setStopTime(endDate);
 		}
 	    }
 	}
@@ -71,18 +71,27 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 	    elems = elems.select("[src]");
 
 	    if (!elems.isEmpty()) {
-		stream.setThumbPath(elems.attr("abs:src"));
+
+		ImageItem item = new ImageItem();
+		item.setUrl(elems.attr("abs:src"));
+
+		Image image = new Image();
+		image.setOriginal(item);
+		image.setSource(url);
+		image.setSticky(true);
+
+		event.getImages().add(image);
 	    }
 	}
 
 	String priceQuery = details.getPrice();
 	if (priceQuery != null) {
-	    stream.setPrice(HTMLUtils.selectText(priceQuery, doc));
+	    event.setPrice(HTMLUtils.selectText(priceQuery, doc));
 	}
 
 	String venueNameQuery = details.getVenueName();
 	if (venueNameQuery != null) {
-	    IVenue venue = new Venue();
+	    Venue venue = new Venue();
 	    venue.setName(HTMLUtils.selectText(venueNameQuery, doc));
 
 	    String venueAddressQuery = details.getVenueAddress();
@@ -90,7 +99,7 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 		venue.setAddress(HTMLUtils.selectText(venueAddressQuery, doc));
 	    }
 
-	    stream.setVenue(venue);
+	    event.setVenue(venue);
 	}
 
 	// Thing to handle for sure!
@@ -98,7 +107,7 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<IStream> {
 	// details.getAudience();
 	// details.getEventType()
 
-	return stream;
+	return event;
     }
 
 }

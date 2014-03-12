@@ -1,20 +1,68 @@
 package com.glue.persistence;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
-import com.glue.domain.v2.Category;
-import com.glue.domain.v2.Comment;
-import com.glue.domain.v2.Event;
-import com.glue.domain.v2.Image;
-import com.glue.domain.v2.Link;
-import com.glue.domain.v2.Performer;
-import com.glue.domain.v2.Property;
-import com.glue.domain.v2.Tag;
+import javax.persistence.Query;
+
+import com.glue.domain.Category;
+import com.glue.domain.Comment;
+import com.glue.domain.Event;
+import com.glue.domain.Image;
+import com.glue.domain.Link;
+import com.glue.domain.Performer;
+import com.glue.domain.Property;
+import com.glue.domain.Tag;
 
 public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
-    protected EventDAO() {
+    public EventDAO() {
 	super();
+    }
+
+    public List<Event> findAll(Collection<String> ids) {
+	List<Event> events = new ArrayList<>();
+
+	if (!ids.isEmpty()) {
+	    events = em.createNamedQuery("findAll", type)
+		    .setParameter("ids", ids).getResultList();
+
+	    // TODO: order by date ?
+	}
+
+	return events;
+    }
+
+    public List<Event> findBetween(Date start, Date end) throws SQLException {
+	List<Event> events = em.createNamedQuery("findBetween", type)
+		.setParameter("start", start).setParameter("end", end)
+		.getResultList();
+
+	return events;
+    }
+
+    /**
+     * This method assumes that the given event has an already persisted venue.
+     * 
+     * @param event
+     * @return
+     */
+    public Event findDuplicate(Event event) {
+	Query query = em.createNamedQuery("findDuplicate", type)
+		.setParameter("title", event.getTitle())
+		.setParameter("startTime", event.getStartTime())
+		.setParameter("venueId", event.getVenue().getId());
+
+	Event other = PersistenceHelper.getSingleResultOrNull(query);
+
+	return other;
+    }
+
+    public boolean hasDuplicate(Event event) {
+	return (findDuplicate(event) != null);
     }
 
     @Override
@@ -130,6 +178,5 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	// TODO Auto-generated method stub
 
     }
-
 
 }

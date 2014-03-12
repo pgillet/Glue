@@ -17,8 +17,8 @@ import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.Category;
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
+import com.glue.domain.EventCategory;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.search.PageIterator;
@@ -34,9 +34,9 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     @Inject
     private StreamController streamController;
 
-    private Category[] categories = Category.values();
+    private EventCategory[] categories = EventCategory.values();
 
-    private List<IStream> streams;
+    private List<Event> events;
 
     private enum Display {
 	LIST, TABLE, MAP
@@ -57,7 +57,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	setDisplay(param);
 	LOG.debug("Toggle display = " + display);
 
-	if (streams == null) {
+	if (events == null) {
 	    search();
 	}
     }
@@ -153,16 +153,16 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     /**
-     * @return the streams
+     * @return the events
      */
-    public List<IStream> getStreams() {
-	return streams;
+    public List<Event> getEvents() {
+	return events;
     }
 
     /**
      * @return the categories
      */
-    public Category[] getCategories() {
+    public EventCategory[] getCategories() {
 	return categories;
     }
 
@@ -182,11 +182,11 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     /**
-     * @param streams
-     *            the streams to set
+     * @param events
+     *            the events to set
      */
-    public void setStreams(List<IStream> streams) {
-	this.streams = streams;
+    public void setEvents(List<Event> events) {
+	this.events = events;
     }
 
     public String search() {
@@ -194,14 +194,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    streams = streamController.search();
+	    events = streamController.search();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	return "stream-search";
+	return "event-search";
     }
 
     public void searchFrom(SelectEvent event) {
@@ -271,7 +271,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    streams = streamController.next();
+	    events = streamController.next();
 	} catch (NoSuchElementException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -304,7 +304,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    streams = streamController.previous();
+	    events = streamController.previous();
 	} catch (NoSuchElementException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -323,7 +323,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    streams = streamController.first();
+	    events = streamController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -338,7 +338,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    streams = streamController.last();
+	    events = streamController.last();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -435,7 +435,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	styleAttr = String.format(styleAttr, paddingBottom, borderWidth,
-		Category.valueOf(cat).getColor());
+		EventCategory.valueOf(cat).getColor());
 
 	return styleAttr;
     }
@@ -449,7 +449,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	try {
-	    streams = streamController.first();
+	    events = streamController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    FacesContext context = FacesContext.getCurrentInstance();
@@ -467,7 +467,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	getCatSelection().add(cat);
 
 	try {
-	    streams = streamController.first();
+	    events = streamController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    FacesContext context = FacesContext.getCurrentInstance();

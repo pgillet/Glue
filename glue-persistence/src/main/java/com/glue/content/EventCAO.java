@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,19 +20,19 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 
-public class StreamCAO extends VenueCAO {
+public class EventCAO extends VenueCAO {
 
-    static final Logger LOG = LoggerFactory.getLogger(StreamCAO.class);
+    static final Logger LOG = LoggerFactory.getLogger(EventCAO.class);
 
-    protected StreamCAO() {
+    protected EventCAO() {
     }
 
     /**
      * Returns the folder for the given stream.
      * 
-     * @param stream
+     * @param event
      *            a persistent stream
      * @param create
      *            <code>true</code> to create the folder for the given stream if
@@ -39,9 +40,9 @@ public class StreamCAO extends VenueCAO {
      *            there's no folder for the stream
      * @return the folder for the given stream
      */
-    public Folder getFolder(IStream stream, boolean create) {
+    public Folder getFolder(Event event, boolean create) {
 
-	String path = getPath(stream).getPath();
+	String path = getPath(event).getPath();
 
 	LOG.debug("Getting stream folder by path = " + path);
 	return getFolder(path, create);
@@ -56,8 +57,8 @@ public class StreamCAO extends VenueCAO {
      * @return the folder for the given stream, or <code>null</code> if it does
      *         not exist
      */
-    public Folder getFolder(IStream stream) {
-	return getFolder(stream, false);
+    public Folder getFolder(Event event) {
+	return getFolder(event, false);
     }
 
     /**
@@ -66,20 +67,19 @@ public class StreamCAO extends VenueCAO {
      * @param venue
      * @return
      */
-    protected CmisPath getPath(IStream stream) {
-	CmisPath venuePath = getPath(stream.getVenue());
+    protected CmisPath getPath(Event event) {
+	CmisPath venuePath = getPath(event.getVenue());
 
-	long startDate = stream.getStartDate();
+	Date startTime = event.getStartTime();
 	Calendar calendar = Calendar.getInstance();
-	calendar.setTimeInMillis(startDate);
+	calendar.setTime(startTime);
 
 	int year = calendar.get(Calendar.YEAR);
 	int month = calendar.get(Calendar.MONTH) + 1;
 	int day = calendar.get(Calendar.DAY_OF_MONTH);
 
 	CmisPath streamSubPath = new CmisPath(false, Integer.toString(year),
-		Integer.toString(month), Integer.toString(day),
-		Long.toString(stream.getId()));
+		Integer.toString(month), Integer.toString(day), event.getId());
 
 	return venuePath.resolve(streamSubPath);
     }
@@ -95,13 +95,13 @@ public class StreamCAO extends VenueCAO {
      *            used
      * @param input
      *            the input stream, should not be null
-     * @param stream
+     * @param event
      *            the stream at which the document will be added
      * @throws IOException
      *             if an I/O error occured or if the document already exists
      */
     public void add(String filename, String mimetype, InputStream input,
-	    IStream stream) throws IOException {
+	    Event event) throws IOException {
 
 	ContentStream contentStream = session.getObjectFactory()
 		.createContentStream(filename, -1, mimetype, input);
@@ -111,7 +111,7 @@ public class StreamCAO extends VenueCAO {
 		BaseTypeId.CMIS_DOCUMENT.value());
 	properties.put(PropertyIds.NAME, filename);
 
-	Folder streamFolder = getFolder(stream, true);
+	Folder streamFolder = getFolder(event, true);
 
 	try {
 	    Document doc = streamFolder.createDocument(properties,
@@ -125,9 +125,9 @@ public class StreamCAO extends VenueCAO {
     }
 
     /**
-     * @see #add(String, String, InputStream, IStream)
+     * @see #add(String, String, InputStream, Event)
      */
-    public void add(URL url, IStream stream) throws IOException {
+    public void add(URL url, Event event) throws IOException {
 
 	String filename = FilenameUtils.getName(url.getPath());
 
@@ -136,7 +136,7 @@ public class StreamCAO extends VenueCAO {
 
 	InputStream input = conn.getInputStream();
 
-	add(filename, contentType, input, stream);
+	add(filename, contentType, input, event);
 
     }
 

@@ -1,61 +1,49 @@
 package com.glue.feed.listener;
 
-import java.sql.SQLException;
-
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.IVenue;
-import com.glue.feed.DataSourceManager;
+import com.glue.domain.Venue;
 import com.glue.feed.FeedMessageListener;
-import com.glue.webapp.db.DAOCommand;
-import com.glue.webapp.db.DAOManager;
-import com.glue.webapp.db.VenueDAO;
+import com.glue.persistence.GluePersistenceService;
 
-public class VenueMessageListener implements FeedMessageListener<IVenue> {
+public class VenueMessageListener extends GluePersistenceService implements
+	FeedMessageListener<Venue> {
 
-	static final Logger LOG = LoggerFactory
-			.getLogger(VenueMessageListener.class);
+    static final Logger LOG = LoggerFactory
+	    .getLogger(VenueMessageListener.class);
 
-	private DAOManager manager;
+    public VenueMessageListener() {
+	super();
+    }
 
-	public VenueMessageListener() throws NamingException, SQLException {
-		DataSource ds = DataSourceManager.getInstance().getDataSource();
+    @Override
+    public void newMessage(final Venue venue) throws Exception {
 
-		manager = DAOManager.getInstance(ds);
+	try {
+	    // Begin transaction
+	    begin();
+
+	    // Search for an existing venue
+	    Venue persistentVenue = getVenueDAO().findDuplicate(venue);
+
+	    if (persistentVenue == null) {
+		LOG.info("Inserting " + venue);
+		persistentVenue = getVenueDAO().create(venue);
+	    } else {
+		LOG.info("Venue already exists = " + venue);
+	    }
+
+	    // End transaction
+	    commit();
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    rollback();
+	    throw e;
+	} finally {
+
 	}
 
-	@Override
-	public void newMessage(final IVenue venue) throws Exception {
-
-		final VenueDAO venueDAO = manager.getVenueDAO();
-
-		manager.transaction(new DAOCommand<Void>() {
-
-			@Override
-			public Void execute(DAOManager manager) throws Exception {
-
-					// Search for an existing venue
-					IVenue persistentVenue = venueDAO.searchForDuplicate(venue);
-
-				if (persistentVenue == null) {
-					LOG.info("Inserting " + venue);
-					persistentVenue = venueDAO.create(venue);
-				} else {
-					LOG.info("Venue already exists = " + venue);
-				}
-				return null;
-			}
-
-		});
-	}
-
-	@Override
-	public void close() {
-		manager.closeConnectionQuietly();
-	}
+    }
 
 }

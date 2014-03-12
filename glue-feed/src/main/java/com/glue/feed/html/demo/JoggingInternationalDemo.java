@@ -5,7 +5,7 @@ import static com.glue.feed.html.SiteMapBuilder.newSiteMap;
 
 import java.util.Locale;
 
-import com.glue.domain.IStream;
+import com.glue.domain.Event;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.html.DirectMappingStrategy;
 import com.glue.feed.html.EventDetailsPage;
@@ -48,10 +48,10 @@ public class JoggingInternationalDemo {
 		.withVenueAddress("table.tab_identite tr:eq(2) td.droite")
 		.withLocale(Locale.FRENCH).build();
 
-	HTMLMappingStrategy<IStream> mappingStrategy = new DirectMappingStrategy(
+	HTMLMappingStrategy<Event> mappingStrategy = new DirectMappingStrategy(
 		details);
 
-	HTMLFeedParser<IStream> parser = new HTMLFeedParser<>(siteMap,
+	HTMLFeedParser<Event> parser = new HTMLFeedParser<>(siteMap,
 		mappingStrategy);
 
 	final FeedMessageListener feedMsgListener = new StreamMessageListener();

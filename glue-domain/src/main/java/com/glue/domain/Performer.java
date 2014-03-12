@@ -1,8 +1,10 @@
-package com.glue.domain.v2;
+package com.glue.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,7 +66,7 @@ public class Performer {
      * List of links.
      */
     @OneToMany(cascade = { CascadeType.ALL })
-    private List<Link> links;
+    private Set<Link> links = new HashSet<>();
 
     /**
      * Performer comments.
@@ -206,7 +208,7 @@ public class Performer {
      * 
      * @return the links
      */
-    public List<Link> getLinks() {
+    public Set<Link> getLinks() {
 	return links;
     }
 
@@ -216,7 +218,7 @@ public class Performer {
      * @param links
      *            the links to set
      */
-    public void setLinks(List<Link> links) {
+    public void setLinks(Set<Link> links) {
 	this.links = links;
     }
 
