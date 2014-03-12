@@ -1,13 +1,13 @@
 package com.glue.api.operations;
 
 import com.glue.exceptions.GlueException;
-import com.glue.domain.IUser;
+import com.glue.domain.User;
 
 public interface UserOperations {
 
-	IUser createUser(String name, String email, String password) throws GlueException;
+	User createUser(String name, String email, String password) throws GlueException;
 
-	void updateUser(IUser user) throws GlueException;
+	void updateUser(User user) throws GlueException;
 
 	void login(String username, String password) throws GlueException;
 

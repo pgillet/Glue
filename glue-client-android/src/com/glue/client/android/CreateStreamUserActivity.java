@@ -1,7 +1,5 @@
 package com.glue.client.android;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
@@ -36,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.glue.client.android.stream.StreamData;
 import com.glue.client.android.utils.Utils;
 import com.glue.client.android.view.FlowLayout;
 
@@ -124,20 +121,7 @@ public class CreateStreamUserActivity extends FragmentActivity implements
 	}
 
 	private void collectStreamData() {
-		StreamData data = StreamData.getInstance();
-		data.setOpen(participationType);
-
-		// Convert the Bundle to a Map
-		Map<String, String> participantsAsMap = new HashMap<String, String>();
-		for (String key : participants.keySet()) {
-			participantsAsMap.put(key, participants.getString(key));
-		}
-		data.setInvitedParticipants(participantsAsMap);
-
-		data.setSharedSecretQuestion(editTextSecretQuestion.getText()
-				.toString());
-		data.setSharedSecretAnswer(editTextSecretAnswer.getText().toString());
-		data.setShouldRequestToParticipate(checkBoxRequest.isChecked());
+	// Nothing to collect
 	}
 
 	/**

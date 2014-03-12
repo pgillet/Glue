@@ -13,7 +13,7 @@ import android.widget.ToggleButton;
 
 import com.glue.client.android.location.LocationActivity;
 import com.glue.client.android.location.LocationConstants;
-import com.glue.client.android.stream.StreamData;
+import com.glue.client.android.stream.EventData;
 
 public class CreateStreamMainActivity extends LocationActivity {
 
@@ -47,7 +47,7 @@ public class CreateStreamMainActivity extends LocationActivity {
 				// received an update
 				if (isLocationEnabled()) {
 
-					StreamData data = StreamData.getInstance();
+					EventData data = EventData.getInstance();
 
 					switch (msg.what) {
 					case LocationConstants.UPDATE_ADDRESS:
@@ -108,12 +108,11 @@ public class CreateStreamMainActivity extends LocationActivity {
 	}
 
 	private void collectStreamData() {
-		StreamData data = StreamData.getInstance();
+		EventData data = EventData.getInstance();
 		data.setTitle(textViewTitle.getText().toString());
 
 		// TODO manage tags ...
 		// data.setDescription(textViewDescription.getText().toString());
-		data.setPublicc(toggleButtonPrivacy.isChecked());
 	}
 
 	@Override

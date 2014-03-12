@@ -1,27 +1,31 @@
 package com.glue.api.operations;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.glue.domain.Event;
 import com.glue.exceptions.GlueException;
-import com.glue.domain.IStream;
 
 public interface StreamOperations {
 
-	IStream createStream(String title, String description, boolean publicc, boolean open, Set<String> tags,
-			Map<String, String> invitedParticipants, String sharedSecretQuestion, String sharedSecretAnswer,
-			boolean shouldRequestToParticipate, long startDate, long endDate, double latitude, double longitude,
-			String address) throws GlueException;
+    Event createEvent(String title, String description, boolean publicc,
+	    boolean open, Set<String> tags,
+	    Map<String, String> invitedParticipants,
+	    String sharedSecretQuestion, String sharedSecretAnswer,
+	    boolean shouldRequestToParticipate, Date startDate, Date endDate,
+	    double latitude, double longitude, String address)
+	    throws GlueException;
 
-	IStream createStream(IStream stream) throws GlueException;
+    Event createEvent(Event event) throws GlueException;
 
-	IStream updateStream(IStream stream) throws GlueException;
+    Event updateEvent(Event event) throws GlueException;
 
-	List<IStream> searchStreams(String query) throws GlueException;
+    List<Event> searchEvents(String query) throws GlueException;
 
-	void joinStream(long streamID) throws GlueException;
+    void joinStream(String streamID) throws GlueException;
 
-	void joinStream(IStream stream) throws GlueException;
+    void joinEvent(Event event) throws GlueException;
 
 }
