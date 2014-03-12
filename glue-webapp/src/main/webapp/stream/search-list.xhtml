@@ -13,10 +13,10 @@
 			varStatus="status">
 			<div class="row">
 				<div class="col-xs-6 col-sm-2 col-md-3">
-					<ui:fragment rendered="#{not empty stream.images[0].thumb.url}">
+					<ui:fragment rendered="#{not empty stream.images[0].original.url}">
 						<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 							<f:param name="id" value="#{stream.id}"></f:param>
-							<img src="#{stream.images[0].thumb.url}" alt="#{stream.title}"
+							<img src="#{stream.images[0].original.url}" alt="#{stream.title}"
 								class="img-responsive" width="170" height="170"
 								title="#{stream.title}" />
 						</h:link>

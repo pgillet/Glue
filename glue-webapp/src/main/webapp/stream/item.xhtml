@@ -41,8 +41,8 @@
 						<div class="pull-right">
 						<br />
 							<ui:fragment
-								rendered="#{not empty streamItemBean.item.images[0].thumb.url}">
-								<img src="#{streamItemBean.item.images[0].thumb.url}"
+								rendered="#{not empty streamItemBean.item.images[0].original.url}">
+								<img src="#{streamItemBean.item.images[0].original.url}"
 									alt="#{streamItemBean.item.title}" class="img-responsive"
 									width="180" height="180" title="#{streamItemBean.item.title}" />
 							</ui:fragment>
