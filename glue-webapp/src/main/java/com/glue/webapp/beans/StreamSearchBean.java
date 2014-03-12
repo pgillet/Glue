@@ -38,23 +38,23 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private List<Event> events;
 
-    private enum Display {
-	LIST, TABLE, MAP
-    };
+    private DisplayType display = DisplayType.LIST; // Default
 
-    private Display display = Display.LIST; // Default
-
-    public String getDisplay() {
-	return display.name();
+    public DisplayType getDisplay() {
+	return display;
     }
 
-    public void setDisplay(String display) {
-	this.display = Display.valueOf(display.toUpperCase());
+    public String getDisplayLabel() {
+	return display.getLabelKey();
+    }
+
+    public void setDisplay(DisplayType display) {
+	this.display = display;
     }
 
     public void toggleDisplay() {
 	String param = FacesUtil.getRequestParameter(PARAM_DISPLAY);
-	setDisplay(param);
+	setDisplay(DisplayType.valueOf(param.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
 
 	if (events == null) {
