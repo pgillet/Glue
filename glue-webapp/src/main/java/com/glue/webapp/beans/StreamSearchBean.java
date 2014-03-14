@@ -28,6 +28,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private static final String PARAM_CAT = "cat";
     private static final String PARAM_DISPLAY = "display";
+    private static final String PARAM_ROWS_PER_PAGE = "rowsperpage";
 
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
@@ -53,13 +54,17 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     public void toggleDisplay() {
-	String param = FacesUtil.getRequestParameter(PARAM_DISPLAY);
-	setDisplay(DisplayType.valueOf(param.toUpperCase()));
+	String displayParam = FacesUtil.getRequestParameter(PARAM_DISPLAY);
+	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
 
-	if (events == null) {
-	    search();
+	String rowsPerPageParam = FacesUtil
+		.getRequestParameter(PARAM_ROWS_PER_PAGE);
+	if (rowsPerPageParam != null) {
+	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
 	}
+
+	first();
     }
 
     /**
@@ -245,6 +250,19 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
 	DateTime end = start.plusWeeks(1);
 	end = end.withDayOfWeek(DateTimeConstants.MONDAY);
+
+	setStartDate(start.toDate());
+	setEndDate(end.toDate());
+
+	first();
+    }
+
+    public void searchMonth() {
+	DateTime start = new DateTime(DateTimeZone.UTC);
+	start = start.withTimeAtStartOfDay();
+
+	DateTime end = start.plusMonths(1);
+	end = end.withDayOfMonth(1);
 
 	setStartDate(start.toDate());
 	setEndDate(end.toDate());

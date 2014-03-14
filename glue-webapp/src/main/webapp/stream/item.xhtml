@@ -92,7 +92,7 @@
 							<li><div class="text-muted">
 									<span class="pull-left"><c:choose>
 											<c:when
-												test="#{session.lastAccessedTime lt streamItemBean.item.startTime}">
+												test="#{session.lastAccessedTime lt streamItemBean.item.startTime.time}">
 												<small>318 <h:outputText
 														value="#{bundle.people_are_going}"></h:outputText></small>
 												<i class="fa fa-bar-chart-o fa-lg disabled"></i>
@@ -253,17 +253,17 @@
 				<br />
 
 
-				<c:if test="#{not empty streamItemBean.item.media}">
+				<c:if test="#{not empty streamItemBean.item.links}">
 					<div class="page-header">
 						<h3>
 							<h:outputText value="#{bundle.last_videos}"></h:outputText>
-							<small>(#{streamItemBean.item.media.size()})</small>
+							<small>(#{streamItemBean.item.links.size()})</small>
 						</h3>
 					</div>
 
-					<c:forEach var="media" items="#{streamItemBean.item.media}">
+					<c:forEach var="link" items="#{streamItemBean.item.links}">
 						<c:choose>
-							<c:when test="#{media.mimeType eq 'Video'}">
+							<c:when test="#{link.url.contains('youtube')}">
 								<div class="row">
 									<div class="col-md-6 col-md-offset-1">
 										<iframe width="560" height="315" src="#{media.url}"

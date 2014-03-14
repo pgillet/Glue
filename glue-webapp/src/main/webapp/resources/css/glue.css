@@ -99,3 +99,11 @@ body { padding-top: 50px; }
 	overflow: hidden; 
 	text-overflow: ellipsis;
 }
+
+.glue-thumbnail {
+	min-height: 350px;
+	display: block;
+	padding: 15px 4px;
+	line-height: 1.428571429;
+	border: 1px solid #ddd;
+}

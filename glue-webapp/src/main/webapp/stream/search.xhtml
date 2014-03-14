@@ -12,6 +12,7 @@
 
 		<f:metadata>
 			<f:viewParam name="display" value="#{streamSearchBean.display}" />
+			<f:viewParam name="rowsperpage" value="#{streamSearchBean.rowsPerPage}" />
 		</f:metadata>
 
 		<ui:define name="content">
@@ -31,6 +32,7 @@
 				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
 				<h:inputHidden value="#{streamSearchBean.totalRows}" />
 				<h:inputHidden value="#{streamSearchBean.display}" />
+				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
 
 				<c:if test="#{not empty facesContext.messageList}">
 					<div class="row">
@@ -51,7 +53,8 @@
 						class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
 						<div class="pull-right">
 							<div class="btn-group">
-								<button type="button" class="btn text-muted glue-btn-link dropdown-toggle"
+								<button type="button"
+									class="btn text-muted glue-btn-link dropdown-toggle"
 									data-toggle="dropdown">
 									<h:outputText value="#{bundle.display_label}" />
 									:
@@ -64,6 +67,7 @@
 											<i class="fa fa-th-list text-muted"></i>
 											<h:outputText value=" #{bundle.display_list}" />
 											<f:param name="display" value="list" />
+											<f:param name="rowsperpage" value="10" />
 											<f:ajax execute="@form" render="@form" />
 										</h:commandLink></li>
 									<li><h:commandLink
@@ -71,15 +75,22 @@
 											<i class="fa fa-align-justify text-muted"></i>
 											<h:outputText value=" #{bundle.display_table}" />
 											<f:param name="display" value="table" />
+											<f:param name="rowsperpage" value="15" />
 											<f:ajax execute="@form" render="@form" />
 										</h:commandLink></li>
-									<li><a href="#"><i class="fa fa-table text-muted"></i>
-											<h:outputText value=" #{bundle.display_grid}" /></a></li>
+									<li><h:commandLink
+											action="#{streamSearchBean.toggleDisplay}">
+											<i class="fa fa-table text-muted"></i>
+											<h:outputText value=" #{bundle.display_grid}" />
+											<f:param name="display" value="grid" />
+											<f:param name="rowsperpage" value="11" />
+											<f:ajax execute="@form" render="@form" />
+										</h:commandLink></li>
 									<li class="divider"></li>
 									<li><a href="#" disabled="disabled"
 										title="#{bundle.feature_not_available}"><i
-											class="fa fa-globe text-muted"></i>
-										<h:outputText value=" #{bundle.display_map}" /></a></li>
+											class="fa fa-globe text-muted"></i> <h:outputText
+												value=" #{bundle.display_map}" /></a></li>
 								</ul>
 							</div>
 						</div>
@@ -118,46 +129,19 @@
 				</div>
 				<br />
 
-				<div class="row">
-					<div
-						class="col-xs-6 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
-						<div class="pull-right">
-							<p:calendar value="#{streamSearchBean.startDate}" mode="inline"
-								id="inlineCal">
-								<p:ajax event="dateSelect"
-									listener="#{streamSearchBean.searchFrom}" update="@form" />
-							</p:calendar>
-							<ul class="nav nav-pills nav-stacked">
-								<li><h:commandButton styleClass="btn btn-link"
-										action="#{streamSearchBean.searchToday}"
-										value="#{bundle.today}">
-										<f:ajax execute="@form" render="@form" />
-									</h:commandButton></li>
-								<li><h:commandButton styleClass="btn btn-link"
-										action="#{streamSearchBean.searchNextWeekEnd}"
-										value="#{bundle.next_week_end}">
-										<f:ajax execute="@form" render="@form" />
-									</h:commandButton></li>
-								<li><h:commandButton styleClass="btn btn-link"
-										action="#{streamSearchBean.searchWeek}"
-										value="#{bundle.current_week}">
-										<f:ajax execute="@form" render="@form" />
-									</h:commandButton></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
-						<h:panelGroup id="search-results">
-							<!-- Default: display list -->
-							<ui:fragment rendered="#{streamSearchBean.display eq 'LIST'}">
-								<ui:include src="/stream/search-list.xhtml" />
-							</ui:fragment>
-							<ui:fragment rendered="#{streamSearchBean.display eq 'TABLE'}">
-								<ui:include src="/stream/search-table.xhtml" />
-							</ui:fragment>
-						</h:panelGroup>
-					</div>
-				</div>
+				<!-- <ui:insert name="search-results" >
+				</ui:insert> -->
+
+
+				<c:choose>
+					<c:when test="#{streamSearchBean.display eq 'GRID'}">
+						<ui:include src="/stream/search-grid.xhtml" />
+					</c:when>
+					<c:otherwise>
+						<ui:include src="/stream/search-common.xhtml" />
+					</c:otherwise>
+				</c:choose>
+
 
 				<!-- <ui:fragment rendered="#{not empty streamSearchBean.events}"> -->
 
