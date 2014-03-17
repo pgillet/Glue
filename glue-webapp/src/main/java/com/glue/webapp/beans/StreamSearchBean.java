@@ -53,7 +53,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	this.display = display;
     }
 
-    public void toggleDisplay() {
+    public String toggleDisplay() {
 	String displayParam = FacesUtil.getRequestParameter(PARAM_DISPLAY);
 	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
@@ -65,6 +65,17 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	first();
+
+	switch (display) {
+	case GRID:
+	    return "event-search-grid";
+
+	case TABLE:
+	    return "event-search-table";
+
+	default: // LIST
+	    return "event-search";
+	}
     }
 
     /**

@@ -8,10 +8,18 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-	<ui:composition> <!-- template="./search.xhtml" -->
-		<!-- <ui:define name="search-results"> -->
-			<table class="table table-hover" style="table-layout: fixed;">
-				<!-- <thead>
+	<ui:composition template="./search.xhtml">
+		<ui:define name="search-results">
+			<div class="row">
+				<div
+					class="col-xs-6 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+					<div class="pull-right">
+						<ui:include src="/stream/search-calendar.xhtml" />
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
+					<table class="table table-hover" style="table-layout: fixed;">
+						<!-- <thead>
 					<tr>
 						<th>#</th>
 						<th>Title</th>
@@ -19,40 +27,44 @@
 						<th>Venue</th>
 					</tr>
 				</thead> -->
-				<tbody>
-					<ui:repeat var="stream" value="#{streamSearchBean.events}"
-						varStatus="status">
-						<tr>
-							<td style="width: 20px;"><i class="fa fa-square"
-								style="color: #{stream.category.color};"></i></td>
-							<td style="width: 35%;"><small><h:link
-										includeViewParams="true" value="#{stream.title}"
-										outcome="/stream/item.xhtml" title="#{stream.title}">
-										<f:param name="id" value="#{stream.id}"></f:param>
-									</h:link></small></td>
-							<td style="width: 20%;"><small><ui:fragment
-										rendered="#{stream.startTime lt stream.stopTime}">
-										<h:outputText value="#{bundle.stream_date_from} " />
-										<h:outputText value="#{stream.startTime}">
-											<f:convertDateTime pattern="#{bundle.date_format_short}" />
-										</h:outputText>
-										<h:outputText value=" #{bundle.stream_date_to} " />
-										<h:outputText value="#{stream.stopTime}">
-											<f:convertDateTime pattern="#{bundle.date_format_short}" />
-										</h:outputText>
-									</ui:fragment> <ui:fragment rendered="#{stream.startTime ge stream.stopTime}">
-										<h:outputText value="#{stream.startTime}">
-											<f:convertDateTime pattern="#{bundle.date_format_short}" />
-										</h:outputText>
-									</ui:fragment></small></td>
-							<td><small><h:outputText
-										value="#{stream.venue.name}, #{stream.venue.city}"
-										title="#{stream.venue.name}, #{stream.venue.city}" /></small></td>
-						</tr>
-					</ui:repeat>
-				</tbody>
-			</table>
-		<!-- </ui:define> -->
+						<tbody>
+							<ui:repeat var="stream" value="#{streamSearchBean.events}"
+								varStatus="status">
+								<tr>
+									<td style="width: 20px;"><i class="fa fa-square"
+										style="color: #{stream.category.color};"></i></td>
+									<td style="width: 35%;"><small><h:link
+												includeViewParams="true" value="#{stream.title}"
+												outcome="/stream/item.xhtml" title="#{stream.title}">
+												<f:param name="id" value="#{stream.id}"></f:param>
+											</h:link></small></td>
+									<td style="width: 20%;"><small><ui:fragment
+												rendered="#{stream.startTime lt stream.stopTime}">
+												<h:outputText value="#{bundle.stream_date_from} " />
+												<h:outputText value="#{stream.startTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_short}" />
+												</h:outputText>
+												<h:outputText value=" #{bundle.stream_date_to} " />
+												<h:outputText value="#{stream.stopTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_short}" />
+												</h:outputText>
+											</ui:fragment> <ui:fragment
+												rendered="#{stream.startTime ge stream.stopTime}">
+												<h:outputText value="#{stream.startTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_short}" />
+												</h:outputText>
+											</ui:fragment></small></td>
+									<td><small><h:outputText
+												value="#{stream.venue.name}, #{stream.venue.city}"
+												title="#{stream.venue.name}, #{stream.venue.city}" /></small></td>
+								</tr>
+							</ui:repeat>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</ui:define>
 	</ui:composition>
 </h:body>
 </html>
