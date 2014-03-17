@@ -29,7 +29,7 @@ import com.glue.webapp.logic.InternalServerException;
  */
 public class SolrSearchServer implements SearchEngine<Event> {
 
-    private static final String SOLR_DATE_PATTERN = "yyyy-MM-dd'T'hh:mm:ss'Z'";
+    private static final String SOLR_DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'Z'"; // "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
     private SimpleDateFormat df = new SimpleDateFormat(SOLR_DATE_PATTERN);
 
@@ -185,7 +185,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	boolean addLocation = false;
 
 	// Get dates
-	String from = ((startDate != null) ? df.format(startDate) : "NOW");
+	String from = ((startDate != null) ? df.format(startDate) : "NOW-1DAYS");
 	String to = ((endDate != null) ? df.format(endDate) : "*");
 
 	// From format should be = 2000-01-01T00:00:00Z
