@@ -11,6 +11,15 @@
 			<entity-listener class="com.glue.persistence.index.EventListener">
 				<post-persist method-name="add" />
 				<pre-remove method-name="delete" />
+				<post-update method-name="update" />
+			</entity-listener>
+		</entity-listeners>
+	</entity>
+	
+	<entity class="com.glue.domain.Venue">
+		<entity-listeners>
+			<entity-listener class="com.glue.persistence.index.VenueListener">
+				<post-update method-name="update" />
 			</entity-listener>
 		</entity-listeners>
 	</entity>

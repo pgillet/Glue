@@ -1,10 +1,14 @@
 package com.glue.persistence;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContextType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A persistence service with an application-managed entity manager.
@@ -13,6 +17,9 @@ import javax.persistence.PersistenceContextType;
  * 
  */
 public class GluePersistenceService extends PersistenceService {
+
+    static final Logger LOG = LoggerFactory
+	    .getLogger(GluePersistenceService.class);
 
     public static final String PERSISTENCE_UNIT = "gluedb";
 
@@ -79,6 +86,16 @@ public class GluePersistenceService extends PersistenceService {
     protected EventDAO getEventDAO() {
 	eventDAO.setEntityManager(getEntityManager());
 	return eventDAO;
+    }
+
+    @Override
+    public void close() {
+	super.close();
+	try {
+	    EntityListenerRealm.flush();
+	} catch (IOException e) {
+	    LOG.error(e.getMessage(), e);
+	}
     }
 
 }

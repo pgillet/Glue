@@ -17,7 +17,7 @@ public abstract class BaseSolrEntityIndexer implements SolrEntityIndexer {
 
     private Queue<SolrInputDocument> docs = new LinkedBlockingQueue<>(100);
 
-    private boolean autoFlush = true;
+    private boolean autoFlush = false;
 
     /**
      * @return the solrServer
@@ -31,9 +31,7 @@ public abstract class BaseSolrEntityIndexer implements SolrEntityIndexer {
     public void addDoc(SolrInputDocument doc) throws SolrServerException,
 	    IOException {
 	if (!docs.offer(doc)) {
-	    getSolrServer().add(docs);
-	    getSolrServer().commit();
-	    docs.clear();
+	    flush();
 	    docs.add(doc);
 	}
 	if (autoFlush) {
@@ -47,6 +45,7 @@ public abstract class BaseSolrEntityIndexer implements SolrEntityIndexer {
 	    if (!docs.isEmpty()) {
 		getSolrServer().add(docs);
 		getSolrServer().commit();
+		docs.clear();
 	    }
 	} catch (SolrServerException e) {
 	    LOG.error(e.getMessage(), e);

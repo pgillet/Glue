@@ -607,4 +607,24 @@ public class Venue {
 	this.reference = reference;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return "Venue [name=" + name + ", description=" + description
+		+ ", type=" + type + ", address=" + address + ", city=" + city
+		+ ", region=" + region + ", regionAbbreviation="
+		+ regionAbbreviation + ", postalCode=" + postalCode
+		+ ", country=" + country + ", countryTwoLetterAbbreviation="
+		+ countryTwoLetterAbbreviation
+		+ ", countryThreeLetterAbbreviation="
+		+ countryThreeLetterAbbreviation + ", latitude=" + latitude
+		+ ", longitude=" + longitude + ", url=" + url
+		+ ", geocodeType=" + geocodeType + ", created=" + created
+		+ ", timeZone=" + timeZone + ", reference=" + reference + "]";
+    }
+
 }
