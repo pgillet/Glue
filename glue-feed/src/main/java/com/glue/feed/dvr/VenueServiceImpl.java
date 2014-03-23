@@ -1,8 +1,11 @@
 package com.glue.feed.dvr;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,8 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Venue;
 import com.glue.domain.Venue_;
+import com.glue.feed.geo.GeoLocation;
 import com.glue.feed.nominatim.NominatimRequester;
+import com.glue.feed.sim.MetricHandler;
+import com.glue.feed.sim.SimilarityMetric;
+import com.glue.feed.sim.VenueSimilarityMetric;
 import com.glue.persistence.GluePersistenceService;
+import com.glue.persistence.PersistenceHelper;
 import com.glue.persistence.VenueDAO;
 
 public class VenueServiceImpl extends GluePersistenceService implements
@@ -23,6 +31,9 @@ public class VenueServiceImpl extends GluePersistenceService implements
     static final Logger LOG = LoggerFactory.getLogger(VenueServiceImpl.class);
 
     private NominatimRequester nr = new NominatimRequester();
+    private SimilarityMetric<Venue> metric = new VenueSimilarityMetric();
+    private MetricHandler<Venue> metricHandler = new MetricHandler<>(metric,
+	    0.9f);
 
     public VenueServiceImpl() {
 	super();
@@ -47,26 +58,79 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	return venues;
     }
 
+    /**
+     * Algorithm:
+     * <ol>
+     * <li>
+     * If the given venue is already a reference venue, the method simply
+     * returns it.</li>
+     * <li>If the given venue has specified lat/long, search in database for
+     * reference venues in a bounding box centered on these coordinates. Compute
+     * the similarity between each of them and the given venue, and keep only
+     * the best candidate. If its score is greater or equal a given threshold,
+     * then the candidate becomes the parent of the given venue in the database,
+     * and the parent is returned.</li>
+     * <li>If the given venue has no coordinates or if the previous step has
+     * failed, request the MapQuest Nominatim search service. The first match
+     * becomes the parent of the given venue, and is returned.</li>
+     * <li>If the given venue has specified lat/long but is still unresolved, we
+     * consider that it is good enough to be promoted as a reference venue.</li>
+     * <li>Returns null otherwise.</li>
+     * </ol>
+     * 
+     */
     @Override
     public Venue resolve(Venue venue) {
 
-	String query = venue.getName() + ", " + venue.getCity();
+	if (venue.isReference()) {
+	    return venue;
+	}
 
-	Venue venueRef = nr.search(query);
+	Venue venueRef = null;
+	final double distance = 2; // 2 kms around
+	boolean hasLatLong = (venue.getLatitude() != 0.0d && venue
+		.getLongitude() != 0.0d);
 
-	if (venueRef != null) {
-	    venueRef.setReference(true);
-	    venue.setParent(venueRef);
-	} else if (venue.getLatitude() != 0.0d && venue.getLongitude() != 0.0d) {
-	    // Fallback: we consider that a venue with specified lat/long is
-	    // good enough
-	    // TODO: should we have Double objects for lat/long ?
+	if (hasLatLong) {
 
-	    venue.setReference(true);
-	    venueRef = venue;
+	    List<Venue> del = findWithinDistance(venue.getLatitude(),
+		    venue.getLongitude(), distance);
+
+	    // Filter venues: keep only reference venues and remove the venue to
+	    // be resolved.
+	    List<Venue> candidates = new ArrayList<>(del);
+	    ListIterator<Venue> iter = candidates.listIterator();
+	    while (iter.hasNext()) {
+		Venue other = iter.next();
+		if (!other.isReference()
+			|| (other.getLatitude() == venue.getLatitude() && other
+				.getLongitude() == venue.getLongitude())) {
+		    iter.remove();
+		}
+	    }
+
+	    venueRef = metricHandler.getBestMatchOver(venue, candidates);
+	}
+
+	if (venueRef == null) {
+
+	    // Request Nominatim
+	    String query = venue.getName() + ", " + venue.getCity();
+	    venueRef = nr.search(query);
+
+	    if (venueRef != null) {
+		venueRef.setReference(true);
+		venue.setParent(venueRef);
+	    } else if (hasLatLong) {
+		// Fallback: we consider that a venue with specified lat/long is
+		// good enough
+		venue.setReference(true);
+		venueRef = venue;
+	    }
 	}
 
 	if (venueRef != null) {
+
 	    VenueDAO venueDAO = getVenueDAO();
 
 	    begin();
@@ -76,4 +140,70 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	return venueRef;
     }
+
+    /**
+     * Search for a venue in database with the exact given coordinates.
+     * 
+     * @return
+     */
+    protected Venue findWithCoordinates(double latitude, double longitude) {
+	EntityManager em = begin();
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Venue> cq = cb.createQuery(Venue.class);
+	Root<Venue> venue = cq.from(Venue.class);
+
+	cq.where(cb.and(cb.equal(venue.get(Venue_.latitude), latitude),
+		cb.equal(venue.get(Venue_.longitude), longitude)));
+
+	cq.select(venue);
+	TypedQuery<Venue> q = em.createQuery(cq);
+
+	long start = System.currentTimeMillis();
+	Venue v = PersistenceHelper.getSingleResultOrNull(q);
+	long end = System.currentTimeMillis();
+
+	LOG.info("Found duplicate venue with lat = " + latitude + ", long = "
+		+ longitude + " in " + (end - start) + " ms");
+
+	commit();
+
+	return v;
+    }
+
+    public List<Venue> findWithinDistance(double latitude, double longitude,
+	    double distance) {
+
+	GeoLocation location = GeoLocation.fromDegrees(latitude, longitude);
+
+	GeoLocation[] boundingCoordinates = location.boundingCoordinates(
+		distance, GeoLocation.EARTH_RADIUS);
+	boolean meridian180WithinDistance = boundingCoordinates[0]
+		.getLongitudeInRadians() > boundingCoordinates[1]
+		.getLongitudeInRadians();
+
+	EntityManager em = begin();
+
+	String sqlString = "SELECT * FROM Venue WHERE (latitude >= ?1 AND latitude <= ?2) AND (longitude >= ?3 "
+		+ (meridian180WithinDistance ? "OR" : "AND")
+		+ " longitude <= ?4) AND "
+		+ "acos(sin(?5) * sin(radians(latitude)) + cos(?6) * cos(radians(latitude)) * cos(radians(longitude) - ?7)) <= ?8";
+
+	Query query = em.createNativeQuery(sqlString, Venue.class);
+
+	query.setParameter(1, boundingCoordinates[0].getLatitudeInDegrees());
+	query.setParameter(2, boundingCoordinates[1].getLatitudeInDegrees());
+	query.setParameter(3, boundingCoordinates[0].getLongitudeInDegrees());
+	query.setParameter(4, boundingCoordinates[1].getLongitudeInDegrees());
+	query.setParameter(5, location.getLatitudeInRadians());
+	query.setParameter(6, location.getLatitudeInRadians());
+	query.setParameter(7, location.getLongitudeInRadians());
+	query.setParameter(8, distance / GeoLocation.EARTH_RADIUS);
+
+	List<Venue> results = (List<Venue>) query.getResultList();
+
+	commit();
+
+	return results;
+    }
+
 }
