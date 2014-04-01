@@ -1,16 +1,21 @@
 package com.glue.persistence;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import com.glue.domain.Category;
 import com.glue.domain.Comment;
 import com.glue.domain.Event;
+import com.glue.domain.Event_;
 import com.glue.domain.Image;
 import com.glue.domain.Link;
 import com.glue.domain.Performer;
@@ -23,15 +28,40 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	super();
     }
 
+    /**
+     * TODO: may be factorized in AbstractDAO with the help of the Glob
+     * interface.
+     */
+    @Override
+    public Event create(Event e) {
+	// Creation date
+	e.setCreated(new Date(System.currentTimeMillis()));
+	return super.create(e);
+    }
+
+    /**
+     * TODO: may be factorized in AbstractDAO with the help of the Glob
+     * interface.
+     */
+    @Override
+    public Event update(Event e) {
+	// Last modified
+	e.setCreated(new Date(System.currentTimeMillis()));
+	return super.update(e);
+    }
+
     public List<Event> findAll(Collection<String> ids) {
-	List<Event> events = new ArrayList<>();
 
-	if (!ids.isEmpty()) {
-	    events = em.createNamedQuery("findAll", type)
-		    .setParameter("ids", ids).getResultList();
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+	Root<Event> event = cq.from(Event.class);
+	event.fetch(Event_.images.getName(), JoinType.LEFT);
 
-	    // TODO: order by date ?
-	}
+	cq.where(event.get(Event_.id).in(ids));
+	cq.select(event);
+	TypedQuery<Event> q = em.createQuery(cq);
+
+	List<Event> events = q.getResultList();
 
 	return events;
     }
@@ -63,6 +93,29 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
     public boolean hasDuplicate(Event event) {
 	return (findDuplicate(event) != null);
+    }
+
+    /**
+     * List the images for the given id.
+     * 
+     * @param id
+     * @return
+     */
+    public Event findWithImages(String id) {
+
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+	Root<Event> event = cq.from(Event.class);
+
+	event.fetch(Event_.images.getName(), JoinType.LEFT);
+
+	cq.where(cb.equal(event.get(Event_.id), id));
+	cq.select(event);
+	TypedQuery<Event> q = em.createQuery(cq);
+
+	Event result = PersistenceHelper.getSingleResultOrNull(q);
+
+	return result;
     }
 
     @Override
@@ -178,5 +231,4 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	// TODO Auto-generated method stub
 
     }
-
 }

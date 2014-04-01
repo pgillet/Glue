@@ -40,14 +40,11 @@
 					<div class="col-xs-4 col-sm-3 col-md-4">
 						<div class="pull-right">
 						<br />
-							<ui:fragment
-								rendered="#{not empty streamItemBean.item.images[0].original.url}">
-								<img src="#{streamItemBean.item.images[0].original.url}"
+							<ui:fragment rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
+								<img src="#{request.contextPath}/services/images/thumbnails/#{streamItemBean.item.id}"
 									alt="#{streamItemBean.item.title}" class="img-responsive"
 									width="180" height="180" title="#{streamItemBean.item.title}" />
 							</ui:fragment>
-
-							<!-- <img src="http://localhost:8080/glue/services/images/thumbnails/1"></img> -->
 						</div>
 					</div>
 					<div class="col-xs-11 col-sm-8 col-md-6">

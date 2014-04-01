@@ -27,7 +27,6 @@ import javax.persistence.Transient;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "findAll", query = "SELECT e FROM Event e WHERE e.id IN :ids"),
 	@NamedQuery(name = "findDuplicate", query = "SELECT e FROM Event e WHERE e.title = :title AND e.startTime = :startTime AND e.venue.id = :venueId"),
 	@NamedQuery(name = "findBetween", query = "SELECT e FROM Event e WHERE e.stopTime BETWEEN :start AND :end") })
 public class Event {

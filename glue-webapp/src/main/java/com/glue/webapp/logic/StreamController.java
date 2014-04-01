@@ -246,7 +246,7 @@ public class StreamController implements
 
     public Event search(final String id) throws InternalServerException {
 	try {
-	    Event event = eventDAO.find(id);
+	    Event event = eventDAO.findWithImages(id);
 
 	    return event;
 	} catch (Exception e) {

@@ -30,31 +30,31 @@ public class EventCAO extends VenueCAO {
     }
 
     /**
-     * Returns the folder for the given stream.
+     * Returns the folder for the given event.
      * 
      * @param event
-     *            a persistent stream
+     *            a persistent event
      * @param create
-     *            <code>true</code> to create the folder for the given stream if
+     *            <code>true</code> to create the folder for the given event if
      *            necessary; <code>false</code> to return <code>null</code> if
-     *            there's no folder for the stream
-     * @return the folder for the given stream
+     *            there's no folder for the event
+     * @return the folder for the given event
      */
     public Folder getFolder(Event event, boolean create) {
 
 	String path = getPath(event).getPath();
 
-	LOG.debug("Getting stream folder by path = " + path);
+	LOG.debug("Getting event folder by path = " + path);
 	return getFolder(path, create);
     }
 
     /**
-     * Returns the folder for the given stream, or <code>null</code> if it does
+     * Returns the folder for the given event, or <code>null</code> if it does
      * not exist.
      * 
      * @param venue
-     *            a persistent stream
-     * @return the folder for the given stream, or <code>null</code> if it does
+     *            a persistent event
+     * @return the folder for the given event, or <code>null</code> if it does
      *         not exist
      */
     public Folder getFolder(Event event) {
@@ -62,7 +62,7 @@ public class EventCAO extends VenueCAO {
     }
 
     /**
-     * <Venue Path>/yyyy/MM/dd/streamID
+     * <Venue Path>/yyyy/MM/dd/eventID
      * 
      * @param venue
      * @return
@@ -78,14 +78,14 @@ public class EventCAO extends VenueCAO {
 	int month = calendar.get(Calendar.MONTH) + 1;
 	int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-	CmisPath streamSubPath = new CmisPath(false, Integer.toString(year),
+	CmisPath eventSubPath = new CmisPath(false, Integer.toString(year),
 		Integer.toString(month), Integer.toString(day), event.getId());
 
-	return venuePath.resolve(streamSubPath);
+	return venuePath.resolve(eventSubPath);
     }
 
     /**
-     * Creates a new document in the stream folder. The input stream is consumed
+     * Creates a new document in the event folder. The input stream is consumed
      * but not closed by this method.
      * 
      * @param filename
@@ -96,7 +96,7 @@ public class EventCAO extends VenueCAO {
      * @param input
      *            the input stream, should not be null
      * @param event
-     *            the stream at which the document will be added
+     *            the event at which the document will be added
      * @throws IOException
      *             if an I/O error occured or if the document already exists
      */
@@ -111,10 +111,10 @@ public class EventCAO extends VenueCAO {
 		BaseTypeId.CMIS_DOCUMENT.value());
 	properties.put(PropertyIds.NAME, filename);
 
-	Folder streamFolder = getFolder(event, true);
+	Folder eventFolder = getFolder(event, true);
 
 	try {
-	    Document doc = streamFolder.createDocument(properties,
+	    Document doc = eventFolder.createDocument(properties,
 		    contentStream, VersioningState.NONE);
 
 	    LOG.info("Created Document ID: " + doc.getId());
@@ -126,6 +126,13 @@ public class EventCAO extends VenueCAO {
 
     /**
      * @see #add(String, String, InputStream, Event)
+     * 
+     *      <p>
+     *      The document can be later retrieved by calling
+     *      {@link #getDocument(String, Event)} where the String argument is the
+     *      name of the given url, i.e. the text after the last forward or
+     *      backslash.
+     *      </p>
      */
     public void add(URL url, Event event) throws IOException {
 
@@ -138,6 +145,22 @@ public class EventCAO extends VenueCAO {
 
 	add(filename, contentType, input, event);
 
+    }
+
+    /**
+     * Finds the document with the given name in the event's folder.
+     * 
+     * @param name
+     *            name of the desired resource
+     * @param event
+     *            the parent event of the resource, from which the parent path
+     *            is deduced.
+     * @return A InputStream object or null if no resource with this name is
+     *         found
+     */
+    public InputStream getDocument(String name, Event event) {
+	CmisPath parent = getPath(event);
+	return getDocument(parent, name);
     }
 
 }

@@ -4,3 +4,5 @@
 /.classpath
 /.project
 /bin
+/${env.CATALINA_HOME}
+/${env.JAVA_HOME}

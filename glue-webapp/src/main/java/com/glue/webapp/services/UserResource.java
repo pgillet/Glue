@@ -2,6 +2,8 @@ package com.glue.webapp.services;
 
 import java.net.URI;
 
+import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,6 +27,7 @@ import com.glue.webapp.logic.AlreadyExistsException;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.UserController;
 
+@ManagedBean
 @Path("/users")
 public class UserResource {
 
@@ -36,8 +39,8 @@ public class UserResource {
     @Context
     UriInfo uriInfo;
 
-    // TODO: should probably use Dependency Injection here!
-    UserController userController = new UserController();
+    @Inject
+    UserController userController;
 
     public UserResource() {
     }

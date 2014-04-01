@@ -23,10 +23,11 @@ public class GlueContext implements ServletContextListener {
 	ServletContext context = sce.getServletContext();
 
 	// Create the repository root folder
-	Path rootDir = Paths.get(System.getProperty("user.home"), ".glue");
+	Path rootDir = Paths.get(System.getProperty("user.home"), ".glue",
+		"repository");
 
 	try {
-	    Files.createDirectory(rootDir);
+	    Files.createDirectories(rootDir);
 	} catch (IOException e) {
 	    LOG.info(e.getMessage());
 	}

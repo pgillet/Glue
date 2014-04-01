@@ -3,6 +3,7 @@ package com.glue.domain;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,37 +61,37 @@ public class Image {
     /**
      * Small image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem small;
 
     /**
      * Medium image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem medium;
 
     /**
      * Large image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem large;
 
     /**
      * Block image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem block;
 
     /**
      * Thumb image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem thumb;
 
     /**
      * Original image
      */
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private ImageItem original;
 
     /**

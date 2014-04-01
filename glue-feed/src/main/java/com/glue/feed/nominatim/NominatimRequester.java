@@ -3,13 +3,16 @@ package com.glue.feed.nominatim;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.jackson.JacksonFeature;
+
 import com.glue.domain.Venue;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
 
 public class NominatimRequester {
 
@@ -17,17 +20,15 @@ public class NominatimRequester {
     public static final String SEARCH = "search.php";
 
     protected Client client = null;
-    protected WebResource ressource = null;
+    protected WebTarget target = null;
 
     public NominatimRequester() {
-	ClientConfig clientConfig = new DefaultClientConfig();
-	clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING,
-		Boolean.TRUE);
-	clientConfig.getProperties().put(
-		ClientConfig.PROPERTY_FOLLOW_REDIRECTS, true);
+	ClientConfig clientConfig = new ClientConfig();
+	clientConfig.register(JacksonFeature.class);
+	clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, true);
 
-	client = Client.create(clientConfig);
-	ressource = client.resource(BASE_URL);
+	client = ClientBuilder.newClient(clientConfig);
+	target = client.target(BASE_URL);
     }
 
     /**
@@ -60,10 +61,10 @@ public class NominatimRequester {
 	    // the interrupt, it doesn't bother to catch InterruptedException.
 	}
 
-	List<NominatimVenue> venues = ressource.path(SEARCH)
+	List<NominatimVenue> venues = target.path(SEARCH)
 		.queryParam("format", "json").queryParam("addressdetails", "1")
 		.queryParam("limit", Integer.toString(limit))
-		.queryParam("q", query)
+		.queryParam("q", query).request()
 		.get(new GenericType<List<NominatimVenue>>() {
 		});
 

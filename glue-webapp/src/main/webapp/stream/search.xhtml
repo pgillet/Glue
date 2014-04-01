@@ -11,9 +11,9 @@
 	<ui:composition template="../template.xhtml">
 
 		<f:metadata>
-			<f:viewParam name="display" value="#{streamSearchBean.display}" />
-			<f:viewParam name="rowsperpage"
-				value="#{streamSearchBean.rowsPerPage}" />
+			<!-- <f:viewParam name="display" value="#{streamSearchBean.display}" /> -->
+			<!-- <f:viewParam name="rowsperpage"
+				value="#{streamSearchBean.rowsPerPage}" /> -->
 		</f:metadata>
 
 		<ui:define name="content">
@@ -144,10 +144,11 @@
 								<div class="row">
 									<div class="col-xs-6 col-sm-2 col-md-3">
 										<ui:fragment
-											rendered="#{not empty stream.images[0].original.url}">
+											rendered="#{eventUtilBean.hasStickyImage(stream)}">
 											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 												<f:param name="id" value="#{stream.id}"></f:param>
-												<img src="#{stream.images[0].original.url}"
+												<img
+													src="#{request.contextPath}/services/images/thumbnails/#{stream.id}"
 													alt="#{stream.title}" class="img-responsive" width="170"
 													height="170" title="#{stream.title}" />
 											</h:link>
@@ -225,7 +226,7 @@
 							</h:commandButton></li>
 						<li><h:commandButton styleClass="btn btn-default"
 								action="#{streamSearchBean.next}"
-								disabled="#{not streamSearchBean.next}" value="#{bundle.next}"
+								value="#{bundle.next}"
 								onclick="jsf.ajax.addOnEvent(scrollToTop);">
 								<f:ajax execute="@form" render="@form" />
 							</h:commandButton></li>

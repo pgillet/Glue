@@ -72,11 +72,14 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 
 	    if (!elems.isEmpty()) {
 
+		String imageUrl = elems.attr("abs:src");
+
 		ImageItem item = new ImageItem();
-		item.setUrl(elems.attr("abs:src"));
+		item.setUrl(imageUrl);
 
 		Image image = new Image();
 		image.setOriginal(item);
+		image.setUrl(imageUrl);
 		image.setSource(url);
 		image.setSticky(true);
 

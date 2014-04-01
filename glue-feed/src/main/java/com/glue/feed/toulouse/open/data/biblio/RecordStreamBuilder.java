@@ -10,7 +10,6 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.Category;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Image;
@@ -91,10 +90,13 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, Event> {
 	String src = record.illustration;
 	if (src != null && src.length() > 0 && !"NULL".equals(src)) {
 
+	    String url = "http://www.bibliotheque.toulouse.fr/" + src;
+
 	    ImageItem item = new ImageItem();
-	    item.setUrl("http://www.bibliotheque.toulouse.fr/" + src);
+	    item.setUrl(url);
 
 	    Image image = new Image();
+	    image.setUrl(url);
 	    image.setOriginal(item);
 	    image.setSource("OPEN DATA");
 	    image.setSticky(true);

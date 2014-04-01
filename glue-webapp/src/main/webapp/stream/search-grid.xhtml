@@ -40,19 +40,16 @@
 
 							<div class="col-sm-4 col-md-4 col-lg-3 glue-thumbnail">
 
-								<ui:fragment
-									rendered="#{not empty stream.images[0].original.url}">
-									<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-										<f:param name="id" value="#{stream.id}"></f:param>
-										<img src="#{stream.images[0].original.url}"
-											alt="#{stream.title}" class="img-responsive center-block"
-											width="170" height="170" title="#{stream.title}" />
-									</h:link>
-								</ui:fragment>
-								<ui:fragment rendered="#{empty stream.images[0].original.url}">
-									<div style="min-width: 170px; min-height: 170px;"></div>
-								</ui:fragment>
-
+								<div style="min-width: 170px; min-height: 170px;">
+									<ui:fragment rendered="#{eventUtilBean.hasStickyImage(stream)}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<img src="#{request.contextPath}/services/images/thumbnails/#{stream.id}"
+												alt="#{stream.title}" class="img-responsive center-block"
+												width="170" height="170" title="#{stream.title}" />
+										</h:link>
+									</ui:fragment>
+								</div>
 								<ul class="fa-ul">
 									<li>
 										<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"

@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.feed.dvr.VenueReconciliationJob;
+import com.glue.feed.img.ImageFetchJob;
 import com.glue.feed.toulouse.bikini.BikiniJob;
 import com.glue.feed.toulouse.open.data.biblio.LibraryAgendaJob;
 import com.glue.feed.toulouse.open.data.so.SoToulouseAgendaJob;
@@ -95,6 +96,15 @@ public class GlueFeed {
 		    "Venue DVR", "DVR").build();
 	    trigger = newTrigger().withIdentity("Venue DVR Trigger", "DVR")
 		    .withSchedule(cronSchedule("0 0 3 * * ?")).build();
+	    scheduler.scheduleJob(job, trigger);
+
+	    // Image fetching
+	    // Every day at 04:00 am
+	    job = newJob(ImageFetchJob.class).withIdentity("Image Fetch",
+		    "Content").build();
+	    trigger = newTrigger()
+		    .withIdentity("Image Fetch Trigger", "Content")
+		    .withSchedule(cronSchedule("0 0 4 * * ?")).build();
 	    scheduler.scheduleJob(job, trigger);
 
 	} catch (SchedulerException se) {

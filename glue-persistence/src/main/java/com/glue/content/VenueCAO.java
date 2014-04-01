@@ -1,5 +1,7 @@
 package com.glue.content;
 
+import java.io.InputStream;
+
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,22 @@ public class VenueCAO extends AbstractCAO {
      */
     protected CmisPath getPath(Venue venue) {
 	return new CmisPath(true, venue.getCity(), venue.getId());
+    }
+
+    /**
+     * Finds the document with the given name in the venue's folder.
+     * 
+     * @param name
+     *            name of the desired resource
+     * @param venue
+     *            the parent venue of the resource, from which the parent path
+     *            is deduced.
+     * @return A InputStream object or null if no resource with this name is
+     *         found
+     */
+    public InputStream getDocument(String name, Venue venue) {
+	CmisPath parent = getPath(venue);
+	return getDocument(parent, name);
     }
 
 }

@@ -104,6 +104,7 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, Event> {
 
 	Image image = new Image();
 	image.setOriginal(item);
+	image.setUrl(imgUrl);
 	image.setSource(url);
 	image.setSticky(true);
 	event.getImages().add(image);

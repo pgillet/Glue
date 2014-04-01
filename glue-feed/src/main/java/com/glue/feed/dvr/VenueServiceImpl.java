@@ -28,12 +28,14 @@ import com.glue.persistence.VenueDAO;
 public class VenueServiceImpl extends GluePersistenceService implements
 	VenueService {
 
+    private static final float SIMILARITY_THRESHOLD = 0.9f;
+
     static final Logger LOG = LoggerFactory.getLogger(VenueServiceImpl.class);
 
     private NominatimRequester nr = new NominatimRequester();
     private SimilarityMetric<Venue> metric = new VenueSimilarityMetric();
     private MetricHandler<Venue> metricHandler = new MetricHandler<>(metric,
-	    0.9f);
+	    SIMILARITY_THRESHOLD);
 
     public VenueServiceImpl() {
 	super();
