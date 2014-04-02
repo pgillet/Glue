@@ -259,8 +259,10 @@ public class SolrSearchServer implements SearchEngine<Event> {
      */
     @Override
     public void setQueryString(String queryString) {
-	this.queryString = queryString == null ? "" : ClientUtils
-		.escapeQueryChars(queryString);
+	this.queryString = queryString == null ? "" : /*
+						       * ClientUtils
+						       * .escapeQueryChars(
+						       */queryString/* ) */;
     }
 
     /**
