@@ -2,6 +2,7 @@ package com.glue.content;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
@@ -160,7 +161,24 @@ public class EventCAO extends VenueCAO {
      */
     public InputStream getDocument(String name, Event event) {
 	CmisPath parent = getPath(event);
-	return getDocument(parent, name);
+	Document doc = getDocumentObject(parent, name);
+	return (doc != null ? doc.getContentStream().getStream() : null);
+    }
+
+    /**
+     * Finds the document with the given name in the event's folder.
+     * 
+     * @param name
+     *            name of the desired resource
+     * @param event
+     *            the parent event of the resource, from which the parent path
+     *            is deduced.
+     * @return the document URI or null if no resource with this name is found
+     */
+    public URI getDocumentURI(String name, Event event) {
+	CmisPath parent = getPath(event);
+	Document doc = getDocumentObject(parent, name);
+	return (doc != null ? getDocumentURI(doc) : null);
     }
 
 }

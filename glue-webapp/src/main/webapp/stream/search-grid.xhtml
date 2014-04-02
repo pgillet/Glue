@@ -44,7 +44,7 @@
 									<ui:fragment rendered="#{eventUtilBean.hasStickyImage(stream)}">
 										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 											<f:param name="id" value="#{stream.id}"></f:param>
-											<img src="#{request.contextPath}/services/images/thumbnails/#{stream.id}"
+											<img src="#{eventUtilBean.getStickyImageURI(stream)}"
 												alt="#{stream.title}" class="img-responsive center-block"
 												width="170" height="170" title="#{stream.title}" />
 										</h:link>

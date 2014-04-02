@@ -2,6 +2,7 @@ package com.glue.content;
 
 import java.io.InputStream;
 
+import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,8 @@ public class VenueCAO extends AbstractCAO {
      */
     public InputStream getDocument(String name, Venue venue) {
 	CmisPath parent = getPath(venue);
-	return getDocument(parent, name);
+	Document doc = getDocumentObject(parent, name);
+	return (doc != null) ? doc.getContentStream().getStream() : null;
     }
 
 }

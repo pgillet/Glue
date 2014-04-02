@@ -17,9 +17,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.content.ContentManager;
 import com.glue.domain.Event;
 import com.glue.persistence.EventDAO;
+import com.glue.webapp.beans.EventUtilBean;
 import com.glue.webapp.logic.UserController;
 import com.glue.webapp.search.SearchEngine;
 import com.glue.webapp.search.SolrSearchServer;
@@ -71,13 +71,12 @@ public class GlueApplication extends ResourceConfig {
 	    try {
 		BeanManager bm = getBeanManager();
 		bind(getBean(bm, UserController.class))
-			.to(UserController.class);
+			.to(UserController.class)/* .in(Singleton.class) */; // ?
 		bind(getBean(bm, SolrSearchServer.class)).to(
 			new TypeLiteral<SearchEngine<Event>>() {
 			});
 		bind(getBean(bm, EventDAO.class)).to(EventDAO.class);
-		bind(getBean(bm, ContentManager.class))
-			.to(ContentManager.class);
+		bind(getBean(bm, EventUtilBean.class)).to(EventUtilBean.class);
 	    } catch (NamingException e) {
 		LOG.error(e.getMessage(), e);
 		throw new RuntimeException(e);

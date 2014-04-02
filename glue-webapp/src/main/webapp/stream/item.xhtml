@@ -41,7 +41,7 @@
 						<div class="pull-right">
 						<br />
 							<ui:fragment rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
-								<img src="#{request.contextPath}/services/images/thumbnails/#{streamItemBean.item.id}"
+								<img src="#{eventUtilBean.getStickyImageURI(streamItemBean.item)}"
 									alt="#{streamItemBean.item.title}" class="img-responsive"
 									width="180" height="180" title="#{streamItemBean.item.title}" />
 							</ui:fragment>

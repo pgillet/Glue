@@ -19,8 +19,8 @@ public class ContentManager {
     static final Logger LOG = LoggerFactory.getLogger(ContentManager.class);
 
     // TODO: should be configurable
-    private static final String ATOMPUB_URL = "http://localhost:8080/glue-content/atom";
-    private static final String REPOSITORY_ID = "glue";
+    static final String ATOMPUB_URL = "http://localhost:8080/glue-content/atom";
+    static final String REPOSITORY_ID = "glue";
     private static final String USER = "glue";
     private static final String PASSWORD = "glue";
 

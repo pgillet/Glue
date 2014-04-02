@@ -1,12 +1,16 @@
 package com.glue.content;
 
-import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,23 +59,43 @@ public abstract class AbstractCAO {
      *            name of the desired resource
      * @param parent
      *            the path of the parent folder
-     * @return A InputStream object or null if no resource with this name is
-     *         found
+     * @return A Document object or null if no resource with this name is found
      */
-    protected InputStream getDocument(CmisPath parent, String name) {
-
+    protected Document getDocumentObject(CmisPath parent, String name) {
 	CmisPath path = parent.resolve(name);
-	InputStream stream = null;
+	Document document = null;
+
 	try {
 	    CmisObject object = session.getObjectByPath(path.getPath());
-	    Document document = (Document) object;
-	    stream = document.getContentStream().getStream();
+	    document = (Document) object;
 
 	} catch (CmisObjectNotFoundException e) {
 	    LOG.warn("Not found object with path = " + path.getPath());
 	}
 
-	return stream;
+	return document;
+    }
+
+    /**
+     * Returns the document URI.
+     */
+    protected URI getDocumentURI(Document doc) {
+	try {
+	    URI uri = new URI(ContentManager.ATOMPUB_URL);
+	    Path path = Paths.get(uri.getPath(), ContentManager.REPOSITORY_ID,
+		    "content");
+	    URIBuilder ub = new URIBuilder().setScheme(uri.getScheme())
+		    .setHost(uri.getHost()).setPort(uri.getPort())
+		    .setPath(path.toString()).addParameter("id", doc.getId());
+
+	    return ub.build();
+	} catch (URISyntaxException e) {
+	    // should not be here as the URI is fully built with internal
+	    // elements
+	    LOG.error(e.getMessage(), e);
+	}
+
+	return null;
     }
 
 }
