@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Calendar;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
 
 import com.glue.domain.Event;
 import com.glue.domain.Venue;
@@ -29,6 +30,7 @@ public class ContentTest {
 	event.setVenue(venue);
 
 	CmisPath path = eventCAO.getPath(event);
+
 	System.out.println("Stream path = " + path);
 
 	Folder folder = eventCAO.getFolder(event, true);
@@ -38,6 +40,13 @@ public class ContentTest {
 		"http://cdn.funnie.st/wp-content/uploads/2013/11/539974_303885846368238_1455014827_n.jpg");
 
 	eventCAO.add(url, event);
+
+	String other = eventCAO.getDocumentURL(
+		"539974_303885846368238_1455014827_n.jpg",
+		event);
+	
+	System.out.println("Document URL = " + other);	
+
     }
 
 }

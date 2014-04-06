@@ -162,8 +162,9 @@
 									<preservePath>true</preservePath>
 									<includes>
 										<include>META-INF/persistence.xml</include>
+										<include>com/glue/content/cmis.properties</include>
 									</includes>
-								</resource>
+								</resource>								
 							</resources>
 						</configuration>
 					</execution>

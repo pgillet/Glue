@@ -1,6 +1,5 @@
 package com.glue.webapp.beans;
 
-import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,8 +49,8 @@ public class EventUtilBean {
 	    String url = image.getOriginal().getUrl();
 	    String name = FilenameUtils.getName(url);
 
-	    URI uri = cm.getEventCAO().getDocumentURI(name, event);
-	    return (uri != null ? uri.toString() : url);
+	    String other = cm.getEventCAO().getDocumentURL(name, event);
+	    return (other != null ? other : url);
 	}
 
 	return null;

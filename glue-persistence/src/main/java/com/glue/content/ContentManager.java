@@ -18,12 +18,6 @@ public class ContentManager {
 
     static final Logger LOG = LoggerFactory.getLogger(ContentManager.class);
 
-    // TODO: should be configurable
-    static final String ATOMPUB_URL = "http://localhost:8080/glue-content/atom";
-    static final String REPOSITORY_ID = "glue";
-    private static final String USER = "glue";
-    private static final String PASSWORD = "glue";
-
     private SessionFactory factory = SessionFactoryImpl.newInstance();
 
     // OpenCMIS is thread-safe
@@ -55,11 +49,12 @@ public class ContentManager {
     }
 
     protected Session createSession() {
+
 	Map<String, String> params = new HashMap<String, String>();
 
 	// User credentials
-	params.put(SessionParameter.USER, USER);
-	params.put(SessionParameter.PASSWORD, PASSWORD);
+	params.put(SessionParameter.USER, SessionParams.getUser());
+	params.put(SessionParameter.PASSWORD, SessionParams.getPassword());
 
 	// Settings for a local connection
 	// params.put(SessionParameter.BINDING_TYPE, BindingType.LOCAL.value());
@@ -68,7 +63,7 @@ public class ContentManager {
 	// params.put(SessionParameter.REPOSITORY_ID, REPOSITORY_ID);
 
 	// ATOMPUB binding for connection
-	params.put(SessionParameter.ATOMPUB_URL, ATOMPUB_URL);
+	params.put(SessionParameter.ATOMPUB_URL, SessionParams.getAtompubUrl());
 	params.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
 	// Connecting to the repository by id

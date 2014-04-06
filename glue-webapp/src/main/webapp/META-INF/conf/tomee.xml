@@ -10,14 +10,14 @@
 		maxWait ${glue.db.maxWait}
 	</Resource>
 	<Resource id="mail/gluemail" type="javax.mail.Session">
-		mail.transport.protocol=smtps
-		mail.smtp.host=smtp.gmail.com 
-		mail.smtp.port=587 
-		mail.smtp.auth=true
-		mail.smtp.starttls.enable=true
-		mail.smtp.user=glue.contact@gmail.com
-		password=pascal&amp;greg
-		mail.from=glue.contact@gmail.com
-		mail.debug=true
+		mail.transport.protocol=${glue.mail.transport.protocol}
+		mail.smtp.host=${glue.mail.smtp.host}
+		mail.smtp.port=${glue.mail.smtp.port}
+		mail.smtp.auth=${glue.mail.smtp.auth}
+		mail.smtp.starttls.enable=${glue.mail.smtp.starttls.enable}
+		mail.smtp.user=${glue.mail.smtp.user}
+		password=${glue.mail.password}
+		mail.from=${glue.mail.from}
+		mail.debug=${glue.mail.debug}
 	</Resource>
 </tomee>

@@ -1,5 +1,6 @@
 package com.glue.content;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -8,8 +9,12 @@ import java.nio.file.Paths;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.atompub.AbstractAtomPubService;
+import org.apache.chemistry.opencmis.client.bindings.spi.atompub.AtomPubParser;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +24,8 @@ public abstract class AbstractCAO {
     static final Logger LOG = LoggerFactory.getLogger(AbstractCAO.class);
 
     protected Session session;
+
+    private Method loadLink;
 
     public Session getSession() {
 	return session;
@@ -76,19 +83,80 @@ public abstract class AbstractCAO {
 	return document;
     }
 
+    private Method getLoadLinkMethod() throws NoSuchMethodException,
+	    SecurityException {
+	if (loadLink == null) {
+	    loadLink = AbstractAtomPubService.class.getDeclaredMethod(
+		    "loadLink",
+
+		    new Class[] { String.class, String.class, String.class,
+			    String.class });
+
+	    loadLink.setAccessible(true);
+	}
+
+	return loadLink;
+    }
+
     /**
      * Returns the document URI.
+     * 
+     * URL pattern that OpenCMIS uses in the AtomPub binding
+     * http://<HOST>:<PORT>
+     * /<SERVLET-PATH>/<REPOSITORY-ID>/<RESOURCE>?<PARAM=VALUE
+     * >&<PARAM=VALUE>&...
+     * 
+     * @see https://chemistry.apache.org/java/developing/dev-url.html
      */
-    protected URI getDocumentURI(Document doc) {
-	try {
-	    URI uri = new URI(ContentManager.ATOMPUB_URL);
-	    Path path = Paths.get(uri.getPath(), ContentManager.REPOSITORY_ID,
-		    "content");
-	    URIBuilder ub = new URIBuilder().setScheme(uri.getScheme())
-		    .setHost(uri.getHost()).setPort(uri.getPort())
-		    .setPath(path.toString()).addParameter("id", doc.getId());
+    protected String getDocumentURL(final ObjectId document) {
 
-	    return ub.build();
+	String link = null;
+
+	try {
+	    Method loadLink = getLoadLinkMethod();
+
+	    link = (String) loadLink.invoke(session.getBinding()
+		    .getObjectService(), session.getRepositoryInfo().getId(),
+		    document.getId(), AtomPubParser.LINK_REL_CONTENT, null);
+
+	    if (StringUtils.isNotBlank(SessionParams.getExternalInetAddress())) {
+		URIBuilder ub = new URIBuilder(link);
+		ub.setHost(SessionParams.getExternalInetAddress());
+		link = ub.toString();
+	    }
+
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	}
+
+	return link;
+    }
+
+    /**
+     * Returns the document URI.
+     * 
+     * Alternative to {@link #getDocumentURL(ObjectId)}.
+     * 
+     * URL pattern that OpenCMIS uses in the AtomPub binding
+     * http://<HOST>:<PORT>
+     * /<SERVLET-PATH>/<REPOSITORY-ID>/<RESOURCE>?<PARAM=VALUE
+     * >&<PARAM=VALUE>&...
+     * 
+     * @see https://chemistry.apache.org/java/developing/dev-url.html
+     */
+    protected String getDocumentURL0(ObjectId doc) {
+	try {
+	    URI uri = new URI(SessionParams.getAtompubUrl());
+	    Path path = Paths.get(uri.getPath(), session.getRepositoryInfo()
+		    .getId(), "content");
+	    URIBuilder ub = new URIBuilder(uri).setPath(path.toString())
+		    .addParameter("id", doc.getId());
+
+	    if (StringUtils.isNotBlank(SessionParams.getExternalInetAddress())) {
+		ub.setHost(SessionParams.getExternalInetAddress());
+	    }
+
+	    return ub.build().toString();
 	} catch (URISyntaxException e) {
 	    // should not be here as the URI is fully built with internal
 	    // elements
