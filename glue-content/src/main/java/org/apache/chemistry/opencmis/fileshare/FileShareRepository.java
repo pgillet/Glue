@@ -164,6 +164,8 @@ public class FileShareRepository {
     /** CMIS 1.1 repository info. */
     private final RepositoryInfo repositoryInfo11;
 
+    public static final String GUEST_USER = "guest";
+
     public FileShareRepository(final String repositoryId, final String rootPath, final FileShareTypeManager typeManager) {
         // check repository id
         if (repositoryId == null || repositoryId.trim().length() == 0) {
@@ -188,6 +190,10 @@ public class FileShareRepository {
         // set up read-write user map
         readWriteUserMap = new HashMap<String, Boolean>();
 
+	// Add support for unauthenticated user (guest user) with
+	// read only permission.
+	setUserReadOnly(GUEST_USER);
+
         // set up repository infos
         repositoryInfo10 = createRepositoryInfo(CmisVersion.CMIS_1_0);
         repositoryInfo11 = createRepositoryInfo(CmisVersion.CMIS_1_1);
@@ -203,6 +209,9 @@ public class FileShareRepository {
         repositoryInfo.setDescription(repositoryId);
 
         repositoryInfo.setCmisVersionSupported(cmisVersion.value());
+
+	repositoryInfo.setPrincipalAnonymous(GUEST_USER);
+	repositoryInfo.setPrincipalAnyone(GUEST_USER);
 
         repositoryInfo.setProductName("OpenCMIS FileShare");
         repositoryInfo.setProductVersion(ServerVersion.OPENCMIS_VERSION);
@@ -2051,7 +2060,9 @@ public class FileShareRepository {
             throw new CmisPermissionDeniedException("No user context!");
         }
 
-        Boolean readOnly = readWriteUserMap.get(context.getUsername());
+	Boolean readOnly = readWriteUserMap
+		.get(context.getUsername() != null ? context.getUsername()
+			: GUEST_USER);
         if (readOnly == null) {
             throw new CmisPermissionDeniedException("Unknown user!");
         }

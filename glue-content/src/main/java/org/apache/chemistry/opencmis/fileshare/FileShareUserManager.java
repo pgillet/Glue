@@ -66,11 +66,17 @@ public class FileShareUserManager {
         // }
 
         // check user and password
-        if (!authenticate(context.getUsername(), context.getPassword())) {
-            throw new CmisPermissionDeniedException("Invalid username or password.");
-        }
+	if (context.getUsername() != null && context.getPassword() != null) {
+	    if (!authenticate(context.getUsername(), context.getPassword())) {
+		throw new CmisPermissionDeniedException(
+			"Invalid username or password.");
+	    }
 
-        return context.getUsername();
+	    return context.getUsername();
+	} else {
+	    return FileShareRepository.GUEST_USER;
+	}
+
     }
 
     /**
