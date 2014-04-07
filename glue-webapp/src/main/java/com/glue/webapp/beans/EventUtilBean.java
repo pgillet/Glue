@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.content.ContentManager;
+import com.glue.content.ImageRendition;
 import com.glue.domain.Event;
 import com.glue.domain.Image;
 
@@ -47,9 +48,10 @@ public class EventUtilBean {
 	Image image = getStickyImage(event);
 	if (image != null) {
 	    String url = image.getOriginal().getUrl();
-	    String name = FilenameUtils.getName(url);
+	    String name = FilenameUtils.getBaseName(url);
 
-	    String other = cm.getEventCAO().getDocumentURL(name, event);
+	    String other = cm.getEventCAO().getImageURL(name, event,
+		    ImageRendition.THUMBNAIL);
 	    return (other != null ? other : url);
 	}
 

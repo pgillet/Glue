@@ -2,21 +2,11 @@ package com.glue.content;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
-import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,26 +92,8 @@ public class EventCAO extends VenueCAO {
      */
     public void add(String filename, String mimetype, InputStream input,
 	    Event event) throws IOException {
-
-	ContentStream contentStream = session.getObjectFactory()
-		.createContentStream(filename, -1, mimetype, input);
-
-	Map<String, Object> properties = new HashMap<String, Object>();
-	properties.put(PropertyIds.OBJECT_TYPE_ID,
-		BaseTypeId.CMIS_DOCUMENT.value());
-	properties.put(PropertyIds.NAME, filename);
-
-	Folder eventFolder = getFolder(event, true);
-
-	try {
-	    Document doc = eventFolder.createDocument(properties,
-		    contentStream, VersioningState.NONE);
-
-	    LOG.info("Created Document ID: " + doc.getId());
-	} catch (CmisNameConstraintViolationException e) {
-	    LOG.error(e.getMessage(), e);
-	    throw new IOException(e.getMessage(), e);
-	}
+	Folder folder = getFolder(event, true);
+	add(filename, mimetype, input, folder);
     }
 
     /**
@@ -134,17 +106,9 @@ public class EventCAO extends VenueCAO {
      *      backslash.
      *      </p>
      */
-    public void add(URL url, Event event) throws IOException {
-
-	String filename = FilenameUtils.getName(url.getPath());
-
-	URLConnection conn = url.openConnection();
-	String contentType = conn.getContentType();
-
-	InputStream input = conn.getInputStream();
-
-	add(filename, contentType, input, event);
-
+    public void add(String url, Event event) throws IOException {
+	Folder folder = getFolder(event, true);
+	add(url, folder);
     }
 
     /**
@@ -164,6 +128,17 @@ public class EventCAO extends VenueCAO {
 	return (doc != null ? doc.getContentStream().getStream() : null);
     }
 
+    public InputStream getImage(String basename, Event event) {
+	return getImage(basename, event, ImageRendition.ORIGINAL);
+    }
+
+    public InputStream getImage(String basename, Event event,
+	    ImageRendition rendition) {
+	CmisPath parent = getPath(event);
+	Document doc = getImage(parent, basename, rendition);
+	return (doc != null ? doc.getContentStream().getStream() : null);
+    }
+
     /**
      * Finds the document with the given name in the event's folder.
      * 
@@ -178,6 +153,76 @@ public class EventCAO extends VenueCAO {
     public String getDocumentURL(String name, Event event) {
 	CmisPath parent = getPath(event);
 	Document doc = getDocumentObject(parent, name);
+	return (doc != null ? getDocumentURL(doc) : null);
+    }
+
+    /**
+     * Adds an image with the original rendition.
+     * 
+     * @param url
+     * @param event
+     * @throws IOException
+     * @see {@link #addImage(String, Event, ImageRendition)}
+     */
+    public void addImage(String url, Event event) throws IOException {
+	addImage(url, event, ImageRendition.ORIGINAL);
+    }
+
+    /**
+     * Adds the image from the given url and with the specified rendition.
+     * 
+     * <p>
+     * The image can be later retrieved by calling
+     * {@link #getImage(String, Event, ImageRendition)} where the String
+     * argument is the basename of the given url, i.e. the text after the last
+     * forward or backslash minus the extension.
+     * </p>
+     * 
+     * @param url
+     * @param event
+     * @param rendition
+     * @throws IOException
+     */
+    public void addImage(String url, Event event, ImageRendition rendition)
+	    throws IOException {
+	Folder folder = getFolder(event, true);
+	addImage(url, folder, rendition);
+    }
+
+    /**
+     * Finds the original image with the given basename in the event's folder.
+     * 
+     * @param basename
+     *            name of the desired image, minus the extension
+     * @param event
+     *            the parent event of the image, from which the parent path is
+     *            deduced.
+     * @return the document URI or null if no resource with this name has been
+     *         found
+     * @see {@link #getImageURL(String, Event, ImageRendition)}
+     */
+    public String getImageURL(String basename, Event event) {
+	return getImageURL(basename, event, ImageRendition.ORIGINAL);
+    }
+
+    /**
+     * Finds the image with the given basename and rendition in the event's
+     * folder.
+     * 
+     * @param basename
+     *            name of the desired image, minus the extension
+     * @param event
+     *            the parent event of the image, from which the parent path is
+     *            deduced.
+     * @param rendition
+     *            the desired rendition
+     * @return the image URL or null if no image with this basename has been
+     *         found
+     */
+    public String getImageURL(String basename, Event event,
+	    ImageRendition rendition) {
+	CmisPath parent = getPath(event);
+	Document doc = getImage(parent, basename, rendition);
 	return (doc != null ? getDocumentURL(doc) : null);
     }
 

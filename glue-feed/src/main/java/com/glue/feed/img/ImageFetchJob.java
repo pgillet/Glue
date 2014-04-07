@@ -45,7 +45,7 @@ public class ImageFetchJob implements Job {
 		}
 	    }
 
-	    LOG.warn("Done");
+	    LOG.info("Done");
 
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);

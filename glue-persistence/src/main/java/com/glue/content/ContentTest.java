@@ -2,11 +2,10 @@ package com.glue.content;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Calendar;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
+import org.apache.commons.io.FilenameUtils;
 
 import com.glue.domain.Event;
 import com.glue.domain.Venue;
@@ -16,6 +15,10 @@ public class ContentTest {
     public static void main(String[] args) throws IOException,
 	    URISyntaxException {
 	ContentManager cm = new ContentManager();
+
+	System.out.println("Repository info = "
+		+ cm.getSession().getRepositoryInfo());
+
 	VenueCAO venueCAO = cm.getVenueCAO();
 	EventCAO eventCAO = cm.getEventCAO();
 
@@ -36,14 +39,13 @@ public class ContentTest {
 	Folder folder = eventCAO.getFolder(event, true);
 	System.out.println("Stream folder = " + folder);
 
-	URL url = new URL(
-		"http://cdn.funnie.st/wp-content/uploads/2013/11/539974_303885846368238_1455014827_n.jpg");
+	String url = "http://cdn.funnie.st/wp-content/uploads/2013/11/539974_303885846368238_1455014827_n.jpg";
+	String basename = FilenameUtils.getBaseName(url);
 
-	eventCAO.add(url, event);
+	eventCAO.addImage(url, event);
 
-	String other = eventCAO.getDocumentURL(
-		"539974_303885846368238_1455014827_n.jpg",
-		event);
+	String other = eventCAO.getImageURL(basename, event,
+		ImageRendition.THUMBNAIL);
 	
 	System.out.println("Document URL = " + other);	
 

@@ -132,6 +132,12 @@
 			<artifactId>htmlcompressor</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- Thumbnailator - a thumbnail generation library for Java -->
+		<dependency>
+		  <groupId>net.coobird</groupId>
+		  <artifactId>thumbnailator</artifactId>
+		  <version>0.4.7</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.google.code.geocoder-java</groupId>
