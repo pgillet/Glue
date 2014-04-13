@@ -91,21 +91,26 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	this.display = display;
     }
 
-    public String toggleDisplay() {
+    public void toggleDisplay() {
 	String displayParam = FacesUtil.getRequestParameter(PARAM_DISPLAY);
 	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
 
 	switch (display) {
 	case GRID:
-	    return "event-search-grid";
+	    setRowsPerPage(11);
+	    break;
 
 	case TABLE:
-	    return "event-search-table";
+	    setRowsPerPage(15);
+	    break;
 
 	default: // LIST
-	    return "event-search";
+	    setRowsPerPage(10);
+	    break;
 	}
+
+	first();
     }
 
     /**

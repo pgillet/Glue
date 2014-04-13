@@ -9,8 +9,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition>
-		<p:calendar value="#{streamSearchBean.startDate}" mode="inline"
-			id="inlineCal">
+		<p:calendar value="#{streamSearchBean.startDate}" mode="inline">
 			<p:ajax event="dateSelect" listener="#{streamSearchBean.searchFrom}"
 				update="@form" />
 		</p:calendar>

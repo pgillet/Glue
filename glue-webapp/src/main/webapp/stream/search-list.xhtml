@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition> <!-- template="./search.xhtml" -->
+		<!-- <ui:define name="search-results"> -->
+			<div class="row">
+						<div
+							class="col-xs-6 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+							<div class="pull-right">
+								<ui:include src="/stream/search-calendar.xhtml" />
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
+							<ui:repeat var="stream" value="#{streamSearchBean.events}"
+								varStatus="status">
+								<div class="row">
+									<div class="col-xs-6 col-sm-2 col-md-3">
+										<ui:fragment
+											rendered="#{eventUtilBean.hasStickyImage(stream)}">
+											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+												<f:param name="id" value="#{stream.id}"></f:param>
+												<img
+													src="#{eventUtilBean.getStickyImageURI(stream)}"
+													alt="#{stream.title}" class="img-responsive" width="170"
+													height="170" title="#{stream.title}" />
+											</h:link>
+										</ui:fragment>
+									</div>
+									<div class="col-xs-12 col-sm-10 col-md-9">
+										<ul class="fa-ul">
+											<li>
+												<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
+										onclick="jsf.ajax.addOnEvent(scrollToTop);"> --> <i
+												class="fa-li fa fa-square"
+												style="color: #{stream.category.color};"></i> <!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink> -->
+												<h4>
+													<strong><h:link includeViewParams="true"
+															value="#{stream.title}" outcome="/stream/item.xhtml">
+															<f:param name="id" value="#{stream.id}"></f:param>
+														</h:link> </strong>
+												</h4>
+											</li>
+											<li><p>
+													<h:outputText value="#{stream.summary}" escape="false" />
+												</p></li>
+											<li><h5>
+													<strong> <i
+														class="fa-li fa fa-calendar text-muted"></i> <ui:fragment
+															rendered="#{stream.startTime lt stream.stopTime}">
+															<h:outputText value="#{bundle.stream_date_from} " />
+															<h:outputText value="#{stream.startTime}">
+																<f:convertDateTime pattern="#{bundle.date_format_long}" />
+															</h:outputText>
+															<h:outputText value=" #{bundle.stream_date_to} " />
+															<h:outputText value="#{stream.stopTime}">
+																<f:convertDateTime pattern="#{bundle.date_format_long}" />
+															</h:outputText>
+														</ui:fragment> <ui:fragment
+															rendered="#{stream.startTime ge stream.stopTime}">
+															<h:outputText value="#{stream.startTime}">
+																<f:convertDateTime pattern="#{bundle.date_format_long}" />
+															</h:outputText>
+														</ui:fragment></strong>
+												</h5></li>
+											<li><h5>
+													<span
+														class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+													<strong>#{stream.venue.name}</strong> - <span
+														class="text-muted">#{stream.venue.city}</span>
+												</h5></li>
+										</ul>
+									</div>
+								</div>
+								<br />
+							</ui:repeat>
+						</div>
+					</div>
+		<!-- </ui:define> -->
+	</ui:composition>
+</h:body>
+</html>
