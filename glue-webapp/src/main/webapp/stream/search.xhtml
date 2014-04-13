@@ -9,35 +9,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="../template.xhtml">
-
-		<f:metadata>
-			<!-- <f:viewParam name="display" value="#{streamSearchBean.display}" /> -->
-			<!-- <f:viewParam name="rowsperpage"
-				value="#{streamSearchBean.rowsPerPage}" /> -->
-		</f:metadata>
-
+		<ui:define name="content">
+			<f:metadata>
+				<f:viewParam name="q" value="#{streamSearchBean.query}"/>
+			</f:metadata>
+		</ui:define>			
+		
 		<ui:define name="content">
 			<h:form>
-				<!-- Reuse the properties from request to request -->
-				<h:inputHidden value="#{streamSearchBean.query}" />
-				<h:inputHidden value="#{streamSearchBean.startDate}">
-					<f:convertDateTime pattern="#{bundle.date_format_jsf}" />
-				</h:inputHidden>
-				<h:inputHidden value="#{streamSearchBean.endDate}">
-					<f:convertDateTime pattern="#{bundle.date_format_jsf}" />
-				</h:inputHidden>
-				<h:inputHidden value="#{streamSearchBean.latitude}" />
-				<h:inputHidden value="#{streamSearchBean.longitude}" />
-				<h:inputHidden value="#{streamSearchBean.location}" />
-				<h:inputHidden value="#{streamSearchBean.catSelection}"
-					converter="StringCollectionConverter" />
-				<!-- Pagination controls -->
-				<h:inputHidden value="#{streamSearchBean.start}" />
-				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
-				<h:inputHidden value="#{streamSearchBean.totalRows}" />
-				<h:inputHidden value="#{streamSearchBean.display}" />
-				<h:inputHidden value="#{streamSearchBean.rowsPerPage}" />
-
 				<c:if test="#{not empty facesContext.messageList}">
 					<div class="row">
 						<div
@@ -196,7 +175,7 @@
 													<span
 														class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
 													<strong>#{stream.venue.name}</strong> - <span
-														class="text-muted">#{stream.venue.address}</span>
+														class="text-muted">#{stream.venue.city}</span>
 												</h5></li>
 										</ul>
 									</div>
@@ -207,38 +186,38 @@
 					</div>
 				</ui:insert>
 
-				<!-- <ui:fragment rendered="#{not empty streamSearchBean.events}"> -->
-
-				<div class="text-center ">
-					<ul class="pagination">
-						<li><h:commandButton styleClass="btn btn-default"
-								action="#{streamSearchBean.first}"
-								disabled="#{not streamSearchBean.previous}" value="&#171;"
-								onclick="jsf.ajax.addOnEvent(scrollToTop);">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton></li>
-						<li><h:commandButton styleClass="btn btn-default"
-								action="#{streamSearchBean.previous}"
-								disabled="#{not streamSearchBean.previous}"
-								value="#{bundle.previous}"
-								onclick="jsf.ajax.addOnEvent(scrollToTop);">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton></li>
-						<li><h:commandButton styleClass="btn btn-default"
-								action="#{streamSearchBean.next}"
-								value="#{bundle.next}"
-								onclick="jsf.ajax.addOnEvent(scrollToTop);">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton></li>
-						<li><h:commandButton styleClass="btn btn-default"
-								action="#{streamSearchBean.last}"
-								disabled="#{not streamSearchBean.next}" value="&#187;"
-								onclick="jsf.ajax.addOnEvent(scrollToTop);">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton></li>
-					</ul>
-				</div>
-				<!-- </ui:fragment> -->
+				<ui:fragment rendered="#{not empty streamSearchBean.events}">
+					<div class="text-center ">
+						<ul class="pagination">
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.first}"
+									disabled="#{not streamSearchBean.previous}" value="&#171;"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.previous}"
+									disabled="#{not streamSearchBean.previous}"
+									value="#{bundle.previous}"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.next}"
+									disabled="#{not streamSearchBean.next}"
+									value="#{bundle.next}"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton></li>
+							<li><h:commandButton styleClass="btn btn-default"
+									action="#{streamSearchBean.last}"
+									disabled="#{not streamSearchBean.next}" value="&#187;"
+									onclick="jsf.ajax.addOnEvent(scrollToTop);">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton></li>
+						</ul>
+					</div>
+				</ui:fragment>
 
 			</h:form>
 

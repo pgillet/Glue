@@ -1,5 +1,6 @@
 package com.glue.webapp.logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,16 +28,17 @@ import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
 public class StreamController implements
-	PageIterator<List<Event>> {
+ PageIterator<List<Event>>,
+	Serializable {
 
     @PersistenceContext(unitName = GluePersistenceService.PERSISTENCE_UNIT)
-    private EntityManager em;
+    private transient EntityManager em;
 
     @Inject
-    private EventDAO eventDAO;
+    private transient EventDAO eventDAO;
 
     @Inject
-    private VenueDAO venueDAO;
+    private transient VenueDAO venueDAO;
 
     private static final String ELLIPSIS = "...";
 
@@ -45,7 +47,7 @@ public class StreamController implements
     static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
 
     @Inject
-    private SearchEngine<Event> engine;
+    private transient SearchEngine<Event> engine;
 
     private int start;
 

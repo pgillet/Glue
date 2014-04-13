@@ -7,7 +7,8 @@
 	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	lang="#{languageBean.language}">
-<f:view locale="#{languageBean.locale}" />
+<f:view locale="#{languageBean.locale}">
+<ui:insert name="metadata"/>
 <h:head>
 	<title>Glue</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -39,7 +40,6 @@
 
 </h:head>
 <h:body>
-
 	<div id="fb-root"></div>
 	<script>
 		(function(d, s, id) {
@@ -85,7 +85,7 @@
 				<h:inputHidden id="inputLat" value="#{streamSearchBean.latitude}" />
 				<h:inputHidden id="inputLng" value="#{streamSearchBean.longitude}" />
 				<div class="form-group">
-					<h:inputText styleClass="typeahead form-control" style="min-width: 300px;"
+					<h:inputText id="q" styleClass="typeahead form-control" style="min-width: 300px;"
 						p:placeholder="#{bundle.search}" value="#{streamSearchBean.query}" />
 				</div>
 				<div class="form-group">
@@ -105,47 +105,45 @@
 				<div class="form-group">
 					<h:commandLink action="#{streamSearchBean.search}"
 						styleClass="btn btn-primary glue-glyphicon-btn-lg">
-						<span class="glyphicon glyphicon-search"></span>
+						<span class="glyphicon glyphicon-search"></span>						
 					</h:commandLink>
 				</div>
 				<h:commandButton id="search_input" action="#{streamSearchBean.search}"
-					style="display:none;" />
+					style="display:none;" />				
 			</h:form>
 
 			<h:form>
 				<ul class="nav navbar-nav navbar-right">
-					<c:choose>
-						<c:when test="${!empty request.remoteUser}">
-							<!-- <li><h:link outcome="/stream/create"
-									title="#{bundle.create_stream}">
-									<span class="glyphicon glyphicon-plus-sign"></span>
-								</h:link></li>
-							<li><a href="#"><span class="badge">42</span></a></li> -->
-							<li class="dropdown"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-									class="caret"></span>
-							</a>
-								<ul class="dropdown-menu">
-									<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
-												value="#{bundle.account_settings}" /></a></li>
-									<li><a href="#"><span
-											class="glyphicon glyphicon-filter"></span>&nbsp;<h:outputText
-												value="#{bundle.search_filters}" /></a></li>
-									<li><h:commandLink action="#{loginBean.logout}">
-											<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
-												value="#{bundle.logout}" />
-										</h:commandLink></li>
-								</ul></li>
-						</c:when>
-						<c:otherwise>
+					<ui:fragment rendered="#{not empty request.remoteUser}">
+						<!-- <li><h:link outcome="/stream/create"
+								title="#{bundle.create_stream}">
+								<span class="glyphicon glyphicon-plus-sign"></span>
+							</h:link></li>
+						<li><a href="#"><span class="badge">42</span></a></li> -->
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#"> #{request.remoteUser} <span
+								class="caret"></span>
+						</a>
+							<ul class="dropdown-menu">
+								<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
+											value="#{bundle.account_settings}" /></a></li>
+								<li><a href="#"><span
+										class="glyphicon glyphicon-filter"></span>&nbsp;<h:outputText
+											value="#{bundle.search_filters}" /></a></li>
+								<li><h:commandLink action="#{loginBean.logout}">
+										<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
+											value="#{bundle.logout}" />
+									</h:commandLink></li>
+							</ul></li>
+					</ui:fragment>
+					<ui:fragment rendered="#{empty request.remoteUser}">
 						<li><h:link value="#{bundle.sign_in}" outcome="login"
 								class="navbar-text" disabled="true"
 								title="#{bundle.feature_not_available}" /></li>
 						<li><h:link value="#{bundle.sign_up}" outcome="register"
 								class="navbar-text" disabled="true"
 								title="#{bundle.feature_not_available}" /></li>
-					</c:otherwise>
-					</c:choose>
+					</ui:fragment>
 				</ul>
 			</h:form>
 		</div>
@@ -260,4 +258,5 @@
 	<ui:insert name="javascript"></ui:insert>
 
 </h:body>
+</f:view>
 </html>

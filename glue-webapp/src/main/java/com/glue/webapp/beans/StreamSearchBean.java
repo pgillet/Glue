@@ -5,14 +5,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
+import org.omnifaces.cdi.Param;
+import org.omnifaces.cdi.ViewScoped;
+import org.omnifaces.cdi.param.ParamValue;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +27,32 @@ import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.StreamController;
 import com.glue.webapp.search.PageIterator;
 
-@ManagedBean
+/**
+ * <p>
+ * Integrated the Omnifaces utility library for JSF 2 to support CDI in the view
+ * scope (NPE with Tomee 1.6.0/MyFaces 2.1.13).
+ * </p>
+ * <p>
+ * Note: we can get rid of Omnifaces if we migrate to MyFaces 2.2.0 (by
+ * replacing the jars in the Tomee lib directory): it works well but it ends up
+ * with bad UI rendering...
+ * </p>
+ * 
+ * @author pgillet
+ * 
+ */
+@Named
+@ViewScoped
 public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private static final String PARAM_CAT = "cat";
     private static final String PARAM_DISPLAY = "display";
     private static final String PARAM_ROWS_PER_PAGE = "rowsperpage";
+
+    @Inject
+    @Param
+    // Like <f:viewParam name="q" value="#{bean.q}">
+    private ParamValue<String> q;
 
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
@@ -37,9 +61,23 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private EventCategory[] categories = EventCategory.values();
 
-    private List<Event> events;
+    private transient List<Event> events;
 
     private DisplayType display = DisplayType.LIST; // Default
+
+    @PostConstruct
+    private void init() {
+	String rowsPerPageParam = FacesUtil
+		.getRequestParameter(PARAM_ROWS_PER_PAGE);
+	if (rowsPerPageParam != null) {
+	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
+	}
+	setQuery(q.getValue());
+
+	LOG.info("Query param = " + q);
+
+	first();
+    }
 
     public DisplayType getDisplay() {
 	return display;
@@ -57,14 +95,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	String displayParam = FacesUtil.getRequestParameter(PARAM_DISPLAY);
 	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
-
-	String rowsPerPageParam = FacesUtil
-		.getRequestParameter(PARAM_ROWS_PER_PAGE);
-	if (rowsPerPageParam != null) {
-	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
-	}
-
-	first();
 
 	switch (display) {
 	case GRID:
@@ -206,17 +236,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     public String search() {
-
-	FacesContext context = FacesContext.getCurrentInstance();
-
-	try {
-	    events = streamController.search();
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
-
+	// Redirect
 	return "event-search";
     }
 

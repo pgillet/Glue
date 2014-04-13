@@ -14,6 +14,7 @@
 			<base-name>com.glue.messages.Messages</base-name>
 			<var>bundle</var>
 		</resource-bundle>
+		<!-- <view-handler>com.glue.webapp.beans.GlueViewHandler</view-handler> -->
 	</application>
 
 
@@ -33,6 +34,7 @@
 		<navigation-case>
 			<from-outcome>event-search</from-outcome>
 			<to-view-id>/stream/search.xhtml</to-view-id>
+			<redirect include-view-params="true"/>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>event-search-table</from-outcome>
