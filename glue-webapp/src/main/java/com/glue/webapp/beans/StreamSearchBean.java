@@ -65,6 +65,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     private DisplayType display = DisplayType.LIST; // Default
 
+    private IntervalType interval;
+
     @PostConstruct
     private void init() {
 	String rowsPerPageParam = FacesUtil
@@ -89,6 +91,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     public void setDisplay(DisplayType display) {
 	this.display = display;
+    }
+
+    public IntervalType getInterval() {
+	return interval;
+    }
+
+    public void setInterval(IntervalType interval) {
+	this.interval = interval;
     }
 
     public void toggleDisplay() {
@@ -248,6 +258,9 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     public void searchFrom(SelectEvent event) {
 	// Reset end date
 	setEndDate(null);
+
+	setInterval(IntervalType.FROM_TODAY);
+
 	first();
     }
 
@@ -260,6 +273,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
 	setStartDate(start.toDate());
 	setEndDate(end.toDate());
+
+	setInterval(IntervalType.TODAY);
 
 	first();
     }
@@ -277,6 +292,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	setStartDate(start.toDate());
 	setEndDate(end.toDate());
 
+	setInterval(IntervalType.WEEK_END);
+
 	first();
     }
 
@@ -290,6 +307,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	setStartDate(start.toDate());
 	setEndDate(end.toDate());
 
+	setInterval(IntervalType.WEEK);
+
 	first();
     }
 
@@ -302,6 +321,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
 	setStartDate(start.toDate());
 	setEndDate(end.toDate());
+
+	setInterval(IntervalType.MONTH);
 
 	first();
     }

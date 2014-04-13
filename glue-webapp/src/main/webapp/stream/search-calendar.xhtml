@@ -13,22 +13,34 @@
 			<p:ajax event="dateSelect" listener="#{streamSearchBean.searchFrom}"
 				update="@form" />
 		</p:calendar>
-		<ul class="nav nav-pills nav-stacked">
-			<li><h:commandButton styleClass="btn btn-link btn-xs"
+		<ul class="nav nav-pills nav-stacked fa-ul">
+			<li><ui:fragment
+					rendered="#{streamSearchBean.interval eq 'TODAY'}">
+					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
 					action="#{streamSearchBean.searchToday}" value="#{bundle.today}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
-			<li><h:commandButton styleClass="btn btn-link btn-xs"
+			<li><ui:fragment
+					rendered="#{streamSearchBean.interval eq 'WEEK_END'}">
+					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
 					action="#{streamSearchBean.searchNextWeekEnd}"
 					value="#{bundle.next_week_end}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
-			<li><h:commandButton styleClass="btn btn-link btn-xs"
+			<li><ui:fragment
+					rendered="#{streamSearchBean.interval eq 'WEEK'}">
+					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
 					action="#{streamSearchBean.searchWeek}"
 					value="#{bundle.current_week}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
-			<li><h:commandButton styleClass="btn btn-link btn-xs"
+			<li><ui:fragment
+					rendered="#{streamSearchBean.interval eq 'MONTH'}">
+					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
 					action="#{streamSearchBean.searchMonth}"
 					value="#{bundle.current_month}">
 					<f:ajax execute="@form" render="@form" />
