@@ -27,7 +27,7 @@ import com.glue.persistence.VenueDAO;
 import com.glue.webapp.search.PageIterator;
 import com.glue.webapp.search.SearchEngine;
 
-public class StreamController implements
+public class EventController implements
  PageIterator<List<Event>>,
 	Serializable {
 
@@ -44,7 +44,7 @@ public class StreamController implements
 
     private static final int SUMMARY_LIMIT = 200;
 
-    static final Logger LOG = LoggerFactory.getLogger(StreamController.class);
+    static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     @Inject
     private transient SearchEngine<Event> engine;

@@ -35,20 +35,20 @@
 									</div>
 									<div class="col-xs-12 col-sm-10 col-md-9">
 										<ul class="fa-ul">
-											<li>
-												<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
-										onclick="jsf.ajax.addOnEvent(scrollToTop);"> --> <i
-												class="fa-li fa fa-square"
-												style="color: #{stream.category.color};"></i> <!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
-										<f:ajax execute="@form" render="@form" />
-									</h:commandLink> -->
+											<li><h:commandLink
+													action="#{streamSearchBean.selectCategory}"
+													onclick="jsf.ajax.addOnEvent(scrollToTop);">
+													<i class="fa-li fa fa-square"
+														style="color: #{stream.category.color};"></i>
+													<f:param name="cat" value="#{stream.category.name}"></f:param>
+													<f:ajax execute="@form" render="@form" />
+												</h:commandLink>
 												<h4>
 													<strong><h:link includeViewParams="true"
 															value="#{stream.title}" outcome="/stream/item.xhtml">
 															<f:param name="id" value="#{stream.id}"></f:param>
-														</h:link> </strong>
-												</h4>
-											</li>
+														</h:link></strong>
+												</h4></li>
 											<li><p>
 													<h:outputText value="#{stream.summary}" escape="false" />
 												</p></li>

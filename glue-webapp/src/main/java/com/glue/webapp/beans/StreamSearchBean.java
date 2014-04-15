@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.webapp.logic.InternalServerException;
-import com.glue.webapp.logic.StreamController;
+import com.glue.webapp.logic.EventController;
 import com.glue.webapp.search.PageIterator;
 
 /**
@@ -57,7 +57,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
     @Inject
-    private StreamController streamController;
+    private EventController eventController;
 
     private EventCategory[] categories = EventCategory.values();
 
@@ -127,7 +127,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      * @return the query
      */
     public String getQuery() {
-	return streamController.getQueryString();
+	return eventController.getQueryString();
     }
 
     /**
@@ -135,14 +135,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the query to set
      */
     public void setQuery(String query) {
-	streamController.setQueryString(query);
+	eventController.setQueryString(query);
     }
 
     /**
      * @return the location
      */
     public String getLocation() {
-	return streamController.getLocation();
+	return eventController.getLocation();
     }
 
     /**
@@ -150,14 +150,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the location to set
      */
     public void setLocation(String location) {
-	streamController.setLocation(location);
+	eventController.setLocation(location);
     }
 
     /**
      * @return the latitude
      */
     public double getLatitude() {
-	return streamController.getLatitude();
+	return eventController.getLatitude();
     }
 
     /**
@@ -165,14 +165,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the latitude to set
      */
     public void setLatitude(double latitude) {
-	streamController.setLatitude(latitude);
+	eventController.setLatitude(latitude);
     }
 
     /**
      * @return the longitude
      */
     public double getLongitude() {
-	return streamController.getLongitude();
+	return eventController.getLongitude();
     }
 
     /**
@@ -180,14 +180,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the longitude to set
      */
     public void setLongitude(double longitude) {
-	streamController.setLongitude(longitude);
+	eventController.setLongitude(longitude);
     }
 
     /**
      * @return the startDate
      */
     public Date getStartDate() {
-	return streamController.getStartDate();
+	return eventController.getStartDate();
     }
 
     /**
@@ -195,14 +195,14 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the startDate to set
      */
     public void setStartDate(Date startDate) {
-	streamController.setStartDate(startDate);
+	eventController.setStartDate(startDate);
     }
 
     /**
      * @return the endDate
      */
     public Date getEndDate() {
-	return streamController.getEndDate();
+	return eventController.getEndDate();
     }
 
     /**
@@ -210,7 +210,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the endDate to set
      */
     public void setEndDate(Date endDate) {
-	streamController.setEndDate(endDate);
+	eventController.setEndDate(endDate);
     }
 
     /**
@@ -231,7 +231,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      * @return the catSelection
      */
     public List<String> getCatSelection() {
-	return streamController.getCategories();
+	return eventController.getCategories();
     }
 
     /**
@@ -239,7 +239,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      *            the catSelection to set
      */
     public void setCatSelection(List<String> catSelection) {
-	streamController.setCategories(catSelection);
+	eventController.setCategories(catSelection);
     }
 
     /**
@@ -329,7 +329,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     @Override
     public boolean hasNext() {
-	return streamController.hasNext();
+	return eventController.hasNext();
     }
 
     /**
@@ -346,7 +346,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    events = streamController.next();
+	    events = eventController.next();
 	} catch (NoSuchElementException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -362,7 +362,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     @Override
     public boolean hasPrevious() {
-	return streamController.hasPrevious();
+	return eventController.hasPrevious();
     }
 
     /**
@@ -379,7 +379,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    events = streamController.previous();
+	    events = eventController.previous();
 	} catch (NoSuchElementException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -398,7 +398,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    events = streamController.first();
+	    events = eventController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -413,7 +413,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	FacesContext context = FacesContext.getCurrentInstance();
 
 	try {
-	    events = streamController.last();
+	    events = eventController.last();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null,
@@ -431,45 +431,45 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 
     @Override
     public int getStart() {
-	return streamController.getStart();
+	return eventController.getStart();
     }
 
     @Override
     public void setStart(int start) {
-	streamController.setStart(start);
+	eventController.setStart(start);
 
     }
 
     @Override
     public int getRowsPerPage() {
-	return streamController.getRowsPerPage();
+	return eventController.getRowsPerPage();
     }
 
     @Override
     public void setRowsPerPage(int rows) {
-	streamController.setRowsPerPage(rows);
+	eventController.setRowsPerPage(rows);
     }
 
     @Override
     public long getTotalRows() {
-	return streamController.getTotalRows();
+	return eventController.getTotalRows();
     }
 
     /**
      * For pagination control from request to request.
      */
     public void setTotalRows(long totalRows) {
-	streamController.setTotalRows(totalRows);
+	eventController.setTotalRows(totalRows);
     }
 
     @Override
     public int getPageIndex() {
-	return streamController.getPageIndex();
+	return eventController.getPageIndex();
     }
 
     @Override
     public int getTotalPages() {
-	return streamController.getTotalPages();
+	return eventController.getTotalPages();
     }
 
     /**
@@ -524,7 +524,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	}
 
 	try {
-	    events = streamController.first();
+	    events = eventController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    FacesContext context = FacesContext.getCurrentInstance();
@@ -542,7 +542,7 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	getCatSelection().add(cat);
 
 	try {
-	    events = streamController.first();
+	    events = eventController.first();
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    FacesContext context = FacesContext.getCurrentInstance();

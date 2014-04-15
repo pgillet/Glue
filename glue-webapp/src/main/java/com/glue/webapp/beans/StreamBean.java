@@ -20,7 +20,7 @@ import com.glue.domain.Tag;
 import com.glue.domain.User;
 import com.glue.domain.Venue;
 import com.glue.webapp.logic.InternalServerException;
-import com.glue.webapp.logic.StreamController;
+import com.glue.webapp.logic.EventController;
 import com.glue.webapp.logic.UserController;
 
 @ManagedBean
@@ -29,7 +29,7 @@ public class StreamBean {
     static final Logger LOG = LoggerFactory.getLogger(StreamBean.class);
 
     @Inject
-    StreamController streamController;
+    EventController eventController;
     UserController userController = new UserController();
 
     private String title;
@@ -222,7 +222,7 @@ public class StreamBean {
 	venue.setLongitude(longitude);
 
 	try {
-	    streamController.createEvent(event);
+	    eventController.createEvent(event);
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null, new FacesMessage(e.getMessage()));
