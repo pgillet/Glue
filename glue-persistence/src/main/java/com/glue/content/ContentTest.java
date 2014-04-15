@@ -39,7 +39,7 @@ public class ContentTest {
 	Folder folder = eventCAO.getFolder(event, true);
 	System.out.println("Stream folder = " + folder);
 
-	String url = "http://cdn.funnie.st/wp-content/uploads/2013/11/539974_303885846368238_1455014827_n.jpg";
+	String url = "http://www.deargrumpycat.com/wp-content/uploads/2013/02/Grumpy-Cat1.jpg";
 	String basename = FilenameUtils.getBaseName(url);
 
 	eventCAO.addImage(url, event);
