@@ -25,6 +25,8 @@ public class EventUtilBean {
     @Inject
     private ContentManager cm;
 
+    private Boolean cmisAvailable;
+
     public boolean hasStickyImage(Event event) {
 	return (getStickyImage(event) != null);
     }
@@ -50,12 +52,32 @@ public class EventUtilBean {
 	    String url = image.getOriginal().getUrl();
 	    String name = FilenameUtils.getBaseName(url);
 
-	    String other = cm.getEventCAO().getImageURL(name, event,
-		    ImageRendition.THUMBNAIL);
+	    String other = null;
+	    if (isCmisAvailable()) {
+		other = cm.getEventCAO().getImageURL(name, event,
+			ImageRendition.THUMBNAIL);
+	    }
 	    return (other != null ? other : url);
 	}
 
 	return null;
+    }
+
+    private boolean isCmisAvailable() {
+	if (cmisAvailable == null) {
+	    // Cannot perform this test in @PostConstruct
+	    // as we cannot be sure that glue-content starts before glue-webapp
+	    // starts itself.
+	    // According to the Tomcat Wiki, <a
+	    // href="http://wiki.apache.org/tomcat/FAQ/Miscellaneous#Q27">What
+	    // order do webapps start (or how can I change startup order)?</a>
+	    // There is no expected startup order. Neither the Servlet spec nor
+	    // Tomcat define one. You can't rely on the apps starting in any
+	    // particular order.
+	    cmisAvailable = cm.ping();
+	}
+
+	return cmisAvailable;
     }
 
 }
