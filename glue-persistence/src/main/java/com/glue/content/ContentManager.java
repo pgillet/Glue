@@ -91,4 +91,19 @@ public class ContentManager {
 	return session;
     }
 
+    /**
+     * Tests the connection to the CMIS server, and returns true if a session
+     * could be opened, false otherwise.
+     * 
+     * Note: This method is time & resource consuming, and it should be called
+     * only once at the beginning of a process involving content operations.
+     */
+    public boolean ping() {
+	try {
+	    return (getSession() != null);
+	} catch (Exception e) {
+	    return false;
+	}
+    }
+
 }
