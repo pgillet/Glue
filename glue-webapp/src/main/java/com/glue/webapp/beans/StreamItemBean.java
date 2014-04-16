@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
 import com.glue.webapp.logic.InternalServerException;
-import com.glue.webapp.logic.StreamController;
+import com.glue.webapp.logic.EventController;
 
 @ManagedBean
 public class StreamItemBean {
@@ -19,7 +19,7 @@ public class StreamItemBean {
     static final Logger LOG = LoggerFactory.getLogger(StreamItemBean.class);
 
     @Inject
-    private StreamController streamController;
+    private EventController eventController;
 
     private static final String PARAM_ID = "id";
     private Event item;
@@ -32,7 +32,7 @@ public class StreamItemBean {
 	    FacesContext context = FacesContext.getCurrentInstance();
 
 	    try {
-		item = streamController.search(id);
+		item = eventController.search(id);
 
 		if (item == null) {
 		    context.addMessage(

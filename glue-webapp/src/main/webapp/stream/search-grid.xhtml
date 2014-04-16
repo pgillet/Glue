@@ -51,14 +51,14 @@
 									</ui:fragment>
 								</div>
 								<ul class="fa-ul">
-									<li>
-										<!-- <h:commandLink action="# {streamSearchBean.selectCategory}"
-										onclick="jsf.ajax.addOnEvent(scrollToTop);"> --> <i
-										class="fa-li fa fa-square"
-										style="color: #{stream.category.color};"></i> <!-- <f:param name="cat" value="#{stream.category.name}"></f:param>
+									<li><h:commandLink action="#{streamSearchBean.selectCategory}"
+										onclick="jsf.ajax.addOnEvent(scrollToTop);">
+										<i class="fa-li fa fa-square"
+											style="color: #{stream.category.color};"></i>
+										<f:param name="cat" value="#{stream.category.name}"></f:param>
 										<f:ajax execute="@form" render="@form" />
-									</h:commandLink> -->
-										<h6>
+									</h:commandLink>
+									<h6>
 											<strong><h:link includeViewParams="true"
 													value="#{facesUtilBean.abbreviate(stream.title, 100)}"
 													outcome="/stream/item.xhtml">

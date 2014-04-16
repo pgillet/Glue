@@ -2,11 +2,11 @@ package com.glue.persistence;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 public abstract class AbstractDAO<T> implements GenericDAO<T> {
 
@@ -35,18 +35,13 @@ public abstract class AbstractDAO<T> implements GenericDAO<T> {
     }
 
     @Override
-    public long countAll(final Map<String, Object> params) {
+    public long countAll() {
 
-        final StringBuffer queryString = new StringBuffer(
-                "SELECT count(o) from ");
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+	cq.select(cb.count(cq.from(type)));
 
-        queryString.append(type.getSimpleName()).append(" o ");
-	// TODO
-	// queryString.append(this.getQueryClauses(params, null));
-
-        final Query query = this.em.createQuery(queryString.toString());
-
-        return (Long) query.getSingleResult();
+	return em.createQuery(cq).getSingleResult();
     }
 
     @Override
