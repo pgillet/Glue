@@ -18,7 +18,7 @@ public class SolrServerManager {
 
     private static SolrServer createNewSolrServer() {
 	// TODO: should be configurable
-	final String solrServerUrl = "http://localhost:8080/solr";
+	final String solrServerUrl = "http://localhost/solr";
 	int queueSize = 1000;
 	int threadCount = 5;
 

@@ -17,9 +17,11 @@ PREREQUESITES: INSTALLS & ENVIRONMENT VARIABLES
 
 Modify $CATALINA_HOME/conf/tomcat-users.xml
 
+  <role rolename="manager-gui"/>
   <role rolename="tomcat"/>
   <role rolename="tomee-admin" />
-  <user username="tomcat" password="DUMMY" roles="tomcat,tomee-admin,manager-gui,manager-script"/>
+  <role rolename="manager-script"/>
+  <user username="tomcat" password="demotest" roles="tomcat,tomee-admin,manager-gui,manager-script"/>
 
 
 Modify $USER_HOME/.m2/settings.xml

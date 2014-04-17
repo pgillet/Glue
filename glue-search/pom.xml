@@ -217,8 +217,8 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<!-- http://localhost:8080/manager/html sur Tomcat -->
-					<url>http://localhost:8080/manager/text</url>
+					<!-- http://localhost/manager/html sur Tomcat -->
+					<url>http://localhost/manager/text</url>
 					<server>tomcat</server>
 					<path>/solr</path>
 					<!-- System properties are only for tomcat7:run -->

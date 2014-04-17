@@ -75,7 +75,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
-					<url>http://localhost:8080/manager/html</url>
+					<url>http://localhost/manager/html</url>
 					<server>tomcat</server>
 					<path>/${project.build.finalName}</path>
 				</configuration>

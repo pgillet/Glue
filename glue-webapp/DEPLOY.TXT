@@ -1,6 +1,6 @@
 Deployment in a fresh new TomEE server:
 * Edit the tomcat-users.xml to fit with the credentials in the Maven settings.xml
 * Set CATALINA_HOME to the TomEE install directory
-* Set CATALINA_OPTS to -Dsolr.solr.home=/home/pgillet/git/Glue/glue-search/target/cores
+* Set CATALINA_OPTS to -Dsolr.solr.home=C:\Users\Greg\SynchroGreg\Perso\Glue\workspace2\Glue\glue-search\target\cores
 * Start TomEE
-* mvn clean install tomcat7:deploy -Dsolr.solr.home=/home/pgillet/git/Glue/glue-search/target/cores
+* mvn clean install tomcat7:deploy -Dsolr.solr.home=C:\Users\Greg\SynchroGreg\Perso\Glue\workspace2\Glue\glue-search\target\cores

@@ -64,7 +64,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
     private SolrServer solr;
 
     public SolrSearchServer() {
-	String urlString = "http://localhost:8080/solr"; // TODO: should be
+	String urlString = "http://localhost/solr"; // TODO: should be
 							 // configurable
 	this.solr = new HttpSolrServer(urlString);
     }
