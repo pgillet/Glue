@@ -55,7 +55,10 @@ public class AutoCompleteResource {
 			    .getTitle().toLowerCase());
 		    LOG.debug(response);
 		    if (!"".equals(response) && response.contains(query)) {
-			results.add(rtrim(response.substring(query.length())));
+			String str = rtrim(response.substring(query.length()));
+			if (!results.contains(str)) {
+			    results.add(str);
+			}
 		    }
 		}
 	    } catch (InternalServerException e) {
