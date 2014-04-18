@@ -67,7 +67,7 @@
 	</dependencies>
 
 	<build>	
-		<plugins>
+		<plugins>			
 			<!-- Generate OpenJPA metamodel classes -->
 			<!-- See http://rmannibucau.wordpress.com/2013/01/24/enhancing-openjpa-classes-with-maven-maven-compiler-alternative/ -->
 			<plugin>
@@ -123,23 +123,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-				<configuration>
-					<files>
-						<!-- Profile dependant properties file -->
-						<file>../glue_${build.profile.id}.properties</file>
-					</files>
-				</configuration>
-				<executions>
-					<!-- Load properties for the default lifecycle -->
-					<execution>
-						<id>default-lifecycle-properties</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>read-project-properties</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.github.goldin</groupId>
@@ -163,6 +146,7 @@
 									<includes>
 										<include>META-INF/persistence.xml</include>
 										<include>com/glue/content/cmis.properties</include>
+										<include>com/glue/persistence/index/solr.properties</include>
 									</includes>
 								</resource>								
 							</resources>

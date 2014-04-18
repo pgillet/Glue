@@ -17,32 +17,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-				<configuration>
-					<files>
-						<!-- Properties are read from profile specific property file -->
-						<file>../glue_${build.profile.id}.properties</file>
-					</files>
-				</configuration>
-				<executions>
-					<!-- Load properties for the default lifecycle -->
-					<execution>
-						<id>default-lifecycle-properties</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>read-project-properties</goal>
-						</goals>
-					</execution>
-					<!-- Load properties for the clean lifecycle -->
-					<execution>
-						<id>clean-lifecycle-properties</id>
-						<phase>pre-clean</phase>
-						<goals>
-							<goal>read-project-properties</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			</plugin>			
 			<plugin>
 				<groupId>com.github.goldin</groupId>
 				<artifactId>copy-maven-plugin</artifactId>
@@ -126,7 +101,7 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<url>http://localhost/manager/text</url>
+					<url>http://${glue.webapp.http.host}:${glue.webapp.http.port}/manager/text</url>
 					<server>tomcat</server>
 					<path>/${project.build.finalName}</path>
 				</configuration>

@@ -64,9 +64,8 @@ public class SolrSearchServer implements SearchEngine<Event> {
     private SolrServer solr;
 
     public SolrSearchServer() {
-	String urlString = "http://localhost/solr"; // TODO: should be
-							 // configurable
-	this.solr = new HttpSolrServer(urlString);
+	this.solr = new HttpSolrServer(
+		com.glue.persistence.index.SolrParams.getSolrServerUrl());
     }
 
     public List<Event> searchForAutoComplete(String q)

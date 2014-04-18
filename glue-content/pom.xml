@@ -66,70 +66,74 @@
 			<version>1.0.0-SNAPSHOT</version>
 			<type>war</type>
 		</dependency> -->
-		
+
 		<dependency>
-            <groupId>org.apache.chemistry.opencmis</groupId>
-            <artifactId>chemistry-opencmis-server-bindings-war</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.chemistry.opencmis</groupId>
-            <artifactId>chemistry-opencmis-server-support</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency><!-- for development only -->
-            <groupId>org.apache.chemistry.opencmis</groupId>
-            <artifactId>chemistry-opencmis-server-bindings</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-server-bindings-war</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-server-support</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency><!-- for development only -->
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-server-bindings</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>glue-content</finalName>
 		<plugins>
-		<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <archive>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<archive>
                         <!--
                             OSGi Bundle Support
                         -->
-                        <manifestEntries>
-                            <Bundle-Name>org.apache.chemistry.opencmis.server.fileshare</Bundle-Name>
-                            <Bundle-SymbolicName>org.apache.chemistry.opencmis.server.fileshare</Bundle-SymbolicName>
-                            <Bundle-Version>${project.version}</Bundle-Version>
-                            <Import-Package>javax.servlet,javax.servlet.http,javax.servlet.resources</Import-Package>
-                            <Bundle-Classpath>.</Bundle-Classpath>
-                            <Web-ContextPath>glue-content</Web-ContextPath>
-                        </manifestEntries>
-                    </archive>
-                    <overlays>
-                        <overlay>
-                        </overlay>
-                        <overlay>
-                            <groupId>org.apache.chemistry.opencmis</groupId>
-                            <artifactId>chemistry-opencmis-server-bindings-war</artifactId>
-                            <excludes>
-                                <exclude>index.html</exclude> <!-- default index page -->
-                                <exclude>css/**</exclude> <!-- CSS for the default index page -->
-                                <exclude>images/**</exclude> <!-- images for the default index page -->
-                                <exclude>web/**</exclude> <!-- sample JavaScript application -->
-                                <exclude>WEB-INF/classes/sample-repository.properties</exclude> <!-- sample server properties file -->
-                                <exclude>WEB-INF/token/**</exclude>  <!-- sample Browser Binding token implementation -->
-                                <exclude>WEB-INF/websphere/**</exclude> <!-- WebSphere specfic files -->
-                            </excludes>
-                            <includes>
-                                <include>**</include>
-                                <include>META-INF/THIRD-PARTY-LICENSES</include>
-                            </includes>
-                        </overlay>
-                    </overlays>
-                </configuration>
-            </plugin>
+						<manifestEntries>
+							<Bundle-Name>org.apache.chemistry.opencmis.server.fileshare</Bundle-Name>
+							<Bundle-SymbolicName>org.apache.chemistry.opencmis.server.fileshare</Bundle-SymbolicName>
+							<Bundle-Version>${project.version}</Bundle-Version>
+							<Import-Package>javax.servlet,javax.servlet.http,javax.servlet.resources</Import-Package>
+							<Bundle-Classpath>.</Bundle-Classpath>
+							<Web-ContextPath>glue-content</Web-ContextPath>
+						</manifestEntries>
+					</archive>
+					<overlays>
+						<overlay>
+						</overlay>
+						<overlay>
+							<groupId>org.apache.chemistry.opencmis</groupId>
+							<artifactId>chemistry-opencmis-server-bindings-war</artifactId>
+							<excludes>
+								<exclude>index.html</exclude> <!-- default index page -->
+								<exclude>css/**</exclude> <!-- CSS for the default index page -->
+								<exclude>images/**</exclude> <!-- images for the default index page -->
+								<exclude>web/**</exclude> <!-- sample JavaScript application -->
+								<exclude>WEB-INF/classes/sample-repository.properties</exclude> <!-- sample server properties file -->
+								<exclude>WEB-INF/token/**</exclude>  <!-- sample Browser Binding token implementation -->
+								<exclude>WEB-INF/websphere/**</exclude> <!-- WebSphere specfic files -->
+							</excludes>
+							<includes>
+								<include>**</include>
+								<include>META-INF/THIRD-PARTY-LICENSES</include>
+							</includes>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
 	<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the container 
 		under $CATALINA_HOME (the container must be previously started), while tomcat7:run 
 		will run the current project as a dynamic web application using an EMBEDDED 
@@ -138,7 +142,7 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<url>http://localhost/manager/text</url>
+					<url>http://${glue.webapp.http.host}:${glue.webapp.http.port}/manager/text</url>
 					<server>tomcat</server>
 					<path>/glue-content</path>
 				</configuration>
