@@ -3,6 +3,7 @@ package com.glue.persistence;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContextType;
@@ -95,6 +96,21 @@ public class GluePersistenceService extends PersistenceService {
 	    EntityListenerRealm.flush();
 	} catch (IOException e) {
 	    LOG.error(e.getMessage(), e);
+	}
+    }
+
+    /**
+     * Tests the connection to the database, and returns true if a session could
+     * be opened, false otherwise.
+     * 
+     */
+    public boolean ping() {
+	try {
+	    EntityManager em = getEntityManager();
+	    em.createNativeQuery("select 1 from DUAL").getSingleResult();
+	    return true;
+	} catch (Exception e) {
+	    return false;
 	}
     }
 
