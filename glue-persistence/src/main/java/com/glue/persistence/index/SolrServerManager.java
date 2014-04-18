@@ -17,13 +17,12 @@ public class SolrServerManager {
     }
 
     private static SolrServer createNewSolrServer() {
-	// TODO: should be configurable
-	final String solrServerUrl = "http://localhost/solr";
 	int queueSize = 1000;
 	int threadCount = 5;
 
 	// Thread-safe
-	return new ConcurrentUpdateSolrServer(solrServerUrl, queueSize,
+	return new ConcurrentUpdateSolrServer(SolrParams.getSolrServerUrl(),
+		queueSize,
 		threadCount);
     }
 

@@ -59,6 +59,35 @@
 		<pluginManagement>
 			<plugins>
 			    <plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>properties-maven-plugin</artifactId>
+					<version>1.0-alpha-2</version>
+					<configuration>
+						<files>
+							<!-- Properties are read from profile specific property file -->
+							<file>../glue_${build.profile.id}.properties</file>
+						</files>
+					</configuration>
+					<executions>
+						<!-- Load properties for the default lifecycle -->
+						<execution>
+							<id>default-lifecycle-properties</id>
+							<phase>initialize</phase>
+							<goals>
+								<goal>read-project-properties</goal>
+							</goals>
+						</execution>
+						<!-- Load properties for the clean lifecycle -->
+						<execution>
+							<id>clean-lifecycle-properties</id>
+							<phase>pre-clean</phase>
+							<goals>
+								<goal>read-project-properties</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			    <plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
@@ -192,31 +221,31 @@
 		</profile>
 		
 		<profile>  
-	    		<id>dev</id>
-	    		<activation>  
-	      			<activeByDefault>true</activeByDefault>  
-	    		</activation>
+    		<id>dev</id>
+    		<activation>  
+      			<activeByDefault>true</activeByDefault>  
+    		</activation>
 			<build>
 				<filters>
 					<filter>../glue_dev.properties</filter>
 				</filters>			
 			</build>
-	    		<properties>  
-	      			<build.profile.id>dev</build.profile.id>
-			        <javax.faces.project.stage>Development</javax.faces.project.stage>
+    		<properties>  
+      			<build.profile.id>dev</build.profile.id>
+		        <javax.faces.project.stage>Development</javax.faces.project.stage>
 	   		</properties>  		
   		</profile>  
   		<profile>  
-	    		<id>prod</id>
+    		<id>prod</id>
 			<build>
 				<filters>
 					<filter>../glue_prod.properties</filter>
 				</filters>			
 			</build>
-	    		<properties>  
-	     			<build.profile.id>prod</build.profile.id>
+    		<properties>  
+     			<build.profile.id>prod</build.profile.id>
 				<javax.faces.project.stage>Production</javax.faces.project.stage>  
-	    		</properties>  
+    		</properties>  
 	  	</profile> 
 	</profiles>
 
