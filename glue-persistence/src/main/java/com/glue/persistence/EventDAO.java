@@ -55,6 +55,8 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 	Root<Event> event = cq.from(Event.class);
+
+	event.fetch(Event_.venue);
 	event.fetch(Event_.images.getName(), JoinType.LEFT);
 
 	cq.where(event.get(Event_.id).in(ids));
