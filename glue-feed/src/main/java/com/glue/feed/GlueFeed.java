@@ -25,7 +25,6 @@ import com.glue.feed.img.ImageFetchJob;
 import com.glue.feed.toulouse.bikini.BikiniJob;
 import com.glue.feed.toulouse.open.data.biblio.LibraryAgendaJob;
 import com.glue.feed.toulouse.open.data.so.SoToulouseAgendaJob;
-import com.glue.feed.youtube.YoutubeMediaFeeder;
 import com.glue.persistence.GluePersistenceService;
 
 public class GlueFeed {
@@ -59,11 +58,11 @@ public class GlueFeed {
 
 	    // YouTube feed
 	    // Every day at 01:00 am
-	    job = newJob(YoutubeMediaFeeder.class).withIdentity("YouTube")
-		    .build();
-	    trigger = newTrigger().withIdentity("YouTubeTrigger")
-		    .withSchedule(cronSchedule("0 0 1 * * ?")).build();
-	    scheduler.scheduleJob(job, trigger);
+	    // job = newJob(YoutubeMediaFeeder.class).withIdentity("YouTube")
+	    // .build();
+	    // trigger = newTrigger().withIdentity("YouTubeTrigger")
+	    // .withSchedule(cronSchedule("0 0 1 * * ?")).build();
+	    // scheduler.scheduleJob(job, trigger);
 
 	    // AGENDA DES MANIFESTATIONS DE LA BIBLIOTHÈQUE DE TOULOUSE
 	    // Every day at 02:00 am

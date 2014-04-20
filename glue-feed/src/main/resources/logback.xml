@@ -35,19 +35,16 @@
 	<appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
 
 		<!-- Configure SMTPAppender for Gmail with the SSL protocol. -->
-		<smtpHost>smtp.gmail.com</smtpHost>
-		<smtpPort>465</smtpPort>
+		<smtpHost>${glue.mail.smtp.host}</smtpHost>
+		<smtpPort>${glue.mail.smtp.port}</smtpPort>
 		<SSL>true</SSL>
-		<username>glue.contact@gmail.com</username>
-		<!-- The value for the password property is determined by variable substitution. 
-			You can pass the required parameter on the command line: java -Dgmail.password=... -->
-		<!-- <password>${gmail.password}</password> -->
-		<password>pascal&amp;greg</password>
+		<username>${glue.mail.smtp.user}</username>
+		<password>${glue.mail.password}</password>
 		<!-- For testing purposes only -->
 		<!-- <asynchronousSending>false</asynchronousSending> -->
 
-		<from>glue.contact@gmail.com</from>
-		<to>glue.contact@gmail.com</to>
+		<from>${glue.mail.smtp.user}</from>
+		<to>${glue.mail.smtp.user}</to>
 		<!-- <to>pascalgillet@ymail.com</to> --> <!-- additional destinations are possible -->
 		<subject>[glue-feed] Something went wrong: %logger{20} - %m</subject>
 
@@ -65,12 +62,11 @@
 
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
-		<!-- TODO -->
-		<!-- <if condition='property("env").contains("production")'> <then> -->
-		<!-- For now, you can just comment the following lines to disable the appenders 
-			in your development environment -->
-		<appender-ref ref="FILE" />
-		<appender-ref ref="EMAIL" />
-		<!-- </then> </if> -->
+		<if condition='"prod".equals("${build.profile.id}")'>
+		    <then>
+		        <appender-ref ref="FILE" />
+		        <appender-ref ref="EMAIL" />
+        	</then>
+       	</if>
 	</root>
 </configuration>
