@@ -3,7 +3,6 @@ package com.glue.webapp.logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -156,27 +155,7 @@ public class EventController implements
 	final Set<String> ids = me.keySet();
 
 	try {
-
-	    // Store venues to avoid repetitive SQL requests
-	    Map<String, Venue> mv = new HashMap<String, Venue>();
-
 	    List<Event> events = eventDAO.findAll(ids);
-
-	    for (Event event : events) {
-
-		Venue persistentVenue = mv.get(event.getVenue().getId());
-		if (persistentVenue == null) { // Not stored yet
-		    persistentVenue = venueDAO.find(
-			    event.getVenue().getId());
-
-		    // Store the persistent venue into the map
-		    mv.put(persistentVenue.getId(), persistentVenue);
-		}
-
-		// Replace the dummy venue with the
-		// persistent one
-		event.setVenue(persistentVenue);
-	    }
 
 	    // Highlighting
 	    for (Event event : events) {

@@ -4,11 +4,6 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -30,17 +25,13 @@ import com.glue.feed.img.ImageFetchJob;
 import com.glue.feed.toulouse.bikini.BikiniJob;
 import com.glue.feed.toulouse.open.data.biblio.LibraryAgendaJob;
 import com.glue.feed.toulouse.open.data.so.SoToulouseAgendaJob;
-import com.glue.feed.youtube.YoutubeMediaFeeder;
+import com.glue.persistence.GluePersistenceService;
 
 public class GlueFeed {
 
     static final Logger LOG = LoggerFactory.getLogger(GlueFeed.class);
 
-    private static final String OPTION_PASSWORD = "password";
-    private static final String OPTION_USER = "user";
-    private static final String OPTION_DBNAME = "dbname";
-    private static final String OPTION_PORT_NUMBER = "port";
-    private static final String OPTION_DBSERVER = "dbserver";
+    private static final String OPTION_DUMMY = "dummy";
 
     public void run() {
 	Scheduler scheduler = null;
@@ -67,11 +58,11 @@ public class GlueFeed {
 
 	    // YouTube feed
 	    // Every day at 01:00 am
-	    job = newJob(YoutubeMediaFeeder.class).withIdentity("YouTube")
-		    .build();
-	    trigger = newTrigger().withIdentity("YouTubeTrigger")
-		    .withSchedule(cronSchedule("0 0 1 * * ?")).build();
-	    scheduler.scheduleJob(job, trigger);
+	    // job = newJob(YoutubeMediaFeeder.class).withIdentity("YouTube")
+	    // .build();
+	    // trigger = newTrigger().withIdentity("YouTubeTrigger")
+	    // .withSchedule(cronSchedule("0 0 1 * * ?")).build();
+	    // scheduler.scheduleJob(job, trigger);
 
 	    // AGENDA DES MANIFESTATIONS DE LA BIBLIOTHÈQUE DE TOULOUSE
 	    // Every day at 02:00 am
@@ -138,39 +129,22 @@ public class GlueFeed {
 		System.exit(0);
 	    }
 
-	    DataSourceManager manager = DataSourceManager.getInstance();
-
-	    if (line.hasOption(OPTION_DBSERVER)) {
-		manager.setServerName(line.getOptionValue(OPTION_DBSERVER));
-	    }
-	    if (line.hasOption(OPTION_PORT_NUMBER)) {
-		manager.setPortNumber(Integer.parseInt(line
-			.getOptionValue(OPTION_PORT_NUMBER)));
-	    }
-	    if (line.hasOption(OPTION_DBNAME)) {
-		manager.setDatabaseName(line.getOptionValue(OPTION_DBNAME));
-	    }
-	    if (line.hasOption(OPTION_USER)) {
-		manager.setUser(line.getOptionValue(OPTION_USER));
-	    }
-	    if (line.hasOption(OPTION_PASSWORD)) {
-		manager.setPassword(line.getOptionValue(OPTION_PASSWORD));
+	    if (line.hasOption(OPTION_DUMMY)) {
+		String val = line.getOptionValue(OPTION_DUMMY);
 	    }
 
 	    // Attempts to establish a connection with the data source
-	    DataSource dataSource = manager.getDataSource();
-	    Connection conn = dataSource.getConnection();
+	    if (GluePersistenceService.getService().ping()) {
+		LOG.info("Successfully established a connection to the database");
+		feed.run();
+	    } else {
+		System.err
+			.println("Cannot establish a connection to the database");
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("gluefeed", options);
+		// System.exit(-1);
+	    }
 
-	    LOG.info("Successfully established a connection to "
-		    + manager.getDatabaseName());
-
-	    feed.run();
-
-	} catch (SQLException e) {
-	    System.err
-		    .println("Cannot establish a connection with the given parameters");
-	    HelpFormatter formatter = new HelpFormatter();
-	    formatter.printHelp("gluefeed", options);
 	} catch (NumberFormatException | ParseException exp) {
 	    // oops, something went wrong
 	    System.err.println("Parsing failed.  Reason: " + exp.getMessage());
@@ -183,25 +157,10 @@ public class GlueFeed {
 	// create Options object
 	Options options = new Options();
 
-	options.addOption("h", "help", false, "print this message");
+	options.addOption("h", "help", false, "Print this message");
 
-	options.addOption(OptionBuilder.withArgName("host").hasArg()
-		.withDescription("database server IP address or hostname")
-		.create(OPTION_DBSERVER));
-
-	options.addOption(OptionBuilder.withArgName("number").hasArg()
-		.withDescription("database port number")
-		.create(OPTION_PORT_NUMBER));
-
-	options.addOption(OptionBuilder.withArgName("name").hasArg()
-		.withDescription("database name").create(OPTION_DBNAME));
-
-	options.addOption(OptionBuilder.withArgName("username").hasArg()
-		.withDescription("database username").create(OPTION_USER));
-
-	options.addOption(OptionBuilder.withArgName("passphrase").hasArg()
-		.withDescription("database user password")
-		.create(OPTION_PASSWORD));
+	options.addOption(OptionBuilder.withArgName("dummy").hasArg()
+		.withDescription("Some text here").create(OPTION_DUMMY));
 
 	return options;
     }
