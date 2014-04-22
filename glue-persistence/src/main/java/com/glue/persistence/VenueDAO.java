@@ -3,7 +3,11 @@ package com.glue.persistence;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
 
 import com.glue.domain.Category;
 import com.glue.domain.Comment;
@@ -13,6 +17,7 @@ import com.glue.domain.Performer;
 import com.glue.domain.Property;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
+import com.glue.domain.Venue_;
 
 public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 
@@ -29,15 +34,34 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 
     public Venue findDuplicate(Venue v) {
 
-	Query query = em
-		.createQuery(
-			"SELECT v FROM Venue v WHERE v.name = :name AND v.city = :city",
-			type).setParameter("name", v.getName())
-		.setParameter("city", v.getCity());
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Venue> cq = cb.createQuery(Venue.class);
+	Root<Venue> venue = cq.from(Venue.class);
 
-	Venue other = PersistenceHelper.getSingleResultOrNull(query);
+	// Matching is based on lat/long if any, name/city otherwise.
+	// There can be only one venue per lat/long couple.
+	boolean hasLatLong = (v.getLatitude() != 0.0d && v
+		.getLongitude() != 0.0d);
+	
+	Expression<Boolean> wc;
+	if(hasLatLong){
+	    wc = cb.and(
+		    cb.equal(venue.get(Venue_.latitude), v.getLatitude()),
+		    cb.equal(venue.get(Venue_.longitude), v.getLongitude()));
+	} else {
+	    // Fallback
+	    wc = cb.and(cb.equal(venue.get(Venue_.name), v.getName()),
+		    cb.equal(venue.get(Venue_.city), v.getCity()));
+	}
+	
+	cq.where(wc);
 
-	return other;
+	cq.select(venue);
+	TypedQuery<Venue> q = em.createQuery(cq);
+
+	Venue result = PersistenceHelper.getSingleResultOrNull(q);
+
+	return result;
     }
 
     public boolean hasDuplicate(Venue venue) {

@@ -22,7 +22,6 @@ import com.glue.feed.sim.MetricHandler;
 import com.glue.feed.sim.SimilarityMetric;
 import com.glue.feed.sim.VenueSimilarityMetric;
 import com.glue.persistence.GluePersistenceService;
-import com.glue.persistence.PersistenceHelper;
 import com.glue.persistence.VenueDAO;
 
 public class VenueServiceImpl extends GluePersistenceService implements
@@ -89,6 +88,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	}
 
 	Venue venueRef = null;
+	VenueDAO venueDAO = getVenueDAO();
 	final double distance = 2; // 2 kms around
 	boolean hasLatLong = (venue.getLatitude() != 0.0d && venue
 		.getLongitude() != 0.0d);
@@ -121,6 +121,15 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    venueRef = nr.search(query);
 
 	    if (venueRef != null) {
+		// Case where the reference venue is already persisted but has
+		// not been found within the given distance. This can happen
+		// when the venue to resolve is located approximately in the
+		// center city.
+		Venue match = venueDAO.findDuplicate(venueRef);
+		if (match != null) {
+		    venueRef = match;
+		}
+
 		venueRef.setReference(true);
 		venue.setParent(venueRef);
 	    } else if (hasLatLong) {
@@ -133,43 +142,12 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	if (venueRef != null) {
 
-	    VenueDAO venueDAO = getVenueDAO();
-
 	    begin();
 	    venueDAO.update(venue);
 	    commit();
 	}
 
 	return venueRef;
-    }
-
-    /**
-     * Search for a venue in database with the exact given coordinates.
-     * 
-     * @return
-     */
-    protected Venue findWithCoordinates(double latitude, double longitude) {
-	EntityManager em = begin();
-	CriteriaBuilder cb = em.getCriteriaBuilder();
-	CriteriaQuery<Venue> cq = cb.createQuery(Venue.class);
-	Root<Venue> venue = cq.from(Venue.class);
-
-	cq.where(cb.and(cb.equal(venue.get(Venue_.latitude), latitude),
-		cb.equal(venue.get(Venue_.longitude), longitude)));
-
-	cq.select(venue);
-	TypedQuery<Venue> q = em.createQuery(cq);
-
-	long start = System.currentTimeMillis();
-	Venue v = PersistenceHelper.getSingleResultOrNull(q);
-	long end = System.currentTimeMillis();
-
-	LOG.info("Found duplicate venue with lat = " + latitude + ", long = "
-		+ longitude + " in " + (end - start) + " ms");
-
-	commit();
-
-	return v;
     }
 
     public List<Venue> findWithinDistance(double latitude, double longitude,
