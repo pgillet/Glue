@@ -4,8 +4,9 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
-	<persistence-unit name="gluedb" >
+	<persistence-unit name="gluedb">
 		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
+		<!-- <jta-data-source>jdbc/gluedb</jta-data-source> -->
 
 		<class>com.glue.domain.Category</class>
 		<class>com.glue.domain.Comment</class>
@@ -22,10 +23,19 @@
 		<validation-mode>NONE</validation-mode>
 
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="${glue.db.jdbc.driver}" />
-			<property name="javax.persistence.jdbc.url" value="${glue.db.jdbc.url}" />
-			<property name="javax.persistence.jdbc.user" value="${glue.db.user}" />
-			<property name="javax.persistence.jdbc.password" value="${glue.db.password}" />
+			<property name="openjpa.ConnectionProperties"
+				value="DriverClassName=${glue.db.jdbc.driver},
+              Url=${glue.db.jdbc.url},
+              Username=${glue.db.user},
+              Password=${glue.db.password},
+              MaxActive=${glue.db.maxActive},
+              MaxIdle=${glue.db.maxIdle},
+              MaxWait=${glue.db.maxWait},              
+              RemoveAbandonedTimeout=60,
+              TestWhileIdle=true,
+              TimeBetweenEvictionRunsMillis=300000,
+              ValidationQuery=select 1" />
+			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
 
 			<property name="openjpa.DataCache" value="true" />
 			<property name="openjpa.RemoteCommitProvider" value="sjvm" />
@@ -38,7 +48,7 @@
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
 			<property name="openjpa.jdbc.MappingDefaults"
 				value="ForeignKeyDeleteAction=restrict, JoinForeignKeyDeleteAction=restrict" />
-			
+
 			<property name="openjpa.jdbc.QuerySQLCache" value="true(EnableStatistics=true)" />
 
 		</properties>

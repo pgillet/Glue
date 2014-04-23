@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomee>
 	<Resource id="jdbc/gluedb" type="javax.sql.DataSource">
-		JdbcDriver ${glue.db.jdbc.driver}
-		JdbcUrl ${glue.db.jdbc.url}
-		UserName ${glue.db.user}
-		Password ${glue.db.password}
-		maxActive ${glue.db.maxActive}
-		maxIdle ${glue.db.maxIdle}
-		maxWait ${glue.db.maxWait}
+		JdbcDriver=${glue.db.jdbc.driver}
+		JdbcUrl=${glue.db.jdbc.url}
+		UserName=${glue.db.user}
+		Password=${glue.db.password}
+		maxActive=${glue.db.maxActive}
+		maxIdle=${glue.db.maxIdle}
+		maxWait=${glue.db.maxWait}
+		removeAbandonedTimeout=60
+		testWhileIdle=true
+		timeBetweenEvictionRunsMillis=300000
+		validationQuery=select 1
 	</Resource>
 	<Resource id="mail/gluemail" type="javax.mail.Session">
 		mail.transport.protocol=${glue.mail.transport.protocol}

@@ -107,7 +107,7 @@ public class GluePersistenceService extends PersistenceService {
     public boolean ping() {
 	try {
 	    EntityManager em = getEntityManager();
-	    em.createNativeQuery("select 1 from DUAL").getSingleResult();
+	    em.createNativeQuery("select 1").getSingleResult();
 	    return true;
 	} catch (Exception e) {
 	    return false;

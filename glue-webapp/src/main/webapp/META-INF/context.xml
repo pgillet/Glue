@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- The contents of this file will be loaded for each web application -->
- <Context crossContext="true">
- 
-    <!-- Default set of monitored resources -->
-    <WatchedResource>WEB-INF/web.xml</WatchedResource>
- 
-   <Resource name="jdbc/gluedb" auth="Container"
-        type="javax.sql.DataSource"
-        maxActive="${glue.db.maxActive}" maxIdle="${glue.db.maxIdle}" maxWait="${glue.db.maxWait}"
-        username="${glue.db.user}"
-        password="${glue.db.password}"
-        driverClassName="${glue.db.jdbc.driver}"
-        url="${glue.db.jdbc.url}"/>
+<Context crossContext="true">
+
+	<!-- Default set of monitored resources -->
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+	<Resource name="jdbc/gluedb" auth="Container" type="javax.sql.DataSource"
+		driverClassName="${glue.db.jdbc.driver}" url="${glue.db.jdbc.url}"
+		username="${glue.db.user}" password="${glue.db.password}" maxActive="${glue.db.maxActive}"
+		maxIdle="${glue.db.maxIdle}" maxWait="${glue.db.maxWait}"
+		removeAbandonedTimeout="60" testWhileIdle="true"
+		timeBetweenEvictionRunsMillis="300000" validationQuery="select 1" />
 </Context>

@@ -92,7 +92,7 @@ public abstract class AbstractCAO {
 	    document = (Document) object;
 
 	} catch (CmisObjectNotFoundException e) {
-	    LOG.warn("Not found object with path = " + path.getPath());
+	    LOG.warn("No object found with path = " + path.getPath());
 	}
 
 	return document;
@@ -284,22 +284,26 @@ public abstract class AbstractCAO {
     protected Document getImage(CmisPath parent, String basename,
 	    ImageRendition rendition) {
 
-	CmisObject object = session.getObjectByPath(parent.getPath());
-	Folder folder = (Folder) object;
+	try {
+	    CmisObject object = session.getObjectByPath(parent.getPath());
+	    Folder folder = (Folder) object;
 
-	ItemIterable<CmisObject> children = folder.getChildren();
+	    ItemIterable<CmisObject> children = folder.getChildren();
 
-	ImageRendition r = rendition;
+	    ImageRendition r = rendition;
 
-	for (CmisObject o : children) {
-	    if (BaseTypeId.CMIS_DOCUMENT.equals(o.getBaseTypeId())) {
-		do {
-		    String prefix = basename + "." + r.name().toLowerCase();
-		    if (o.getName().startsWith(prefix)) {
-			return (Document) o;
-		    }
-		} while ((r = r.upper()) != null);
+	    for (CmisObject o : children) {
+	        if (BaseTypeId.CMIS_DOCUMENT.equals(o.getBaseTypeId())) {
+	    	do {
+	    	    String prefix = basename + "." + r.name().toLowerCase();
+	    	    if (o.getName().startsWith(prefix)) {
+	    		return (Document) o;
+	    	    }
+	    	} while ((r = r.upper()) != null);
+	        }
 	    }
+	} catch (CmisObjectNotFoundException e) {
+	    LOG.warn("No object found with path = " + parent.getPath());
 	}
 
 	return null;
