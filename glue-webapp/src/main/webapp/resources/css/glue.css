@@ -107,3 +107,13 @@ body { padding-top: 50px; }
 	line-height: 1.428571429;
 	border: 1px solid #ddd;
 }
+
+/* .glue-a {
+	color: @link-color;
+	text-decoration: none; 
+} */
+
+.glue-a:hover {
+	color : darken;
+	text-decoration: none;
+}
