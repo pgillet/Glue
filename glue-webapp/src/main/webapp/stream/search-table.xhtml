@@ -14,7 +14,9 @@
 				<div
 					class="col-xs-6 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
 					<div class="pull-right">
-						<ui:include src="/stream/search-calendar.xhtml" />
+						<ui:include src="/stream/search-calendar.xhtml" >
+							<ui:param name="paramBean" value="#{paramBean}" />
+						</ui:include>
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
@@ -28,7 +30,7 @@
 					</tr>
 				</thead> -->
 						<tbody>
-							<ui:repeat var="stream" value="#{streamSearchBean.events}"
+							<ui:repeat var="stream" value="#{paramBean.events}"
 								varStatus="status">
 								<tr>
 									<td style="width: 20px;"><i class="fa fa-square"
@@ -54,9 +56,12 @@
 													<f:convertDateTime pattern="#{bundle.date_format_short}" />
 												</h:outputText>
 											</ui:fragment></small></td>
-									<td><small><h:outputText
-												value="#{stream.venue.name}, #{stream.venue.city}"
-												title="#{stream.venue.name}, #{stream.venue.city}" /></small></td>
+									<td><small><h:link includeViewParams="true"
+											value="#{stream.venue.name}, #{stream.venue.city}"
+											title="#{stream.venue.name}, #{stream.venue.city}"
+											outcome="/venues/search.xhtml">
+											<f:param name="v" value="#{stream.venue.id}"></f:param>
+										</h:link></small></td>
 								</tr>
 							</ui:repeat>
 						</tbody>

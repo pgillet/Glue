@@ -1,20 +1,15 @@
 package com.glue.webapp.logic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.commons.lang.WordUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,36 +18,26 @@ import com.glue.domain.Venue;
 import com.glue.persistence.EventDAO;
 import com.glue.persistence.GluePersistenceService;
 import com.glue.persistence.VenueDAO;
-import com.glue.webapp.search.PageIterator;
+import com.glue.webapp.search.AbstractPaginatedSearch;
 import com.glue.webapp.search.SearchEngine;
 
-public class EventController implements
- PageIterator<List<Event>>,
-	Serializable {
+public class EventController extends AbstractPaginatedSearch<List<Event>> {
 
     @PersistenceContext(unitName = GluePersistenceService.PERSISTENCE_UNIT)
-    private transient EntityManager em;
+    private EntityManager em;
 
     @Inject
-    private transient EventDAO eventDAO;
+    private EventDAO eventDAO;
 
     @Inject
-    private transient VenueDAO venueDAO;
+    private VenueDAO venueDAO;
 
-    private static final String ELLIPSIS = "...";
 
-    private static final int SUMMARY_LIMIT = 200;
 
     static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     @Inject
     private transient SearchEngine<Event> engine;
-
-    private int start;
-
-    private int rowsPerPage = PageIterator.DEFAULT_ROWS;
-
-    private long totalRows;
 
     private String queryString;
     private Date startDate;
@@ -161,11 +146,7 @@ public class EventController implements
 	    for (Event event : events) {
 		String summary = me.get(event.getId()).getSummary();
 		if (summary == null) {
-		    String html = event.getDescription();
-		    // Keep only text nodes: all HTML will be stripped.
-		    String onlytext = Jsoup.clean(html, Whitelist.none());
-		    summary = WordUtils.abbreviate(onlytext, SUMMARY_LIMIT, -1,
-			    ELLIPSIS);
+		    summary = EventUtils.summarize(event.getDescription());
 		}
 		event.setSummary(summary);
 	    }
@@ -234,102 +215,5 @@ public class EventController implements
 	    LOG.error(e.getMessage(), e);
 	    throw new InternalServerException(e);
 	}
-    }
-
-    @Override
-    public boolean hasNext() {
-	return getPageIndex() < (getTotalPages() - 1);
-    }
-
-    @Override
-    public List<Event> next() throws InternalServerException,
-	    NoSuchElementException {
-	if (!hasNext()) {
-	    throw new NoSuchElementException();
-	}
-
-	start += rowsPerPage;
-	return search();
-    }
-
-    @Override
-    public boolean hasPrevious() {
-	return getPageIndex() > 0;
-    }
-
-    @Override
-    public List<Event> previous() throws InternalServerException,
-	    NoSuchElementException {
-	if (!hasPrevious()) {
-	    throw new NoSuchElementException();
-	}
-
-	start -= rowsPerPage;
-	return search();
-    }
-
-    @Override
-    public List<Event> first() throws InternalServerException {
-	start = 0;
-	return search();
-    }
-
-    @Override
-    public List<Event> last() throws InternalServerException {
-	start = (getTotalPages() - 1) * rowsPerPage; // last page index
-	return search();
-    }
-
-    @Override
-    public List<Event> get(int pageNumber) throws NoSuchElementException {
-	// TODO Not yet implemented!
-	return null;
-    }
-
-    @Override
-    public int getStart() {
-	return start;
-    }
-
-    @Override
-    public void setStart(int start) {
-	this.start = start;
-    }
-
-    @Override
-    public int getRowsPerPage() {
-	return rowsPerPage;
-    }
-
-    @Override
-    public void setRowsPerPage(int rowsPerPage) {
-	this.rowsPerPage = rowsPerPage;
-    }
-
-    @Override
-    public long getTotalRows() {
-	return totalRows;
-    }
-
-    /**
-     * For pagination control from request to request.
-     */
-    public void setTotalRows(long totalRows) {
-	this.totalRows = totalRows;
-    }
-
-    @Override
-    public int getPageIndex() {
-	return start / rowsPerPage;
-    }
-
-    @Override
-    public int getTotalPages() {
-	int num = (int) totalRows / rowsPerPage;
-	if (totalRows % rowsPerPage > 0) {
-	    num++;
-	}
-
-	return num;
     }
 }

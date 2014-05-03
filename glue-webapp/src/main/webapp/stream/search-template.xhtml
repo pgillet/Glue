@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:form>
+	
+		<c:if test="#{not empty facesContext.messageList}">
+			<div class="row">
+				<div
+					class="col-md-6 col-md-offset-3 alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert"
+						aria-hidden="true">&times;</button>
+					<h4>
+						<h:outputText value="#{bundle.error}" />
+					</h4>
+					<h:messages layout="table" />
+				</div>
+			</div>
+		</c:if>
+
+		<div class="row glue-hr-bottom-border">
+			<div
+				class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+				<div class="pull-right">
+					<div class="btn-group">
+						<button type="button"
+							class="btn text-muted glue-btn-link dropdown-toggle"
+							data-toggle="dropdown">
+							<h:outputText value="#{bundle.display_label}" />
+							:
+							<h:outputText value="#{bundle[paramBean.displayLabel]}" />
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+									<i class="fa fa-th-list text-muted"></i>
+									<h:outputText value=" #{bundle.display_list}" />
+									<f:param name="display" value="list" />
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+									<i class="fa fa-align-justify text-muted"></i>
+									<h:outputText value=" #{bundle.display_table}" />
+									<f:param name="display" value="table" />
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+									<i class="fa fa-table text-muted"></i>
+									<h:outputText value=" #{bundle.display_grid}" />
+									<f:param name="display" value="grid" />
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink></li>
+							<li class="divider"></li>
+							<li><a href="#" disabled="disabled"
+								title="#{bundle.feature_not_available}"><i
+									class="fa fa-globe text-muted"></i> <h:outputText
+										value=" #{bundle.display_map}" /></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
+				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
+				<ui:repeat var="item" value="#{paramBean.categories}">
+					<h:commandButton styleClass="btn text-muted glue-btn-link"
+						style="#{paramBean.getCategoryStyle(item.name, false, false)}"
+						onmouseover="#{paramBean.getCategoryStyle(item.name, true, true)}"
+						onmouseout="#{paramBean.getCategoryStyle(item.name, true, false)}"
+						value="#{bundle[item.name.toLowerCase()]}"
+						action="#{paramBean.enableCategory()}">
+						<f:param name="cat" value="#{item.name}"></f:param>
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
+				</ui:repeat>
+			</div>
+		</div>
+		<br />
+
+		<div class="row">
+			<div class="col-md-6 col-md-offset-1">
+				<ui:fragment rendered="#{empty paramBean.events}">
+					<p>
+						<h:outputText value="#{bundle.no_result_found}" />
+					</p>
+				</ui:fragment>
+				<ui:fragment rendered="#{not empty paramBean.events}">
+					<p class="text-muted">
+						<small><h:outputText>#{paramBean.totalRows} #{bundle.results} - #{bundle.page} #{paramBean.pageIndex + 1} #{bundle.page_on} #{paramBean.totalPages}</h:outputText>
+						</small>
+					</p>
+				</ui:fragment>
+			</div>
+		</div>
+		<br />
+
+		<!-- <ui:insert name="search-results">
+				</ui:insert> -->
+		<ui:fragment rendered="#{paramBean.display eq 'LIST'}">
+			<ui:include src="search-list.xhtml">
+				<ui:param name="paramBean" value="#{paramBean}" />
+			</ui:include>
+		</ui:fragment>
+		<ui:fragment rendered="#{paramBean.display eq 'TABLE'}">
+			<ui:include src="search-table.xhtml">
+				<ui:param name="paramBean" value="#{paramBean}" />
+			</ui:include>
+		</ui:fragment>
+		<ui:fragment rendered="#{paramBean.display eq 'GRID'}">
+			<ui:include src="search-grid.xhtml">
+				<ui:param name="paramBean" value="#{paramBean}" />
+			</ui:include>
+		</ui:fragment>
+
+		<ui:fragment rendered="#{not empty paramBean.events}">
+			<div class="text-center ">
+				<ul class="pagination">
+					<li><h:commandButton styleClass="btn btn-default"
+							action="#{paramBean.first}" disabled="#{not paramBean.previous}"
+							value="&#171;" onclick="jsf.ajax.addOnEvent(scrollToTop);">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton></li>
+					<li><h:commandButton styleClass="btn btn-default"
+							action="#{paramBean.previous}"
+							disabled="#{not paramBean.previous}" value="#{bundle.previous}"
+							onclick="jsf.ajax.addOnEvent(scrollToTop);">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton></li>
+					<li><h:commandButton styleClass="btn btn-default"
+							action="#{paramBean.next}" disabled="#{not paramBean.next}"
+							value="#{bundle.next}"
+							onclick="jsf.ajax.addOnEvent(scrollToTop);">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton></li>
+					<li><h:commandButton styleClass="btn btn-default"
+							action="#{paramBean.last}" disabled="#{not paramBean.next}"
+							value="&#187;" onclick="jsf.ajax.addOnEvent(scrollToTop);">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton></li>
+				</ul>
+			</div>
+		</ui:fragment>
+
+	</h:form>
+</ui:composition>

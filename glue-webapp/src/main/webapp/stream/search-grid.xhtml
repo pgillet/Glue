@@ -17,10 +17,12 @@
 					<div class="row">
 
 						<div class="col-sm-4 col-md-4 col-lg-3 pull-right">
-							<ui:include src="/stream/search-calendar.xhtml" />
+							<ui:include src="/stream/search-calendar.xhtml" >
+								<ui:param name="paramBean" value="#{paramBean}" />
+							</ui:include>
 						</div>
 
-						<ui:repeat var="stream" value="#{streamSearchBean.events}"
+						<ui:repeat var="stream" value="#{paramBean.events}"
 							varStatus="status">
 
 							<c:set var="count" value="#{status.index + 1}" />
@@ -51,7 +53,7 @@
 									</ui:fragment>
 								</div>
 								<ul class="fa-ul">
-									<li><h:commandLink action="#{streamSearchBean.selectCategory}"
+									<li><h:commandLink action="#{paramBean.selectCategory}"
 										onclick="jsf.ajax.addOnEvent(scrollToTop);">
 										<i class="fa-li fa fa-square"
 											style="color: #{stream.category.color};"></i>
@@ -89,13 +91,19 @@
 												</h:outputText>
 											</ui:fragment>
 										</h6></li>
-									<li><span
-										class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+									<li>
 										<h6>
-											<strong>#{stream.venue.name}</strong>
-											- <span class="text-muted">#{stream.venue.city}</span>
-										</h6></li>
-								</ul>
+											<h:link includeViewParams="true"
+												outcome="/venues/search.xhtml">
+												<span
+													class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+												<strong>#{stream.venue.name}</strong> - <span
+													class="text-muted">#{stream.venue.city}</span>
+												<f:param name="v" value="#{stream.venue.id}"></f:param>
+											</h:link>
+										</h6>
+									</li>
+							</ul>
 							</div>
 						</ui:repeat>
 					</div>

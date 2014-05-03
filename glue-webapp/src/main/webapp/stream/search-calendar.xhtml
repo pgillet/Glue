@@ -9,39 +9,39 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition>
-		<p:calendar value="#{streamSearchBean.startDate}" mode="inline">
-			<p:ajax event="dateSelect" listener="#{streamSearchBean.searchFrom}"
+		<p:calendar value="#{paramBean.startDate}" mode="inline">
+			<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}"
 				update="@form" />
 		</p:calendar>
 		<ul class="nav nav-pills nav-stacked fa-ul">
 			<li><ui:fragment
-					rendered="#{streamSearchBean.interval eq 'TODAY'}">
+					rendered="#{paramBean.interval eq 'TODAY'}">
 					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
 				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{streamSearchBean.searchToday}" value="#{bundle.today}">
+					action="#{paramBean.searchToday}" value="#{bundle.today}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
 			<li><ui:fragment
-					rendered="#{streamSearchBean.interval eq 'WEEK_END'}">
+					rendered="#{paramBean.interval eq 'WEEK_END'}">
 					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
 				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{streamSearchBean.searchNextWeekEnd}"
+					action="#{paramBean.searchNextWeekEnd}"
 					value="#{bundle.next_week_end}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
 			<li><ui:fragment
-					rendered="#{streamSearchBean.interval eq 'WEEK'}">
+					rendered="#{paramBean.interval eq 'WEEK'}">
 					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
 				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{streamSearchBean.searchWeek}"
+					action="#{paramBean.searchWeek}"
 					value="#{bundle.current_week}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>
 			<li><ui:fragment
-					rendered="#{streamSearchBean.interval eq 'MONTH'}">
+					rendered="#{paramBean.interval eq 'MONTH'}">
 					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
 				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{streamSearchBean.searchMonth}"
+					action="#{paramBean.searchMonth}"
 					value="#{bundle.current_month}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton></li>

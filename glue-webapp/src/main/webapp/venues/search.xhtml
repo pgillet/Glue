@@ -10,13 +10,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="metadata">
 		<f:metadata>
-			<f:viewParam name="q" value="#{eventSearchBean.query}" />
+			<f:viewParam name="q" value="#{venueSearchBean.query}" />
 		</f:metadata>
 	</ui:define>
 
 	<ui:define name="content">
-		<ui:include src="search-template.xhtml">
-			<ui:param name="paramBean" value="#{eventSearchBean}" />
+		<ui:include src="../stream/search-template.xhtml">
+			<ui:param name="paramBean" value="#{venueSearchBean}" />
 		</ui:include>
 	</ui:define>
 
