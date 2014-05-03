@@ -45,14 +45,16 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 	LOG.debug("Query param = " + q);
 
 	String venueId = v.getValue();
-	venue = controller.getVenue(venueId);
+	if (venueId != null) {
+	    venue = controller.getVenue(venueId);
 
-	if (venue == null) {
-	    FacesContext context = FacesContext.getCurrentInstance();
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("no.such.venue")));
-	} else {
-	    first();
+	    if (venue == null) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null,
+			new FacesMessage(FacesUtil.getString("no.such.venue")));
+	    } else {
+		first();
+	    }
 	}
     }
 
