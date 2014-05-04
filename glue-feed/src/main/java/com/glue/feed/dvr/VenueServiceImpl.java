@@ -112,6 +112,9 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    }
 
 	    venueRef = metricHandler.getBestMatchOver(venue, candidates);
+	    if (venueRef != null) {
+		venue.setParent(venueRef);
+	    }
 	}
 
 	if (venueRef == null) {
