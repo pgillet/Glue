@@ -1,31 +1,24 @@
 package com.glue.webapp.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
-import org.omnifaces.cdi.Param;
-import org.omnifaces.cdi.ViewScoped;
-import org.omnifaces.cdi.param.ParamValue;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
-import com.glue.webapp.logic.InternalServerException;
-import com.glue.webapp.logic.EventController;
-import com.glue.webapp.search.PageIterator;
+import com.glue.webapp.search.AbstractPaginatedSearch;
 
 /**
  * <p>
@@ -41,45 +34,24 @@ import com.glue.webapp.search.PageIterator;
  * @author pgillet
  * 
  */
-@Named
-@ViewScoped
-public class StreamSearchBean implements PageIterator<Void>, Serializable {
-
-    private static final String PARAM_CAT = "cat";
-    private static final String PARAM_DISPLAY = "display";
-    private static final String PARAM_ROWS_PER_PAGE = "rowsperpage";
-
-    @Inject
-    @Param
-    // Like <f:viewParam name="q" value="#{bean.q}">
-    private ParamValue<String> q;
+public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
+	implements Serializable {
 
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
 
-    @Inject
-    private EventController eventController;
+    private String query;
+    private Date startDate;
+    private Date endDate;
+
+    private List<String> catSelection = new ArrayList<>();
 
     private EventCategory[] categories = EventCategory.values();
 
-    private transient List<Event> events;
+    protected transient List<Event> events;
 
     private DisplayType display = DisplayType.LIST; // Default
 
     private IntervalType interval;
-
-    @PostConstruct
-    private void init() {
-	String rowsPerPageParam = FacesUtil
-		.getRequestParameter(PARAM_ROWS_PER_PAGE);
-	if (rowsPerPageParam != null) {
-	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
-	}
-	setQuery(q.getValue());
-
-	LOG.info("Query param = " + q);
-
-	first();
-    }
 
     public DisplayType getDisplay() {
 	return display;
@@ -102,7 +74,8 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     public void toggleDisplay() {
-	String displayParam = FacesUtil.getRequestParameter(PARAM_DISPLAY);
+	String displayParam = FacesUtil
+		.getRequestParameter(QueryParams.PARAM_DISPLAY);
 	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
 
@@ -123,94 +96,36 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	first();
     }
 
-    /**
-     * @return the query
-     */
     public String getQuery() {
-	return eventController.getQueryString();
+	return query;
     }
 
-    /**
-     * @param query
-     *            the query to set
-     */
     public void setQuery(String query) {
-	eventController.setQueryString(query);
+	this.query = query;
     }
 
-    /**
-     * @return the location
-     */
-    public String getLocation() {
-	return eventController.getLocation();
-    }
-
-    /**
-     * @param location
-     *            the location to set
-     */
-    public void setLocation(String location) {
-	eventController.setLocation(location);
-    }
-
-    /**
-     * @return the latitude
-     */
-    public double getLatitude() {
-	return eventController.getLatitude();
-    }
-
-    /**
-     * @param latitude
-     *            the latitude to set
-     */
-    public void setLatitude(double latitude) {
-	eventController.setLatitude(latitude);
-    }
-
-    /**
-     * @return the longitude
-     */
-    public double getLongitude() {
-	return eventController.getLongitude();
-    }
-
-    /**
-     * @param longitude
-     *            the longitude to set
-     */
-    public void setLongitude(double longitude) {
-	eventController.setLongitude(longitude);
-    }
-
-    /**
-     * @return the startDate
-     */
     public Date getStartDate() {
-	return eventController.getStartDate();
+	return startDate;
     }
 
-    /**
-     * @param startDate
-     *            the startDate to set
-     */
     public void setStartDate(Date startDate) {
-	eventController.setStartDate(startDate);
+	this.startDate = startDate;
     }
 
-    /**
-     * @return the endDate
-     */
     public Date getEndDate() {
-	return eventController.getEndDate();
+	return endDate;
     }
 
-    /**
-     * @param endDate
-     *            the endDate to set
-     */
     public void setEndDate(Date endDate) {
-	eventController.setEndDate(endDate);
+	this.endDate = endDate;
+    }
+
+    public List<String> getCatSelection() {
+	return catSelection;
+    }
+
+    public void setCatSelection(List<String> catSelection) {
+	this.catSelection = catSelection;
     }
 
     /**
@@ -225,34 +140,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
      */
     public EventCategory[] getCategories() {
 	return categories;
-    }
-
-    /**
-     * @return the catSelection
-     */
-    public List<String> getCatSelection() {
-	return eventController.getCategories();
-    }
-
-    /**
-     * @param catSelection
-     *            the catSelection to set
-     */
-    public void setCatSelection(List<String> catSelection) {
-	eventController.setCategories(catSelection);
-    }
-
-    /**
-     * @param events
-     *            the events to set
-     */
-    public void setEvents(List<Event> events) {
-	this.events = events;
-    }
-
-    public String search() {
-	// Redirect
-	return "event-search";
     }
 
     public void searchFrom(SelectEvent event) {
@@ -327,151 +214,6 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
 	first();
     }
 
-    @Override
-    public boolean hasNext() {
-	return eventController.hasNext();
-    }
-
-    /**
-     * For EL access.
-     * 
-     * @return
-     */
-    public boolean isNext() {
-	return hasNext();
-    }
-
-    @Override
-    public Void next() {
-	FacesContext context = FacesContext.getCurrentInstance();
-
-	try {
-	    events = eventController.next();
-	} catch (NoSuchElementException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
-
-	return null;
-    }
-
-    @Override
-    public boolean hasPrevious() {
-	return eventController.hasPrevious();
-    }
-
-    /**
-     * For EL access.
-     * 
-     * @return
-     */
-    public boolean isPrevious() {
-	return hasPrevious();
-    }
-
-    @Override
-    public Void previous() {
-	FacesContext context = FacesContext.getCurrentInstance();
-
-	try {
-	    events = eventController.previous();
-	} catch (NoSuchElementException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
-
-	return null;
-    }
-
-    @Override
-    public Void first() {
-	FacesContext context = FacesContext.getCurrentInstance();
-
-	try {
-	    events = eventController.first();
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
-
-	return null;
-    }
-
-    @Override
-    public Void last() {
-	FacesContext context = FacesContext.getCurrentInstance();
-
-	try {
-	    events = eventController.last();
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
-
-	return null;
-    }
-
-    @Override
-    public Void get(int pageNumber) throws NoSuchElementException {
-	// TODO Not yet implemented
-	return null;
-    }
-
-    @Override
-    public int getStart() {
-	return eventController.getStart();
-    }
-
-    @Override
-    public void setStart(int start) {
-	eventController.setStart(start);
-
-    }
-
-    @Override
-    public int getRowsPerPage() {
-	return eventController.getRowsPerPage();
-    }
-
-    @Override
-    public void setRowsPerPage(int rows) {
-	eventController.setRowsPerPage(rows);
-    }
-
-    @Override
-    public long getTotalRows() {
-	return eventController.getTotalRows();
-    }
-
-    /**
-     * For pagination control from request to request.
-     */
-    public void setTotalRows(long totalRows) {
-	eventController.setTotalRows(totalRows);
-    }
-
-    @Override
-    public int getPageIndex() {
-	return eventController.getPageIndex();
-    }
-
-    @Override
-    public int getTotalPages() {
-	return eventController.getTotalPages();
-    }
-
     /**
      * Returns the CSS styles to apply to the given category selector.
      * 
@@ -516,39 +258,116 @@ public class StreamSearchBean implements PageIterator<Void>, Serializable {
     }
 
     public void enableCategory() {
-	String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+	String cat = FacesUtil.getRequestParameter(QueryParams.PARAM_CAT);
 	LOG.debug("Toggle category = " + cat);
 
 	if (!getCatSelection().remove(cat)) {
 	    getCatSelection().add(cat);
 	}
 
-	try {
-	    events = eventController.first();
-	} catch (InternalServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    FacesContext context = FacesContext.getCurrentInstance();
-	    context.addMessage(null,
-		    new FacesMessage(FacesUtil.getString("error.generic")));
-	}
+	first();
     }
 
     public void selectCategory() {
-	String cat = FacesUtil.getRequestParameter(PARAM_CAT);
+	String cat = FacesUtil.getRequestParameter(QueryParams.PARAM_CAT);
 	LOG.debug("Select category = " + cat);
 
 	// Select only the chosen category
 	getCatSelection().clear();
 	getCatSelection().add(cat);
 
+	first();
+    }
+
+    @Override
+    public abstract Void search() throws Exception;
+
+    @Override
+    public Void first() {
 	try {
-	    events = eventController.first();
-	} catch (InternalServerException e) {
+	    super.first();
+	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);
 	    FacesContext context = FacesContext.getCurrentInstance();
 	    context.addMessage(null,
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
+
+	return null;
+    }
+
+    /**
+     * For EL access.
+     * 
+     * @return
+     */
+    public boolean isNext() {
+	return hasNext();
+    }
+
+    @Override
+    public Void next() throws Exception, NoSuchElementException {
+	try {
+	    super.next();
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	}
+
+	return null;
+    }
+
+    /**
+     * For EL access.
+     * 
+     * @return
+     */
+    public boolean isPrevious() {
+	return hasPrevious();
+    }
+
+    @Override
+    public Void previous() throws Exception, NoSuchElementException {
+	try {
+	    super.previous();
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	}
+
+	return null;
+    }
+
+    @Override
+    public Void last() throws Exception {
+	try {
+	    super.last();
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	}
+
+	return null;
+    }
+
+    @Override
+    public Void get(int pageNumber) throws Exception, NoSuchElementException {
+	try {
+	    super.get(pageNumber);
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	}
+
+	return null;
     }
 
 }

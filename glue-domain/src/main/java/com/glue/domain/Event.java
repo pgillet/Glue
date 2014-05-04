@@ -677,4 +677,21 @@ public class Event {
     public void setReference(boolean reference) {
 	this.reference = reference;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return "Event [id=" + id + ", title=" + title + ", description="
+		+ description + ", url=" + url + ", startTime=" + startTime
+		+ ", stopTime=" + stopTime + ", timeZone=" + timeZone
+		+ ", allDay=" + allDay + ", free=" + free + ", price=" + price
+		+ ", withdrawn=" + withdrawn + ", withdrawnNote="
+		+ withdrawnNote + ", category=" + category + ", categories="
+		+ categories + ", reference=" + reference + ", created="
+		+ created + "]";
+    }
 }
