@@ -1,167 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="../template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:body>
-	<ui:composition template="../template.xhtml">
-		<ui:define name="content">
-			<f:metadata>
-				<f:viewParam name="q" value="#{streamSearchBean.query}"/>
-			</f:metadata>
-		</ui:define>			
-		
-		<ui:define name="content">
-			<h:form>
-				<c:if test="#{not empty facesContext.messageList}">
-					<div class="row">
-						<div
-							class="col-md-6 col-md-offset-3 alert alert-danger alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert"
-								aria-hidden="true">&times;</button>
-							<h4>
-								<h:outputText value="#{bundle.error}" />
-							</h4>
-							<h:messages layout="table" />
-						</div>
-					</div>
-				</c:if>
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="q" value="#{eventSearchBean.query}" />
+		</f:metadata>
+	</ui:define>
 
-				<div class="row glue-hr-bottom-border">
-					<div
-						class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button"
-									class="btn text-muted glue-btn-link dropdown-toggle"
-									data-toggle="dropdown">
-									<h:outputText value="#{bundle.display_label}" />
-									:
-									<h:outputText value="#{bundle[streamSearchBean.displayLabel]}" />
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" role="menu">
-									<li><h:commandLink
-											action="#{streamSearchBean.toggleDisplay}">
-											<i class="fa fa-th-list text-muted"></i>
-											<h:outputText value=" #{bundle.display_list}" />
-											<f:param name="display" value="list" />
-											<f:ajax execute="@form" render="@form" />
-										</h:commandLink></li>
-									<li><h:commandLink
-											action="#{streamSearchBean.toggleDisplay}">
-											<i class="fa fa-align-justify text-muted"></i>
-											<h:outputText value=" #{bundle.display_table}" />
-											<f:param name="display" value="table" />
-											<f:ajax execute="@form" render="@form" />
-										</h:commandLink></li>
-									<li><h:commandLink
-											action="#{streamSearchBean.toggleDisplay}">
-											<i class="fa fa-table text-muted"></i>
-											<h:outputText value=" #{bundle.display_grid}" />
-											<f:param name="display" value="grid" />
-											<f:ajax execute="@form" render="@form" />
-										</h:commandLink></li>
-									<li class="divider"></li>
-									<li><a href="#" disabled="disabled"
-										title="#{bundle.feature_not_available}"><i
-											class="fa fa-globe text-muted"></i> <h:outputText
-												value=" #{bundle.display_map}" /></a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
-						<!-- rendered="#{streamSearchBean.catSelection.contains(item.name)}" -->
-						<ui:repeat var="item" value="#{streamSearchBean.categories}">
-							<h:commandButton styleClass="btn text-muted glue-btn-link"
-								style="#{streamSearchBean.getCategoryStyle(item.name, false, false)}"
-								onmouseover="#{streamSearchBean.getCategoryStyle(item.name, true, true)}"
-								onmouseout="#{streamSearchBean.getCategoryStyle(item.name, true, false)}"
-								value="#{bundle[item.name.toLowerCase()]}"
-								action="#{streamSearchBean.enableCategory}">
-								<f:param name="cat" value="#{item.name}"></f:param>
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton>
-						</ui:repeat>
-					</div>
-				</div>
-				<br />
+	<ui:define name="content">
+		<ui:include src="search-template.xhtml">
+			<ui:param name="paramBean" value="#{eventSearchBean}" />
+		</ui:include>
+	</ui:define>
 
-				<div class="row">
-					<div class="col-md-6 col-md-offset-1">
-						<ui:fragment rendered="#{empty streamSearchBean.events}">
-							<p>
-								<h:outputText value="#{bundle.no_result_found}" />
-							</p>
-						</ui:fragment>
-						<ui:fragment rendered="#{not empty streamSearchBean.events}">
-							<p class="text-muted">
-								<small><h:outputText>#{streamSearchBean.totalRows} #{bundle.results} - #{bundle.page} #{streamSearchBean.pageIndex + 1} #{bundle.page_on} #{streamSearchBean.totalPages}</h:outputText>
-								</small>
-							</p>
-						</ui:fragment>
-					</div>
-				</div>
-				<br />
-
-				<!-- <ui:insert name="search-results">
-				</ui:insert> -->
-				<ui:fragment rendered="#{streamSearchBean.display eq 'LIST'}">
-					<ui:include src="search-list.xhtml"/>
-				</ui:fragment>
-				<ui:fragment rendered="#{streamSearchBean.display eq 'TABLE'}">
-					<ui:include src="search-table.xhtml"/>
-				</ui:fragment>
-				<ui:fragment rendered="#{streamSearchBean.display eq 'GRID'}">
-					<ui:include src="search-grid.xhtml"/>
-				</ui:fragment>
-
-				<ui:fragment rendered="#{not empty streamSearchBean.events}">
-					<div class="text-center ">
-						<ul class="pagination">
-							<li><h:commandButton styleClass="btn btn-default"
-									action="#{streamSearchBean.first}"
-									disabled="#{not streamSearchBean.previous}" value="&#171;"
-									onclick="jsf.ajax.addOnEvent(scrollToTop);">
-									<f:ajax execute="@form" render="@form" />
-								</h:commandButton></li>
-							<li><h:commandButton styleClass="btn btn-default"
-									action="#{streamSearchBean.previous}"
-									disabled="#{not streamSearchBean.previous}"
-									value="#{bundle.previous}"
-									onclick="jsf.ajax.addOnEvent(scrollToTop);">
-									<f:ajax execute="@form" render="@form" />
-								</h:commandButton></li>
-							<li><h:commandButton styleClass="btn btn-default"
-									action="#{streamSearchBean.next}"
-									disabled="#{not streamSearchBean.next}"
-									value="#{bundle.next}"
-									onclick="jsf.ajax.addOnEvent(scrollToTop);">
-									<f:ajax execute="@form" render="@form" />
-								</h:commandButton></li>
-							<li><h:commandButton styleClass="btn btn-default"
-									action="#{streamSearchBean.last}"
-									disabled="#{not streamSearchBean.next}" value="&#187;"
-									onclick="jsf.ajax.addOnEvent(scrollToTop);">
-									<f:ajax execute="@form" render="@form" />
-								</h:commandButton></li>
-						</ul>
-					</div>
-				</ui:fragment>
-
-			</h:form>
-
-		</ui:define>
-
-		<ui:define name="javascript">
-			<h:outputScript library="js" name="primefaces-locales.js" />
-		</ui:define>
-
-	</ui:composition>
-</h:body>
-</html>
+	<ui:define name="javascript">
+		<h:outputScript library="js" name="primefaces-locales.js" />
+	</ui:define>
+</ui:composition>
