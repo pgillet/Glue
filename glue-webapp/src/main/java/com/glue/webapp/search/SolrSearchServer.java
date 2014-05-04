@@ -3,8 +3,8 @@ package com.glue.webapp.search;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -123,7 +123,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
     @Override
     public Map<String, Event> searchAsMap() throws InternalServerException {
 	List<Event> items = search();
-	Map<String, Event> m = new HashMap<>();
+	Map<String, Event> m = new LinkedHashMap<>();
 	for (Event item : items) {
 	    m.put(item.getId(), item);
 	}

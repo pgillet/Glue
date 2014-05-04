@@ -1,9 +1,12 @@
 package com.glue.persistence;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -63,7 +66,15 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	cq.select(event);
 	TypedQuery<Event> q = em.createQuery(cq);
 
-	List<Event> events = q.getResultList();
+	List<Event> events = new ArrayList<>();
+
+	Map<String, Event> map = new HashMap<>();
+	for (Event anEvent : q.getResultList()) {
+	    map.put(anEvent.getId(), anEvent);
+	}
+	for (String anId : ids) {
+	    events.add(map.get(anId));
+	}
 
 	return events;
     }
