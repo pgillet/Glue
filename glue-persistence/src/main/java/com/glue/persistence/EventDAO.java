@@ -68,8 +68,9 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
 	List<Event> events = new ArrayList<>();
 
+	List<Event> results = q.getResultList();
 	Map<String, Event> map = new HashMap<>();
-	for (Event anEvent : q.getResultList()) {
+	for (Event anEvent : results) {
 	    map.put(anEvent.getId(), anEvent);
 	}
 	for (String anId : ids) {
