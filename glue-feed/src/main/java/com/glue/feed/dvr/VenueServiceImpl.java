@@ -112,9 +112,6 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    }
 
 	    venueRef = metricHandler.getBestMatchOver(venue, candidates);
-	    if (venueRef != null) {
-		venue.setParent(venueRef);
-	    }
 	}
 
 	if (venueRef == null) {
@@ -133,17 +130,22 @@ public class VenueServiceImpl extends GluePersistenceService implements
 		    venueRef = match;
 		}
 
-		venueRef.setReference(true);
-		venue.setParent(venueRef);
 	    } else if (hasLatLong) {
 		// Fallback: we consider that a venue with specified lat/long is
 		// good enough
-		venue.setReference(true);
 		venueRef = venue;
 	    }
 	}
 
 	if (venueRef != null) {
+
+	    if (venue.getId().equals(venueRef.getId())) {
+		// The venue has been promoted has a reference venue
+		venue.setReference(true);
+	    } else {
+		venueRef.setReference(true);
+		venue.setParent(venueRef);
+	    }
 
 	    begin();
 	    venueDAO.update(venue);
