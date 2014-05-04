@@ -19,6 +19,7 @@
 		media="screen" />
 	<h:outputStylesheet library="css" name="typeahead.js-bootstrap.css"
 		media="screen" />
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 	<h:outputStylesheet library="css" name="glue.css" media="screen" />
 	<h:outputStylesheet library="css" name="font-awesome.min.css"
 		media="screen" />
@@ -26,6 +27,8 @@
 	<script type="text/javascript"
 		src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
 	<h:outputScript library="js" name="geolocation.js" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+	
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -81,11 +84,11 @@
 
 			<h:form id="main_form" prependId="false"
 				styleClass="navbar-form navbar-left" role="search">
-				<h:inputHidden id="inputLat" value="#{streamSearchBean.latitude}" />
-				<h:inputHidden id="inputLng" value="#{streamSearchBean.longitude}" />
+				<h:inputHidden id="inputLat" value="#{eventSearchBean.latitude}" />
+				<h:inputHidden id="inputLng" value="#{eventSearchBean.longitude}" />
 				<div class="form-group">
 					<h:inputText id="q" styleClass="typeahead form-control" style="min-width: 300px;"
-						p:placeholder="#{bundle.search}" value="#{streamSearchBean.query}" />
+						p:placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
 				</div>
 				<div class="form-group">
 					<div class="input-group" style="width: 196px;">
@@ -98,16 +101,16 @@
 						</span>
 						<h:inputText id="inputLocation" styleClass="form-control"
 							p:placeholder="#{bundle.location}"
-							value="#{streamSearchBean.location}"></h:inputText>
+							value="#{eventSearchBean.location}"></h:inputText>
 					</div>
 				</div>
 				<div class="form-group">
-					<h:commandLink action="#{streamSearchBean.search}"
+					<h:commandLink action="#{eventSearchBean.search0}"
 						styleClass="btn btn-primary glue-glyphicon-btn-lg">
 						<span class="glyphicon glyphicon-search"></span>						
 					</h:commandLink>
 				</div>
-				<h:commandButton id="search_input" action="#{streamSearchBean.search}"
+				<h:commandButton id="search_input" action="#{eventSearchBean.search0}"
 					style="display:none;" />				
 			</h:form>
 
@@ -234,7 +237,7 @@
 	<h:outputScript library="primefaces" name="jquery/jquery.js" />
 	<h:outputScript library="js" name="bootstrap.min.js" />
 	<h:outputScript library="js" name="handlebars.js" />
-	<h:outputScript library="js" name="typeahead.js" />
+	<h:outputScript library="js" name="typeahead.js" />	
 	<h:outputScript library="js" name="glue.js" />
 
 	<h:outputScript>

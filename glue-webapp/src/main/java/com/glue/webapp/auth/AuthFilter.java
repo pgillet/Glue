@@ -32,7 +32,7 @@ import com.glue.persistence.UserDAO;
  */
 @WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
 	@WebInitParam(name = "form-login-page", value = "/login.xhtml"),
-	@WebInitParam(name = "excludes", value = "/main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml, /stream/search-table.xhtml, /stream/search-grid.xhtml, /stream/item.xhtml") })
+	@WebInitParam(name = "excludes", value = "/main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml, /stream/search-table.xhtml, /stream/search-grid.xhtml, /stream/search-map.xhtml, /stream/item.xhtml, , /venues/search.xhtml") })
 public class AuthFilter implements Filter {
 
     private static final String RESOURCES = "/resources";
