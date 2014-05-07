@@ -3,6 +3,7 @@ package com.glue.webapp.beans;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -67,6 +68,15 @@ public class EventSearchBean extends StreamSearchBean implements Serializable {
     }
 
     public String search0() {
+
+	String viewId = FacesContext.getCurrentInstance().getViewRoot()
+		.getViewId();
+	// TODO: should reference view id in a more consistent way!
+	if ("/stream/search.xhtml".equals(viewId)) {
+	    first();
+	    return null;
+	}
+
 	// Redirect
 	return "event-search";
     }
