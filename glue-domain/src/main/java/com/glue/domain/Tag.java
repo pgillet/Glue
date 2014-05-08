@@ -1,5 +1,6 @@
 package com.glue.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Tag {
     /**
      * Tag title.
      */
+    @Column(nullable = false, unique = true)
     private String title;
 
     /**
