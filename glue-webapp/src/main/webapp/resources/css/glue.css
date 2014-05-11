@@ -101,8 +101,10 @@ body { padding-top: 50px; }
 }
 
 .glue-thumbnail {
-	height: 170px;
+	height: auto;
 	width: auto;
+	max-width: 170px;
+	max-height: 170px;
 }
 
 .glue-tile {
