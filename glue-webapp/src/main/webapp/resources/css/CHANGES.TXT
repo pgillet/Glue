@@ -1,1 +1,3 @@
-replace all occurences of "../fonts" by "../resources/fonts"
+Twitter Bootstrap: replace all occurences of "../fonts" by "../resources/fonts"
+Leaflet: replace all occurences of "images" by "..resources/img/leaflet-0.7.2"
+Font Awesome: Idem...

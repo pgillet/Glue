@@ -53,6 +53,12 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 		context.addMessage(null,
 			new FacesMessage(FacesUtil.getString("no.such.venue")));
 	    } else {
+
+		if (venue.getParent() != null) {
+		    // The venue has a reference venue
+		    venue = venue.getParent();
+		}
+
 		first();
 	    }
 	}

@@ -14,7 +14,41 @@
 		</f:metadata>
 	</ui:define>
 
+	<ui:define name="stylesheet">
+		<!-- Additional stylesheets -->
+		<h:outputStylesheet library="css" name="leaflet.css" />
+	</ui:define>
+
 	<ui:define name="content">
+
+		<div class="row">
+			<div class="col-sm-12 col-md-4 col-md-offset-1">
+				<ul class="fa-ul">
+					<li><h4>
+							<h:outputText value="#{venueSearchBean.venue.name}" />
+						</h4></li>
+					<li><h:outputText value="#{venueSearchBean.venue.description}" /></li>
+					<ui:fragment rendered="#{not empty venueSearchBean.venue.address}">
+						<li><span
+							class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+							<h:outputText value="#{venueSearchBean.venue.address}" /></li>
+					</ui:fragment>
+					<ui:fragment rendered="#{not empty venueSearchBean.venue.url}">
+						<li><a
+							href="#{venueSearchBean.venue.url.startsWith('http://') ? venueSearchBean.venue.url : 'http://'.concat(venueSearchBean.venue.url) }"
+							target="_blank"><h:outputText
+									value="#{venueSearchBean.venue.url}" /></a></li>
+					</ui:fragment>
+				</ul>
+			</div>
+			<ui:fragment
+				rendered="#{venueSearchBean.venue.latitude ne 0.0 and venueSearchBean.venue.longitude ne 0.0}">
+				<div class="col-sm-12 col-md-7">
+					<div id="map" style="height: 350px"></div>
+				</div>
+			</ui:fragment>
+		</div>
+		<br />
 		<ui:include src="../stream/search-template.xhtml">
 			<ui:param name="paramBean" value="#{venueSearchBean}" />
 		</ui:include>
@@ -22,5 +56,19 @@
 
 	<ui:define name="javascript">
 		<h:outputScript library="js" name="primefaces-locales.js" />
+		<h:outputScript library="js" name="leaflet.js" />
+		<h:outputScript>
+		// Setting up the map
+		var map = L.map('map').setView([#{venueSearchBean.venue.latitude}, #{venueSearchBean.venue.longitude}], 13);
+		
+		// create the tile layer with correct attribution
+		var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		var osmAttrib='Map data &copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors';
+		L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib}).addTo(map);
+		
+		var marker = L.marker([#{venueSearchBean.venue.latitude}, #{venueSearchBean.venue.longitude}]).addTo(map);
+		
+		marker.bindPopup("#{venueSearchBean.venue.name}").openPopup();
+		</h:outputScript>
 	</ui:define>
 </ui:composition>

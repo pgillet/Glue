@@ -117,8 +117,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
     }
 
     /**
-     * Returns the venue with the given id, with its reference venue and events
-     * if any.
+     * Returns the venue with the given id, with its reference venue if any.
      * 
      * @param venueId
      * @return
