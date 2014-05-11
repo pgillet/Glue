@@ -30,6 +30,7 @@ public class GluePersistenceService extends PersistenceService {
     private VenueDAO venueDAO = new VenueDAO();
     private PerformerDAO performerDAO = new PerformerDAO();
     private UserDAO userDAO = new UserDAO();
+    private TagDAO tagDAO = new TagDAO();
 
     protected GluePersistenceService(String unit, EntityManagerFactory emf,
 	    boolean managed, PersistenceContextType scope) {
@@ -87,6 +88,14 @@ public class GluePersistenceService extends PersistenceService {
     protected EventDAO getEventDAO() {
 	eventDAO.setEntityManager(getEntityManager());
 	return eventDAO;
+    }
+
+    /**
+     * @return the tagDAO
+     */
+    protected TagDAO getTagDAO() {
+	tagDAO.setEntityManager(getEntityManager());
+	return tagDAO;
     }
 
     @Override

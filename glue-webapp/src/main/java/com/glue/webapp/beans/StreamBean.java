@@ -1,9 +1,8 @@
 package com.glue.webapp.beans;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.faces.application.FacesMessage;
@@ -19,8 +18,8 @@ import com.glue.domain.Event;
 import com.glue.domain.Tag;
 import com.glue.domain.User;
 import com.glue.domain.Venue;
-import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.EventController;
+import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.logic.UserController;
 
 @ManagedBean
@@ -205,7 +204,7 @@ public class StreamBean {
 	event.setStartTime(startDate);
 	event.setStopTime(endDate);
 
-	List<Tag> l = new ArrayList<>();
+	Set<Tag> l = new HashSet<>();
 	for (String str : tags) {
 	    Tag tag = new Tag();
 	    tag.setTitle(str);

@@ -141,7 +141,7 @@ public class Event {
      */
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
-    private List<Tag> tags = new ArrayList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     /**
      * Event properties.
@@ -166,7 +166,7 @@ public class Event {
     private boolean reference = false;
 
     @ManyToOne(cascade = { CascadeType.DETACH, /* CascadeType.PERSIST, */
-	    CascadeType.REFRESH, CascadeType.MERGE }, optional = false)
+    CascadeType.REFRESH, CascadeType.MERGE }, optional = false)
     private Venue venue;
 
     /**
@@ -534,7 +534,7 @@ public class Event {
      * 
      * @return the tags
      */
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
 	return tags;
     }
 
@@ -544,7 +544,7 @@ public class Event {
      * @param tags
      *            the tags to set
      */
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
 	this.tags = tags;
     }
 

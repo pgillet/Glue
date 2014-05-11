@@ -1,8 +1,8 @@
 package com.glue.api.application;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class StreamOperationsImpl implements StreamOperations {
 	event.setStartTime(startDate);
 	event.setStopTime(endDate);
 
-	List<Tag> tagObjs = new ArrayList<>();
+	Set<Tag> tagObjs = new HashSet<>();
 	for (String str : tags) {
 	    Tag tag = new Tag();
 	    tag.setTitle(str);

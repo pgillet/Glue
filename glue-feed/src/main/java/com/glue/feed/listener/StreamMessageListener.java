@@ -1,9 +1,13 @@
 package com.glue.feed.listener;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
+import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.FeedMessageListener;
 import com.glue.persistence.GluePersistenceService;
@@ -40,6 +44,18 @@ public class StreamMessageListener extends GluePersistenceService implements
 		LOG.info("Venue already exists = " + venue);
 	    }
 	    event.setVenue(persistentVenue);
+
+	    // Search for existing tags and replace them in event tag list
+	    Set<Tag> tags = new HashSet<>();
+	    for (Tag tag : event.getTags()) {
+		Tag tmpTag = getTagDAO().findDuplicate(tag);
+		if (tmpTag == null) {
+		    tags.add(tag);
+		} else {
+		    tags.add(tmpTag);
+		}
+	    }
+	    event.setTags(tags);
 
 	    if (!getEventDAO().hasDuplicate(event)) {
 		LOG.info("Inserting " + event);
