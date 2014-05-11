@@ -28,11 +28,11 @@
 									rendered="#{eventUtilBean.hasStickyImage(stream)}">
 									<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 										<f:param name="id" value="#{stream.id}"></f:param>
-										<img
-											src="#{eventUtilBean.getStickyImageURI(stream)}"
-											alt="#{stream.title}" class="img-responsive" width="170"
-											height="170" title="#{stream.title}" />
-									</h:link>
+									<img src="#{eventUtilBean.getStickyImageURI(stream)}"
+										alt="#{stream.title}"
+										class="img-responsive glue-thumbnail pull-right"
+										title="#{stream.title}" />
+								</h:link>
 								</ui:fragment>
 							</div>
 							<div class="col-xs-12 col-sm-10 col-md-9">
