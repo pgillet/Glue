@@ -16,7 +16,7 @@
 
 	<ui:define name="stylesheet">
 		<!-- Additional stylesheets -->
-		<h:outputStylesheet library="css" name="leaflet.css" />
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 	</ui:define>
 
 	<ui:define name="content">
@@ -56,19 +56,37 @@
 
 	<ui:define name="javascript">
 		<h:outputScript library="js" name="primefaces-locales.js" />
-		<h:outputScript library="js" name="leaflet.js" />
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+		<script src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
 		<h:outputScript>
-		// Setting up the map
-		var map = L.map('map').setView([#{venueSearchBean.venue.latitude}, #{venueSearchBean.venue.longitude}], 13);
 		
-		// create the tile layer with correct attribution
+		// OpenStreetMap layer
 		var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 		var osmAttrib='Map data &copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors';
-		L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib}).addTo(map);
+		var osmLayer = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
+				
+		// MapQuest layer
+		var mqLayer = MQ.mapLayer();
+		
+		// Setting up the map
+		var map = L.map('map', {
+		    center: [#{venueSearchBean.venue.latitude}, #{venueSearchBean.venue.longitude}],
+		    zoom: 13,
+		    layers: [osmLayer, mqLayer]
+		});
+		
+		var baseMaps = {
+		    "OpenStreetMap": osmLayer,
+		    "MapQuest": mqLayer
+		};
+		
+		L.control.layers(baseMaps).addTo(map);
 		
 		var marker = L.marker([#{venueSearchBean.venue.latitude}, #{venueSearchBean.venue.longitude}]).addTo(map);
-		
 		marker.bindPopup("#{venueSearchBean.venue.name}").openPopup();
+		
+		L.layerGroup([marker]).addTo(map);		
+		
 		</h:outputScript>
 	</ui:define>
 </ui:composition>
