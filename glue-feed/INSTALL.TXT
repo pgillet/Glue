@@ -1,0 +1,5 @@
+mvn clean compile assembly:single
+Copy the generated jar file in the desired location
+Copy the jobs.xml file next to the JAR file
+
+java -jar glue-feed-<VERSION>.jar
