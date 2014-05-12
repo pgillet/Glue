@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+	version="1.8">
+
+	<schedule>		
+		<job>
+			<name>SoToulouseAgenda</name>
+			<group>TOULOUSE</group>
+			<description>Agenda des manifestations culturelles So Toulouse</description>
+			<job-class>com.glue.feed.toulouse.open.data.so.SoToulouseAgendaJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>SoToulouseAgendaTrigger</name>
+				<group>TOULOUSE</group>
+				<job-name>SoToulouseAgenda</job-name>
+				<job-group>TOULOUSE</job-group>
+				<!-- trigger twice a week, every Tuesday and Friday at 12:00 am -->
+				<cron-expression>0 0 0 ? * MON,THU</cron-expression>
+			</cron>
+		</trigger>
+		
+		<job>
+			<name>LibraryAgenda</name>
+			<group>TOULOUSE</group>
+			<description>Agenda des manifestations de la bibliothèque de Toulouse</description>
+			<job-class>com.glue.feed.toulouse.open.data.biblio.LibraryAgendaJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>LibraryAgendaTrigger</name>
+				<group>TOULOUSE</group>
+				<job-name>LibraryAgenda</job-name>
+				<job-group>TOULOUSE</job-group>
+				<!-- trigger every day at 02:00 am -->
+				<cron-expression>0 0 2 * * ?</cron-expression>
+			</cron>
+		</trigger>
+		
+		<job>
+			<name>Bikini</name>
+			<group>TOULOUSE</group>
+			<description>Le Bikini RSS feed</description>
+			<job-class>com.glue.feed.toulouse.bikini.BikiniJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>BikiniTrigger</name>
+				<group>TOULOUSE</group>
+				<job-name>Bikini</job-name>
+				<job-group>TOULOUSE</job-group>
+				<!-- trigger every Wednesday at 12:00 am -->
+				<cron-expression>0 0 0 ? * WED</cron-expression>
+			</cron>
+		</trigger>
+		
+		<job>
+			<name>Venue DVR</name>
+			<group>DVR</group>
+			<description>Data validation and reconciliation</description>
+			<job-class>com.glue.feed.dvr.VenueReconciliationJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>Venue DVR Trigger</name>
+				<group>DVR</group>
+				<job-name>Venue DVR</job-name>
+				<job-group>DVR</job-group>
+				<!-- trigger every day at 03:00 am -->
+				<cron-expression>0 0 3 * * ?</cron-expression>
+			</cron>
+		</trigger>
+		
+		<!-- <job>
+			<name>YouTube</name>
+			<group>CONTENT_FEED</group>
+			<description>YouTube feed</description>
+			<job-class>com.glue.feed.youtube.YoutubeMediaFeeder</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>YouTubeTrigger</name>
+				<group>CONTENT_FEED</group>
+				<job-name>YouTube</job-name>
+				<job-group>CONTENT_FEED</job-group>
+				trigger every day at 01:00 am
+				<cron-expression>0 0 1 * * ?</cron-expression>
+			</cron>
+		</trigger> -->
+		
+		<job>
+			<name>Image Fetch</name>
+			<group>CONTENT_FEED</group>
+			<description>Image fetching</description>
+			<job-class>com.glue.feed.img.ImageFetchJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>Image Fetch Trigger</name>
+				<group>CONTENT_FEED</group>
+				<job-name>Image Fetch</job-name>
+				<job-group>CONTENT_FEED</job-group>
+				<!-- trigger every day at 04:00 am -->
+				<cron-expression>0 0 4 * * ?</cron-expression>
+			</cron>
+		</trigger>
+		
+	</schedule>
+</job-scheduling-data>
