@@ -2,7 +2,8 @@ package com.glue.domain;
 
 
 public enum EventCategory {
-	MUSIC("#3a87ad"), PERFORMING_ART("#b94a48"), SPORT("#468847"), CONFERENCE("#c09853"), EXHIBITION("#ef7c00"), OTHER(
+    MUSIC("#3a87ad"), PERFORMING_ART("#b94a48"), SPORT("#468847"), CONFERENCE(
+	    "#c09853"), EXHIBITION("#ef7c00"), YOUTH("#5bc0de"), OTHER(
 			"#bd1789");
 
 	private final String color;
