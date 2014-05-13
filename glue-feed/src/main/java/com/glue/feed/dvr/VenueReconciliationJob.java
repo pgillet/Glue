@@ -23,7 +23,7 @@ public class VenueReconciliationJob implements Job {
 	    throws JobExecutionException {
 
 	try (VenueService service = new VenueServiceImpl()) {
-	    List<Venue> venues = service.getUnresolvedVenues(100);
+	    List<Venue> venues = service.getUnresolvedVenues(500);
 
 	    List<Venue> nomatches = new ArrayList<>();
 
