@@ -40,20 +40,21 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 
 	// Matching is based on lat/long if any, name/city otherwise.
 	// There can be only one venue per lat/long couple.
-	boolean hasLatLong = (v.getLatitude() != 0.0d && v
-		.getLongitude() != 0.0d);
-	
+	boolean hasLatLong = (v.getLatitude() != 0.0d && v.getLongitude() != 0.0d);
+
 	Expression<Boolean> wc;
-	if(hasLatLong){
-	    wc = cb.and(
+	if (hasLatLong) {
+	    wc = cb.or(cb.and(
 		    cb.equal(venue.get(Venue_.latitude), v.getLatitude()),
-		    cb.equal(venue.get(Venue_.longitude), v.getLongitude()));
+		    cb.equal(venue.get(Venue_.longitude), v.getLongitude())),
+		    cb.and(cb.equal(venue.get(Venue_.name), v.getName()),
+			    cb.equal(venue.get(Venue_.city), v.getCity())));
 	} else {
 	    // Fallback
 	    wc = cb.and(cb.equal(venue.get(Venue_.name), v.getName()),
 		    cb.equal(venue.get(Venue_.city), v.getCity()));
 	}
-	
+
 	cq.where(wc);
 
 	cq.select(venue);

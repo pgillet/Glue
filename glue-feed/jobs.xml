@@ -18,7 +18,7 @@
 				<group>TOULOUSE</group>
 				<job-name>SoToulouseAgenda</job-name>
 				<job-group>TOULOUSE</job-group>
-				<!-- trigger twice a week, every Tuesday and Friday at 12:00 am -->
+				<!-- trigger twice a week, every Tuesday and Friday at 00:00 am -->
 				<cron-expression>0 0 0 ? * MON,THU</cron-expression>
 			</cron>
 		</trigger>
@@ -35,8 +35,8 @@
 				<group>TOULOUSE</group>
 				<job-name>LibraryAgenda</job-name>
 				<job-group>TOULOUSE</job-group>
-				<!-- trigger every day at 02:00 am -->
-				<cron-expression>0 0 2 * * ?</cron-expression>
+				<!-- trigger every day at 00:15 am -->
+				<cron-expression>0 15 0 * * ?</cron-expression>
 			</cron>
 		</trigger>
 		
@@ -52,8 +52,8 @@
 				<group>TOULOUSE</group>
 				<job-name>Bikini</job-name>
 				<job-group>TOULOUSE</job-group>
-				<!-- trigger every Wednesday at 12:00 am -->
-				<cron-expression>0 0 0 ? * WED</cron-expression>
+				<!-- trigger every Wednesday at 00:30 am -->
+				<cron-expression>0 30 0 ? * WED</cron-expression>
 			</cron>
 		</trigger>
 		
