@@ -56,8 +56,10 @@
 								<ul class="fa-ul">
 									<li><h:commandLink action="#{paramBean.selectCategory}"
 										onclick="jsf.ajax.addOnEvent(scrollToTop);">
-										<i class="fa-li fa fa-square"
-											style="color: #{stream.category.color};"></i>
+										<span title="#{bundle[stream.category.name.toLowerCase()]}"
+											class="glue-badge-li glue-badge"
+											style="background-color: #{stream.category.color};"><h:outputText
+												value="#{bundle[stream.category.name.toLowerCase()].substring(0,1)}"></h:outputText></span>
 										<f:param name="cat" value="#{stream.category.name}"></f:param>
 										<f:ajax execute="@form" render="@form" />
 									</h:commandLink>
@@ -72,37 +74,32 @@
 									<!-- <li><p>
 								<h:outputText value="#{stream.summary}" escape="false" />
 							</p></li> -->
-									<li><i class="fa-li fa fa-calendar text-muted"></i>
-										<h6>
-											<ui:fragment
-												rendered="#{stream.startTime lt stream.stopTime}">
-												<h:outputText value="#{bundle.stream_date_from} " />
-												<h:outputText value="#{stream.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short}" />
-												</h:outputText>
-												<h:outputText value=" #{bundle.stream_date_to} " />
-												<h:outputText value="#{stream.stopTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short}" />
-												</h:outputText>
-											</ui:fragment>
-											<ui:fragment
-												rendered="#{stream.startTime ge stream.stopTime}">
-												<h:outputText value="#{stream.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short}" />
-												</h:outputText>
-											</ui:fragment>
-										</h6></li>
+									<li><i class="fa-li fa fa-calendar text-muted"></i> <span
+										class="text-success"> <ui:fragment
+											rendered="#{stream.startTime lt stream.stopTime}">
+											<h:outputText value="#{bundle.stream_date_from} " />
+											<h:outputText value="#{stream.startTime}">
+												<f:convertDateTime pattern="#{bundle.date_format_short}" />
+											</h:outputText>
+											<h:outputText value=" #{bundle.stream_date_to} " />
+											<h:outputText value="#{stream.stopTime}">
+												<f:convertDateTime pattern="#{bundle.date_format_short}" />
+											</h:outputText>
+										</ui:fragment> <ui:fragment
+											rendered="#{stream.startTime ge stream.stopTime}">
+											<h:outputText value="#{stream.startTime}">
+												<f:convertDateTime pattern="#{bundle.date_format_short}" />
+											</h:outputText>
+										</ui:fragment></span></li>
 									<li>
-										<h6>
-											<h:link includeViewParams="true"
-												outcome="/venues/search.xhtml" styleClass="glue-a">
-												<span
-													class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
-												<strong>#{stream.venue.name}</strong> - <span
-													class="text-muted">#{stream.venue.city}</span>
-												<f:param name="v" value="#{stream.venue.id}"></f:param>
-											</h:link>
-										</h6>
+										<h:link includeViewParams="true"
+											outcome="/venues/search.xhtml" styleClass="glue-a">
+											<span
+												class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+											#{stream.venue.name} - <span
+												class="text-muted">#{stream.venue.city}</span>
+											<f:param name="v" value="#{stream.venue.id}"></f:param>
+										</h:link>
 									</li>
 							</ul>
 							</div>

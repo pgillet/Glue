@@ -124,3 +124,34 @@ body { padding-top: 50px; }
 	color : darken;
 	text-decoration: none;
 }
+
+.glue-badge {
+  display: inline-block;
+  padding: .7em;
+  font-size: 70%;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  font-family: monospace;
+}
+
+.glue-badge[href]:hover,
+.glue-badge[href]:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.glue-badge:empty {
+  display: none;
+}
+
+.glue-badge-li {
+  position: absolute;
+  left: -2.642857142857143em;
+  width: 2.242857142857143em;
+  top: -0.04285714285714285em;
+  text-align: center;
+}

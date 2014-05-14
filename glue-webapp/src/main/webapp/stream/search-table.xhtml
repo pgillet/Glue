@@ -33,14 +33,23 @@
 							<ui:repeat var="stream" value="#{paramBean.events}"
 								varStatus="status">
 								<tr>
-									<td style="width: 20px;"><i class="fa fa-square"
-										style="color: #{stream.category.color};"></i></td>
+									<td style="width: 30px;">
+										<h:commandLink action="#{paramBean.selectCategory}"
+										onclick="jsf.ajax.addOnEvent(scrollToTop);">
+										<span title="#{bundle[stream.category.name.toLowerCase()]}"
+											class="glue-badge"
+											style="background-color: #{stream.category.color};"><h:outputText
+												value="#{bundle[stream.category.name.toLowerCase()].substring(0,1)}"></h:outputText></span>
+										<f:param name="cat" value="#{stream.category.name}"></f:param>
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink>
+								</td>
 									<td style="width: 40%;"><small><h:link
 												includeViewParams="true" value="#{stream.title}"
 												outcome="/stream/item.xhtml" title="#{stream.title}">
 												<f:param name="id" value="#{stream.id}"></f:param>
 											</h:link></small></td>
-									<td style="width: 17%;"><small><ui:fragment
+									<td style="width: 17%;"><span class="text-success"><small><ui:fragment
 												rendered="#{stream.startTime lt stream.stopTime}">
 												<h:outputText value="#{bundle.stream_date_from} " />
 												<h:outputText value="#{stream.startTime}">
@@ -55,7 +64,7 @@
 												<h:outputText value="#{stream.startTime}">
 													<f:convertDateTime pattern="#{bundle.date_format_short}" />
 												</h:outputText>
-											</ui:fragment></small></td>
+											</ui:fragment></small></span></td>
 									<td><small><h:link includeViewParams="true"
 											value="#{stream.venue.name}, #{stream.venue.city}"
 											title="#{stream.venue.name}, #{stream.venue.city}"
