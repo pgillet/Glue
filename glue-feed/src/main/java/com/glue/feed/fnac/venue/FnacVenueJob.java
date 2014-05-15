@@ -1,12 +1,13 @@
 package com.glue.feed.fnac.venue;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -18,6 +19,8 @@ import com.glue.domain.Venue;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.error.StoreErrorListener;
+import com.glue.feed.io.FileExtensionFilter;
+import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.VenueMessageListener;
 import com.glue.feed.xml.XMLFeedParser;
 
@@ -37,19 +40,14 @@ public class FnacVenueJob implements Job {
 	    URL url = new URL(
 		    "http://www.francebillet.com/static/uploads/Newspart/zip/lieu_20140411.zip");
 
-	    FileInputStream fin = new FileInputStream(new File(
-		    "C:\\Users\\Greg\\Downloads\\lieu_20140411.xml"));
-
-	    // ZipInputStream zin = new ZipInputStream(url.openStream());
-	    // ZipInputStream zin = new ZipInputStream(fin);
-	    // ZipEntry entry = GlueIOUtils.getEntry(zin, new
-	    // FileExtensionFilter(
-	    // ".xml"));
-	    // InputStream in = GlueIOUtils.getDeferredInputStream(zin,
-	    // entry.getName());
+	    ZipInputStream zin = new ZipInputStream(url.openStream());
+	    ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
+		    ".xml"));
+	    InputStream in = GlueIOUtils.getDeferredInputStream(zin,
+		    entry.getName());
 
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    fin, Charset.forName("ISO-8859-1")));
+		    in, Charset.forName("ISO-8859-1")));
 
 	    XMLFeedParser<Lieu> parser = new XMLFeedParser<Lieu>(reader,
 		    Lieu.class);
