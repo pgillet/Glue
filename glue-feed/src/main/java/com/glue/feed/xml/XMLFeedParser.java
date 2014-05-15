@@ -29,141 +29,142 @@ import com.glue.feed.error.ErrorManager;
 import com.glue.feed.listener.DefaultFeedMessageListener;
 
 public class XMLFeedParser<T> implements ErrorHandler, ErrorManager,
-		FeedParser<T> {
+	FeedParser<T> {
 
-	static final Logger LOG = LoggerFactory.getLogger(XMLFeedParser.class);
+    static final Logger LOG = LoggerFactory.getLogger(XMLFeedParser.class);
 
-	private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<T>();
+    private FeedMessageListener<T> feedMessageListener = new DefaultFeedMessageListener<T>();
 
-	private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
+    private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
-	XMLStreamReader xsr;
-	Class<T> clazz;
-	Unmarshaller unmarshaller;
+    XMLStreamReader xsr;
+    Class<T> clazz;
+    Unmarshaller unmarshaller;
 
-	/**
-	 * Equivalent to <code>this(reader, new ElementFilter(clazz), clazz)</code>.
-	 * 
-	 * @param reader
-	 * @param clazz
-	 * @throws XMLStreamException
-	 * @throws FactoryConfigurationError
-	 * @throws JAXBException
-	 */
-	public XMLFeedParser(Reader reader, Class<T> clazz)
-			throws XMLStreamException, FactoryConfigurationError, JAXBException {
-		this(reader, new ElementFilter(clazz), clazz);
+    /**
+     * Equivalent to <code>this(reader, new ElementFilter(clazz), clazz)</code>.
+     * 
+     * @param reader
+     * @param clazz
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     * @throws JAXBException
+     */
+    public XMLFeedParser(Reader reader, Class<T> clazz)
+	    throws XMLStreamException, FactoryConfigurationError, JAXBException {
+	this(reader, new ElementFilter(clazz), clazz);
+    }
+
+    public XMLFeedParser(Reader reader, StreamFilter filter, Class<T> clazz)
+	    throws XMLStreamException, FactoryConfigurationError, JAXBException {
+	this.clazz = clazz;
+	this.unmarshaller = JAXBContext.newInstance(clazz).createUnmarshaller();
+
+	XMLInputFactory xmlif = XMLInputFactory.newInstance();
+	xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
+	this.xsr = xmlif.createFilteredReader(
+		xmlif.createXMLStreamReader(reader), filter);
+    }
+
+    public T next() throws XMLStreamException, JAXBException {
+	if (!hasNext())
+	    throw new NoSuchElementException();
+
+	T value = unmarshaller.unmarshal(xsr, clazz).getValue();
+
+	skipElements(XMLEvent.SPACE, XMLEvent.CHARACTERS, XMLEvent.END_ELEMENT);
+	return value;
+    }
+
+    public boolean hasNext() throws XMLStreamException {
+	return xsr.hasNext();
+    }
+
+    public void close() throws IOException {
+	if (feedMessageListener != null) {
+	    feedMessageListener.close();
 	}
-
-	public XMLFeedParser(Reader reader, StreamFilter filter, Class<T> clazz)
-			throws XMLStreamException, FactoryConfigurationError, JAXBException {
-		this.clazz = clazz;
-		this.unmarshaller = JAXBContext.newInstance(clazz).createUnmarshaller();
-
-		XMLInputFactory xmlif = XMLInputFactory.newInstance();
-		this.xsr = xmlif.createFilteredReader(
-				xmlif.createXMLStreamReader(reader), filter);
+	try {
+	    xsr.close();
+	} catch (XMLStreamException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new IOException(e);
 	}
+    }
 
-	public T next() throws XMLStreamException, JAXBException {
-		if (!hasNext())
-			throw new NoSuchElementException();
+    /**
+     * 
+     * @throws IOException
+     * @throws NullPointerException
+     *             If a listener has not been set for this parser
+     */
+    @Override
+    public void read() throws Exception {
+	int num = 0;
 
-		T value = unmarshaller.unmarshal(xsr, clazz).getValue();
-
-		skipElements(XMLEvent.SPACE, XMLEvent.CHARACTERS, XMLEvent.END_ELEMENT);
-		return value;
+	while (xsr.hasNext()) {
+	    try {
+		T msg = next();
+		num++;
+		feedMessageListener.newMessage(msg);
+	    } catch (Exception e) {
+		LOG.error(e.getMessage(), e);
+		errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
+			e.getMessage(), e, "xml", num);
+	    }
 	}
+    }
 
-	public boolean hasNext() throws XMLStreamException {
-		return xsr.hasNext();
+    private void skipElements(Integer... elements) throws XMLStreamException {
+	int eventType = xsr.getEventType();
+
+	List<Integer> types = Arrays.asList(elements);
+	while (types.contains(eventType)) {
+	    eventType = xsr.next();
 	}
+    }
 
-	public void close() throws IOException {
-		if (feedMessageListener != null) {
-			feedMessageListener.close();
-		}
-		try {
-			xsr.close();
-		} catch (XMLStreamException e) {
-			LOG.error(e.getMessage(), e);
-			throw new IOException(e);
-		}
-	}
+    /**
+     * @return the feedMessageListener
+     */
+    @Override
+    public FeedMessageListener<T> getFeedMessageListener() {
+	return feedMessageListener;
+    }
 
-	/**
-	 * 
-	 * @throws IOException
-	 * @throws NullPointerException
-	 *             If a listener has not been set for this parser
-	 */
-	@Override
-	public void read() throws Exception {
-		int num = 0;
+    /**
+     * @param feedMessageListener
+     *            the feedMessageListener to set
+     */
+    public void setFeedMessageListener(
+	    FeedMessageListener<T> feedMessageListener) {
+	this.feedMessageListener = feedMessageListener;
+    }
 
-		while (xsr.hasNext()) {
-			try {
-				T msg = next();
-				num++;
-				feedMessageListener.newMessage(msg);
-			} catch (Exception e) {
-				LOG.error(e.getMessage(), e);
-				errorDispatcher.fireErrorEvent(ErrorLevel.ERROR,
-						e.getMessage(), e, "xml", num);
-			}
-		}
-	}
+    @Override
+    public void flush() throws IOException {
+	errorDispatcher.flush();
+    }
 
-	private void skipElements(Integer... elements) throws XMLStreamException {
-		int eventType = xsr.getEventType();
+    @Override
+    public ErrorListener[] getErrorListeners() {
+	return errorDispatcher.getErrorListeners();
+    }
 
-		List<Integer> types = Arrays.asList(elements);
-		while (types.contains(eventType)) {
-			eventType = xsr.next();
-		}
-	}
+    @Override
+    public void addErrorListener(ErrorListener l) {
+	errorDispatcher.addErrorListener(l);
+    }
 
-	/**
-	 * @return the feedMessageListener
-	 */
-	@Override
-	public FeedMessageListener<T> getFeedMessageListener() {
-		return feedMessageListener;
-	}
+    @Override
+    public void removeErrorListener(ErrorListener l) {
+	errorDispatcher.removeErrorListener(l);
+    }
 
-	/**
-	 * @param feedMessageListener
-	 *            the feedMessageListener to set
-	 */
-	public void setFeedMessageListener(
-			FeedMessageListener<T> feedMessageListener) {
-		this.feedMessageListener = feedMessageListener;
-	}
-
-	@Override
-	public void flush() throws IOException {
-		errorDispatcher.flush();
-	}
-
-	@Override
-	public ErrorListener[] getErrorListeners() {
-		return errorDispatcher.getErrorListeners();
-	}
-
-	@Override
-	public void addErrorListener(ErrorListener l) {
-		errorDispatcher.addErrorListener(l);
-	}
-
-	@Override
-	public void removeErrorListener(ErrorListener l) {
-		errorDispatcher.removeErrorListener(l);
-	}
-
-	@Override
-	public void fireErrorEvent(ErrorLevel lvl, String message, Throwable cause,
-			String source, int lineNumber) {
-		errorDispatcher.fireErrorEvent(lvl, message, cause, source, lineNumber);
-	}
+    @Override
+    public void fireErrorEvent(ErrorLevel lvl, String message, Throwable cause,
+	    String source, int lineNumber) {
+	errorDispatcher.fireErrorEvent(lvl, message, cause, source, lineNumber);
+    }
 
 }
