@@ -56,13 +56,30 @@ $(document).ready(function() {
 });
 
 //Location field
-$('#inputLocation').on('input.inputLocation').keypress(function (e) {
+$('#ql').on('input.ql').keypress(function (e) {
 	if (e.which == 13) {
 		 codeAddress();
     }
 });
 
-$('#inputLocation').on('input.inputLocation').change(function (e) {
+$('#ql').on('input.ql').change(function (e) {
 	codeAddress0(undefined);
 });
-	
+
+
+function createmap(events) {
+	var map = L.map('map').setView([43.5882114,1.4436048], 12);
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	}).addTo(map);
+	L.marker([43.610228,1.445682]).addTo(map); 
+	$.each(events, function(index) {
+		if (events[index].venue.parent != null) {
+			L.marker([events[index].venue.parent.latitude, events[index].venue.parent.longitude]).addTo(map)
+			.bindPopup('<strong>'+events[index].title+'</strong><br>@ '+events[index].venue.name);
+		} 		
+		// add a marker in the given location
+		//L.marker([events[index].venue.parent.latitude, events[index].venue.parent.longitude]).addTo(map);        
+    });
+}
+
