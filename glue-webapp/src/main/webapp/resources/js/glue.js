@@ -56,13 +56,13 @@ $(document).ready(function() {
 });
 
 //Location field
-$('#inputLocation').on('input.inputLocation').keypress(function (e) {
+$('#ql').on('input.ql').keypress(function (e) {
 	if (e.which == 13) {
 		 codeAddress();
     }
 });
 
-$('#inputLocation').on('input.inputLocation').change(function (e) {
+$('#ql').on('input.ql').change(function (e) {
 	codeAddress0(undefined);
 });
 	

@@ -77,7 +77,9 @@ public class GlueViewHandler extends ViewHandlerWrapper {
 		    Object value = viewParam.getValue();
 		    System.out.println("ViewParam " + name + " = " + value);
 
-		    ub.addParameter(name, value.toString());
+		    if (value != null) {
+			ub.addParameter(name, value.toString());
+		    }
 		}
 
 		actionURL = ub.toString();

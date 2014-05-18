@@ -75,7 +75,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 
     public void toggleDisplay() {
 	String displayParam = FacesUtil
-		.getRequestParameter(QueryParams.PARAM_DISPLAY);
+		.getRequestParameter(QueryParams.DISPLAY);
 	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
 	LOG.debug("Toggle display = " + display);
 
@@ -258,7 +258,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
     }
 
     public void enableCategory() {
-	String cat = FacesUtil.getRequestParameter(QueryParams.PARAM_CAT);
+	String cat = FacesUtil.getRequestParameter(QueryParams.CATEGORY);
 	LOG.debug("Toggle category = " + cat);
 
 	if (!getCatSelection().remove(cat)) {
@@ -269,7 +269,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
     }
 
     public void selectCategory() {
-	String cat = FacesUtil.getRequestParameter(QueryParams.PARAM_CAT);
+	String cat = FacesUtil.getRequestParameter(QueryParams.CATEGORY);
 	LOG.debug("Select category = " + cat);
 
 	// Select only the chosen category

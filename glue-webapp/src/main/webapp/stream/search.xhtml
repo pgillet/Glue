@@ -10,7 +10,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="metadata">
 		<f:metadata>
-			<f:viewParam name="q" value="#{eventSearchBean.query}" />
+			<f:viewParam name="q" value="#{flash.now.q}" />
+			<f:viewParam name="ql" value="#{flash.now.ql}" />
+			<f:viewParam name="lat" value="#{flash.now.lat}" />
+			<f:viewParam name="lng" value="#{flash.now.lng}" />
 		</f:metadata>
 	</ui:define>
 
