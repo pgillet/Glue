@@ -37,7 +37,7 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
     @PostConstruct
     private void init() {
 	String rowsPerPageParam = FacesUtil
-		.getRequestParameter(QueryParams.PARAM_ROWS_PER_PAGE);
+		.getRequestParameter(QueryParams.ROWS_PER_PAGE);
 	if (rowsPerPageParam != null) {
 	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
 	}

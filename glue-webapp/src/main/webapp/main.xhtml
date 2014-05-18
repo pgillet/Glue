@@ -7,6 +7,15 @@
 	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <h:body>
 	<ui:composition template="./stream/search.xhtml">
+		
+		<ui:define name="metadata">
+			<f:metadata>
+				<f:viewParam name="q" value="#{eventSearchBean.query}" />
+				<f:viewParam name="ql" value="#{eventSearchBean.location}" />
+				<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
+				<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
+			</f:metadata>
+		</ui:define>
 		<ui:define name="header">
 
 			<div id="info" class="jumbotron glue-jumbotron">

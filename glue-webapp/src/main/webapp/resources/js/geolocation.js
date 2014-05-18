@@ -6,10 +6,11 @@ var geocoder;
 // var autocomplete;
 
 function initialize() {
+	
 	inputLocation = /** @type {HTMLInputElement} */
-	document.getElementById("inputLocation");
-	inputLat = document.getElementById("inputLat");
-	inputLng = document.getElementById("inputLng");
+	document.getElementById("ql");
+	inputLat = document.getElementById("lat");
+	inputLng = document.getElementById("lng");
 
 	// SearchBox vs Autocomplete ?
 	// autocomplete = new google.maps.places.Autocomplete(inputLocation);

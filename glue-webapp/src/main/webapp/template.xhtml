@@ -29,9 +29,6 @@
 	<!-- Additional stylesheets -->	
 	<ui:insert name="stylesheet"/>	
 
-	<script type="text/javascript"
-		src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
-	<h:outputScript library="js" name="geolocation.js" />
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -75,7 +72,7 @@
 					class="icon-bar"></span>
 			</button>
 
-			<h:link class="navbar-brand glue-brand" outcome="main">
+			<h:link class="navbar-brand glue-brand" outcome="/index">
 				<h:graphicImage library="img" name="glue-icon.svg" width="25"
 					style="vertical-align:top; position: relative; top: -7px;" />
 				<span class="text-muted">glue</span>
@@ -87,8 +84,8 @@
 
 			<h:form id="main_form" prependId="false"
 				styleClass="navbar-form navbar-left" role="search">
-				<h:inputHidden id="inputLat" value="#{eventSearchBean.latitude}" />
-				<h:inputHidden id="inputLng" value="#{eventSearchBean.longitude}" />
+				<h:inputHidden id="lat" value="#{eventSearchBean.latitude}" />
+				<h:inputHidden id="lng" value="#{eventSearchBean.longitude}" />
 				<div class="form-group">
 					<h:inputText id="q" styleClass="typeahead form-control" style="min-width: 300px;"
 						p:placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
@@ -102,7 +99,7 @@
 								<span class="glyphicon glyphicon-map-marker text-muted"></span>
 							</button>
 						</span>
-						<h:inputText id="inputLocation" styleClass="form-control"
+						<h:inputText id="ql" styleClass="form-control"
 							p:placeholder="#{bundle.location}"
 							value="#{eventSearchBean.location}"></h:inputText>
 					</div>
@@ -142,10 +139,10 @@
 							</ul></li>
 					</ui:fragment>
 					<ui:fragment rendered="#{empty request.remoteUser}">
-						<li><h:link value="#{bundle.sign_in}" outcome="login"
+						<li><h:link value="#{bundle.sign_in}" outcome="/login"
 								class="navbar-text" disabled="true"
 								title="#{bundle.feature_not_available}" /></li>
-						<li><h:link value="#{bundle.sign_up}" outcome="register"
+						<li><h:link value="#{bundle.sign_up}" outcome="/register"
 								class="navbar-text" disabled="true"
 								title="#{bundle.feature_not_available}" /></li>
 					</ui:fragment>
@@ -242,6 +239,10 @@
 	<h:outputScript library="js" name="handlebars.js" />
 	<h:outputScript library="js" name="typeahead.js" />
 	<h:outputScript library="js" name="glue.js" />
+	
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+	<h:outputScript library="js" name="geolocation.js" />
 
 	<h:outputScript>
 	$('input').popover({trigger: 'focus'});
