@@ -7,7 +7,7 @@
 	<display-name>glue-webapp</display-name>
 
 	<welcome-file-list>
-		<welcome-file>main.xhtml</welcome-file>
+		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<resource-ref>

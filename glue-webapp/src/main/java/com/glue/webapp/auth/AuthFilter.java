@@ -11,8 +11,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,9 +28,11 @@ import com.glue.persistence.UserDAO;
  * @author pgillet
  * 
  */
-@WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
-	@WebInitParam(name = "form-login-page", value = "/login.xhtml"),
-	@WebInitParam(name = "excludes", value = "/robots.txt, /main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml, /stream/item.xhtml, /venues/search.xhtml") })
+// @WebFilter(filterName = "AuthFilter", urlPatterns = { "/*" }, initParams = {
+// @WebInitParam(name = "form-login-page", value = "/login.xhtml"),
+// @WebInitParam(name = "excludes", value =
+// "/robots.txt, /main.xhtml, /fr/main.xhtml, /register.xhtml, /stream/search.xhtml, /stream/item.xhtml, /venues/search.xhtml")
+// })
 public class AuthFilter implements Filter {
 
     private static final String RESOURCES = "/resources";
