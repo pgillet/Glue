@@ -98,6 +98,7 @@ body { padding-top: 50px; }
 	white-space: nowrap; 
 	overflow: hidden; 
 	text-overflow: ellipsis;
+	vertical-align: middle !important;
 }
 
 .glue-thumbnail {
@@ -127,7 +128,7 @@ body { padding-top: 50px; }
 
 .glue-badge {
   display: inline-block;
-  padding: .7em;
+  padding: .6em .7em;
   font-size: 70%;
   line-height: 1;
   color: #fff;
@@ -150,8 +151,6 @@ body { padding-top: 50px; }
 
 .glue-badge-li {
   position: absolute;
-  left: -2.642857142857143em;
-  width: 2.242857142857143em;
-  top: -0.04285714285714285em;
-  text-align: center;
+  left: -2.742857142857143em;
+  min-width: 2.242857142857143em;
 }
