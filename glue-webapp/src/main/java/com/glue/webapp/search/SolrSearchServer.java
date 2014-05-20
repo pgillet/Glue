@@ -181,26 +181,34 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	query.setParam("qt", "/event_select");
 
 	// Add location to query if no lat/lon parameter
+	boolean hasLatLon = false;
 	boolean addLocation = false;
 
 	// Get dates
-	String from = ((startDate != null) ? df.format(startDate) : "NOW-1DAYS");
+	String from = ((startDate != null) ? df.format(startDate) : "NOW/HOUR");
 	String to = ((endDate != null) ? df.format(endDate) : "*");
-
-	// From format should be = 2000-01-01T00:00:00Z
-	// http://wiki.apache.org/solr/FunctionQuery#ms
-	// Boost streams
-	query.setParam("bf", "recip(abs(ms(" + from + "," + FIELD_START_TIME
-		+ ")),3.16e-11,1,1)");
 
 	// Location filtering
 	if ((getLatitude() != 0 || getLongitude() != 0)) {
-	    query.addFilterQuery("{!geofilt sfield=latlng}");
+	    query.addFilterQuery("{!geofilt}");
+	    query.add("sfield", "latlng");
 	    query.add("pt", getLatitude() + "," + getLongitude());
-	    query.add("d", "50");
+	    query.add("d", "30");
+	    hasLatLon = true;
 	} else if (!StringUtils.isEmpty(location)) {
 	    addLocation = true;
 	}
+
+	// Boost dates and location
+	String boostDates = "if(max(ms(" + from + "," + FIELD_START_TIME
+		+ "),0),10000,recip(abs(ms(" + from + "," + FIELD_START_TIME
+		+ ")),3.16e-10,10000,1))";
+	String boostLocation = "recip(geodist(),1,1000,10)";
+	String boost = boostDates;
+	if (hasLatLon) {
+	    boost = "sum(" + boostDates + "," + boostLocation + ")";
+	}
+	query.setParam("boost", boost);
 
 	// Category filtering
 	if (categories != null && categories.length > 0) {
