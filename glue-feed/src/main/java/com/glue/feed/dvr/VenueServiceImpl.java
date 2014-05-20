@@ -95,8 +95,12 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	if (hasLatLong) {
 
+	    long start = System.currentTimeMillis();
 	    List<Venue> del = findWithinDistance(venue.getLatitude(),
 		    venue.getLongitude(), distance);
+	    long end = System.currentTimeMillis();
+	    LOG.info("findWithinDistance took " + (end - start) + " ms");
+	    
 
 	    // Filter venues: keep only reference venues and remove the venue to
 	    // be resolved.
