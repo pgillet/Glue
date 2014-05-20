@@ -97,6 +97,8 @@ public class Event {
 
     private String withdrawnNote;
 
+    private String source;
+
     /**
      * Parent event.
      */
@@ -678,20 +680,36 @@ public class Event {
 	this.reference = reference;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
+    /**
+     * @return the source
      */
+    public String getSource() {
+	return source;
+    }
+
+    /**
+     * @param source
+     *            the source to set
+     */
+    public void setSource(String source) {
+	this.source = source;
+    }
+
     @Override
     public String toString() {
 	return "Event [id=" + id + ", title=" + title + ", description="
-		+ description + ", url=" + url + ", startTime=" + startTime
-		+ ", stopTime=" + stopTime + ", timeZone=" + timeZone
-		+ ", allDay=" + allDay + ", free=" + free + ", price=" + price
-		+ ", withdrawn=" + withdrawn + ", withdrawnNote="
-		+ withdrawnNote + ", category=" + category + ", categories="
-		+ categories + ", reference=" + reference + ", created="
-		+ created + "]";
+		+ description + ", summary=" + summary + ", url=" + url
+		+ ", startTime=" + startTime + ", stopTime=" + stopTime
+		+ ", timeZone=" + timeZone + ", allDay=" + allDay + ", free="
+		+ free + ", price=" + price + ", withdrawn=" + withdrawn
+		+ ", withdrawnNote=" + withdrawnNote + ", source=" + source
+		+ ", parent=" + parent + ", children=" + children + ", links="
+		+ links + ", comments=" + comments + ", performers="
+		+ performers + ", images=" + images + ", tags=" + tags
+		+ ", properties=" + properties + ", going=" + going
+		+ ", category=" + category + ", categories=" + categories
+		+ ", reference=" + reference + ", venue=" + venue
+		+ ", created=" + created + "]";
     }
+
 }

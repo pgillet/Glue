@@ -60,6 +60,8 @@ public class Venue {
 
     private String geocodeType;
 
+    private String source;
+
     /**
      * Parent venue.
      */
@@ -605,6 +607,21 @@ public class Venue {
      */
     public void setReference(boolean reference) {
 	this.reference = reference;
+    }
+
+    /**
+     * @return the source
+     */
+    public String getSource() {
+	return source;
+    }
+
+    /**
+     * @param source
+     *            the source to set
+     */
+    public void setSource(String source) {
+	this.source = source;
     }
 
     /*

@@ -21,6 +21,7 @@ public class FnacVenueBeanBuilder implements GlueObjectBuilder<Lieu, Venue> {
 	venue.setCity(bean.villieu);
 	venue.setDescription(StringUtils.defaultString(bean.desclieu).trim());
 	venue.setReference(true);
+	venue.setSource("www.francebillet.com");
 
 	StringBuilder address = new StringBuilder();
 	address.append(StringUtils.defaultString(bean.ad1lieu)).append(" ")
@@ -29,7 +30,10 @@ public class FnacVenueBeanBuilder implements GlueObjectBuilder<Lieu, Venue> {
 		.append(StringUtils.defaultString(bean.ad4lieu)).append(" ")
 		.append(StringUtils.defaultString(bean.cptlieu)).append(" ")
 		.append(StringUtils.defaultString(bean.villieu));
-	venue.setAddress(address.toString().trim());
+
+	// Replace double space with unique space
+	String result = address.toString().trim().replaceAll("  ", " ");
+	venue.setAddress(result);
 	return venue;
     }
 }

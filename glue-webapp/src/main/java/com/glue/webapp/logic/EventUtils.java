@@ -1,5 +1,6 @@
 package com.glue.webapp.logic;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -11,7 +12,8 @@ public class EventUtils {
 
     public static String summarize(String html) {
 	// Keep only text nodes: all HTML will be stripped.
-	String onlytext = Jsoup.clean(html, Whitelist.none());
+	String onlytext = Jsoup.clean(StringUtils.defaultString(html),
+		Whitelist.none());
 	String summary = WordUtils.abbreviate(onlytext, SUMMARY_LIMIT, -1,
 		ELLIPSIS);
 
