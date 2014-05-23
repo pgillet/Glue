@@ -164,7 +164,9 @@ public abstract class PersistenceService implements Serializable {
 	    if (isManaged) {
 
 	    } else {
-		em.getTransaction().rollback();
+		if (em.getTransaction().isActive()) { // TODO: assertActive(); ?
+		    em.getTransaction().rollback();
+		}
 	    }
 	    if (scope == PersistenceContextType.TRANSACTION) {
 		em.clear();
