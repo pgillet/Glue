@@ -25,57 +25,54 @@ public class StreamMessageListener extends GluePersistenceService implements
     @Override
     public void newMessage(final Event event) throws Exception {
 
-	if (event != null) {
+	try {
+	    // Begin transaction
+	    begin();
 
-	    try {
-		// Begin transaction
-		begin();
-
-		Venue venue = event.getVenue();
-		if (venue == null) {
-		    LOG.trace("Events without a venue are not allowed");
-		    return;
-		}
-
-		// Search for an existing venue
-		Venue persistentVenue = getVenueDAO().findDuplicate(venue);
-		if (persistentVenue == null) {
-		    LOG.info("Inserting " + venue);
-		    persistentVenue = getVenueDAO().create(venue);
-		} else {
-		    LOG.info("Venue already exists = " + venue);
-		}
-		event.setVenue(persistentVenue);
-
-		// Search for existing tags and replace them in event tag list
-		Set<Tag> tags = new HashSet<>();
-		for (Tag tag : event.getTags()) {
-		    Tag tmpTag = getTagDAO().findDuplicate(tag);
-		    if (tmpTag == null) {
-			tags.add(tag);
-		    } else {
-			tags.add(tmpTag);
-		    }
-		}
-		event.setTags(tags);
-
-		if (!getEventDAO().hasDuplicate(event)) {
-		    LOG.info("Inserting " + event);
-		    getEventDAO().update(event);
-
-		} else {
-		    LOG.info("Event already exists = " + event);
-		}
-
-		// End transaction
-		commit();
-	    } catch (Exception e) {
-		LOG.error(e.getMessage(), e);
-		rollback();
-		throw e;
-	    } finally {
-
+	    Venue venue = event.getVenue();
+	    if (venue == null) {
+		LOG.trace("Events without a venue are not allowed");
+		return;
 	    }
+
+	    // Search for an existing venue
+	    Venue persistentVenue = getVenueDAO().findDuplicate(venue);
+	    if (persistentVenue == null) {
+		LOG.info("Inserting " + venue);
+		persistentVenue = getVenueDAO().create(venue);
+	    } else {
+		LOG.info("Venue already exists = " + venue);
+	    }
+	    event.setVenue(persistentVenue);
+
+	    // Search for existing tags and replace them in event tag list
+	    Set<Tag> tags = new HashSet<>();
+	    for (Tag tag : event.getTags()) {
+		Tag tmpTag = getTagDAO().findDuplicate(tag);
+		if (tmpTag == null) {
+		    tags.add(tag);
+		} else {
+		    tags.add(tmpTag);
+		}
+	    }
+	    event.setTags(tags);
+
+	    if (!getEventDAO().hasDuplicate(event)) {
+		LOG.info("Inserting " + event);
+		getEventDAO().update(event);
+
+	    } else {
+		LOG.info("Event already exists = " + event);
+	    }
+
+	    // End transaction
+	    commit();
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    rollback();
+	    throw e;
+	} finally {
+
 	}
     }
 }

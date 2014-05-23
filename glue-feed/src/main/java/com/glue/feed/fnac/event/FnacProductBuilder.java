@@ -59,7 +59,7 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 
 	// We don't want to manage that event
 	if (cat == null) {
-	    return null;
+	    throw new IllegalStateException("No category found");
 	}
 
 	event.setCategory(cat);
