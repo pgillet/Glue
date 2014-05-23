@@ -92,16 +92,18 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	final double distance = 2; // 2 kms around
 	boolean hasLatLong = (venue.getLatitude() != 0.0d && venue
 		.getLongitude() != 0.0d);
+	GeoLocation location = null;
 
 	if (hasLatLong) {
 
+	    location = GeoLocation.fromDegrees(venue.getLatitude(),
+		    venue.getLongitude());
+
 	    long start = System.currentTimeMillis();
-	    List<Venue> del = findWithinDistance(venue.getLatitude(),
-		    venue.getLongitude(), distance);
+	    List<Venue> del = findWithinDistance(location, distance);
 	    long end = System.currentTimeMillis();
 	    LOG.info("findWithinDistance took " + (end - start) + " ms");
 	    
-
 	    // Filter venues: keep only reference venues and remove the venue to
 	    // be resolved.
 	    List<Venue> candidates = new ArrayList<>(del);
@@ -122,7 +124,11 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	    // Request Nominatim
 	    String query = venue.getName() + ", " + venue.getCity();
-	    venueRef = nr.search(query);
+	    GeoLocation[] boundingCoordinates = hasLatLong ? location
+		    .boundingCoordinates(15) // 15 kms around
+		    : null;
+
+	    venueRef = nr.search(query, boundingCoordinates);
 
 	    if (venueRef != null) {
 		// Case where the reference venue is already persisted but has
@@ -159,13 +165,10 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	return venueRef;
     }
 
-    public List<Venue> findWithinDistance(double latitude, double longitude,
+    public List<Venue> findWithinDistance(GeoLocation location,
 	    double distance) {
 
-	GeoLocation location = GeoLocation.fromDegrees(latitude, longitude);
-
-	GeoLocation[] boundingCoordinates = location.boundingCoordinates(
-		distance, GeoLocation.EARTH_RADIUS);
+	GeoLocation[] boundingCoordinates = location.boundingCoordinates(distance);
 	boolean meridian180WithinDistance = boundingCoordinates[0]
 		.getLongitudeInRadians() > boundingCoordinates[1]
 		.getLongitudeInRadians();
