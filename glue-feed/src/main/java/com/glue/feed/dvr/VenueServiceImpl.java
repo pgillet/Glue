@@ -135,7 +135,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 		// not been found within the given distance. This can happen
 		// when the venue to resolve is located approximately in the
 		// center city.
-		Venue match = venueDAO.findDuplicate(venueRef);
+		Venue match = venueDAO.findDuplicate(venueRef, true);
 		if (match != null) {
 		    venueRef = match;
 		}
