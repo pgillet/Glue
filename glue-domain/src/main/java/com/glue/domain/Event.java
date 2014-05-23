@@ -174,7 +174,7 @@ public class Event {
     /**
      * Date event was created.
      */
-    private Date created;
+    private Date created = new Date();
 
     /**
      * Return the venue from the given information.

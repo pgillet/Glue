@@ -48,7 +48,7 @@ public class Link {
     /**
      * Time the link was created.
      */
-    private Date created;
+    private Date created = new Date();
 
     /**
      * @return the created

@@ -113,7 +113,7 @@ public class Venue {
     /**
      * Date venue was created
      */
-    private Date created;
+    private Date created = new Date();
 
     private String timeZone;
 

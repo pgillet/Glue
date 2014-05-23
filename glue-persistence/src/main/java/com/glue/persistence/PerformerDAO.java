@@ -1,6 +1,5 @@
 package com.glue.persistence;
 
-import java.util.Date;
 import java.util.List;
 
 import com.glue.domain.Category;
@@ -16,13 +15,6 @@ public class PerformerDAO extends AbstractDAO<Performer> implements
 
     public PerformerDAO() {
 	super();
-    }
-
-    @Override
-    public Performer create(Performer p) {
-	// Creation date
-	p.setCreated(new Date(System.currentTimeMillis()));
-	return super.create(p);
     }
 
     @Override

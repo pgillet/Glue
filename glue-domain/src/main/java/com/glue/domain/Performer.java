@@ -48,7 +48,7 @@ public class Performer {
     /**
      * Date performer was created.
      */
-    private Date created;
+    private Date created = new Date();
 
     /**
      * Username that created the performer.

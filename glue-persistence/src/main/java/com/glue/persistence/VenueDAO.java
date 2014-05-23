@@ -1,6 +1,5 @@
 package com.glue.persistence;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -23,13 +22,6 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 
     public VenueDAO() {
 	super();
-    }
-
-    @Override
-    public Venue create(Venue v) {
-	// Creation date
-	v.setCreated(new Date(System.currentTimeMillis()));
-	return super.create(v);
     }
 
     public Venue findDuplicate(Venue v) {

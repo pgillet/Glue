@@ -43,7 +43,7 @@ public class Comment {
     /**
      * Date comment was created.
      */
-    private Date created;
+    private Date created = new Date();
 
     /**
      * Create a new comment.

@@ -31,28 +31,6 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	super();
     }
 
-    /**
-     * TODO: may be factorized in AbstractDAO with the help of the Glob
-     * interface.
-     */
-    @Override
-    public Event create(Event e) {
-	// Creation date
-	e.setCreated(new Date(System.currentTimeMillis()));
-	return super.create(e);
-    }
-
-    /**
-     * TODO: may be factorized in AbstractDAO with the help of the Glob
-     * interface.
-     */
-    @Override
-    public Event update(Event e) {
-	// Last modified
-	e.setCreated(new Date(System.currentTimeMillis()));
-	return super.update(e);
-    }
-
     public List<Event> findAll(Collection<String> ids) {
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
