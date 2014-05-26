@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.glue.domain.Event;
+import com.glue.domain.EventCategory;
 import com.glue.domain.Event_;
 import com.glue.domain.Venue;
 import com.glue.domain.Venue_;
@@ -205,6 +206,18 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 
 	    conjunction.add(
 		    cb.or(notYetStarted, notYetFinished));
+	}
+
+	// Categories
+	if (!categories.isEmpty()) {
+	    List<Predicate> disjunction = new ArrayList<>();
+	    for (String cat : categories) {
+		disjunction.add(cb.equal(event.get(Event_.category),
+			EventCategory.valueOf(cat)));
+	    }
+
+	    conjunction.add(cb.or(disjunction.toArray(new Predicate[disjunction
+		    .size()])));
 	}
 
 	conjunction.add(
