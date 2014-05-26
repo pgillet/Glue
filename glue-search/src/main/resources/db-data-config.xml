@@ -3,12 +3,22 @@
 		url="${glue.db.jdbc.url}" user="${glue.db.user}" password="${glue.db.password}" />
 	<document name="events">
 		<entity name="event" query="select *, TIMESTAMPDIFF(SECOND,startTime,stopTime) as duration from Event">
-			<entity name="venue"
-				query="select * from Venue where id='${event.VENUE_ID}'">
+			<entity name="venueNoRef"
+				query="select * from Venue where parent_id is null and id='${event.VENUE_ID}'">
 				<field column="name" name="venue" />
 				<field column="city" name="city" />
 				<field column="latitude" name="latlng_0_coordinate" />
 				<field column="longitude" name="latlng_1_coordinate" />
+			</entity>
+			<entity name="venueRef"
+				query="select parent_id from Venue where parent_id is not null and id='${event.VENUE_ID}'">
+				<entity name="venueRef"
+				    query="select * from Venue where id='${venueRef.VENUE_ID}'">
+					<field column="name" name="venue" />
+					<field column="city" name="city" />
+					<field column="latitude" name="latlng_0_coordinate" />
+					<field column="longitude" name="latlng_1_coordinate" />
+				</entity>
 			</entity>
 		</entity>
 	</document>
