@@ -185,7 +185,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	boolean addLocation = false;
 
 	// Get dates
-	String from = ((startDate != null) ? df.format(startDate) : "NOW/HOUR");
+	String from = ((startDate != null) ? df.format(startDate) : "NOW/DAY");
 	String to = ((endDate != null) ? df.format(endDate) : "*");
 
 	// Location filtering
