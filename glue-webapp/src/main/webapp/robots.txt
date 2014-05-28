@@ -1,5 +1,5 @@
 User-agent: *
-Allow: /index.xtml
-Allow: /main.xhtml
-Allow: /fr/main.xhtml
-Disallow: /
+Disallow: /stream/*
+Disallow: /venues/*
+Disallow: /login.xhtml
+Disallow: /register.xhtml
