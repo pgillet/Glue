@@ -14,7 +14,6 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,37 +67,12 @@ public class SolrSearchServer implements SearchEngine<Event> {
 		com.glue.persistence.index.SolrParams.getSolrServerUrl());
     }
 
-    public List<Event> searchForAutoComplete(String q)
-	    throws InternalServerException {
-
-	List<? extends Event> items = new ArrayList<Event>();
-
-	SolrQuery query = new SolrQuery();
-
-	// Use this specific RequestHandler
-	query.setParam("qt", "/suggest");
-	query.setParam("q", ClientUtils.escapeQueryChars(q));
-
-	try {
-	    QueryResponse rsp = solr.query(query);
-	    items = rsp.getBeans(SolrStream.class);
-
-	    // Get the total number of results
-	    numFound = rsp.getResults().getNumFound();
-	} catch (SolrServerException e) {
-	    LOG.error(e.getMessage(), e);
-	    throw new InternalServerException(e);
-	}
-
-	return (List<Event>) items;
-    }
-
-    @Override
-    public List<Event> search() throws InternalServerException {
+    private List<Event> search(String requester) throws InternalServerException {
 
 	List<? extends Event> items = new ArrayList<Event>();
 
 	SolrQuery query = constructSolrQuery();
+	query.setParam("qt", requester);
 
 	try {
 	    QueryResponse rsp = solr.query(query);
@@ -118,6 +92,17 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	}
 
 	return (List<Event>) items;
+
+    }
+
+    @Override
+    public List<Event> searchForAutoComplete() throws InternalServerException {
+	return search("/suggest");
+    }
+
+    @Override
+    public List<Event> search() throws InternalServerException {
+	return search("/event_select");
     }
 
     @Override
@@ -177,8 +162,6 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	    // query.setHighlightFragsize(100); // Default
 	    // query.setHighlightRequireFieldMatch(false); // Default
 	}
-
-	query.setParam("qt", "/event_select");
 
 	// Add location to query if no lat/lon parameter
 	boolean hasLatLon = false;
@@ -371,4 +354,5 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	}
 	return result;
     }
+
 }

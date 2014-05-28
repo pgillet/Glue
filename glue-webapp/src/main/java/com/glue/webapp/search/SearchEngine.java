@@ -11,12 +11,13 @@ public interface SearchEngine<T> {
     /**
      * Performs an autocomplete query .
      * 
+     * 
      * @return a list of T.
      * @throws InternalServerException
      *             if communication or parsing issues occurred while talking to
      *             the search engine
      */
-    List<T> searchForAutoComplete(String query) throws InternalServerException;
+    List<T> searchForAutoComplete() throws InternalServerException;
 
     /**
      * Performs a query to the search engine with all the sent parameters.

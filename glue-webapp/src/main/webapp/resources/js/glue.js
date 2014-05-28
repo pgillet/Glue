@@ -5,33 +5,43 @@ function scrollToTop(data) {
 }
 
 
-//instantiate the bloodhound suggestion engine
-var events = new Bloodhound({
-    datumTokenizer: function (d) {
-        return Bloodhound.tokenizers.whitespace(d.value);
-    },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-        url: '/glue/services/autocomplete?query=%QUERY',
-        filter: function (events) {
-	        retval = [];	        	
-	        for (var i = 1;  i < events.length;  i++) {
-	            retval.push({
-	            value: events[0] + events[i],
-	            query: events[0],
-	            comp: events[i]
-	            });
-	        }
-	        return retval;
-        }
-    }
-});
-
-// initialize the bloodhound suggestion engine
-events.initialize();
-
 // instantiate the typeahead UI
 $(document).ready(function() {
+	
+	//instantiate the bloodhound suggestion engine
+	var events = new Bloodhound({
+	    datumTokenizer: function (d) {
+	        return Bloodhound.tokenizers.whitespace(d.value);
+	    },
+	    queryTokenizer: Bloodhound.tokenizers.whitespace,
+	    remote: {
+	        url: '/glue/services/autocomplete?query=%QUERY',
+	        replace: function () {
+	        	var q = '/glue/services/autocomplete?query=' + $('.typeahead').val();
+	        	var lat = document.getElementById("lat").value;
+	        	var lng = document.getElementById("lng").value;
+	        	if (lat && lng) {
+	        		q = q + '&lat=' + lat + "&lng=" + lng;
+	        	}
+	        	return q;
+	        },
+	        filter: function (events) {
+		        retval = [];	        	
+		        for (var i = 1;  i < events.length;  i++) {
+		            retval.push({
+		            value: events[0] + events[i],
+		            query: events[0],
+		            comp: events[i]
+		            });
+		        }
+		        return retval;
+	        }
+	    }
+	});
+	
+	// initialize the bloodhound suggestion engine
+	events.initialize();
+	
 	$('.typeahead')
 	.typeahead({
 		hint: false,
@@ -55,10 +65,14 @@ $(document).ready(function() {
     });
 });
 
+$('#q').focus(function() {
+	codeAddress0(undefined);
+});
+
 //Location field
-$('#ql').on('input.ql').keypress(function (e) {
+$('#ql').keypress(function (e) {	
 	if (e.which == 13) {
-		 codeAddress();
+		codeAddress();
     }
 });
 
