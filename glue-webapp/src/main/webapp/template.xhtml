@@ -82,8 +82,7 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 
-			<h:form id="main_form" prependId="false"
-				styleClass="navbar-form navbar-left" role="search">
+			<form id="main_form" action="#{request.contextPath}/stream/search.xhtml" class="navbar-form navbar-left" role="search">
 				<h:inputHidden id="lat" value="#{eventSearchBean.latitude}" />
 				<h:inputHidden id="lng" value="#{eventSearchBean.longitude}" />
 				<div class="form-group">
@@ -110,11 +109,8 @@
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 				</div>
-				<h:commandButton id="search_input" action="/stream/search?faces-redirect=true&amp;includeViewParams=true"
-					style="display:none;" >
-					<!-- <f:ajax execute="@form" render="@form" /> -->
-					</h:commandButton>				
-			</h:form>
+				<input type="submit" value="Submit" style="display:none;"/>
+			</form>
 
 			<h:form>
 				<ul class="nav navbar-nav navbar-right">

@@ -154,8 +154,7 @@ function codeLatLng(lat, lng) {
 
 function codeAddress() {
 	codeAddress0(function() {
-		// TODO: awful! We are not supposed to know the underlying JSF implementation...
-		return myfaces.oam.submitForm('main_form','search_input');
+		return document.getElementById("main_form").submit();
 	});
 }
 

@@ -56,11 +56,11 @@ $(document).ready(function() {
 	      }
 	})
 	.on('typeahead:selected', function($e, datum){
-    	return myfaces.oam.submitForm('main_form','search_input');
+    	return $("#main_form").submit();
         })
 	.on('input.typeahead').keypress(function (e) {
         if (e.which == 13) {
-        	return myfaces.oam.submitForm('main_form','search_input');
+        	return $("#main_form").submit();
         }
     });
 });
