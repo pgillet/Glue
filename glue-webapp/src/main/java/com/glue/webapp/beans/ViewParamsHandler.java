@@ -9,7 +9,10 @@ import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewMetadata;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @see <a href=
@@ -23,11 +26,13 @@ import org.apache.http.client.utils.URIBuilder;
  * @author pgillet
  * 
  */
-public class GlueViewHandler extends ViewHandlerWrapper {
+public class ViewParamsHandler extends ViewHandlerWrapper {
+
+    static final Logger LOG = LoggerFactory.getLogger(ViewParamsHandler.class);
 
     private ViewHandler wrapped;
 
-    public GlueViewHandler(ViewHandler wrapped) {
+    public ViewParamsHandler(ViewHandler wrapped) {
 	this.wrapped = wrapped;
     }
 
@@ -38,30 +43,6 @@ public class GlueViewHandler extends ViewHandlerWrapper {
 
     @Override
     public String getActionURL(FacesContext context, String viewId) {
-	// HttpServletRequest request = (HttpServletRequest) context
-	// .getExternalContext().getRequest();
-	//
-	// // remaining on the same view keeps URL state
-	// String requestViewID = request.getRequestURI().substring(
-	// request.getContextPath().length());
-	// if (requestViewID.equals(viewID)) {
-	//
-	// // keep RESTful URLs and query strings
-	// String action = (String) request
-	// .getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-	// if (action == null) {
-	// action = request.getRequestURI();
-	// }
-	// if (request.getQueryString() != null) {
-	// return action + "?" + request.getQueryString();
-	// } else {
-	// return action;
-	// }
-	// } else {
-	//
-	// // moving to a new view drops old URL state
-	// return super.getActionURL(context, viewID);
-	// }
 
 	String actionURL = super.getActionURL(context, viewId);
 
@@ -73,19 +54,17 @@ public class GlueViewHandler extends ViewHandlerWrapper {
 		URIBuilder ub = new URIBuilder(actionURL);
 
 		for (UIViewParameter viewParam : viewParams) {
-		    String name = viewParam.getName();
-		    Object value = viewParam.getValue();
-		    System.out.println("ViewParam " + name + " = " + value);
 
-		    if (value != null) {
-			ub.addParameter(name, value.toString());
+		    String value = viewParam.getStringValue(context);
+
+		    if (StringUtils.isNotBlank(value)) {
+			ub.addParameter(viewParam.getName(), value);
 		    }
 		}
 
 		actionURL = ub.toString();
 	    } catch (URISyntaxException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		LOG.error(e.getMessage(), e);
 	    }
 
 	}

@@ -2,15 +2,12 @@ package com.glue.webapp.beans;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
-import org.omnifaces.cdi.param.ParamValue;
 
 import com.glue.domain.Venue;
 import com.glue.webapp.logic.VenueController;
@@ -20,48 +17,34 @@ import com.glue.webapp.logic.VenueController;
 public class VenueSearchBean extends StreamSearchBean implements Serializable {
 
     @Inject
-    @Param
-    // Like <f:viewParam name="q" value="#{bean.q}">
-    private ParamValue<String> q;
-
-    @Inject
-    @Param
-    // Like <f:viewParam name="v" value="#{bean.v}">
-    private ParamValue<String> v;
-
-    @Inject
     private transient VenueController controller;
+
+    private String venueId;
 
     private Venue venue;
 
-    @PostConstruct
-    private void init() {
-	String rowsPerPageParam = FacesUtil
-		.getRequestParameter(QueryParams.ROWS_PER_PAGE);
-	if (rowsPerPageParam != null) {
-	    setRowsPerPage(Integer.valueOf(rowsPerPageParam));
-	}
-	setQuery(q.getValue());
-	LOG.debug("Query param = " + q);
+    public void init() {
+	venue = controller.getVenue(venueId);
 
-	String venueId = v.getValue();
-	if (venueId != null) {
-	    venue = controller.getVenue(venueId);
+	if (venue == null) {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    context.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("no.such.venue")));
+	} else {
 
-	    if (venue == null) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,
-			new FacesMessage(FacesUtil.getString("no.such.venue")));
-	    } else {
-
-		if (venue.getParent() != null) {
-		    // The venue has a reference venue
-		    venue = venue.getParent();
-		}
-
-		first();
+	    if (venue.getParent() != null) {
+		// The venue has a reference venue
+		venue = venue.getParent();
 	    }
 	}
+    }
+
+    public String getVenueId() {
+	return venueId;
+    }
+
+    public void setVenueId(String venueId) {
+	this.venueId = venueId;
     }
 
     public Venue getVenue() {
@@ -73,7 +56,7 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
     }
 
     @Override
-    public Void search() throws Exception {
+    public String search() throws Exception {
 
 	// Common params
 	controller.setQueryString(getQuery());
@@ -86,7 +69,9 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 
 	// Pagination controls
 	controller.setStart(getStart());
-	controller.setRowsPerPage(getRowsPerPage());
+
+	int rows = getRowsPerPage(getDisplay());
+	controller.setRowsPerPage(rows);
 
 	this.events = controller.search();
 
@@ -96,5 +81,10 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 	return null;
     }
 
-}
+    @Override
+    protected String outcome() {
+	return FacesContext.getCurrentInstance().getViewRoot().getViewId()
+		+ "?faces-redirect=true&amp;includeViewParams=true";
+    }
 
+}

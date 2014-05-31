@@ -6,16 +6,28 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <h:body>
-	<ui:composition template="./stream/search.xhtml">
-		
+	<ui:composition template="./template.xhtml">
+	
 		<ui:define name="metadata">
 			<f:metadata>
 				<f:viewParam name="q" value="#{eventSearchBean.query}" />
 				<f:viewParam name="ql" value="#{eventSearchBean.location}" />
 				<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
 				<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
+				<f:viewParam name="cat" value="#{eventSearchBean.catSelection}"
+					converter="StringCollectionConverter" />
+				<f:viewParam name="display" value="#{eventSearchBean.display}" />
+				<f:viewParam name="start" value="#{eventSearchBean.start}" />
+				<f:viewParam name="startdate" value="#{eventSearchBean.startDate}">
+					<f:convertDateTime pattern="yyyyMMdd"/>
+				</f:viewParam>
+				<f:viewParam name="enddate" value="#{eventSearchBean.endDate}">
+					<f:convertDateTime pattern="yyyyMMdd"/>
+				</f:viewParam>
+				<f:event type="preRenderView" listener="#{eventSearchBean.search}" />
 			</f:metadata>
 		</ui:define>
+		
 		<ui:define name="header">
 
 			<div id="info" class="jumbotron glue-jumbotron">
@@ -169,9 +181,21 @@
 			</div>
 
 		</ui:define>
+		
+		<ui:define name="content">
+			<ui:include src="./stream/search-template.xhtml">
+				<ui:param name="paramBean" value="#{eventSearchBean}" />
+			</ui:include>
+		</ui:define>
+		
 		<ui:define name="footer">
 			<ui:include src="full-footer.xhtml" />
 		</ui:define>
+		
+		<ui:define name="javascript">
+			<h:outputScript library="js" name="primefaces-locales.js" />
+		</ui:define>
+		
 	</ui:composition>
 </h:body>
 </html>

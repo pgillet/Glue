@@ -9,8 +9,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition>
-		<p:calendar value="#{paramBean.startDate}" mode="inline">
-			<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}"
+		<p:calendar value="#{paramBean.startDate}" timeZone="UTC" mode="inline">
+			<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}" 
 				update="@form" />
 		</p:calendar>
 		<ul class="nav nav-pills nav-stacked fa-ul">

@@ -1,5 +1,7 @@
 Deployment in a fresh new TomEE server:
-* Edit the tomcat-users.xml to fit with the credentials in the Maven settings.xml
+* Add URIEncoding="UTF-8" to the HTTP Connector in conf/server.xml (WARNING: the server.xml may be automatically reloaded from Eclipse 
+  and the attribute setting may be discarded. To prevent this, also edit the server.xml in your workspace.)
+* Edit the conf/tomcat-users.xml to fit with the credentials in the Maven settings.xml
 * Set CATALINA_HOME to the TomEE install directory
 * Set CATALINA_OPTS to -Dsolr.solr.home=C:\Users\Greg\SynchroGreg\Perso\Glue\workspace2\Glue\glue-search\target\cores
 * Start TomEE

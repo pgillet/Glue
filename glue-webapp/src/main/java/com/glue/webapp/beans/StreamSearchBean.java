@@ -1,5 +1,6 @@
 package com.glue.webapp.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.DateTime;
@@ -34,7 +37,7 @@ import com.glue.webapp.search.AbstractPaginatedSearch;
  * @author pgillet
  * 
  */
-public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
+public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	implements Serializable {
 
     static final Logger LOG = LoggerFactory.getLogger(StreamSearchBean.class);
@@ -73,27 +76,26 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 	this.interval = interval;
     }
 
-    public void toggleDisplay() {
-	String displayParam = FacesUtil
-		.getRequestParameter(QueryParams.DISPLAY);
-	setDisplay(DisplayType.valueOf(displayParam.toUpperCase()));
-	LOG.debug("Toggle display = " + display);
+    // TODO: may be moved somewhere else
+    public int getRowsPerPage(DisplayType display) {
+
+	int rows;
 
 	switch (display) {
 	case GRID:
-	    setRowsPerPage(11);
+	    rows = 11;
 	    break;
 
 	case TABLE:
-	    setRowsPerPage(15);
+	    rows = 15;
 	    break;
 
 	default: // LIST
-	    setRowsPerPage(10);
+	    rows = 10;
 	    break;
 	}
 
-	first();
+	return rows;
     }
 
     public String getQuery() {
@@ -145,13 +147,28 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
     public void searchFrom(SelectEvent event) {
 	// Reset end date
 	setEndDate(null);
-
 	setInterval(IntervalType.FROM_TODAY);
+	setStart(0);
 
-	first();
+	FacesContext facesContext = FacesContext.getCurrentInstance();
+	ExternalContext extContext = facesContext.getExternalContext();
+
+	ViewHandler viewHandler = new ViewParamsHandler(facesContext
+		.getApplication().getViewHandler());
+
+	String url = viewHandler.getActionURL(facesContext,
+			facesContext.getViewRoot().getViewId());
+
+	try {
+	    extContext.redirect(url);
+	} catch (IOException e) {
+	    LOG.error(e.getMessage(), e);
+	    facesContext.addMessage(null,
+		    new FacesMessage(FacesUtil.getString("error.generic")));
+	}
     }
 
-    public void searchToday() {
+    public String searchToday() {
 	// TODO: Get the client time zone somehow
 	DateTime start = new DateTime(DateTimeZone.UTC);
 	start = start.withTimeAtStartOfDay();
@@ -163,10 +180,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 
 	setInterval(IntervalType.TODAY);
 
-	first();
+	return first();
     }
 
-    public void searchNextWeekEnd() {
+    public String searchNextWeekEnd() {
 	DateTime start = new DateTime(DateTimeZone.UTC);
 	if (start.getDayOfWeek() < DateTimeConstants.FRIDAY) {
 	    start = start.withDayOfWeek(DateTimeConstants.FRIDAY);
@@ -181,10 +198,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 
 	setInterval(IntervalType.WEEK_END);
 
-	first();
+	return first();
     }
 
-    public void searchWeek() {
+    public String searchWeek() {
 	DateTime start = new DateTime(DateTimeZone.UTC);
 	start = start.withTimeAtStartOfDay();
 
@@ -196,10 +213,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 
 	setInterval(IntervalType.WEEK);
 
-	first();
+	return first();
     }
 
-    public void searchMonth() {
+    public String searchMonth() {
 	DateTime start = new DateTime(DateTimeZone.UTC);
 	start = start.withTimeAtStartOfDay();
 
@@ -211,7 +228,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 
 	setInterval(IntervalType.MONTH);
 
-	first();
+	return first();
     }
 
     /**
@@ -257,33 +274,22 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 	return styleAttr;
     }
 
-    public void enableCategory() {
-	String cat = FacesUtil.getRequestParameter(QueryParams.CATEGORY);
+    public String enableCategory() {
+	String cat = FacesUtil.getRequestParameter("selectedCat");
 	LOG.debug("Toggle category = " + cat);
 
 	if (!getCatSelection().remove(cat)) {
 	    getCatSelection().add(cat);
 	}
 
-	first();
-    }
-
-    public void selectCategory() {
-	String cat = FacesUtil.getRequestParameter(QueryParams.CATEGORY);
-	LOG.debug("Select category = " + cat);
-
-	// Select only the chosen category
-	getCatSelection().clear();
-	getCatSelection().add(cat);
-
-	first();
+	return first();
     }
 
     @Override
-    public abstract Void search() throws Exception;
+    public abstract String search() throws Exception;
 
     @Override
-    public Void first() {
+    public String first() {
 	try {
 	    super.first();
 	} catch (Exception e) {
@@ -293,7 +299,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	return null;
+	return outcome();
     }
 
     /**
@@ -306,7 +312,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
     }
 
     @Override
-    public Void next() throws Exception, NoSuchElementException {
+    public String next() throws Exception, NoSuchElementException {
 	try {
 	    super.next();
 	} catch (Exception e) {
@@ -316,7 +322,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	return null;
+	return outcome();
     }
 
     /**
@@ -329,7 +335,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
     }
 
     @Override
-    public Void previous() throws Exception, NoSuchElementException {
+    public String previous() throws Exception, NoSuchElementException {
 	try {
 	    super.previous();
 	} catch (Exception e) {
@@ -339,11 +345,11 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	return null;
+	return outcome();
     }
 
     @Override
-    public Void last() throws Exception {
+    public String last() throws Exception {
 	try {
 	    super.last();
 	} catch (Exception e) {
@@ -353,11 +359,11 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
-	return null;
+	return outcome();
     }
 
     @Override
-    public Void get(int pageNumber) throws Exception, NoSuchElementException {
+    public String get(int pageNumber) throws Exception, NoSuchElementException {
 	try {
 	    super.get(pageNumber);
 	} catch (Exception e) {
@@ -367,6 +373,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<Void>
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
 
+	return outcome();
+    }
+
+    protected String outcome() {
 	return null;
     }
 

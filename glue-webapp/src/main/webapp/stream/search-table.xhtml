@@ -6,7 +6,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:glue="http://java.sun.com/jsf/composite/components">
 <h:body>
 	<ui:composition><!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
@@ -34,16 +35,8 @@
 								varStatus="status">
 								<tr>
 									<td style="width: 30px;">
-										<h:commandLink action="#{paramBean.selectCategory}"
-										onclick="jsf.ajax.addOnEvent(scrollToTop);">
-										<span title="#{bundle[stream.category.name.toLowerCase()]}"
-											class="glue-badge"
-											style="background-color: #{stream.category.color};"><h:outputText
-												value="#{bundle[stream.category.name.toLowerCase()].substring(0,1)}"></h:outputText></span>
-										<f:param name="cat" value="#{stream.category.name}"></f:param>
-										<f:ajax execute="@form" render="@form" />
-									</h:commandLink>
-								</td>
+										<glue:categoryBadge category="#{stream.category}" />
+									</td>
 									<td style="width: 40%;"><small><h:link
 												includeViewParams="true" value="#{stream.title}"
 												outcome="/stream/item.xhtml" title="#{stream.title}">

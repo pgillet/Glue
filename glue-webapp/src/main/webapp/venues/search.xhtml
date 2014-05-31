@@ -10,7 +10,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="metadata">
 		<f:metadata>
+			<f:viewParam name="v" value="#{venueSearchBean.venueId}" required="true" />
 			<f:viewParam name="q" value="#{venueSearchBean.query}" />
+			<f:viewParam name="cat" value="#{venueSearchBean.catSelection}"
+				converter="StringCollectionConverter" />
+			<f:viewParam name="display" value="#{venueSearchBean.display}" />
+			<f:viewParam name="start" value="#{venueSearchBean.start}" />
+			<f:viewParam name="startdate" value="#{venueSearchBean.startDate}">
+				<f:convertDateTime pattern="yyyyMMdd"/>
+			</f:viewParam>
+			<f:viewParam name="enddate" value="#{venueSearchBean.endDate}">
+				<f:convertDateTime pattern="yyyyMMdd"/>
+			</f:viewParam>
+			<f:event type="preRenderView" listener="#{venueSearchBean.init}" />
+			<f:event type="preRenderView" listener="#{venueSearchBean.search}" />
 		</f:metadata>
 	</ui:define>
 

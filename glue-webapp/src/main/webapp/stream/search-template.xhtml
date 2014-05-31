@@ -37,24 +37,27 @@
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
-							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+							<li><h:link outcome="#{facesContext.viewRoot.viewId}"
+									includeViewParams="true">
 									<i class="fa fa-th-list text-muted"></i>
 									<h:outputText value=" #{bundle.display_list}" />
-									<f:param name="display" value="list" />
-									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
-							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+									<f:param name="display" value="LIST" />
+									<f:param name="start" value="0" />
+								</h:link></li>
+							<li><h:link outcome="#{facesContext.viewRoot.viewId}"
+									includeViewParams="true">
 									<i class="fa fa-align-justify text-muted"></i>
 									<h:outputText value=" #{bundle.display_table}" />
-									<f:param name="display" value="table" />
-									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
-							<li><h:commandLink action="#{paramBean.toggleDisplay}">
+									<f:param name="display" value="TABLE" />
+									<f:param name="start" value="0" />
+								</h:link></li>
+							<li><h:link outcome="#{facesContext.viewRoot.viewId}"
+									includeViewParams="true">
 									<i class="fa fa-table text-muted"></i>
 									<h:outputText value=" #{bundle.display_grid}" />
-									<f:param name="display" value="grid" />
-									<f:ajax execute="@form" render="@form" />
-								</h:commandLink></li>
+									<f:param name="display" value="GRID" />
+									<f:param name="start" value="0" />
+								</h:link></li>
 							<li class="divider"></li>
 							<li><a href="#" disabled="disabled"
 								title="#{bundle.feature_not_available}"><i
@@ -73,7 +76,7 @@
 						onmouseout="#{paramBean.getCategoryStyle(item.name, true, false)}"
 						value="#{bundle[item.name.toLowerCase()]}"
 						action="#{paramBean.enableCategory()}">
-						<f:param name="cat" value="#{item.name}"></f:param>
+						<f:param name="selectedCat" value="#{item.name}"></f:param>
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 				</ui:repeat>

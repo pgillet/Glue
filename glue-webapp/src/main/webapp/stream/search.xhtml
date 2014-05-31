@@ -10,10 +10,21 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<ui:define name="metadata">
 		<f:metadata>
-			<f:viewParam name="q" value="#{flash.now.q}" />
-			<f:viewParam name="ql" value="#{flash.now.ql}" />
-			<f:viewParam name="lat" value="#{flash.now.lat}" />
-			<f:viewParam name="lng" value="#{flash.now.lng}" />
+			<f:viewParam name="q" value="#{eventSearchBean.query}" />
+			<f:viewParam name="ql" value="#{eventSearchBean.location}" />
+			<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
+			<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
+			<f:viewParam name="cat" value="#{eventSearchBean.catSelection}"
+				converter="StringCollectionConverter" />
+			<f:viewParam name="display" value="#{eventSearchBean.display}" />
+			<f:viewParam name="start" value="#{eventSearchBean.start}" />
+			<f:viewParam name="startdate" value="#{eventSearchBean.startDate}">
+				<f:convertDateTime pattern="yyyyMMdd"/>
+			</f:viewParam>
+			<f:viewParam name="enddate" value="#{eventSearchBean.endDate}">
+				<f:convertDateTime pattern="yyyyMMdd"/>
+			</f:viewParam>
+			<f:event type="preRenderView" listener="#{eventSearchBean.search}" />
 		</f:metadata>
 	</ui:define>
 

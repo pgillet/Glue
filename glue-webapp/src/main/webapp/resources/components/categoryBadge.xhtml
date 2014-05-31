@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="category" required="true"
+			type="com.glue.domain.EventCategory" />
+		<composite:attribute name="preCss" />
+	</composite:interface>
+	
+	<composite:implementation>			
+		<h:link outcome="#{facesContext.viewRoot.viewId}"
+			includeViewParams="true" onclick="jsf.ajax.addOnEvent(scrollToTop);">
+			<span title="#{bundle[cc.attrs.category.name.toLowerCase()]}"
+				class="#{cc.attrs.preCss} glue-badge"
+				style="background-color: #{cc.attrs.category.color};"><h:outputText
+					value="#{bundle[cc.attrs.category.name.toLowerCase()].substring(0,1)}"/></span>
+			<f:param name="cat" value="#{cc.attrs.category.name}" />
+			<f:param name="start" value="0" />
+		</h:link>
+	</composite:implementation>
+</html>
