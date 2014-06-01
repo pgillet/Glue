@@ -90,6 +90,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	    rows = 15;
 	    break;
 
+	case MAP:
+	    rows = 500;
+	    break;
+
 	default: // LIST
 	    rows = 10;
 	    break;
@@ -156,8 +160,8 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	ViewHandler viewHandler = new ViewParamsHandler(facesContext
 		.getApplication().getViewHandler());
 
-	String url = viewHandler.getActionURL(facesContext,
-			facesContext.getViewRoot().getViewId());
+	String url = viewHandler.getActionURL(facesContext, facesContext
+		.getViewRoot().getViewId());
 
 	try {
 	    extContext.redirect(url);

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:of="http://omnifaces.org/functions">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="q" value="#{eventMapSearchBean.query}" />
+			<f:viewParam name="ql" value="#{eventMapSearchBean.location}" />
+			<f:viewParam name="lat" value="#{eventMapSearchBean.latitude}" />
+			<f:viewParam name="lng" value="#{eventMapSearchBean.longitude}" />
+			<f:viewParam name="cat" value="#{eventMapSearchBean.catSelection}"
+				converter="StringCollectionConverter" />
+			<f:viewParam name="display" value="#{eventMapSearchBean.display}" />
+			<f:viewParam name="startdate" value="#{eventMapSearchBean.startDate}">
+				<f:convertDateTime pattern="yyyyMMdd"/>
+			</f:viewParam>
+			<f:event type="preRenderView" listener="#{eventMapSearchBean.search}" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="stylesheet">
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<h:form>
+			<div class="row glue-hr-bottom-border">
+				<div
+					class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+					<div class="pull-right">
+						<div class="btn-group">
+							<button type="button"
+								class="btn text-muted glue-btn-link dropdown-toggle"
+								data-toggle="dropdown">
+								<h:outputText value="#{bundle.display_label}" />
+								:
+								<h:outputText value="#{bundle[eventMapSearchBean.displayLabel]}" />
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><h:commandLink action="#{eventMapSearchBean.toggleDisplay}">
+										<i class="fa fa-th-list text-muted"></i>
+										<h:outputText value=" #{bundle.display_list}" />
+										<f:param name="display" value="list" />
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink></li>
+								<li><h:commandLink action="#{eventMapSearchBean.toggleDisplay}">
+										<i class="fa fa-align-justify text-muted"></i>
+										<h:outputText value=" #{bundle.display_table}" />
+										<f:param name="display" value="table" />
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink></li>
+								<li><h:commandLink action="#{eventMapSearchBean.toggleDisplay}">
+										<i class="fa fa-table text-muted"></i>
+										<h:outputText value=" #{bundle.display_grid}" />
+										<f:param name="display" value="grid" />
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink></li>
+								<li class="divider"></li>
+								<li><h:commandLink action="#{eventMapSearchBean.toggleDisplay}">
+										<i class="fa fa-globe text-muted"></i>
+										<h:outputText value=" #{bundle.display_map}" />
+										<f:param name="display" value="map" />
+										<f:ajax execute="@form" render="@form" />
+									</h:commandLink></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
+				<ui:repeat var="item" value="#{eventMapSearchBean.categories}">
+					<h:commandButton styleClass="btn text-muted glue-btn-link"
+						style="#{eventMapSearchBean.getCategoryStyle(item.name, false, false)}"
+						onmouseover="#{eventMapSearchBean.getCategoryStyle(item.name, true, true)}"
+						onmouseout="#{eventMapSearchBean.getCategoryStyle(item.name, true, false)}"
+						value="#{bundle[item.name.toLowerCase()]}"
+						action="#{eventMapSearchBean.enableCategory()}">
+						<f:param name="selectedCat" value="#{item.name}"></f:param>
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
+				</ui:repeat>
+			</div>
+			</div>
+		
+			<br/>		
+
+			<div class="row" id="glue-map-container">
+		      	<div id="glue-map"></div>
+	            <div id="glue-map-datepicker">
+	            	<h:commandLink action="#{eventMapSearchBean.previous}">
+									<i id="glue-map-datepicker-previous" class="fa fa-arrow-left"></i>
+					</h:commandLink>
+		            <p:calendar id="glue-map-calendar" value="#{eventMapSearchBean.startDate}" size="7">
+						<p:ajax event="dateSelect" listener="#{eventMapSearchBean.updateDate}" execute="@form" update="@form" />
+					</p:calendar>
+					<h:commandLink action="#{eventMapSearchBean.next}">
+									<i id="glue-map-datepicker-next" class="fa fa-arrow-right"></i>
+					</h:commandLink>
+				</div>
+			</div>
+		</h:form>	
+	</ui:define>
+	
+	<ui:define name="footer">
+	</ui:define>
+
+	<ui:define name="javascript">
+		<h:outputScript library="js" name="primefaces-locales.js" />
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+		<script src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
+		<h:outputScript>
+		
+			var LeafIcon = L.Icon.extend({
+			    options: {
+			        shadowUrl: '../resources/img/markers/shadow-marker.png',
+			        iconSize:     [21, 34],
+			        shadowSize:   [40, 37],
+			        iconAnchor:   [10, 34],
+			        shadowAnchor: [12, 35],
+			        popupAnchor:  [0, -20]
+			    }
+			});
+			
+			var catIconMap = {};
+			catIconMap['MUSIC'] = '../resources/img/markers/music-marker.png';
+			catIconMap['PERFORMING_ART'] = '../resources/img/markers/performing_art-marker.png';
+			catIconMap['EXHIBITION'] = '../resources/img/markers/exhibition-marker.png';
+			catIconMap['SPORT'] = '../resources/img/markers/sport-marker.png';
+			catIconMap['YOUTH'] = '../resources/img/markers/youth-marker.png';
+			catIconMap['OTHER'] = '../resources/img/markers/other-marker.png';
+			catIconMap['CONFERENCE'] = '../resources/img/markers/conference-marker.png';					
+			
+			// MQ layer
+			var mqUrl='http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
+			domains = ['otile1','otile2','otile3','otile4'];
+			var mqAttrib='Tiles &copy; &lt;a href="http://www.mapquest.com/" target="_blank"&gt;MapQuest&lt;/a&gt; &lt;img src="http://developer.mapquest.com/content/osm/mq_logo.png" /&gt;';
+			var mqLayer = L.tileLayer(mqUrl, {maxZoom: 18, subdomains: domains, attribution: osmAttrib+', '+ mqAttrib});
+			
+			var map = L.map('glue-map', {
+					   layers: [mqLayer]
+				});
+			
+			map.setView([#{eventMapSearchBean.latitude}, #{eventMapSearchBean.longitude}],11);
+			
+			var events = [
+				  <ui:repeat value="#{eventMapSearchBean.events}" var="event" varStatus="loop">
+				    { "id": "#{event.id}", "title": '#{of:escapeJS(event.title)}', "vid": "#{event.venue.id}", "venue": "#{event.venue.name}", 
+				    "lat": "#{event.venue.latitude}", "lng": "#{event.venue.longitude}", 
+				    "cat": "#{event.category}" }#{!loop.last ? ',' : ''}
+				  </ui:repeat>
+			];
+						
+			for (var i = 0; i &lt; events.length; i++) {
+		    	event = events[i];    		
+		    	catIcon = new LeafIcon({iconUrl: catIconMap[event.cat]});
+		    	marker = L.marker([event.lat, event.lng],{icon: catIcon}).addTo(map);
+		    	eventurl = "/glue/stream/item.xhtml?id=" + event.id;
+		    	eventlink = "&lt;strong&gt;&lt;a href=" + eventurl + "&gt;" + event.title + "&lt;/a&gt;&lt;/strong&gt;";
+		    	venueurl = "/glue/venues/search.xhtml?v=" + event.vid;
+		    	venuelink = '&lt;a href=' + venueurl + ' class="glue-a"&gt;'  + event.venue + '&lt;/a&gt;';
+		    	content = eventlink + '&lt;br/&gt;' + '@ ' + venuelink;
+				marker.bindPopup(content);
+				marker.on('mouseover', function (e) {
+            		this.openPopup();
+        		});
+		    }	
+			
+		</h:outputScript>
+	</ui:define>
+</ui:composition>

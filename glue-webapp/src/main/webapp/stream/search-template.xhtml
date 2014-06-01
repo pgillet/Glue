@@ -68,10 +68,14 @@
 									<f:param name="start" value="0" />
 								</h:link></li>
 							<li class="divider"></li>
-							<li><a href="#" disabled="disabled"
-								title="#{bundle.feature_not_available}"><i
-									class="fa fa-globe text-muted"></i> <h:outputText
-										value=" #{bundle.display_map}" /></a></li>
+							<li><h:link outcome="/stream/search-map"
+									includeViewParams="true">
+									<i class="fa fa-globe text-muted"></i>
+									<h:outputText value=" #{bundle.display_map}" />
+									<f:param name="display" value="MAP" />
+									<f:param name="start" value="0" />
+								</h:link>
+							</li>							
 						</ul>
 					</div>
 				</div>

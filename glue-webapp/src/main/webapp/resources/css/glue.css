@@ -156,3 +156,25 @@ body { padding-top: 50px; }
   left: -2.742857142857143em;
   min-width: 2.242857142857143em;
 }
+
+#glue-map {
+  height: 100%; 
+  width: 100%; 
+  position:absolute;
+  left: 0; 
+  z-index: 0;
+}
+
+#glue-map-datepicker { 
+  position: absolute;
+  z-index: 1;
+  margin: 50px;
+  height: auto;
+  opacity: .80;
+  color: white;
+  right:0;
+}
+
+#glue-map-datepicker-previous, #glue-map-datepicker-next {
+  color:black;
+}
