@@ -32,6 +32,8 @@ Modify $USER_HOME/.m2/settings.xml
   </server>
 
 
+Add URIEncoding="UTF-8" to the HTTP Connector in $CATALINA_HOME/conf/server.xml
+
 ***
 CHECKOUT SOURCES:
 Download & Unzip https://github.com/pgillet/Glue/archive/master.zip to $GLUE_CHECKOUT_DIR
