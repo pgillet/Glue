@@ -2,38 +2,45 @@ var inputLocation;
 var inputLat;
 var inputLng;
 var bounds;
-var geocoder;
 // var autocomplete;
 
 function initialize() {
-	
+
 	inputLocation = /** @type {HTMLInputElement} */
 	document.getElementById("ql");
 	inputLat = document.getElementById("lat");
 	inputLng = document.getElementById("lng");
 
+	if (window.localStorage) {
+		
+		// Clears all the local storage data (for test purpose)
+		// window.localStorage.clear();
+		
+		inputLocation.value = localStorage.getItem("location");
+		inputLat.value = localStorage.getItem("latitude");
+		inputLng.value = localStorage.getItem("longitude");
+
+		console.log("Location retrieved from Web Storage.");
+	} else {
+		console.warn("Web Storage is not supported by this browser.");
+	}
+
+	if (!inputLocation.value) {
+		console.warn("No stored location.");
+		document.getElementById("geolocation-alert").style.display = "initial";
+	}
+
+}
+
+function getCurrentPosition() {
 	// SearchBox vs Autocomplete ?
 	// autocomplete = new google.maps.places.Autocomplete(inputLocation);
-
-	geocoder = new google.maps.Geocoder();
-
-	if (inputLocation.value) {
-		// Location already set
-		return;
-	}
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(successFunction, showError);
 	} else {
 		console.warn("Geolocation is not supported by this browser.");
 	}
-}
-
-function getCurrentPosition() {
-	// Clear position
-	clearPosition();
-	// Reinit
-	initialize();
 }
 
 function locationResult(location, lat, lng) {
@@ -50,13 +57,17 @@ function setPosition(locationResult) {
 		inputLng.value = locationResult.lng;
 	}
 
+	// Store
+	if (window.localStorage) {
+		localStorage.setItem("location", locationResult.location);
+		localStorage.setItem("latitude", locationResult.lat);
+		localStorage.setItem("longitude", locationResult.lng);
+		
+		console.log("Stored new location");
+	}
+
 	console.log("lat = " + locationResult.lat + ", long = "
 			+ locationResult.lng + ", city = " + locationResult.location);
-}
-
-function clearPosition() {
-	// Clear
-	inputLocation.value = inputLat.value = inputLng.value = '';
 }
 
 function showError(error) {
@@ -107,7 +118,10 @@ function configureAutocomplete(lat, lng) {
 
 function codeLatLng(lat, lng) {
 
+	
 	var latlng = new google.maps.LatLng(lat, lng);
+	var geocoder = new google.maps.Geocoder();
+	
 	geocoder
 			.geocode(
 					{
@@ -159,39 +173,63 @@ function codeAddress() {
 }
 
 function codeAddress0(callbackFunc) {
-	// Reset lat/lng
-	inputLat.value = inputLng.value = '';
 
-	if (inputLocation.value) {
-		var address = inputLocation.value;
+	if (!inputLocation.value) {
+		console.log("No input location.");
+		// Callback
+		if (callbackFunc) {
+			callbackFunc();
+		}
+		return;
+	}
 
-		geocoder.geocode({
-			'address' : address,
-			'bounds' : bounds
-		}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				if (results[0]) {
-					// city data
-					console.log("Address found = "
-							+ results[0].formatted_address);
-					var location = results[0].geometry.location;
-					var position = new locationResult(address, location.lat(),
-							location.lng());
-					setPosition(position);
+	var address = inputLocation.value;
 
-				} else {
-					console.warn("No results found");
-				}
-			} else {
-				console.error("Geocoder failed due to: " + status);
-			}
+	if (window.localStorage) {
+		var storedLocation = localStorage.getItem("location");
+		var strcmp = address.localeCompare(storedLocation);
 
+		if (strcmp == 0) {
+			console
+					.log("Input location is equal to the stored location. No need for geocoding.");
 			// Callback
 			if (callbackFunc) {
 				callbackFunc();
 			}
-		});
+			return;
+		}
 	}
+
+	// Reset lat/lng ???
+	inputLat.value = inputLng.value = '';
+	
+	var geocoder = new google.maps.Geocoder();
+
+	geocoder.geocode({
+		'address' : address,
+		'bounds' : bounds
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			if (results[0]) {
+				// city data
+				console.log("Address found = " + results[0].formatted_address);
+				var location = results[0].geometry.location;
+				var position = new locationResult(address, location.lat(),
+						location.lng());
+				setPosition(position);
+
+			} else {
+				console.warn("Geocoder found no result");
+			}
+		} else {
+			console.error("Geocoder failed due to: " + status);
+		}
+
+		// Callback
+		if (callbackFunc) {
+			callbackFunc();
+		}
+	});
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
