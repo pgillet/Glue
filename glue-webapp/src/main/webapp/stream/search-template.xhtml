@@ -11,9 +11,7 @@
 	<div id="geolocation-alert" class="row" style="display:none;">
 		<div class="col-md-offset-2 col-md-8">
 			<div class="alert alert-danger">
-				<strong><h:outputText value="#{bundle.first_visit}" /> </strong>
-				<h:outputText value="#{bundle.missing_location_warning}" />
-				<span class="glyphicon glyphicon-map-marker text-muted"></span>
+				<h:outputText value="#{bundle.missing_location_warning}" escape="false"/>
 			</div>
 		</div>
 	</div>
