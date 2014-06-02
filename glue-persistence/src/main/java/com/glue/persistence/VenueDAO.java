@@ -37,13 +37,17 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
     /**
      * Returns the persistent venue with the same name and city as the given
      * venue, or null if no such venue exists. The second argument tells whether
-     * the persistent venue must be a reference venue or not.
+     * or not the persistent venue must be a reference venue.
      * 
      * @param v
-     * @param reference
-     * @return
+     *            the venue to compare
+     * @param onlyRef
+     *            <code>true</code> to return a reference venue if any,
+     *            <code>false</code> to return any venue that matches the name
+     *            and city of the given venue.
+     * @return a Venue object, or null
      */
-    public Venue findDuplicate(Venue v, boolean reference) {
+    public Venue findDuplicate(Venue v, boolean onlyRef) {
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Venue> cq = cb.createQuery(Venue.class);
@@ -55,13 +59,17 @@ public class VenueDAO extends AbstractDAO<Venue> implements BaseOperations {
 
 	conjunction.add(cb.equal(venue.get(Venue_.name), v.getName()));
 	conjunction.add(cb.equal(venue.get(Venue_.city), v.getCity()));
-	conjunction.add(cb.equal(venue.get(Venue_.reference), reference));
+	if (onlyRef) {
+	    conjunction.add(cb.isTrue(venue.get(Venue_.reference)));
+	}
 
 	cq.where(conjunction.toArray(new Predicate[conjunction.size()]));
 
+	cq.orderBy(cb.asc(venue.get(Venue_.reference)));
+
 	TypedQuery<Venue> q = em.createQuery(cq);
 
-	Venue result = PersistenceHelper.getSingleResultOrNull(q);
+	Venue result = PersistenceHelper.getFirstResultOrNull(q);
 
 	return result;
     }
