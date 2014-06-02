@@ -138,17 +138,20 @@
 			catIconMap['OTHER'] = '../resources/img/markers/other-marker.png';
 			catIconMap['CONFERENCE'] = '../resources/img/markers/conference-marker.png';					
 			
+			var osmAttrib='Map data &copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors';
+			
 			// MQ layer
 			var mqUrl='http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
 			domains = ['otile1','otile2','otile3','otile4'];
 			var mqAttrib='Tiles &copy; &lt;a href="http://www.mapquest.com/" target="_blank"&gt;MapQuest&lt;/a&gt; &lt;img src="http://developer.mapquest.com/content/osm/mq_logo.png" /&gt;';
 			var mqLayer = L.tileLayer(mqUrl, {maxZoom: 18, subdomains: domains, attribution: osmAttrib+', '+ mqAttrib});
 			
+			// Setting up the map
 			var map = L.map('glue-map', {
-					   layers: [mqLayer]
-				});
-			
-			map.setView([#{eventMapSearchBean.latitude}, #{eventMapSearchBean.longitude}],11);
+		    	center: [#{eventMapSearchBean.latitude}, #{eventMapSearchBean.longitude}],
+		    	zoom: 11,
+		    	layers: [mqLayer]
+			});
 			
 			var events = [
 				  <ui:repeat value="#{eventMapSearchBean.events}" var="event" varStatus="loop">
