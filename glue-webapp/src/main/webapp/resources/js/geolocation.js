@@ -4,6 +4,10 @@ var inputLng;
 var bounds;
 // var autocomplete;
 
+if (typeof Storage === "undefined") {
+	throw new Error("Glue requires Storage support");
+}
+
 function initialize() {
 
 	inputLocation = /** @type {HTMLInputElement} */
@@ -11,19 +15,14 @@ function initialize() {
 	inputLat = document.getElementById("lat");
 	inputLng = document.getElementById("lng");
 
-	if (window.localStorage) {
-		
-		// Clears all the local storage data (for test purpose)
-		// window.localStorage.clear();
-		
-		inputLocation.value = localStorage.getItem("location");
-		inputLat.value = localStorage.getItem("latitude");
-		inputLng.value = localStorage.getItem("longitude");
+	// Clears all the local storage data (for test purpose)
+	// window.localStorage.clear();
 
-		console.log("Location retrieved from Web Storage.");
-	} else {
-		console.warn("Web Storage is not supported by this browser.");
-	}
+	console.log("Retrieving location from Web Storage.");
+
+	inputLocation.value = localStorage.getItem("location");
+	inputLat.value = localStorage.getItem("latitude");
+	inputLng.value = localStorage.getItem("longitude");
 
 	if (!inputLocation.value) {
 		console.warn("No stored location.");
@@ -45,8 +44,8 @@ function getCurrentPosition() {
 
 function locationResult(location, lat, lng) {
 	this.location = location;
-	this.lat = lat;
-	this.lng = lng;
+	this.lat = roundDD(lat);
+	this.lng = roundDD(lng);
 }
 
 function setPosition(locationResult) {
@@ -58,22 +57,33 @@ function setPosition(locationResult) {
 	}
 
 	// Store
-	if (window.localStorage) {
-		localStorage.setItem("location", locationResult.location);
-		localStorage.setItem("latitude", locationResult.lat);
-		localStorage.setItem("longitude", locationResult.lng);
-		
-		console.log("Stored new location");
-	}
+	localStorage.setItem("location", locationResult.location);
+	localStorage.setItem("latitude", locationResult.lat);
+	localStorage.setItem("longitude", locationResult.lng);
 
+	console.log("Stored new location");
 	console.log("lat = " + locationResult.lat + ", long = "
 			+ locationResult.lng + ", city = " + locationResult.location);
+}
+
+function roundDD(num) {
+
+	// A value in decimal degrees to an precision of 4 decimal places is precise
+	// to 11.132 meters at the equator.
+	// See http://en.wikipedia.org/wiki/Decimal_degrees#Accuracy
+	var precision = 10000;
+	return Math.round(num * precision) / precision;
 }
 
 function showError(error) {
 	switch (error.code) {
 	case error.PERMISSION_DENIED:
 		console.log("User denied the request for Geolocation.");
+
+		// Store
+		var granted = new Boolean(0);
+		localStorage.setItem("geolocation_permission_granted", granted);
+
 		var btn = document.getElementById("btnLocation");
 		btn.title = "Glue has been blocked from tracking your location. Clear your settings to re-enable the user location.";
 		// btn.disabled = "disabled";
@@ -93,6 +103,11 @@ function showError(error) {
 
 // Get the latitude and the longitude;
 function successFunction(position) {
+
+	// Store
+	var granted = new Boolean(1);
+	localStorage.setItem("geolocation_permission_granted", granted);
+
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
 
@@ -118,10 +133,9 @@ function configureAutocomplete(lat, lng) {
 
 function codeLatLng(lat, lng) {
 
-	
 	var latlng = new google.maps.LatLng(lat, lng);
 	var geocoder = new google.maps.Geocoder();
-	
+
 	geocoder
 			.geocode(
 					{
@@ -184,25 +198,22 @@ function codeAddress0(callbackFunc) {
 	}
 
 	var address = inputLocation.value;
+	var storedLocation = localStorage.getItem("location");
 
-	if (window.localStorage) {
-		var storedLocation = localStorage.getItem("location");
-		var strcmp = address.localeCompare(storedLocation);
-
-		if (strcmp == 0) {
-			console
-					.log("Input location is equal to the stored location. No need for geocoding.");
-			// Callback
-			if (callbackFunc) {
-				callbackFunc();
-			}
-			return;
+	var strcmp = address.localeCompare(storedLocation);
+	if (strcmp == 0) {
+		console
+				.log("Input location is equal to the stored location. No need for geocoding.");
+		// Callback
+		if (callbackFunc) {
+			callbackFunc();
 		}
+		return;
 	}
 
-	// Reset lat/lng ???
+	// Reset lat/lng
 	inputLat.value = inputLng.value = '';
-	
+
 	var geocoder = new google.maps.Geocoder();
 
 	geocoder.geocode({
