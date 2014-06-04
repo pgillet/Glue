@@ -20,9 +20,9 @@ function initialize() {
 
 	console.log("Retrieving location from Web Storage.");
 
-	inputLocation.value = localStorage.getItem("location");
-	inputLat.value = localStorage.getItem("latitude");
-	inputLng.value = localStorage.getItem("longitude");
+	inputLocation.value = localStorage.location;
+	inputLat.value = localStorage.latitude;
+	inputLng.value = localStorage.longitude;
 
 	if (!inputLocation.value) {
 		console.warn("No stored location.");
@@ -57,9 +57,9 @@ function setPosition(locationResult) {
 	}
 
 	// Store
-	localStorage.setItem("location", locationResult.location);
-	localStorage.setItem("latitude", locationResult.lat);
-	localStorage.setItem("longitude", locationResult.lng);
+	localStorage.location = locationResult.location;
+	localStorage.latitude = locationResult.lat;
+	localStorage.longitude = locationResult.lng;
 
 	console.log("Stored new location");
 	console.log("lat = " + locationResult.lat + ", long = "
@@ -82,7 +82,7 @@ function showError(error) {
 
 		// Store
 		var granted = new Boolean(0);
-		localStorage.setItem("geolocation_permission_granted", granted);
+		localStorage.geolocation_permission_granted = granted.toString();
 
 		var btn = document.getElementById("btnLocation");
 		btn.title = "Glue has been blocked from tracking your location. Clear your settings to re-enable the user location.";
@@ -106,7 +106,7 @@ function successFunction(position) {
 
 	// Store
 	var granted = new Boolean(1);
-	localStorage.setItem("geolocation_permission_granted", granted);
+	localStorage.geolocation_permission_granted = granted.toString();
 
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
@@ -198,9 +198,8 @@ function codeAddress0(callbackFunc) {
 	}
 
 	var address = inputLocation.value;
-	var storedLocation = localStorage.getItem("location");
-
-	var strcmp = address.localeCompare(storedLocation);
+	
+	var strcmp = address.localeCompare(localStorage.location);
 	if (strcmp == 0) {
 		console
 				.log("Input location is equal to the stored location. No need for geocoding.");
