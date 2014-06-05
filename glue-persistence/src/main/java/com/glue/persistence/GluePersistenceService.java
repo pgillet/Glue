@@ -8,6 +8,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContextType;
 
+import org.apache.openjpa.event.TransactionListener;
+import org.apache.openjpa.persistence.OpenJPAEntityManager;
+import org.apache.openjpa.persistence.OpenJPAEntityManagerSPI;
+import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +60,25 @@ public class GluePersistenceService extends PersistenceService {
 		    PersistenceContextType.TRANSACTION);
 	}
 	return _service;
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+
+	EntityManager em = super.getEntityManager();
+
+	// Get the OpenJPA facade to the given entity manager
+	OpenJPAEntityManager facade = OpenJPAPersistence.cast(em);
+	if (facade != null) {
+	    OpenJPAEntityManagerSPI facadeSPI = (OpenJPAEntityManagerSPI) facade;
+
+	    for (TransactionListener listener : TransactionListenerRealm
+		    .getListeners()) {
+		facadeSPI.addTransactionListener(listener);
+	    }
+	}
+
+	return em;
     }
 
     /**

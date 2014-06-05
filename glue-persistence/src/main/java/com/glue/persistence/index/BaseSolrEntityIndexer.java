@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.openjpa.event.TransactionEvent;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
@@ -53,4 +54,67 @@ public abstract class BaseSolrEntityIndexer implements SolrEntityIndexer {
 	}
     }
 
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void beforeCommit(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterCommit(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterRollback(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterStateTransitions(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterCommitComplete(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterRollbackComplete(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterBegin(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void beforeFlush(TransactionEvent event) {
+    }
+
+    @Override
+    /**
+     * No-op implementation.
+     */
+    public void afterFlush(TransactionEvent event) {
+    }
+    
 }
