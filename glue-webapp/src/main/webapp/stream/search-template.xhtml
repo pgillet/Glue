@@ -80,13 +80,15 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
 				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
 				<ui:repeat var="item" value="#{paramBean.categories}">
+					<ui:param name="enabled" value="#{paramBean.catSelection.contains(item.name)}"/>
 					<h:commandButton styleClass="btn text-muted glue-btn-link"
-						style="#{paramBean.getCategoryStyle(item.name, false, false)}"
-						onmouseover="#{paramBean.getCategoryStyle(item.name, true, true)}"
-						onmouseout="#{paramBean.getCategoryStyle(item.name, true, false)}"
+						style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
+						onmouseover="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, true)}"
+						onmouseout="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, false)}"
 						value="#{bundle[item.name.toLowerCase()]}"
 						action="#{paramBean.enableCategory()}">
 						<f:param name="selectedCat" value="#{item.name}"></f:param>

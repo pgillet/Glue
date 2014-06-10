@@ -158,23 +158,20 @@ body { padding-top: 50px; }
 }
 
 #glue-map {
+  bottom: 0;
   height: 100%; 
   width: 100%; 
   position:absolute;
   left: 0; 
   z-index: 0;
+  overflow: hidden;
 }
 
-#glue-map-datepicker { 
-  position: absolute;
-  z-index: 1;
-  margin: 50px;
-  height: auto;
-  opacity: .80;
-  color: white;
-  right:0;
+/* Overrides Primefaces calendar */
+.ui-inputfield {
+	padding: 0px !important;
 }
 
-#glue-map-datepicker-previous, #glue-map-datepicker-next {
-  color:black;
+.glue-map-btn {
+	background-color: #ffffff;
 }
