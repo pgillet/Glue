@@ -72,8 +72,8 @@
 									includeViewParams="true">
 									<i class="fa fa-globe text-muted"></i>
 									<h:outputText value=" #{bundle.display_map}" />
-									<f:param name="display" value="MAP" />
-									<f:param name="start" value="0" />
+									<f:param name="lat" value="#{paramBean.latitude}" />
+									<f:param name="lng" value="#{paramBean.longitude}" />
 								</h:link>
 							</li>							
 						</ul>

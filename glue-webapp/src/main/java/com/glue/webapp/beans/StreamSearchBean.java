@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.application.ViewHandler;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.DateTime;
@@ -154,20 +152,11 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	setInterval(IntervalType.FROM_TODAY);
 	setStart(0);
 
-	FacesContext facesContext = FacesContext.getCurrentInstance();
-	ExternalContext extContext = facesContext.getExternalContext();
-
-	ViewHandler viewHandler = new ViewParamsHandler(facesContext
-		.getApplication().getViewHandler());
-
-	String url = viewHandler.getActionURL(facesContext, facesContext
-		.getViewRoot().getViewId());
-
 	try {
-	    extContext.redirect(url);
+	    FacesUtil.redirectIncludingViewParams();
 	} catch (IOException e) {
 	    LOG.error(e.getMessage(), e);
-	    facesContext.addMessage(null,
+	    FacesContext.getCurrentInstance().addMessage(null,
 		    new FacesMessage(FacesUtil.getString("error.generic")));
 	}
     }

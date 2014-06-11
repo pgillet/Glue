@@ -1,8 +1,11 @@
 package com.glue.webapp.beans;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.faces.application.ViewHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 public class FacesUtil {
@@ -38,4 +41,20 @@ public class FacesUtil {
 
 		return str;
 	}
+
+    /**
+     * Redirects to the same view ID including view params.
+     */
+    public static void redirectIncludingViewParams() throws IOException {
+	FacesContext facesContext = FacesContext.getCurrentInstance();
+	ExternalContext extContext = facesContext.getExternalContext();
+
+	ViewHandler viewHandler = new ViewParamsHandler(facesContext
+		.getApplication().getViewHandler());
+
+	String url = viewHandler.getActionURL(facesContext, facesContext
+		.getViewRoot().getViewId());
+
+	extContext.redirect(url);
+    }
 }
