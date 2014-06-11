@@ -235,49 +235,6 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	return first();
     }
 
-    /**
-     * Returns the CSS styles to apply to the given category selector.
-     * 
-     * @param cat
-     *            the category name
-     * @param javascriptSyntax
-     *            a boolean telling whether the method should return the
-     *            JavaScript syntax or not
-     * @param onmouseover
-     *            a boolean telling whether the method should return the CSS
-     *            styles to be applied when the pointer is moved onto the
-     *            element (onMouseOver attribute) or away from it (onMouseOut
-     *            attribute). This parameter is ignored if javascriptSyntax is
-     *            set to false.
-     * @return
-     */
-    public String getCategoryStyle(String cat, boolean javascriptSyntax,
-	    boolean onmouseover) {
-	String styleAttr;
-	if (javascriptSyntax) {
-	    // JavaScript syntax
-	    styleAttr = "this.style.paddingBottom = '%dpx'; this.style.borderBottom = '%dpx solid %s' ;";
-	} else {
-	    styleAttr = "padding-bottom: %dpx; border-bottom: %dpx solid %s ;";
-	}
-	// We compensate for the height of the border with the padding and vice
-	// versa
-	int borderWidth;
-	int paddingBottom;
-	if (getCatSelection().contains(cat) || onmouseover) {
-	    paddingBottom = 3;
-	    borderWidth = 5;
-	} else {
-	    paddingBottom = 6;
-	    borderWidth = 2;
-	}
-
-	styleAttr = String.format(styleAttr, paddingBottom, borderWidth,
-		EventCategory.valueOf(cat).getColor());
-
-	return styleAttr;
-    }
-
     public String enableCategory() {
 	String cat = FacesUtil.getRequestParameter("selectedCat");
 	LOG.debug("Toggle category = " + cat);
