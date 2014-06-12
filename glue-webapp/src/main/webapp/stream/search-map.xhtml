@@ -11,13 +11,13 @@
 	xmlns:of="http://omnifaces.org/functions">
 	<ui:define name="metadata">
 		<f:metadata>
-			<f:viewParam name="q" value="#{eventMapSearchBean.query}" />
-			<f:viewParam name="ql" value="#{eventMapSearchBean.location}" />
-			<f:viewParam name="lat" value="#{eventMapSearchBean.latitude}" />
-			<f:viewParam name="lng" value="#{eventMapSearchBean.longitude}" />
-			<f:viewParam name="cat" value="#{eventMapSearchBean.catSelection}"
+			<f:viewParam name="q" value="#{eventSearchBean.query}" />
+			<f:viewParam name="ql" value="#{eventSearchBean.location}" />
+			<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
+			<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
+			<f:viewParam name="cat" value="#{eventSearchBean.catSelection}"
 				converter="StringCollectionConverter" />
-			<f:viewParam name="startdate" value="#{eventMapSearchBean.startDate}">
+			<f:viewParam name="startdate" value="#{eventSearchBean.startDate}">
 				<f:convertDateTime pattern="yyyyMMdd" />
 			</f:viewParam>
 			<f:event type="preRenderView" listener="#{eventMapSearchBean.search}" />
@@ -34,9 +34,9 @@
 		<h:form>
 			<div class="row">
 				<div class="col-sm-12 col-md-7" style="z-index: 1;">
-					<ui:repeat var="item" value="#{eventMapSearchBean.categories}">
+					<ui:repeat var="item" value="#{eventSearchBean.categories}">
 						<ui:param name="enabled"
-							value="#{eventMapSearchBean.catSelection.contains(item.name)}" />
+							value="#{eventSearchBean.catSelection.contains(item.name)}" />
 						<h:commandButton
 							styleClass="btn text-muted glue-btn-link glue-map-btn"
 							style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
@@ -57,9 +57,9 @@
 								<i class="fa fa-angle-left text-muted"></i>
 							</h:commandLink> </span>
 						<p:calendar id="glue-map-calendar"
-							value="#{eventMapSearchBean.startDate}" size="6" timeZone="UTC" styleClass="form-control input-sm">
+							value="#{eventSearchBean.startDate}" size="6" timeZone="UTC" styleClass="form-control input-sm">
 							<p:ajax event="dateSelect"
-								listener="#{eventMapSearchBean.updateDate}" execute="@form"
+								listener="#{eventSearchBean.searchFrom}" execute="@form"
 								update="@form" />
 						</p:calendar>
 						<span class="input-group-btn"> <h:commandLink
@@ -116,7 +116,7 @@
 			
 			// Setting up the map
 			var map = L.map('glue-map', {
-		    	center: [#{eventMapSearchBean.latitude}, #{eventMapSearchBean.longitude}],
+		    	center: [#{eventSearchBean.latitude}, #{eventSearchBean.longitude}],
 		    	zoom: 11,
 		    	zoomControl: false,
 		    	layers: [mqLayer]
@@ -127,7 +127,7 @@
 			control.addTo(map);
 			
 			var events = [
-				  <ui:repeat value="#{eventMapSearchBean.events}" var="event"
+				  <ui:repeat value="#{eventSearchBean.events}" var="event"
 				varStatus="loop">
 				    { "id": "#{event.id}", "title": '#{of:escapeJS(event.title)}', "vid": "#{event.venue.id}", "venue": "#{event.venue.name}", 
 				    "lat": "#{event.venue.latitude}", "lng": "#{event.venue.longitude}", 
