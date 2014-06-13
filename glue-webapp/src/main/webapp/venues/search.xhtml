@@ -12,6 +12,9 @@
 		<f:metadata>
 			<f:viewParam name="v" value="#{venueSearchBean.venueId}" required="true" />
 			<f:viewParam name="q" value="#{venueSearchBean.query}" />
+			<f:viewParam name="ql" value="#{eventSearchBean.location}" />
+			<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
+			<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
 			<f:viewParam name="cat" value="#{venueSearchBean.catSelection}"
 				converter="StringCollectionConverter" />
 			<f:viewParam name="display" value="#{venueSearchBean.display}" />
