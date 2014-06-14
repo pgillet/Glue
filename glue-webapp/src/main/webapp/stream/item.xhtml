@@ -5,12 +5,13 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:glue="http://java.sun.com/jsf/composite/components">
 <h:body>
 	<ui:composition template="../template.xhtml">
-	
+
 		<ui:define name="metadata">
-			<f:metadata>				
+			<f:metadata>
 				<f:viewParam name="ql" value="#{eventSearchBean.location}" />
 				<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
 				<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
@@ -64,53 +65,50 @@
 									rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
 									<img
 										src="#{eventUtilBean.getStickyImageURI(streamItemBean.item)}"
-										alt="#{streamItemBean.item.title}" class="img-responsive"
-										width="180" height="180" title="#{streamItemBean.item.title}" />
+										alt="#{streamItemBean.item.title}"
+										class="img-responsive glue-thumbnail pull-right"
+										title="#{streamItemBean.item.title}" />
 								</ui:fragment>
 							</div>
 
 							<!-- title -->
 							<div class="col-sm-8 col-md-8">
 								<ul class="fa-ul">
-									<li><h3 class="text-primary">
-											<strong>#{streamItemBean.item.title}</strong>
-										</h3></li>
-									<li><h4>
-											<strong><i class="fa-li fa fa-calendar text-muted"></i>
-												<ui:fragment
-													rendered="#{streamItemBean.item.startTime lt streamItemBean.item.stopTime}">
-													<h:outputText value="#{bundle.stream_date_from} " />
-													<h:outputText value="#{streamItemBean.item.startTime}">
-														<f:convertDateTime pattern="#{bundle.date_format_long}" />
-													</h:outputText>
-													<h:outputText value=" #{bundle.stream_date_to} " />
-													<h:outputText value="#{streamItemBean.item.stopTime}">
-														<f:convertDateTime pattern="#{bundle.date_format_long}" />
-													</h:outputText>
-												</ui:fragment> <ui:fragment
-													rendered="#{streamItemBean.item.startTime ge streamItemBean.item.stopTime}">
-													<h:outputText value="#{streamItemBean.item.startTime}">
-														<f:convertDateTime pattern="#{bundle.date_format_long}" />
-													</h:outputText>
-												</ui:fragment></strong>
-										</h4></li>
-									<li><h4>
-											<strong><h:link includeViewParams="true"
-													outcome="/venues/search.xhtml">
-													<span
-														class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
-													<h:outputText
-														value="#{streamItemBean.item.venue.name} - #{streamItemBean.item.venue.city}" />
-													<f:param name="v" value="#{streamItemBean.item.venue.id}"></f:param>
-												</h:link> </strong>
-										</h4>
-										<h5>
-											<span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
-										</h5></li>
+									<li><glue:categoryBadge
+											category="#{streamItemBean.item.category}"
+											preCss="glue-badge-li" /><strong><span
+											class="text-primary">#{streamItemBean.item.title}</span></strong></li>
+								</ul>
+								<ul class="fa-ul">
+									<li><i class="fa-li fa fa-calendar text-muted"></i><span
+										class="text-success"> <ui:fragment
+												rendered="#{streamItemBean.item.startTime lt streamItemBean.item.stopTime}">
+												<h:outputText value="#{bundle.stream_date_from} " />
+												<h:outputText value="#{streamItemBean.item.startTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_long}" />
+												</h:outputText>
+												<h:outputText value=" #{bundle.stream_date_to} " />
+												<h:outputText value="#{streamItemBean.item.stopTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_long}" />
+												</h:outputText>
+											</ui:fragment> <ui:fragment
+												rendered="#{streamItemBean.item.startTime ge streamItemBean.item.stopTime}">
+												<h:outputText value="#{streamItemBean.item.startTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_long}" />
+												</h:outputText>
+											</ui:fragment></span></li>
+									<li><h:link includeViewParams="true"
+											outcome="/venues/search.xhtml">
+											<span
+												class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+											<h:outputText value="#{streamItemBean.item.venue.name}" />
+											<f:param name="v" value="#{streamItemBean.item.venue.id}"></f:param>
+										</h:link></li>
+									<li><span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
+									</li>
 									<c:if test="#{not empty streamItemBean.item.price}">
-										<li><h4>
-												<i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
-											</h4></li>
+										<li><i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
+										</li>
 									</c:if>
 								</ul>
 							</div>
@@ -118,23 +116,24 @@
 
 						<!-- tags + desc -->
 						<div class="row">
-						
-							<div class="col-md-offset-4">							
-								<ui:repeat var="tag" value="#{streamItemBean.item.tags.toArray()}">
+
+							<div class="col-md-offset-4">
+								<ui:repeat var="tag"
+									value="#{streamItemBean.item.tags.toArray()}">
 									<h:link includeViewParams="true" outcome="/stream/search.xhtml">
-										<span class="badge text-muted">
-											<h:outputText value="#{tag.title}" />
+										<span class="badge text-muted"> <h:outputText
+												value="#{tag.title}" />
 										</span>
 										<f:param name="q" value="#{tag.title}"></f:param>
-									</h:link>							
+									</h:link>
 								</ui:repeat>
 							</div>
-							<br/>
+							<br />
 							<div class="col-md-offset-4">
-								<br/>
+								<br />
 								<p>#{streamItemBean.item.description}</p>
-							</div>							
-						</div>						
+							</div>
+						</div>
 					</div>
 
 					<!-- map -->
