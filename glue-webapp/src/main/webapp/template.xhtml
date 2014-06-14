@@ -111,41 +111,6 @@
 				</div>
 				<input type="submit" value="Submit" style="display:none;"/>
 			</form>
-
-			<h:form>
-				<ul class="nav navbar-nav navbar-right">
-					<ui:fragment rendered="#{not empty request.remoteUser}">
-						<!-- <li><h:link outcome="/stream/create"
-								title="#{bundle.create_stream}">
-								<span class="glyphicon glyphicon-plus-sign"></span>
-							</h:link></li>
-						<li><a href="#"><span class="badge">42</span></a></li> -->
-						<li class="dropdown"><a class="dropdown-toggle"
-							data-toggle="dropdown" href="#"> #{request.remoteUser} <span
-								class="caret"></span>
-						</a>
-							<ul class="dropdown-menu">
-								<li><a href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp;<h:outputText
-											value="#{bundle.account_settings}" /></a></li>
-								<li><a href="#"><span
-										class="glyphicon glyphicon-filter"></span>&nbsp;<h:outputText
-											value="#{bundle.search_filters}" /></a></li>
-								<li><h:commandLink action="#{loginBean.logout}">
-										<span class="glyphicon glyphicon-log-out"></span>&nbsp;<h:outputText
-											value="#{bundle.logout}" />
-									</h:commandLink></li>
-							</ul></li>
-					</ui:fragment>
-					<ui:fragment rendered="#{empty request.remoteUser}">
-						<li><h:link value="#{bundle.sign_in}" outcome="/login"
-								class="navbar-text" disabled="true"
-								title="#{bundle.feature_not_available}" /></li>
-						<li><h:link value="#{bundle.sign_up}" outcome="/register"
-								class="navbar-text" disabled="true"
-								title="#{bundle.feature_not_available}" /></li>
-					</ui:fragment>
-				</ul>
-			</h:form>
 		</div>
 
 		<!--/.nav-collapse -->
@@ -204,9 +169,8 @@
 						<a class="btn btn-default" data-dismiss="modal"> <h:outputText
 								value="#{bundle.feedback_close}"></h:outputText>
 						</a>
-						<h:commandButton styleClass="btn btn-primary hidefeedback"
-							value="#{bundle.feedback_send}" action="#{feedbackBean.send}">
-							<f:ajax execute="@form" />
+						<h:commandButton styleClass="btn btn-primary hidefeedback" value="#{bundle.feedback_send}" actionListener="#{feedbackBean.send}">
+							<f:ajax execute="@form"></f:ajax>
 						</h:commandButton>
 					</div>
 				</h:form>
@@ -253,9 +217,12 @@
 	</h:outputScript>
 	<h:outputScript>
 		$('.hidefeedback').click(function(e){
-   		 	e.preventDefault();
-    		$('.modal').modal('hide');
-    		return false;
+    		$('#feedback').modal('hide');
+		});
+		$('#feedback').on('hidden.bs.modal', function () {
+			document.getElementById("feedback-form:feedback-subject").value="";
+			document.getElementById("feedback-form:feedback-mail").value="";
+			document.getElementById("feedback-form:feedback-message").value="";
 		});
 	</h:outputScript>
 
