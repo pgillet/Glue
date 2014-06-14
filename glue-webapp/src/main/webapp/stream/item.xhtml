@@ -8,6 +8,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="../template.xhtml">
+	
+		<ui:define name="metadata">
+			<f:metadata>				
+				<f:viewParam name="ql" value="#{eventSearchBean.location}" />
+				<f:viewParam name="lat" value="#{eventSearchBean.latitude}" />
+				<f:viewParam name="lng" value="#{eventSearchBean.longitude}" />
+				<f:viewParam name="cat" value="#{eventSearchBean.catSelection}"
+					converter="StringCollectionConverter" />
+				<f:viewParam name="startdate" value="#{eventSearchBean.startDate}">
+					<f:convertDateTime pattern="yyyyMMdd" />
+				</f:viewParam>
+				<f:viewParam name="enddate" value="#{eventSearchBean.endDate}">
+					<f:convertDateTime pattern="yyyyMMdd" />
+				</f:viewParam>
+				<f:viewParam name="id" value="#{streamItemBean.id}" />
+				<f:event type="preRenderView" listener="#{streamItemBean.search}" />
+			</f:metadata>
+		</ui:define>
 
 		<ui:define name="stylesheet">
 			<!-- Additional stylesheets -->
@@ -97,14 +115,26 @@
 								</ul>
 							</div>
 						</div>
-						<br/>
-						<!-- desc -->
-						<div class="row">
-							<div class="col-md-offset-4">
-								<p>#{streamItemBean.item.description}</p>
-							</div>
-						</div>
 
+						<!-- tags + desc -->
+						<div class="row">
+						
+							<div class="col-md-offset-4">							
+								<ui:repeat var="tag" value="#{streamItemBean.item.tags.toArray()}">
+									<h:link includeViewParams="true" outcome="/stream/search.xhtml">
+										<span class="badge text-muted">
+											<h:outputText value="#{tag.title}" />
+										</span>
+										<f:param name="q" value="#{tag.title}"></f:param>
+									</h:link>							
+								</ui:repeat>
+							</div>
+							<br/>
+							<div class="col-md-offset-4">
+								<br/>
+								<p>#{streamItemBean.item.description}</p>
+							</div>							
+						</div>						
 					</div>
 
 					<!-- map -->

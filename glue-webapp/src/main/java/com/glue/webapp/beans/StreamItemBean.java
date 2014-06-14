@@ -1,6 +1,5 @@
 package com.glue.webapp.beans;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -22,13 +21,11 @@ public class StreamItemBean {
     @Inject
     private EventController eventController;
 
-    private static final String PARAM_ID = "id";
+    private String id;
     private Event item;
     private Venue venue;
 
-    @PostConstruct
-    public void init() {
-	String id = FacesUtil.getRequestParameter(PARAM_ID);
+    public String search() {
 
 	if (id != null) {
 	    FacesContext context = FacesContext.getCurrentInstance();
@@ -60,6 +57,7 @@ public class StreamItemBean {
 			new FacesMessage(FacesUtil.getString("error.generic")));
 	    }
 	}
+	return null;
     }
 
     /**
@@ -70,26 +68,18 @@ public class StreamItemBean {
     }
 
     /**
-     * @param item
-     *            the item to set
-     */
-    public void setItem(Event item) {
-	this.item = item;
-    }
-
-    /**
      * @return the ref venue
      */
     public Venue getVenue() {
 	return venue;
     }
 
-    /**
-     * @param venue
-     *            the venue to set
-     */
-    public void setVenue(Venue venue) {
-	this.venue = venue;
+    public String getId() {
+	return id;
+    }
+
+    public void setId(String id) {
+	this.id = id;
     }
 
 }

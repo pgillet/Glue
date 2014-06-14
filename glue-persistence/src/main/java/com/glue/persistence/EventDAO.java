@@ -110,6 +110,30 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	return result;
     }
 
+    /**
+     * Find event with medias and tags.
+     * 
+     * @param id
+     * @return
+     */
+    public Event findWithMediasAndTags(String id) {
+
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+	Root<Event> event = cq.from(Event.class);
+
+	event.fetch(Event_.images.getName(), JoinType.LEFT);
+	event.fetch(Event_.tags.getName(), JoinType.LEFT);
+
+	cq.where(cb.equal(event.get(Event_.id), id));
+	cq.select(event);
+	TypedQuery<Event> q = em.createQuery(cq);
+
+	Event result = PersistenceHelper.getSingleResultOrNull(q);
+
+	return result;
+    }
+
     @Override
     public void addCategory(String id, Category category) {
 	// TODO Auto-generated method stub

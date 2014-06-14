@@ -32,8 +32,6 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
     @Inject
     private VenueDAO venueDAO;
 
-
-
     static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     @Inject
@@ -208,7 +206,7 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 
     public Event search(final String id) throws InternalServerException {
 	try {
-	    Event event = eventDAO.findWithImages(id);
+	    Event event = eventDAO.findWithMediasAndTags(id);
 
 	    return event;
 	} catch (Exception e) {
