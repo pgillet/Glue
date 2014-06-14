@@ -10,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
-import com.glue.webapp.logic.InternalServerException;
+import com.glue.domain.Venue;
 import com.glue.webapp.logic.EventController;
+import com.glue.webapp.logic.InternalServerException;
 
 @ManagedBean
 public class StreamItemBean {
@@ -23,6 +24,7 @@ public class StreamItemBean {
 
     private static final String PARAM_ID = "id";
     private Event item;
+    private Venue venue;
 
     @PostConstruct
     public void init() {
@@ -39,6 +41,13 @@ public class StreamItemBean {
 			    null,
 			    new FacesMessage(FacesUtil
 				    .getString("no.such.stream")));
+		}
+
+		venue = item.getVenue();
+
+		if (venue.getParent() != null) {
+		    // The venue has a reference venue
+		    venue = venue.getParent();
 		}
 
 	    } catch (NumberFormatException e) {
@@ -66,6 +75,21 @@ public class StreamItemBean {
      */
     public void setItem(Event item) {
 	this.item = item;
+    }
+
+    /**
+     * @return the ref venue
+     */
+    public Venue getVenue() {
+	return venue;
+    }
+
+    /**
+     * @param venue
+     *            the venue to set
+     */
+    public void setVenue(Venue venue) {
+	this.venue = venue;
     }
 
 }

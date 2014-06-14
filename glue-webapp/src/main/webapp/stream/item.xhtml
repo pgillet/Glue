@@ -110,7 +110,7 @@
 					<!-- map -->
 					<div class="col-md-4">
 						<ui:fragment
-							rendered="#{streamItemBean.item.venue.latitude ne 0.0 and streamItemBean.item.venue.longitude ne 0.0}">
+							rendered="#{streamItemBean.venue.latitude ne 0.0 and streamItemBean.venue.longitude ne 0.0}">
 							<div id="map" style="height: 300px"></div>
 						</ui:fragment>
 					</div>
@@ -131,13 +131,13 @@
 				
 				// Setting up the map
 				var map = L.map('map', {
-				    center: [#{streamItemBean.item.venue.latitude}, #{streamItemBean.item.venue.longitude}],
+				    center: [#{streamItemBean.venue.latitude}, #{streamItemBean.venue.longitude}],
 				    zoom: 13,
 				    layers: [mqLayer]
 				});
 				
-				var marker = L.marker([#{streamItemBean.item.venue.latitude}, #{streamItemBean.item.venue.longitude}]).addTo(map);
-				marker.bindPopup("#{streamItemBean.item.venue.name}").openPopup();			
+				var marker = L.marker([#{streamItemBean.venue.latitude}, #{streamItemBean.venue.longitude}]).addTo(map);
+				marker.bindPopup("#{streamItemBean.venue.name}").openPopup();			
 			
 			</h:outputScript>
 		</ui:define>
