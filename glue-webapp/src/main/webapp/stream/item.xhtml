@@ -8,11 +8,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="../template.xhtml">
+	
+		<ui:define name="stylesheet">
+			<!-- Additional stylesheets -->
+			<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+		</ui:define>
+	
 		<ui:define name="content">
-
-			<!-- <f:metadata>
-				<f:viewParam name="id" value="#{stream.id}" />
-			</f:metadata> -->
 
 			<c:if test="#{not empty facesContext.messageList}">
 				<div class="row">
@@ -28,16 +30,9 @@
 				</div>
 			</c:if>
 
-			<!-- <div class="row">
-				<div
-					class="col-md-6 col-md-offset-3">
-					<div class="alert alert-danger"></div>
-				</div>
-			</div> -->
-
 			<ui:fragment rendered="#{not empty streamItemBean.item}">
 				<div class="row">
-					<div class="col-xs-4 col-sm-3 col-md-4">
+					<div class="col-xs-12 col-sm-4 col-md-3">
 						<div class="pull-right">
 						<br />
 							<ui:fragment rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
@@ -47,12 +42,10 @@
 							</ui:fragment>
 						</div>
 					</div>
-					<div class="col-xs-11 col-sm-8 col-md-6">
+					<div class="col-xs-12 col-sm-8 col-md-5">
 						<ul class="fa-ul">
 							<li><h3 class="text-primary">
-									<span class="pull-right"><i
-										class="fa fa-bookmark-o text-muted"
-										title="#{bundle.add_to_watchlist}"></i></span><strong>#{streamItemBean.item.title}</strong>
+									<strong>#{streamItemBean.item.title}</strong>
 								</h3></li>
 							<li><h4>
 									<strong><i class="fa-li fa fa-calendar text-muted"></i>
@@ -74,8 +67,14 @@
 										</ui:fragment></strong>
 								</h4></li>
 							<li><h4>
-									<strong><span
-										class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>#{streamItemBean.item.venue.name}</strong>
+								<strong><h:link includeViewParams="true"
+											outcome="/venues/search.xhtml">
+											<span
+												class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+											<h:outputText value="#{streamItemBean.item.venue.name} - #{streamItemBean.item.venue.city}"/>
+											<f:param name="v" value="#{streamItemBean.item.venue.id}"></f:param>								
+										</h:link>
+									</strong>
 								</h4>
 								<h5>
 									<span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
@@ -84,40 +83,17 @@
 								<li><h4>
 										<i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
 									</h4></li>
-							</c:if>
-
-							<li><div class="text-muted">
-									<span class="pull-left"><c:choose>
-											<c:when
-												test="#{session.lastAccessedTime lt streamItemBean.item.startTime.time}">
-												<small>318 <h:outputText
-														value="#{bundle.people_are_going}"></h:outputText></small>
-												<i class="fa fa-bar-chart-o fa-lg disabled"></i>
-											</c:when>
-											<c:otherwise>
-												<small>318 <h:outputText
-														value="#{bundle.people_went}"></h:outputText></small>
-												<i class="fa fa-bar-chart-o fa-lg"
-													title="#{bundle.event_analytics}"></i>
-											</c:otherwise>
-										</c:choose> </span> <span class="pull-right"> <i
-										class="fa fa-thumbs-o-up fa-lg text-muted"
-										title="#{bundle.like_content}"></i>144 <i
-										class="fa fa-thumbs-o-down fa-lg text-muted"
-										title="#{bundle.dislike_content}"></i>17 <i
-										class="fa fa-flag-o fa-lg text-muted" title="#{bundle.report}"></i>
-									</span>
-								</div></li>
+							</c:if>							
 						</ul>
 					</div>
-					<div class="col-md-1">
-						<br /> <i class="fa fa-facebook-square fa-2x text-info"
-							title="#{bundle.share_facebook}"></i><br /> <i
-							class="fa fa-google-plus-square fa-2x text-danger"
-							title="#{bundle.share_google_plus}"></i><br /> <i
-							class="fa fa-twitter-square fa-2x text-primary"
-							title="#{bundle.share_twitter}"></i>
-					</div>
+					
+					<ui:fragment
+						rendered="#{streamItemBean.item.venue.latitude ne 0.0 and streamItemBean.item.venue.longitude ne 0.0}">
+						<div class="col-xs-12 col-sm-12 col-md-4">
+						<div id="map" style="height: 200px"></div>
+						</div>
+					</ui:fragment>
+									
 				</div>
 				<br />
 				<div class="row">
@@ -129,150 +105,29 @@
 						</div> -->
 					</div>
 				</div>
-
-				<br />
-				<br />
-
-				<div class="row">
-					<div class="col-md-4 col-md-offset-4">
-						<div class="btn-toolbar" role="toolbar">
-							<div class="btn-group btn-group-lg">
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_chronicle}">
-									<i class="fa fa-font"></i>
-								</button>
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_comment}">
-									<i class="fa fa-comments-o"></i>
-								</button>
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_link}">
-									<i class="fa fa-link"></i>
-								</button>
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_images}">
-									<i class="fa fa-picture-o"></i>
-								</button>
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_video}">
-									<i class="fa fa-film"></i>
-								</button>
-								<button type="button" class="btn btn-default"
-									title="#{bundle.add_audio}">
-									<i class="fa fa-microphone"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<br />
-
-				<div class="page-header">
-					<h3>
-						<h:outputText value="#{bundle.last_comments}"></h:outputText>
-						<small>(194)</small>
-					</h3>
-				</div>
-				<span class="help-block"><h:outputText
-						value="#{bundle.item_help_text}" /></span>
-
-				<div class="row">
-					<div class="col-md-6 col-md-offset-1">
-						<div class="media">
-							<span class="pull-left"><span class="fa-stack fa-lg">
-									<i class="fa fa-circle fa-stack-2x text-danger"></i> <i
-									class="fa fa-user fa-stack-1x fa-inverse"></i>
-							</span></span>
-							<div class="media-body">
-								<h4 class="media-heading">Homer Simpson</h4>
-								Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-								scelerisque ante sollicitudin commodo. Cras purus odio,
-								vestibulum in vulputate at, tempus viverra turpis. Fusce
-								condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-								congue felis in faucibus.
-								<div class="pull-right">
-									<i class="fa fa-thumbs-o-up fa-lg text-muted"
-										title="#{bundle.like_content}"></i> <i
-										class="fa fa-thumbs-o-down fa-lg text-muted"
-										title="#{bundle.dislike_content}"></i>
-								</div>
-							</div>
-						</div>
-						<div class="media">
-							<span class="pull-left"><span class="fa-stack fa-lg">
-									<i class="fa fa-circle fa-stack-2x text-success"></i> <i
-									class="fa fa-female fa-stack-1x fa-inverse"></i>
-							</span></span>
-							<div class="media-body">
-								<h4 class="media-heading">Lara Croft</h4>
-								Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-								scelerisque ante sollicitudin commodo. Cras purus odio,
-								vestibulum in vulputate at, tempus viverra turpis. Fusce
-								condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-								congue felis in faucibus.
-								<div class="pull-right">
-									<i class="fa fa-thumbs-o-up fa-lg text-muted"
-										title="#{bundle.like_content}"></i> <i
-										class="fa fa-thumbs-o-down fa-lg text-muted"
-										title="#{bundle.dislike_content}"></i>
-								</div>
-								<div class="media">
-									<span class="pull-left"><span class="fa-stack fa-lg">
-											<i class="fa fa-circle fa-stack-2x text-primary"></i> <i
-											class="fa fa-moon-o fa-stack-1x fa-inverse"></i>
-									</span></span>
-									<div class="media-body">
-										<h4 class="media-heading">Jack Sparrow</h4>
-										Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-										scelerisque ante sollicitudin commodo. Cras purus odio,
-										vestibulum in vulputate at, tempus viverra turpis. Fusce
-										condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-										congue felis in faucibus.
-										<div class="pull-right">
-											<i class="fa fa-thumbs-o-up fa-lg text-muted"
-												title="#{bundle.like_content}"></i> <i
-												class="fa fa-thumbs-o-down fa-lg text-muted"
-												title="#{bundle.dislike_content}"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<br /> <br />
-						<div>
-							<button type="button" class="btn btn-default text-center">#{bundle.more_comments}</button>
-						</div>
-					</div>
-				</div>
-
-				<br />
-				<br />
-
-
-				<c:if test="#{not empty streamItemBean.item.links}">
-					<div class="page-header">
-						<h3>
-							<h:outputText value="#{bundle.last_videos}"></h:outputText>
-							<small>(#{streamItemBean.item.links.size()})</small>
-						</h3>
-					</div>
-
-					<c:forEach var="link" items="#{streamItemBean.item.links}">
-						<c:choose>
-							<c:when test="#{link.url.contains('youtube')}">
-								<div class="row">
-									<div class="col-md-6 col-md-offset-1">
-										<iframe width="560" height="315" src="#{media.url}"
-											frameborder="0" allowfullscreen="true"></iframe>
-									</div>
-								</div>
-								<br />
-							</c:when>
-						</c:choose>
-					</c:forEach>
-				</c:if>
 			</ui:fragment>
+		</ui:define>
+		
+		<ui:define name="javascript">
+			<h:outputScript library="js" name="primefaces-locales.js" />
+			<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+			<script src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
+			<h:outputScript>
+						
+				// MapQuest layer
+				var mqLayer = MQ.mapLayer();
+				
+				// Setting up the map
+				var map = L.map('map', {
+				    center: [#{streamItemBean.item.venue.latitude}, #{streamItemBean.item.venue.longitude}],
+				    zoom: 13,
+				    layers: [mqLayer]
+				});
+				
+				var marker = L.marker([#{streamItemBean.item.venue.latitude}, #{streamItemBean.item.venue.longitude}]).addTo(map);
+				marker.bindPopup("#{streamItemBean.item.venue.name}").openPopup();			
+			
+			</h:outputScript>
 		</ui:define>
 	</ui:composition>
 </h:body>
