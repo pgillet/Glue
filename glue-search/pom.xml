@@ -59,6 +59,12 @@
 			<artifactId>solr-dataimporthandler</artifactId>
 			<version>${solr.version}</version>
 		</dependency>
+		<!-- ICU support -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-icu</artifactId>
+			<version>${solr.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>solr</finalName>
