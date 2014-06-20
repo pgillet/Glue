@@ -21,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.domain.Category;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Venue;
@@ -70,6 +69,8 @@ public class EventBeanStreamBuilder implements
 	// Description
 	StringBuilder description = new StringBuilder()
 		.append(StringUtils.defaultString(bean.getDescriptifCourt()))
+		.append("\n")
+		.append(StringUtils.defaultString(bean.getDescriptifLong()))
 		.append("\n")
 		.append(StringUtils.defaultString(bean.getHoraires()));
 
