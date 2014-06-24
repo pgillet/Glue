@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
+import com.glue.domain.Occurrence;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.FeedMessageListener;
@@ -35,15 +36,14 @@ public class StreamMessageListener extends GluePersistenceService implements
 		return;
 	    }
 
-	    // Search for an existing venue
-	    Venue persistentVenue = getVenueDAO().findDuplicate(venue);
-	    if (persistentVenue == null) {
-		LOG.info("Inserting " + venue);
-		persistentVenue = getVenueDAO().create(venue);
-	    } else {
-		LOG.info("Venue already exists = " + venue);
-	    }
+	    Venue persistentVenue = persistVenue(venue);
 	    event.setVenue(persistentVenue);
+
+	    for (Occurrence occurrence : event.getOccurrences()) {
+		Venue occurVenue = occurrence.getVenue();
+		Venue other = persistVenue(occurVenue);
+		occurrence.setVenue(other);
+	    }
 
 	    // Search for existing tags and replace them in event tag list
 	    Set<Tag> tags = new HashSet<>();
@@ -74,5 +74,17 @@ public class StreamMessageListener extends GluePersistenceService implements
 	} finally {
 
 	}
+    }
+
+    protected Venue persistVenue(Venue venue) {
+	// Search for an existing venue
+	Venue persistentVenue = getVenueDAO().findDuplicate(venue);
+	if (persistentVenue == null) {
+	    LOG.info("Inserting " + venue);
+	    persistentVenue = getVenueDAO().create(venue);
+	} else {
+	    LOG.info("Venue already exists = " + venue);
+	}
+	return persistentVenue;
     }
 }

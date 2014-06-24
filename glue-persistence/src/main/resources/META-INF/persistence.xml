@@ -14,6 +14,7 @@
 		<class>com.glue.domain.Image</class>
 		<class>com.glue.domain.ImageItem</class>
 		<class>com.glue.domain.Link</class>
+		<class>com.glue.domain.Occurrence</class>
 		<class>com.glue.domain.Performer</class>
 		<class>com.glue.domain.Property</class>
 		<class>com.glue.domain.Tag</class>

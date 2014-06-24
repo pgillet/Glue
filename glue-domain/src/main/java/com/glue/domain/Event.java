@@ -1,10 +1,12 @@
 package com.glue.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,6 +23,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+
+import com.glue.domain.util.OccurrenceComparator;
 
 /**
  * Event class.
@@ -172,6 +176,15 @@ public class Event {
     private Venue venue;
 
     /**
+     * Event occurrences. We consider that most events are unique and an event
+     * has an implicit occurrence (startTime, stopTime, venue) declared directly
+     * in this event.
+     */
+    @OneToMany(cascade = { CascadeType.ALL })
+    private Collection<Occurrence> occurrences = new TreeSet<>(
+	    new OccurrenceComparator());
+
+    /**
      * Date event was created.
      */
     private Date created = new Date();
@@ -312,6 +325,25 @@ public class Event {
      */
     public void setStopTime(Date stopTime) {
 	this.stopTime = stopTime;
+    }
+
+    /**
+     * Event occurrences.
+     * 
+     * @return the occurrences
+     */
+    public Collection<Occurrence> getOccurrences() {
+	return occurrences;
+    }
+
+    /**
+     * Event occurrences.
+     * 
+     * @param occurrences
+     *            the occurrences to set
+     */
+    public void setOccurrences(Collection<Occurrence> occurrences) {
+	this.occurrences = occurrences;
     }
 
     /**

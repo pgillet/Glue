@@ -17,6 +17,7 @@ import com.glue.domain.Image;
 import com.glue.domain.ImageItem;
 import com.glue.domain.Link;
 import com.glue.domain.LinkType;
+import com.glue.domain.Occurrence;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.GlueObjectBuilder;
@@ -84,6 +85,30 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 	    event.setDescription(temp[2].trim());
 	}
 
+	// Venue
+	Venue venue = new Venue();
+
+	// Name
+	venue.setName(StringUtils.defaultString(bean.manufacturer));
+
+	// City
+	temp = StringUtils.split(StringUtils.defaultString(bean.extra2), '|');
+	String city = temp[1].trim();
+	venue.setCity(city);
+
+	// Address
+	String address = StringUtils.defaultString(bean.terms).trim();
+	String postalCode = temp[0].trim();
+	venue.setAddress((address + " " + postalCode + " " + city).trim());
+
+	// Geo
+	temp = StringUtils.split(
+		StringUtils.defaultString(bean.shippingHandling), '|');
+	venue.setLatitude(Double.parseDouble(temp[3]));
+	venue.setLongitude(Double.parseDouble(temp[2]));
+
+	event.setVenue(venue);
+
 	// How many dates?
 	temp = StringUtils.split(
 		StringUtils.defaultString(bean.longDescription), '|');
@@ -92,17 +117,20 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 		.parse(StringUtils.defaultString(bean.validFrom));
 	Date dateTo = format1.parse(StringUtils.defaultString(bean.validTo));
 
-	// more than 1 recurrence?
-	if (temp.length > 1) {
-
-	    // Manage recurrences
-	} else {
-	    if (temp.length > 0) {
-		dateFrom = format2.parse(StringUtils.defaultString(temp[0]));
-	    }
-	}
 	event.setStartTime(dateFrom);
 	event.setStopTime(dateTo);
+
+	// more than 1 occurrence?
+	for (int i = 0; i < temp.length; i++) {
+	    String str = temp[i];
+	    dateFrom = format2.parse(StringUtils.defaultString(str));
+	    Occurrence o = new Occurrence();
+
+	    o.setStartTime(dateFrom);
+	    o.setVenue(venue);
+
+	    event.getOccurrences().add(o);
+	}
 
 	// Price
 	event.setPrice(StringUtils.defaultString(bean.price));
@@ -155,30 +183,6 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 	if (find) {
 	    event.getImages().add(image);
 	}
-
-	// Venue
-	Venue venue = new Venue();
-
-	// Name
-	venue.setName(StringUtils.defaultString(bean.manufacturer));
-
-	// City
-	temp = StringUtils.split(StringUtils.defaultString(bean.extra2), '|');
-	String city = temp[1].trim();
-	venue.setCity(city);
-
-	// Address
-	String address = StringUtils.defaultString(bean.terms).trim();
-	String postalCode = temp[0].trim();
-	venue.setAddress((address + " " + postalCode + " " + city).trim());
-
-	// Geo
-	temp = StringUtils.split(
-		StringUtils.defaultString(bean.shippingHandling), '|');
-	venue.setLatitude(Double.parseDouble(temp[3]));
-	venue.setLongitude(Double.parseDouble(temp[2]));
-
-	event.setVenue(venue);
 
 	return event;
     }

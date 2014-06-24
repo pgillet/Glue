@@ -1,8 +1,12 @@
 package com.glue.persistence.index;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
 
 import com.glue.domain.Event;
+import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 
 public class SolrDocumentFactory {
@@ -16,6 +20,7 @@ public class SolrDocumentFactory {
     public static final String FIELD_DURATION = "duration";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_CATEGORY = "category";
+    public static final String FIELD_TAGS = "tags";
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_ID = "id";
 
@@ -32,8 +37,9 @@ public class SolrDocumentFactory {
 	doc.addField(FIELD_START_TIME, event.getStartTime());
 	doc.addField(FIELD_STOP_TIME, event.getStopTime());
 	// Duration
-	doc.addField(FIELD_DURATION, (event.getStopTime().getTime() - event
-		.getStartTime().getTime()) * 1000);
+	long duration = event.getStopTime() != null ? ((event.getStopTime()
+		.getTime() - event.getStartTime().getTime()) * 1000) : 0;
+	doc.addField(FIELD_DURATION, duration);
 
 	Venue venue = event.getVenue();
 	Venue parent = venue.getParent();
@@ -45,6 +51,13 @@ public class SolrDocumentFactory {
 	doc.addField(FIELD_CITY, venue.getCity());
 	doc.addField(FIELD_LATITUDE, venue.getLatitude());
 	doc.addField(FIELD_LONGITUDE, venue.getLongitude());
+
+	// Tags
+	List<String> tags = new ArrayList<>();
+	for (Tag tag : event.getTags()) {
+	    tags.add(tag.getTitle());
+	}
+	doc.addField(FIELD_TAGS, tags);
 
 	return doc;
     }

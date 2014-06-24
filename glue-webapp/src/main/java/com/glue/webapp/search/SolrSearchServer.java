@@ -165,7 +165,6 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
 	// Add location to query if no lat/lon parameter
 	boolean hasLatLon = false;
-	boolean addLocation = false;
 
 	// Get dates
 	String from = ((startDate != null) ? df.format(startDate) : "NOW/DAY");
@@ -179,7 +178,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	    query.add("d", "30");
 	    hasLatLon = true;
 	} else if (!StringUtils.isEmpty(location)) {
-	    addLocation = true;
+	    query.addFilterQuery("city:" + location);
 	}
 
 	// Boost dates and location
@@ -195,7 +194,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
 	// Category filtering
 	if (categories != null && categories.length > 0) {
-	    System.out.println("cat = " + constructCategoriesFilter());
+	    LOG.debug("cat = " + constructCategoriesFilter());
 	    query.addFilterQuery("category:(" + constructCategoriesFilter()
 		    + ")");
 	}
@@ -214,9 +213,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	if (isFullQuery()) {
 	    finalQuery = DEFAULT_Q;
 	}
-	if (addLocation) {
-	    finalQuery = finalQuery + " city:" + location;
-	}
+
 	query.setParam("q", finalQuery);
 	return query;
     }
@@ -343,16 +340,14 @@ public class SolrSearchServer implements SearchEngine<Event> {
     }
 
     private String constructCategoriesFilter() {
-	String result = "";
-	// Add first category
-	if (categories.length > 0) {
-	    result += categories[0];
+	StringBuilder sb = new StringBuilder();
+
+	for (int i = 0; i < categories.length; i++) {
+	    sb.append(categories[i]);
+	    sb.append(" ");
 	}
-	// For each other categories
-	for (int i = 1; i < categories.length; i++) {
-	    result += " " + categories[i];
-	}
-	return result;
+
+	return sb.toString().trim();
     }
 
 }

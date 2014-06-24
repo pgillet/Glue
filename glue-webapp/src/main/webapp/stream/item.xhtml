@@ -133,6 +133,29 @@
 								<br />
 								<p>#{streamItemBean.item.description}</p>
 							</div>
+							<ui:fragment
+								rendered="#{not empty streamItemBean.item.occurrences}">
+								<div class="col-md-offset-4">
+									<br />
+									<p class="text-muted">
+										<small> <h:outputText value="#{bundle.all_dates}" />:&#160;<ui:repeat
+												var="occurrence"
+												value="#{streamItemBean.item.occurrences.toArray()}"
+												varStatus="status">
+												<h:outputText value="#{occurrence.startTime}">
+													<f:convertDateTime pattern="#{bundle.date_format_short}" />
+												</h:outputText>&#160;
+												<h:outputText value="#{occurrence.startTime}">
+													<f:convertDateTime pattern="#{bundle.time_format}" />
+												</h:outputText>
+												<ui:fragment rendered="#{!status.last}">
+													<h:outputText value=" | " />
+												</ui:fragment>
+											</ui:repeat>
+										</small>
+									</p>
+								</div>
+							</ui:fragment>
 						</div>
 					</div>
 

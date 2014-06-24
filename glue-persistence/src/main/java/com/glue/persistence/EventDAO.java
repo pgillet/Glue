@@ -116,7 +116,7 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
      * @param id
      * @return
      */
-    public Event findWithMediasAndTags(String id) {
+    public Event findWithFullInfo(String id) {
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
@@ -124,6 +124,7 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
 	event.fetch(Event_.images.getName(), JoinType.LEFT);
 	event.fetch(Event_.tags.getName(), JoinType.LEFT);
+	event.fetch(Event_.occurrences.getName(), JoinType.LEFT);
 
 	cq.where(cb.equal(event.get(Event_.id), id));
 	cq.select(event);

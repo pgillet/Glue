@@ -206,7 +206,7 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 
     public Event search(final String id) throws InternalServerException {
 	try {
-	    Event event = eventDAO.findWithMediasAndTags(id);
+	    Event event = eventDAO.findWithFullInfo(id);
 
 	    return event;
 	} catch (Exception e) {
