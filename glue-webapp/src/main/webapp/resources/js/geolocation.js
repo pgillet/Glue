@@ -20,11 +20,11 @@ function initialize() {
 
 	console.log("Retrieving location from Web Storage.");
 
-	inputLocation.value = localStorage.location;
-	inputLat.value = localStorage.latitude;
-	inputLng.value = localStorage.longitude;
-
-	if (!inputLocation.value) {
+	if (localStorage.location) {
+		inputLocation.value = localStorage.location;
+		inputLat.value = localStorage.latitude;
+		inputLng.value = localStorage.longitude;
+	} else {
 		console.warn("No stored location.");
 		document.getElementById("geolocation-alert").style.display = "initial";
 	}
@@ -198,7 +198,7 @@ function codeAddress0(callbackFunc) {
 	}
 
 	var address = inputLocation.value;
-	
+
 	var strcmp = address.localeCompare(localStorage.location);
 	if (strcmp == 0) {
 		console
