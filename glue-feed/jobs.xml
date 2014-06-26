@@ -5,7 +5,24 @@
 	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
 	version="1.8">
 
-	<schedule>		
+	<schedule>
+	    <job>
+			<name>InfoLocale</name>
+			<group>FRANCE</group>
+			<description>OpenData Rennes</description>
+			<job-class>com.glue.feed.rennes.open.data.infolocale.InfoLocaleAgendaJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>InfoLocale</name>
+				<group>FRANCE</group>
+				<job-name>InfoLocale</job-name>
+				<job-group>FRANCE</job-group>
+				<!-- trigger every day at 00:15 am -->
+				<cron-expression>0 15 0 ? * MON,THU</cron-expression>
+			</cron>
+		</trigger>
+	    		
 		<job>
 			<name>SoToulouseAgenda</name>
 			<group>TOULOUSE</group>
@@ -18,8 +35,8 @@
 				<group>TOULOUSE</group>
 				<job-name>SoToulouseAgenda</job-name>
 				<job-group>TOULOUSE</job-group>
-				<!-- trigger twice a week, every Tuesday and Friday at 00:00 am -->
-				<cron-expression>0 0 0 ? * MON,THU</cron-expression>
+				<!-- trigger twice a week, every Tuesday and Friday at 01:00 am -->
+				<cron-expression>0 0 1 ? * MON,THU</cron-expression>
 			</cron>
 		</trigger>
 		
@@ -35,8 +52,8 @@
 				<group>TOULOUSE</group>
 				<job-name>LibraryAgenda</job-name>
 				<job-group>TOULOUSE</job-group>
-				<!-- trigger every day at 00:15 am -->
-				<cron-expression>0 15 0 * * ?</cron-expression>
+				<!-- trigger every day at 01:15 am -->
+				<cron-expression>0 15 1 * * ?</cron-expression>
 			</cron>
 		</trigger>
 		
@@ -53,7 +70,7 @@
 				<job-name>Bikini</job-name>
 				<job-group>TOULOUSE</job-group>
 				<!-- trigger every Wednesday at 00:30 am -->
-				<cron-expression>0 30 0 ? * WED</cron-expression>
+				<cron-expression>0 30 1 ? * WED</cron-expression>
 			</cron>
 		</trigger>
 		
