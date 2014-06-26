@@ -25,6 +25,7 @@ import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Image;
 import com.glue.domain.ImageItem;
+import com.glue.domain.Occurrence;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.GlueObjectBuilder;
@@ -53,10 +54,18 @@ public class InfoLocaleBeanStreamBuilder implements
     @Override
     public Event build(InfoLocaleBean bean) throws Exception {
 
+	Event event = new Event();
+
 	String debut = null, fin = null;
 	if (StringUtils.isNotEmpty(bean.getJour1())) {
 	    debut = bean.getJour1();
 	    fin = debut;
+	}
+	if (StringUtils.isNotEmpty(bean.getJour2())) {
+	    fin = bean.getJour2();
+	}
+	if (StringUtils.isNotEmpty(bean.getJour3())) {
+	    fin = bean.getJour3();
 	}
 	if (StringUtils.isNotEmpty(bean.getJourDu())) {
 	    debut = bean.getJourDu();
@@ -101,7 +110,6 @@ public class InfoLocaleBeanStreamBuilder implements
 	String longitude = StringUtils.defaultString(coords[1]);
 
 	// Event
-	Event event = new Event();
 	event.setTitle(StringUtils.defaultString(bean.getTitre()).trim());
 	event.setDescription(description.toString().trim());
 	event.setStartTime(sdate);
@@ -161,7 +169,29 @@ public class InfoLocaleBeanStreamBuilder implements
 	venue.setCity(bean.getCommune().trim());
 	event.setVenue(venue);
 
+	// Occurrences management
+	if (StringUtils.isNotEmpty(bean.getJour1())
+		&& StringUtils.isNotEmpty(bean.getJour2())) {
+	    event.getOccurrences().add(
+		    createOccurrence(format.parse(bean.getJour1()), venue));
+	    event.getOccurrences().add(
+		    createOccurrence(format.parse(bean.getJour2()), venue));
+
+	    if (StringUtils.isNotEmpty(bean.getJour3())) {
+		event.getOccurrences().add(
+			createOccurrence(format.parse(bean.getJour3()), venue));
+	    }
+	}
+
 	return event;
+    }
+
+    private Occurrence createOccurrence(Date date, Venue venue) {
+	Occurrence occ = new Occurrence();
+	occ.setStartTime(date);
+	occ.setStopTime(date);
+	occ.setVenue(venue);
+	return occ;
     }
 
     // Get categories
