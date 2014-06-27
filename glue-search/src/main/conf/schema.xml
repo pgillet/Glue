@@ -248,6 +248,7 @@
    <copyField source="venue" dest="text"/>
    <copyField source="city" dest="text"/>
    <copyField source="category" dest="text"/>
+   <copyField source="tags" dest="text"/>
    
    <!-- Copy the price into a currency enabled field (default USD) -->
    <!-- <copyField source="price" dest="price_c"/> -->
