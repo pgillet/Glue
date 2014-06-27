@@ -137,7 +137,7 @@ public class InfoLocaleBeanStreamBuilder implements
 	    ImageItem item = new ImageItem();
 	    item.setUrl(bean.getPhoto2Path());
 	    image.setOriginal(item);
-	    image.setUrl(bean.getPhoto1Path());
+	    image.setUrl(bean.getPhoto2Path());
 	    image.setSource(bean.getUrl());
 	    image.setCaption(bean.getPhoto2Legende());
 	    image.setCreator(bean.getPhoto2Credit());
