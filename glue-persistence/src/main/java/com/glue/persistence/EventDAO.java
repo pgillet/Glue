@@ -127,8 +127,17 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	event.fetch(Event_.occurrences.getName(), JoinType.LEFT);
 
 	cq.where(cb.equal(event.get(Event_.id), id));
-	cq.select(event);
+	cq.select(event).distinct(true);
 	TypedQuery<Event> q = em.createQuery(cq);
+
+	// A fetch join has the same join semantics as the corresponding inner
+	// or outer join, except that the related objects specified on the
+	// right-hand side of the join operation are not returned in the query
+	// result or otherwise referenced in the query. Hence, for example, if
+	// event id 1 has five images, the above query returns five
+	// references to the event 1 entity.
+	// Accordingly, we eliminate duplicate query results with
+	// CriteriaQuery.distinct(true)
 
 	Event result = PersistenceHelper.getSingleResultOrNull(q);
 
