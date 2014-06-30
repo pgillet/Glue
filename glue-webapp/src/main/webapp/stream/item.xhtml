@@ -106,37 +106,35 @@
 										</h:link></li>
 									<li><span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
 									</li>
-									<c:if test="#{not empty streamItemBean.item.price}">
+									<ui:fragment rendered="#{not empty streamItemBean.item.price}">
 										<li><i class="fa-li fa fa-ticket text-muted"></i> <strong>#{streamItemBean.item.price}</strong>
 										</li>
-									</c:if>
+									</ui:fragment>
 								</ul>
-							</div>
-						</div>
 
-						<!-- tags + desc -->
-						<div class="row">
+								<!-- tags + desc -->
+								<p>
+									<ui:repeat var="tag"
+										value="#{streamItemBean.item.tags.toArray()}">
+										<h:link includeViewParams="true"
+											outcome="/stream/search.xhtml">
+											<span class="badge text-muted"><h:outputText
+													value="#{tag.title}" /> </span>
+											<f:param name="q" value="#{tag.title}"></f:param>
+										</h:link>
+									</ui:repeat>
+								</p>
 
-							<div class="col-md-offset-4">
-								<ui:repeat var="tag"
-									value="#{streamItemBean.item.tags.toArray()}">
-									<h:link includeViewParams="true" outcome="/stream/search.xhtml">
-										<span class="badge text-muted"> <h:outputText
-												value="#{tag.title}" />
-										</span>
-										<f:param name="q" value="#{tag.title}"></f:param>
-									</h:link>
-								</ui:repeat>
-							</div>
-							<br />
-							<div class="col-md-offset-4">
-								<br />
 								<p>#{streamItemBean.item.description}</p>
-							</div>
-							<ui:fragment
-								rendered="#{not empty streamItemBean.item.occurrences}">
-								<div class="col-md-offset-4">
-									<br />
+								<ui:fragment rendered="#{not empty streamItemBean.item.source}">
+									<p class="text-muted">
+										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText
+												value="#{streamItemBean.item.source}" /></small>
+									</p>
+								</ui:fragment>
+
+								<ui:fragment
+									rendered="#{not empty streamItemBean.item.occurrences}">
 									<p class="text-muted">
 										<small> <h:outputText value="#{bundle.all_dates}" />:&#160;<ui:repeat
 												var="occurrence"
@@ -154,8 +152,8 @@
 											</ui:repeat>
 										</small>
 									</p>
-								</div>
-							</ui:fragment>
+								</ui:fragment>
+							</div>
 						</div>
 					</div>
 

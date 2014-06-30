@@ -33,6 +33,8 @@ import com.glue.feed.GlueObjectBuilder;
 public class InfoLocaleBeanStreamBuilder implements
 	GlueObjectBuilder<InfoLocaleBean, Event> {
 
+    private static final String DATA_SOURCE = "Infolocale";
+
     private static final String DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'+'00:00"; // ex:
 										// "14/05/77"
 
@@ -118,6 +120,7 @@ public class InfoLocaleBeanStreamBuilder implements
 	event.setPrice(StringUtils.defaultString(bean.getTarifGeneral()).trim());
 	event.setUrl(bean.getUrl());
 	event.setTags(getTags(bean.getRubrique(), bean.getGenre()));
+	event.setSource(DATA_SOURCE);
 
 	// Images
 	if (StringUtils.isNotEmpty(bean.getPhoto1Path())) {
