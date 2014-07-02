@@ -1,0 +1,2 @@
+update Event set source="<a href=\"http://www.francebillet.com\" target=\"_blank\">www.francebillet.com</a>" where source="www.francebillet.com";
+update Event set source="<a href=\"http://www.infolocale.fr\" title=\"Pour annoncer vos évènements dans cette base rendez-vous sur www.infolocale.fr.\" target=\"_blank\">Infolocale</a>" where source = "???";

@@ -24,6 +24,7 @@ import com.glue.feed.GlueObjectBuilder;
 
 public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 
+    private static final String DATA_SOURCE = "<a href=\"http://www.francebillet.com\" target=\"_blank\">www.francebillet.com</a>";
     private static final String DATE_PATTERN = "yyyy-MM-dd'T'00:00:00";
     private static final String DATE_PATTERN_2 = "dd/MM/yyy HH:mm";
 
@@ -138,7 +139,7 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 	// Performers
 
 	// Source
-	event.setSource("www.francebillet.com");
+	event.setSource(DATA_SOURCE);
 
 	// Ticket
 	String link = StringUtils.defaultString(bean.deepLink);

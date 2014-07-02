@@ -128,8 +128,8 @@
 								<p>#{streamItemBean.item.description}</p>
 								<ui:fragment rendered="#{not empty streamItemBean.item.source}">
 									<p class="text-muted">
-										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText
-												value="#{streamItemBean.item.source}" /></small>
+										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText styleClass="glue-a"
+												value="#{streamItemBean.item.source}" escape="false" /></small>
 									</p>
 								</ui:fragment>
 

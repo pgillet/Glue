@@ -33,7 +33,7 @@ import com.glue.feed.GlueObjectBuilder;
 public class InfoLocaleBeanStreamBuilder implements
 	GlueObjectBuilder<InfoLocaleBean, Event> {
 
-    private static final String DATA_SOURCE = "Infolocale";
+    private static final String DATA_SOURCE = "<a href=\"http://www.infolocale.fr\" title=\"Pour annoncer vos évènements dans cette base rendez-vous sur www.infolocale.fr.\" target=\"_blank\">Infolocale</a>";
 
     private static final String DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'+'00:00"; // ex:
 										// "14/05/77"

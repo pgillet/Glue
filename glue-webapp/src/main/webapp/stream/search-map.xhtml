@@ -142,8 +142,8 @@
 		    	eventurl = "/glue/stream/item.xhtml?id=" + event.id;
 		    	eventlink = "&lt;strong&gt;&lt;a href=" + eventurl + "&gt;" + event.title + "&lt;/a&gt;&lt;/strong&gt;";
 		    	venueurl = "/glue/venues/search.xhtml?v=" + event.vid;
-		    	venuelink = '&lt;a href=' + venueurl + ' class="glue-a"&gt;'  + event.venue + '&lt;/a&gt;';
-		    	content = eventlink + '&lt;br/&gt;' + '@ ' + venuelink;
+		    	venuelink = '&lt;small&gt;&lt;a href=' + venueurl + ' class="glue-a"&gt;'  + event.venue + '&lt;/a&gt;&lt;/small&gt;';
+		    	content = eventlink + '&lt;br/&gt;' + venuelink;
 				marker.bindPopup(content);
 				marker.on('mouseover', function (e) {
             		this.openPopup();
