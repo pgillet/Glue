@@ -2,6 +2,7 @@ package com.glue.webapp.beans;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +17,8 @@ import com.glue.content.ImageRendition;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Image;
+import com.glue.domain.Link;
+import com.glue.domain.LinkType;
 
 @ManagedBean
 @ApplicationScoped
@@ -124,6 +127,17 @@ public class EventUtilBean {
 		EventCategory.valueOf(cat).getColor());
 
 	return styleAttr;
+    }
+
+    public String getBookingLink(Event event) {
+	Set<Link> links = event.getLinks();
+	for (Link link : links) {
+	    if (LinkType.TICKET.equals(link.getType())) {
+		return link.getUrl();
+	    }
+	}
+
+	return null;
     }
 
 }
