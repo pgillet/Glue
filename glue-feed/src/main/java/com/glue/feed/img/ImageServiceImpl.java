@@ -1,5 +1,6 @@
 package com.glue.feed.img;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
@@ -26,6 +28,12 @@ public class ImageServiceImpl extends GluePersistenceService implements
 
     static final Logger LOG = LoggerFactory.getLogger(ImageServiceImpl.class);
 
+    /**
+     * A blacklist based on the event source to define what events to forbid
+     * through the query. Everything else should be allowed.
+     */
+    private static final String[] blacklist = { "www.francebillet.com" };
+
     public ImageServiceImpl() {
 	super();
     }
@@ -36,12 +44,21 @@ public class ImageServiceImpl extends GluePersistenceService implements
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 	Root<Event> event = cq.from(Event.class);
-	
+
 	event.fetch(Event_.images);
 	Join<Event, Image> image = event.join(Event_.images);
-	
-	cq.where(cb.and(cb.greaterThanOrEqualTo(event.get(Event_.created), d),
-		cb.isTrue(image.get(Image_.sticky))));
+
+	List<Predicate> conjunction = new ArrayList<>();
+
+	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.created), d));
+	conjunction.add(cb.isTrue(image.get(Image_.sticky)));
+
+	for (String urlLike : blacklist) {
+	    conjunction.add(cb.notLike(event.get(Event_.source), "%" + urlLike
+		    + "%"));
+	}
+
+	cq.where(conjunction.toArray(new Predicate[conjunction.size()]));
 
 	cq.select(event);
 	TypedQuery<Event> q = em.createQuery(cq);

@@ -21,6 +21,7 @@ import com.glue.domain.Occurrence;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.GlueObjectBuilder;
+import com.glue.feed.html.URLFilter;
 
 public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 
@@ -31,6 +32,8 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
     static final Logger LOG = LoggerFactory.getLogger(FnacProductBuilder.class);
 
     private DateFormat format1, format2;
+
+    private URLFilter imageFilter = new FnacImageFilter();
 
     public FnacProductBuilder() {
 	format1 = new SimpleDateFormat(DATE_PATTERN);
@@ -154,38 +157,42 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 	Image image = new Image();
 	image.setSource("www.francebillet.com");
 	image.setSticky(true);
-	boolean find = false;
-	if (StringUtils.isNotEmpty(bean.largeImage)) {
+	boolean found = false;
+	if (isValidImage(bean.largeImage)) {
 	    ImageItem item = new ImageItem();
 	    item.setUrl(bean.largeImage);
 	    image.setLarge(item);
 	    image.setOriginal(item);
-	    find = true;
+	    found = true;
 	}
-	if (StringUtils.isNotEmpty(bean.mediumImage)) {
+	if (isValidImage(bean.mediumImage)) {
 	    ImageItem item = new ImageItem();
 	    item.setUrl(bean.mediumImage);
 	    image.setMedium(item);
 	    if (image.getOriginal() == null) {
 		image.setOriginal(item);
 	    }
-	    find = true;
+	    found = true;
 	}
-	if (StringUtils.isNotEmpty(bean.smallImage)) {
+	if (isValidImage(bean.smallImage)) {
 	    ImageItem item = new ImageItem();
 	    item.setUrl(bean.smallImage);
 	    image.setSmall(item);
 	    if (image.getOriginal() == null) {
 		image.setOriginal(item);
 	    }
-	    find = true;
+	    found = true;
 	}
 
-	if (find) {
+	if (found) {
 	    event.getImages().add(image);
 	}
 
 	return event;
+    }
+
+    private boolean isValidImage(String url) {
+	return StringUtils.isNotEmpty(url) && imageFilter.accept(url);
     }
 
     private EventCategory getCategory(String category) {
