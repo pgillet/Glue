@@ -155,7 +155,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 	CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 	Root<Event> event = cq.from(Event.class);
 
-	cq.select(event);
+	cq.select(event).distinct(true);
 	event.fetch(Event_.images.getName(), JoinType.LEFT);
 	// event.fetch(Event_.venue);
 
@@ -171,8 +171,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 	return events;
     }
 
-    protected Predicate[] getWhereClause(String venueId,
-	    CriteriaBuilder cb,
+    protected Predicate[] getWhereClause(String venueId, CriteriaBuilder cb,
 	    Root<Event> event) {
 	Join<Event, Venue> venue = event.join(Event_.venue);
 	Join<Venue, Venue> parent = venue.join(Venue_.parent.getName(),
@@ -190,8 +189,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 	    Predicate notYetFinished = cb.greaterThanOrEqualTo(
 		    event.get(Event_.stopTime), startDate);
 
-	    conjunction.add(
-		    cb.or(notYetStarted, notYetFinished));
+	    conjunction.add(cb.or(notYetStarted, notYetFinished));
 	}
 
 	// Relatively to the end date
@@ -204,8 +202,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 	    Predicate notYetFinished = cb.lessThanOrEqualTo(
 		    event.get(Event_.stopTime), endDate);
 
-	    conjunction.add(
-		    cb.or(notYetStarted, notYetFinished));
+	    conjunction.add(cb.or(notYetStarted, notYetFinished));
 	}
 
 	// Categories
@@ -220,8 +217,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 		    .size()])));
 	}
 
-	conjunction.add(
-		cb.or(cb.equal(venue.get(Venue_.id), venueId),
+	conjunction.add(cb.or(cb.equal(venue.get(Venue_.id), venueId),
 		cb.equal(parent.get(Venue_.id), venueId)));
 
 	return conjunction.toArray(new Predicate[conjunction.size()]);
