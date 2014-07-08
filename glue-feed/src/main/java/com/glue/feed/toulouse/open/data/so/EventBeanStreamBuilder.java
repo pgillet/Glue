@@ -31,6 +31,8 @@ public class EventBeanStreamBuilder implements
 
     private static final String DATE_PATTERN = "dd/MM/yy"; // ex: "14/05/77"
 
+    private static final String DATA_SOURCE = "<a href=\"http://data.grandtoulouse.fr\" target=\"_blank\"><img alt=\"This material is Open Data\" border=\"0\" src=\"http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png\" /></a>";
+
     static final Logger LOG = LoggerFactory
 	    .getLogger(EventBeanStreamBuilder.class);
 
@@ -105,6 +107,7 @@ public class EventBeanStreamBuilder implements
 		bean.getThèmeDeLaManifestation());
 	event.setCategory(cat);
 	event.setPrice(bean.getTarifNormal());
+	event.setSource(DATA_SOURCE);
 
 	Venue venue = new Venue();
 	venue.setName(name);

@@ -29,6 +29,9 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, Event> {
     static final Logger LOG = LoggerFactory.getLogger(ItemStreamBuilder.class);
 
     private static final String DATE_PATTERN = "'le' E dd MMM yyyy";
+
+    private static final String DATA_SOURCE = "<a href=\"http://www.lebikini.com\" target=\"_blank\">www.lebikini.com</a>";
+
     private DateFormat format;
     private File root;
 
@@ -98,6 +101,7 @@ public class ItemStreamBuilder implements GlueObjectBuilder<Item, Event> {
 	event.setUrl(url);
 	event.setStartTime(date);
 	event.setStopTime(date);
+	event.setSource(DATA_SOURCE);
 
 	ImageItem item = new ImageItem();
 	item.setUrl(imgUrl);

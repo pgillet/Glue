@@ -26,6 +26,8 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, Event> {
     private static final String date_pattern = "dd/MM/yyyy HH:mm";
     private static final String time_pattern = "HH:mm";
 
+    private static final String DATA_SOURCE = "<a href=\"http://www.bibliotheque.toulouse.fr\" target=\"_blank\"><img alt=\"This material is Open Data\" border=\"0\" src=\"http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png\" /></a>";
+
     private DateFormat dateFormat;
     private DateFormat timeFormat;
 
@@ -44,6 +46,7 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, Event> {
 	event.setTitle(record.title);
 	event.setCategory(getCategory(record.genre));
 	event.setDescription(record.summary);
+	event.setSource(DATA_SOURCE);
 
 	// Start date
 	String dateSource = record.startTime;
@@ -98,7 +101,7 @@ public class RecordStreamBuilder implements GlueObjectBuilder<Record, Event> {
 	    Image image = new Image();
 	    image.setUrl(url);
 	    image.setOriginal(item);
-	    image.setSource("OPEN DATA");
+	    image.setSource(DATA_SOURCE);
 	    image.setSticky(true);
 
 	    event.getImages().add(image);
