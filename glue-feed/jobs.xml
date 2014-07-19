@@ -108,6 +108,24 @@
 			</cron>
 		</trigger>
 		
+		<job>
+			<name>Event DVR</name>
+			<group>DVR</group>
+			<description>Data validation and reconciliation</description>
+			<job-class>com.glue.feed.dvr.EventReconciliationJob</job-class>
+		</job>
+		<trigger>
+			<cron>
+				<name>Event DVR Trigger</name>
+				<group>DVR</group>
+				<job-name>Event DVR</job-name>
+				<job-group>DVR</job-group>
+				<!-- trigger every day at 05:00 am -->
+				<!-- Should be triggered after venue reconciliation. -->
+				<cron-expression>0 0 5 * * ?</cron-expression>
+			</cron>
+		</trigger>
+		
 		<!-- <job>
 			<name>YouTube</name>
 			<group>CONTENT_FEED</group>
@@ -137,8 +155,8 @@
 				<group>CONTENT_FEED</group>
 				<job-name>Image Fetch</job-name>
 				<job-group>CONTENT_FEED</job-group>
-				<!-- trigger every day at 04:00 am -->
-				<cron-expression>0 0 5 * * ?</cron-expression>
+				<!-- trigger every day at 06:00 am -->
+				<cron-expression>0 0 6 * * ?</cron-expression>
 			</cron>
 		</trigger>
 		
