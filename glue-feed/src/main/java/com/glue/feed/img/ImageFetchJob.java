@@ -37,7 +37,7 @@ public class ImageFetchJob implements Job {
 	    ImageFetcher imageFetcher = new ImageFetcher();
 
 	    for (Event event : events) {
-		System.out.println("event = " + event.getTitle());
+		LOG.info("event = " + event.getTitle());
 		try {
 		    imageFetcher.fetchEventImage(event);
 		} catch (IOException e) {
