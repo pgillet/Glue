@@ -47,10 +47,13 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	CriteriaQuery<Venue> cq = cb.createQuery(Venue.class);
 	Root<Venue> venue = cq.from(Venue.class);
 
+	cq.select(venue);
 	cq.where(cb.and(cb.isNull(venue.get(Venue_.parent)),
 		cb.isFalse(venue.get(Venue_.reference))));
 
-	cq.select(venue);
+	// Priority to the newer venues
+	cq.orderBy(cb.desc(venue.get(Venue_.created)));
+
 	TypedQuery<Venue> q = em.createQuery(cq).setMaxResults(limit);
 	List<Venue> venues = q.getResultList();
 
