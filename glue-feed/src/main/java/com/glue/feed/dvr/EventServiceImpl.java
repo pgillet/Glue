@@ -131,7 +131,12 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	// Select events from a different source: we consider that a single data
 	// source does not contain any duplicates
-	conjunction.add(cb.notEqual(event.get(Event_.source), e.getSource()));
+	// TODO: Should add a column AUTHOR. The event source may be null if a
+	// user authored the event.
+	if (e.getSource() != null) {
+	    conjunction
+		    .add(cb.notEqual(event.get(Event_.source), e.getSource()));
+	}
 
 	// Select events that are not already withdrawn
 	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));
