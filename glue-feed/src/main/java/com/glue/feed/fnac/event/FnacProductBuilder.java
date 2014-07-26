@@ -1,6 +1,7 @@
 package com.glue.feed.fnac.event;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -113,28 +114,8 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 
 	event.setVenue(venue);
 
-	// How many dates?
-	temp = StringUtils.split(
-		StringUtils.defaultString(bean.longDescription), '|');
-
-	Date dateFrom = format1
-		.parse(StringUtils.defaultString(bean.validFrom));
-	Date dateTo = format1.parse(StringUtils.defaultString(bean.validTo));
-
-	event.setStartTime(dateFrom);
-	event.setStopTime(dateTo);
-
-	// more than 1 occurrence?
-	for (int i = 0; i < temp.length; i++) {
-	    String str = temp[i];
-	    dateFrom = format2.parse(StringUtils.defaultString(str));
-	    Occurrence o = new Occurrence();
-
-	    o.setStartTime(dateFrom);
-	    o.setVenue(venue);
-
-	    event.getOccurrences().add(o);
-	}
+	// Dates
+	manageDates(bean, event, venue);
 
 	// Price
 	event.setPrice(StringUtils.defaultString(bean.price));
@@ -186,6 +167,59 @@ public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 
 	if (found) {
 	    event.getImages().add(image);
+	}
+
+	return event;
+    }
+
+    private Event manageDates(Product bean, Event event, Venue venue)
+	    throws ParseException {
+	String[] dateTokens = StringUtils.split(
+		StringUtils.defaultString(bean.longDescription), '|');
+
+	Date dateFrom = format1
+		.parse(StringUtils.defaultString(bean.validFrom));
+	Date dateTo = format1.parse(StringUtils.defaultString(bean.validTo));
+
+	// The number of occurrences define the semantics.
+	switch (dateTokens.length) {
+	case 0:
+	    // 0 occurrence: only bounding dates without time.
+	    // Example: an art exhibition or a festival spanning several
+	    // days
+	    event.setStartTime(dateFrom);
+	    event.setStopTime(dateTo);
+	    break;
+
+	case 1:
+	    // Only one occurrence: is only used to specify the time.
+	    Date dateAndtime = format2.parse(dateTokens[0]);
+	    event.setStartTime(dateAndtime);
+	    event.setStopTime(dateAndtime);
+	    break;
+
+	default:
+	    // More than 1 occurrence.
+	    // Note: the data source is updated every day to keep only the
+	    // upcoming occurrences!
+	    // Example: multiple representations of the same play
+
+	    // Bounding dates without time
+	    event.setStartTime(dateFrom);
+	    event.setStopTime(dateTo);
+
+	    for (int i = 0; i < dateTokens.length; i++) {
+		String token = dateTokens[i];
+		dateFrom = format2.parse(token);
+
+		Occurrence o = new Occurrence();
+		o.setStartTime(dateFrom);
+		o.setVenue(venue);
+
+		event.getOccurrences().add(o);
+	    }
+
+	    break;
 	}
 
 	return event;
