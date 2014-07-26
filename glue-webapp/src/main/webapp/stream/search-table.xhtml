@@ -42,23 +42,10 @@
 												outcome="/stream/item.xhtml" title="#{stream.title}">
 												<f:param name="id" value="#{stream.id}"></f:param>
 											</h:link></small></td>
-									<td style="width: 17%;"><span class="text-success"><small><ui:fragment
-												rendered="#{stream.startTime lt stream.stopTime}">
-												<h:outputText value="#{bundle.stream_date_from} " />
-												<h:outputText value="#{stream.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short_interval}" />
-												</h:outputText>
-												<h:outputText value=" #{bundle.stream_date_to} " />
-												<h:outputText value="#{stream.stopTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short_interval}" />
-												</h:outputText>
-											</ui:fragment> <ui:fragment
-												rendered="#{stream.startTime ge stream.stopTime}">
-												<h:outputText value="#{stream.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short}" />
-												</h:outputText>
-											</ui:fragment></small></span></td>
-									<td><small><h:link includeViewParams="true"
+								<td style="width: 17%;"><small><glue:outputDate
+											startTime="#{stream.startTime}" stopTime="#{stream.stopTime}"
+											pattern="#{bundle.date_format_short_interval}" /></small></td>
+								<td><small><h:link includeViewParams="true"
 											value="#{stream.venue.name}, #{stream.venue.city}"
 											title="#{stream.venue.name}, #{stream.venue.city}"
 											outcome="/venues/search.xhtml">

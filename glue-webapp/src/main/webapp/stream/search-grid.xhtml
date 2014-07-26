@@ -67,24 +67,11 @@
 								<!-- <li><p>
 								<h:outputText value="#{stream.summary}" escape="false" />
 							</p></li> -->
-									<li><i class="fa-li fa fa-calendar text-muted"></i> <span
-										class="text-success"> <ui:fragment
-											rendered="#{stream.startTime lt stream.stopTime}">
-											<h:outputText value="#{bundle.stream_date_from} " />
-											<h:outputText value="#{stream.startTime}">
-												<f:convertDateTime pattern="#{bundle.date_format_short}" />
-											</h:outputText>
-											<h:outputText value=" #{bundle.stream_date_to} " />
-											<h:outputText value="#{stream.stopTime}">
-												<f:convertDateTime pattern="#{bundle.date_format_short}" />
-											</h:outputText>
-										</ui:fragment> <ui:fragment
-											rendered="#{stream.startTime ge stream.stopTime}">
-											<h:outputText value="#{stream.startTime}">
-												<f:convertDateTime pattern="#{bundle.date_format_short}" />
-											</h:outputText>
-										</ui:fragment></span></li>
-									<li>
+								<li><i class="fa-li fa fa-calendar text-muted"></i>
+								<glue:outputDate startTime="#{stream.startTime}"
+										stopTime="#{stream.stopTime}"
+										pattern="#{bundle.date_format_short}" /></li>
+								<li>
 										<h:link includeViewParams="true"
 											outcome="/venues/search.xhtml">
 											<span

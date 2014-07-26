@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+	<composite:attribute name="startTime" required="true"
+		type="java.util.Date" />
+	<composite:attribute name="stopTime" type="java.util.Date" />
+	<composite:attribute name="pattern"
+		default="#{bundle.date_format_long}" />
+</composite:interface>
+
+<composite:implementation>
+	<span class="text-success"><ui:fragment
+			rendered="#{cc.attrs.startTime lt cc.attrs.stopTime}">
+			<h:outputText value="#{bundle.stream_date_from} " />
+			<h:outputText value="#{cc.attrs.startTime}">
+				<f:convertDateTime pattern="#{cc.attrs.pattern}" />
+			</h:outputText>
+			<h:outputText value=" #{bundle.stream_date_to} " />
+			<h:outputText value="#{cc.attrs.stopTime}">
+				<f:convertDateTime pattern="#{cc.attrs.pattern}" />
+			</h:outputText>
+		</ui:fragment> <ui:fragment rendered="#{cc.attrs.startTime ge cc.attrs.stopTime}">
+			<h:outputText value="#{cc.attrs.startTime}">
+				<f:convertDateTime pattern="#{cc.attrs.pattern}" />
+			</h:outputText>
+			<ui:fragment rendered="#{dateUtilBean.hasTime(cc.attrs.startTime)}">&#160;<h:outputText
+					value="#{cc.attrs.startTime}">
+					<f:convertDateTime pattern="#{bundle.time_format}" />
+				</h:outputText>
+			</ui:fragment>
+		</ui:fragment></span>
+</composite:implementation>
+</html>

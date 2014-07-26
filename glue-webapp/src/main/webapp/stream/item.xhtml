@@ -80,23 +80,9 @@
 											class="text-primary">#{streamItemBean.item.title}</span></strong></li>
 								</ul>
 								<ul class="fa-ul">
-									<li><i class="fa-li fa fa-calendar text-muted"></i><span
-										class="text-success"> <ui:fragment
-												rendered="#{streamItemBean.item.startTime lt streamItemBean.item.stopTime}">
-												<h:outputText value="#{bundle.stream_date_from} " />
-												<h:outputText value="#{streamItemBean.item.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_long}" />
-												</h:outputText>
-												<h:outputText value=" #{bundle.stream_date_to} " />
-												<h:outputText value="#{streamItemBean.item.stopTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_long}" />
-												</h:outputText>
-											</ui:fragment> <ui:fragment
-												rendered="#{streamItemBean.item.startTime ge streamItemBean.item.stopTime}">
-												<h:outputText value="#{streamItemBean.item.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_long}" />
-												</h:outputText>
-											</ui:fragment></span></li>
+									<li><i class="fa-li fa fa-calendar text-muted"></i>
+									<glue:outputDate startTime="#{streamItemBean.item.startTime}"
+											stopTime="#{streamItemBean.item.stopTime}" /></li>
 									<li><h:link includeViewParams="true"
 											outcome="/venues/search.xhtml">
 											<span
@@ -106,20 +92,18 @@
 										</h:link></li>
 									<li><span class="text-muted"><address>#{streamItemBean.item.venue.address}</address></span>
 									</li>
-									<li>
-										<ui:fragment rendered="#{not empty streamItemBean.item.price}">
+									<li><ui:fragment
+											rendered="#{not empty streamItemBean.item.price}">
 											<i class="fa-li fa fa-ticket text-muted"></i>
 											<strong>#{streamItemBean.item.price}</strong>
-										</ui:fragment>
-										<ui:fragment
+										</ui:fragment> <ui:fragment
 											rendered="#{not empty eventUtilBean.getBookingLink(streamItemBean.item)}">
 											<span class="pull-right"> <h:graphicImage
 													library="img" name="Fnac.svg" width="25" /> <small><a
 													href="#{eventUtilBean.getBookingLink(streamItemBean.item)}"
 													target="_blank"><h:outputText
 															value="#{bundle.booking_link}"></h:outputText> </a></small></span>
-										</ui:fragment>
-									</li>
+										</ui:fragment></li>
 								</ul>
 
 								<!-- tags + desc -->
@@ -138,8 +122,9 @@
 								<p>#{streamItemBean.item.description}</p>
 								<ui:fragment rendered="#{not empty streamItemBean.item.source}">
 									<p class="text-muted">
-										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText styleClass="glue-a"
-												value="#{streamItemBean.item.source}" escape="false" /></small>
+										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText
+												styleClass="glue-a" value="#{streamItemBean.item.source}"
+												escape="false" /></small>
 									</p>
 								</ui:fragment>
 
