@@ -12,16 +12,12 @@
 	<ui:composition> <!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
 		<div class="row">
-			<div
-					class="col-sm-12 col-md-2 col-md-offset-1 col-md-push-9">
-				<div class="pull-right">
-					<ui:include src="/stream/search-calendar.xhtml">
-						<ui:param name="paramBean" value="#{paramBean}" />
-					</ui:include>
-				</div>
+			<div class="col-sm-4 col-sm-push-8 col-md-2 col-md-offset-1 col-md-push-8">
+				<ui:include src="/stream/search-calendar.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
 			</div>			
-			<div class="col-md-8 col-md-offset-1 col-md-pull-3">
-				<div class="clearfix visible-sm-block"></div>
+			<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">				
 				<ui:repeat var="stream" value="#{paramBean.events}"
 					varStatus="status">
 					<div class="row">
