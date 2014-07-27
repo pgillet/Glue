@@ -9,43 +9,45 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition>
-		<p:calendar value="#{paramBean.startDate}" timeZone="UTC" mode="inline">
-			<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}" 
-				update="@form" />
-		</p:calendar>
-		<ul class="nav nav-pills nav-stacked fa-ul">
-			<li><ui:fragment
-					rendered="#{paramBean.interval eq 'TODAY'}">
-					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{paramBean.searchToday}" value="#{bundle.today}">
-					<f:ajax execute="@form" render="@form" />
-				</h:commandButton></li>
-			<li><ui:fragment
-					rendered="#{paramBean.interval eq 'WEEK_END'}">
-					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{paramBean.searchNextWeekEnd}"
-					value="#{bundle.next_week_end}">
-					<f:ajax execute="@form" render="@form" />
-				</h:commandButton></li>
-			<li><ui:fragment
-					rendered="#{paramBean.interval eq 'WEEK'}">
-					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{paramBean.searchWeek}"
-					value="#{bundle.current_week}">
-					<f:ajax execute="@form" render="@form" />
-				</h:commandButton></li>
-			<li><ui:fragment
-					rendered="#{paramBean.interval eq 'MONTH'}">
-					<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-				</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-					action="#{paramBean.searchMonth}"
-					value="#{bundle.current_month}">
-					<f:ajax execute="@form" render="@form" />
-				</h:commandButton></li>
-		</ul>
+		<div class="glue-block">
+			<p:calendar value="#{paramBean.startDate}" timeZone="UTC" mode="inline">
+				<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}" 
+					update="@form" />
+			</p:calendar>
+			<ul class="nav nav-pills nav-stacked fa-ul">
+				<li><ui:fragment
+						rendered="#{paramBean.interval eq 'TODAY'}">
+						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchToday}" value="#{bundle.today}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton></li>
+				<li><ui:fragment
+						rendered="#{paramBean.interval eq 'WEEK_END'}">
+						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchNextWeekEnd}"
+						value="#{bundle.next_week_end}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton></li>
+				<li><ui:fragment
+						rendered="#{paramBean.interval eq 'WEEK'}">
+						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchWeek}"
+						value="#{bundle.current_week}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton></li>
+				<li><ui:fragment
+						rendered="#{paramBean.interval eq 'MONTH'}">
+						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
+					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchMonth}"
+						value="#{bundle.current_month}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton></li>
+			</ul>
+		</div>
 	</ui:composition>
 </h:body>
 </html>

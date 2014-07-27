@@ -33,8 +33,25 @@
 		</c:if>
 
 		<div class="row glue-hr-bottom-border">
+		
+			<div class="col-sm-10 col-md-8 col-md-offset-1">
+				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
+				<ui:repeat var="item" value="#{paramBean.categories}">
+					<ui:param name="enabled" value="#{paramBean.catSelection.contains(item.name)}"/>
+					<h:commandButton styleClass="btn text-muted glue-btn-link"
+						style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
+						onmouseover="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, true)}"
+						onmouseout="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, false)}"
+						value="#{bundle[item.name.toLowerCase()]}"
+						action="#{paramBean.enableCategory()}">
+						<f:param name="selectedCat" value="#{item.name}"></f:param>
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
+				</ui:repeat>
+			</div>
+		
 			<div
-				class="col-xs-12 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+				class="col-sm-2 col-md-2 col-md-offset-1">
 				<div class="pull-right">
 					<div class="btn-group">
 						<button type="button"
@@ -78,22 +95,7 @@
 					</div>
 				</div>
 			</div>
-			
-			<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
-				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
-				<ui:repeat var="item" value="#{paramBean.categories}">
-					<ui:param name="enabled" value="#{paramBean.catSelection.contains(item.name)}"/>
-					<h:commandButton styleClass="btn text-muted glue-btn-link"
-						style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
-						onmouseover="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, true)}"
-						onmouseout="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, false)}"
-						value="#{bundle[item.name.toLowerCase()]}"
-						action="#{paramBean.enableCategory()}">
-						<f:param name="selectedCat" value="#{item.name}"></f:param>
-						<f:ajax execute="@form" render="@form" />
-					</h:commandButton>
-				</ui:repeat>
-			</div>
+						
 		</div>
 		<br />
 

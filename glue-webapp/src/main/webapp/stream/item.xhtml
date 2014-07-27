@@ -98,7 +98,7 @@
 											<strong>#{streamItemBean.item.price}</strong>
 										</ui:fragment> <ui:fragment
 											rendered="#{not empty eventUtilBean.getBookingLink(streamItemBean.item)}">
-											<span class="pull-right"> <h:graphicImage
+											<span class="pull-right" style="padding-right:10px;"> <h:graphicImage
 													library="img" name="Fnac.svg" width="25" /> <small><a
 													href="#{eventUtilBean.getBookingLink(streamItemBean.item)}"
 													target="_blank"><h:outputText

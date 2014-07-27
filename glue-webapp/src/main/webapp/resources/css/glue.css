@@ -16,6 +16,10 @@ body { padding-top: 50px; }
 	height: auto;
 }
 
+.glue-block {
+	margin-bottom: 20px;
+}
+
 .glue-jumbotron {
 	background-image: url(#{     resource [     'img:crowd-concert-arms-raised.jpg' ]});
 	background-repeat:no-repeat;
