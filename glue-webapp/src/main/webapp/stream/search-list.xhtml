@@ -20,6 +20,9 @@
 			<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">				
 				<ui:repeat var="stream" value="#{paramBean.events}"
 					varStatus="status">
+					
+					<c:set var="bookingLink" value="#{eventUtilBean.getBookingLink(stream)}"></c:set>
+					
 					<div class="row">
 						<div class="col-xs-3 col-sm-2 col-md-3">
 							<ui:fragment
@@ -56,6 +59,11 @@
 										<h:outputText value="#{stream.venue.name} - #{stream.venue.city}" />
 										<f:param name="v" value="#{stream.venue.id}"></f:param>
 									</h:link></li>
+								<ui:fragment rendered="#{not empty bookingLink}">
+									<li><a href="#{bookingLink}" target="_blank"
+										class="btn btn-warning btn-xs"><h:outputText
+												value="#{bundle.booking_link}" /></a></li>
+								</ui:fragment>
 							</ul>
 						</div>
 					</div>
