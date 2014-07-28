@@ -39,6 +39,7 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
 	event.fetch(Event_.venue);
 	event.fetch(Event_.images.getName(), JoinType.LEFT);
+	event.fetch(Event_.links.getName(), JoinType.LEFT);
 
 	cq.where(event.get(Event_.id).in(ids));
 	cq.select(event);
