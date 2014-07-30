@@ -157,6 +157,7 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 
 	cq.select(event).distinct(true);
 	event.fetch(Event_.images.getName(), JoinType.LEFT);
+	event.fetch(Event_.links.getName(), JoinType.LEFT);
 	// event.fetch(Event_.venue);
 
 	cq.where(getWhereClause(venueId, cb, event));

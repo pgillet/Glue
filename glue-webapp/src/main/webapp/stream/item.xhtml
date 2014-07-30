@@ -96,13 +96,14 @@
 											rendered="#{not empty streamItemBean.item.price}">
 											<i class="fa-li fa fa-ticket text-muted"></i>
 											<strong>#{streamItemBean.item.price}</strong>
-										</ui:fragment> <ui:fragment
-											rendered="#{not empty eventUtilBean.getBookingLink(streamItemBean.item)}">
-											<span class="pull-right" style="padding-right:10px;"> <h:graphicImage
-													library="img" name="Fnac.svg" width="25" /> <small><a
-													href="#{eventUtilBean.getBookingLink(streamItemBean.item)}"
-													target="_blank"><h:outputText
-															value="#{bundle.booking_link}"></h:outputText> </a></small></span>
+										</ui:fragment> <c:set var="bookingLink"
+											value="#{eventUtilBean.getBookingLink(streamItemBean.item)}"></c:set>
+										<ui:fragment rendered="#{not empty bookingLink}">
+											<span class="pull-right" style="padding-right: 10px;">
+												<h:graphicImage library="img" name="Fnac.svg" width="25" />
+												<small><a href="#{bookingLink}" target="_blank"><h:outputText
+															value="#{bundle.booking_link}"></h:outputText> </a></small>
+											</span>
 										</ui:fragment></li>
 								</ul>
 
