@@ -9,83 +9,84 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:glue="http://java.sun.com/jsf/composite/components">
 <h:body>
-	<ui:composition> <!-- template="./search.xhtml" -->
+	<ui:composition>
+		<!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
 
-			<div class="row">
-				<div
-					class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-8 col-xs-offset-2 ">
-					<div class="row">
+		<div class="row">
+			<div
+				class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-8 col-xs-offset-2 ">
+				<div class="row">
 
-						<div class="col-sm-4 col-md-4 col-lg-3 pull-right">
-							<ui:include src="/stream/search-calendar.xhtml" >
-								<ui:param name="paramBean" value="#{paramBean}" />
-							</ui:include>
-						</div>
+					<div class="col-sm-4 col-md-4 col-lg-3 pull-right">
+						<ui:include src="/stream/search-calendar.xhtml">
+							<ui:param name="paramBean" value="#{paramBean}" />
+						</ui:include>
+					</div>
 
-						<ui:repeat var="stream" value="#{paramBean.events}"
-							varStatus="status">
+					<ui:repeat var="stream" value="#{paramBean.events}"
+						varStatus="status">
 
-							<c:set var="count" value="#{status.index + 1}" />
+						<c:set var="count" value="#{status.index + 1}" />
+						<c:set var="bookingLink"
+							value="#{eventUtilBean.getBookingLink(stream)}"></c:set>
 
-							<ui:fragment rendered="#{count mod 4 == 0}">
-								<div class="clearfix visible-lg"></div>
-							</ui:fragment>
-							<ui:fragment rendered="#{count mod 3 == 0}">
-								<div class="clearfix visible-md"></div>
-								<div class="clearfix visible-sm"></div>
-							</ui:fragment>
-							<!-- <ui:fragment rendered="#{count mod 2 == 0}">
+						<ui:fragment rendered="#{count mod 4 == 0}">
+							<div class="clearfix visible-lg"></div>
+						</ui:fragment>
+						<ui:fragment rendered="#{count mod 3 == 0}">
+							<div class="clearfix visible-md"></div>
+							<div class="clearfix visible-sm"></div>
+						</ui:fragment>
+						<!-- <ui:fragment rendered="#{count mod 2 == 0}">
 							<div class="clearfix visible-sm"></div>
 						</ui:fragment> -->
-							<div class="clearfix visible-xs"></div>
+						<div class="clearfix visible-xs"></div>
 
 
-							<div class="col-sm-4 col-md-4 col-lg-3 glue-tile">
+						<div class="col-sm-4 col-md-4 col-lg-3 glue-tile">
 
-								<div style="min-width: 170px; min-height: 170px;">
-									<ui:fragment rendered="#{eventUtilBean.hasStickyImage(stream)}">
-										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-											<f:param name="id" value="#{stream.id}"></f:param>
+							<div style="min-width: 170px; min-height: 170px;">
+								<ui:fragment rendered="#{eventUtilBean.hasStickyImage(stream)}">
+									<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+										<f:param name="id" value="#{stream.id}"></f:param>
 										<img src="#{eventUtilBean.getStickyImageURI(stream)}"
 											alt="#{stream.title}"
 											class="img-responsive glue-thumbnail center-block"
 											title="#{stream.title}" />
 									</h:link>
-									</ui:fragment>
-								</div>
-								<ul class="fa-ul">
-									<li><glue:categoryBadge category="#{stream.category}"
-											preCss="glue-badge-li" />
-										<h6>
-											<strong><h:link includeViewParams="true"
-													value="#{facesUtilBean.abbreviate(stream.title, 100)}"
-													outcome="/stream/item.xhtml">
-													<f:param name="id" value="#{stream.id}"></f:param>
-												</h:link> </strong>
-										</h6></li>
+								</ui:fragment>
+							</div>
+							<ul class="list-unstyled">
+								<li><glue:categoryBadge category="#{stream.category}" /> <small>
+										<strong><h:link includeViewParams="true"
+												value="#{facesUtilBean.abbreviate(stream.title, 100)}"
+												outcome="/stream/item.xhtml">
+												<f:param name="id" value="#{stream.id}"></f:param>
+											</h:link> </strong>
+								</small></li>
 								<!-- <li><p>
 								<h:outputText value="#{stream.summary}" escape="false" />
 							</p></li> -->
-								<li><i class="fa-li fa fa-calendar text-muted"></i>
-								<glue:outputDate startTime="#{stream.startTime}"
+								<li><glue:outputDate startTime="#{stream.startTime}"
 										stopTime="#{stream.stopTime}"
 										pattern="#{bundle.date_format_short}" /></li>
-								<li>
-										<h:link includeViewParams="true"
-											outcome="/venues/search.xhtml">
-											<span
-												class="fa-li glue-fa-li glyphicon glyphicon-map-marker text-muted"></span>
+								<li><small><h:link includeViewParams="true"
+											outcome="/venues/search.xhtml" styleClass="text-muted">
 											#{stream.venue.name} - #{stream.venue.city}
 											<f:param name="v" value="#{stream.venue.id}"></f:param>
-										</h:link>
-									</li>
+										</h:link></small></li>
+								<ui:fragment rendered="#{not empty bookingLink}">
+									<li><a href="#{bookingLink}" target="_blank"
+										class="btn btn-warning btn-xs pull-right"><h:outputText
+												value="#{bundle.booking_link}" /></a></li>
+								</ui:fragment>
 							</ul>
-							</div>
-						</ui:repeat>
-					</div>
+						</div>
+					</ui:repeat>
 				</div>
 			</div>
+		</div>
 
 		<!-- </ui:define> -->
 	</ui:composition>

@@ -115,7 +115,7 @@ body { padding-top: 50px; }
 .glue-tile {
 	min-height: 350px;
 	display: block;
-	padding: 15px 4px;
+	padding: 15px 10px;
 	line-height: 1.428571429;
 	border: 1px solid #ddd;
 	margin-top: -1px;
@@ -130,15 +130,19 @@ body { padding-top: 50px; }
 	color: #999;
 }
 
+a.text-muted:hover {
+  color: #777777;
+}
+
 .glue-badge {
   display: inline-block;
-  padding: .6em .7em;
+  padding: .5em .7em;
   font-size: 70%;
   line-height: 1;
   color: #fff;
   text-align: center;
   white-space: nowrap;
-  vertical-align: baseline;
+  vertical-align: bottom;
   font-family: monospace;
 }
 
@@ -156,7 +160,7 @@ body { padding-top: 50px; }
 .glue-badge-li {
   position: absolute;
   left: -2.742857142857143em;
-  min-width: 2.242857142857143em;
+  /* min-width: 2.242857142857143em; */
 }
 
 #glue-map {
