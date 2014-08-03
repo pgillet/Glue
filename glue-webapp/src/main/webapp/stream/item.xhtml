@@ -23,9 +23,29 @@
 				<f:viewParam name="enddate" value="#{eventSearchBean.endDate}">
 					<f:convertDateTime pattern="yyyyMMdd" />
 				</f:viewParam>
-				<f:viewParam name="id" value="#{streamItemBean.id}" />
+				<f:viewParam name="id" value="#{streamItemBean.id}" required="true" />
 				<f:event type="preRenderView" listener="#{streamItemBean.search}" />
 			</f:metadata>
+		</ui:define>
+
+		<ui:define name="tags">
+
+			<!-- Open Graph -->
+			<meta property="og:title" content="#{streamItemBean.item.title}" />
+			<meta property="og:site_name" content="Dataglue" />
+			<meta property="og:url"
+				content="#{request.requestURL}?#{request.queryString}" />
+			<meta property="og:description"
+				content="#{streamItemBean.item.description}" />
+			<ui:fragment
+				rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
+				<meta property="og:image"
+					content="#{eventUtilBean.getStickyImageURI(streamItemBean.item)}" />
+			</ui:fragment>
+			<meta property="og:locale" content="#{languageBean.locale}" />
+
+			<!-- Twitter -->
+			<meta name="twitter:site" content="@data_glue" />
 		</ui:define>
 
 		<ui:define name="stylesheet">
@@ -80,8 +100,8 @@
 											class="text-primary">#{streamItemBean.item.title}</span></strong></li>
 								</ul>
 								<ul class="fa-ul">
-									<li><i class="fa-li fa fa-calendar text-muted"></i>
-									<glue:outputDate startTime="#{streamItemBean.item.startTime}"
+									<li><i class="fa-li fa fa-calendar text-muted"></i> <glue:outputDate
+											startTime="#{streamItemBean.item.startTime}"
 											stopTime="#{streamItemBean.item.stopTime}" /></li>
 									<li><h:link includeViewParams="true"
 											outcome="/venues/search.xhtml">
@@ -107,48 +127,73 @@
 										</ui:fragment></li>
 								</ul>
 
-								<!-- tags + desc -->
-								<p>
-									<ui:repeat var="tag"
-										value="#{streamItemBean.item.tags.toArray()}">
-										<h:link includeViewParams="true"
-											outcome="/stream/search.xhtml">
-											<span class="badge text-muted"><h:outputText
-													value="#{tag.title}" /> </span>
-											<f:param name="q" value="#{tag.title}"></f:param>
-										</h:link>
-									</ui:repeat>
-								</p>
 
-								<p>#{streamItemBean.item.description}</p>
-								<ui:fragment rendered="#{not empty streamItemBean.item.source}">
-									<p class="text-muted">
-										<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText
-												styleClass="glue-a" value="#{streamItemBean.item.source}"
-												escape="false" /></small>
-									</p>
-								</ui:fragment>
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="active"><a href="#about" role="tab"
+										data-toggle="tab"><h:outputText value="#{bundle.about}" /></a></li>
+									<li><a href="#share" role="tab" data-toggle="tab"><h:outputText
+												value="#{bundle.share}" /></a></li>
+								</ul>
 
-								<ui:fragment
-									rendered="#{not empty streamItemBean.item.occurrences}">
-									<p class="text-muted">
-										<small> <h:outputText value="#{bundle.all_dates}" />:&#160;<ui:repeat
-												var="occurrence"
-												value="#{streamItemBean.item.occurrences.toArray()}"
-												varStatus="status">
-												<h:outputText value="#{occurrence.startTime}">
-													<f:convertDateTime pattern="#{bundle.date_format_short}" />
-												</h:outputText>&#160;
-												<h:outputText value="#{occurrence.startTime}">
-													<f:convertDateTime pattern="#{bundle.time_format}" />
-												</h:outputText>
-												<ui:fragment rendered="#{!status.last}">
-													<h:outputText value=" | " />
-												</ui:fragment>
+								<div class="tab-content">
+									<div class="tab-pane active glue-tab-pane" id="about">
+										<!-- About Pane -->
+										<p>
+											<ui:repeat var="tag"
+												value="#{streamItemBean.item.tags.toArray()}">
+												<h:link includeViewParams="true"
+													outcome="/stream/search.xhtml">
+													<span class="badge text-muted"><h:outputText
+															value="#{tag.title}" /> </span>
+													<f:param name="q" value="#{tag.title}"></f:param>
+												</h:link>
 											</ui:repeat>
-										</small>
-									</p>
-								</ui:fragment>
+										</p>
+
+										<p>#{streamItemBean.item.description}</p>
+										<ui:fragment
+											rendered="#{not empty streamItemBean.item.source}">
+											<p class="text-muted">
+												<small><h:outputText value="#{bundle.source}" />:&#160;<h:outputText
+														styleClass="glue-a" value="#{streamItemBean.item.source}"
+														escape="false" /></small>
+											</p>
+										</ui:fragment>
+
+										<ui:fragment
+											rendered="#{not empty streamItemBean.item.occurrences}">
+											<p class="text-muted">
+												<small> <h:outputText value="#{bundle.all_dates}" />:&#160;<ui:repeat
+														var="occurrence"
+														value="#{streamItemBean.item.occurrences.toArray()}"
+														varStatus="status">
+														<h:outputText value="#{occurrence.startTime}">
+															<f:convertDateTime pattern="#{bundle.date_format_short}" />
+														</h:outputText>&#160;
+												<h:outputText value="#{occurrence.startTime}">
+															<f:convertDateTime pattern="#{bundle.time_format}" />
+														</h:outputText>
+														<ui:fragment rendered="#{!status.last}">
+															<h:outputText value=" | " />
+														</ui:fragment>
+													</ui:repeat>
+												</small>
+											</p>
+										</ui:fragment>
+									</div>
+									<div class="tab-pane glue-tab-pane" id="share">
+										<a
+											href="https://www.facebook.com/sharer/sharer.php?u=#{request.requestURL}?#{request.queryString}"
+											target="_blank"><i
+											class="fa fa-facebook-square fa-2x facebook"></i></a> <a
+											href="https://plus.google.com/share?url=#{request.requestURL}?#{request.queryString}"
+											target="_blank"><i
+											class="fa fa-google-plus-square fa-2x google-plus"></i></a> <a
+											href="https://twitter.com/share?url=#{request.requestURL}?#{request.queryString}"
+											target="_blank"><i
+											class="fa fa-twitter-square fa-2x twitter"></i></a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
