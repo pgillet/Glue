@@ -20,22 +20,13 @@ body { padding-top: 50px; }
 	margin-bottom: 20px;
 }
 
-.glue-jumbotron {
-	background-image: url(#{     resource [     'img:crowd-concert-arms-raised.jpg' ]});
-	background-repeat:no-repeat;
+#glue-logo {
+	background-image: url(#{resource['img:glue-big-icon.png']});
+	background-repeat: no-repeat;
 	background-position: center;
-	background-size: cover;
-	padding-top: 28px;
-	padding-bottom: 28px;
-}
-
-.glue-jumbotron h1,.glue-jumbotron .h1 {
-	font-size: 48px;
-}
-
-.glue-jumbotron-panel {
-	background-color: transparent;
-	color: white;
+	background-size: 160px 140px; 
+	height: 140px; 
+	width: 160px;
 }
 
 .glue-label {
