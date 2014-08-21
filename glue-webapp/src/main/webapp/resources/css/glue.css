@@ -76,6 +76,13 @@ body { padding-top: 50px; }
 	        border-right: 0px;
 }
 
+.glue-btn-xxs {
+	padding: 1px 3px;
+	font-size: 11px;
+	line-height: 1.2;
+	border-radius: 3px;
+}
+
 /* To be used in conjunction with .fa-li to nicely mix Bootstrap icons with Font Awesome icons in unordered lists. */
 .glue-fa-li {
 	width: 2.142857142857143em !important;
