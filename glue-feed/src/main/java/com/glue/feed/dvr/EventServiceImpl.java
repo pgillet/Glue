@@ -13,6 +13,8 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import com.glue.feed.sim.EventSimilarityMetric;
 import com.glue.feed.sim.MetricHandler;
 import com.glue.feed.sim.SimilarityMetric;
 import com.glue.persistence.GluePersistenceService;
+import com.glue.persistence.index.SolrServerManager;
 
 public class EventServiceImpl extends GluePersistenceService implements
 	EventService, ErrorHandler, ErrorManager {
@@ -183,9 +186,10 @@ public class EventServiceImpl extends GluePersistenceService implements
      * 
      * @param e1
      * @param e2
+     * @throws Exception
      */
     @Override
-    public void resolve(Event e1, Event e2) {
+    public void resolve(Event e1, Event e2) throws Exception {
 
 	// Reattach: Why do I have to do that!!?
 	EntityManager em = getEntityManager();
@@ -204,13 +208,21 @@ public class EventServiceImpl extends GluePersistenceService implements
 	    disposable = e1;
 	}
 
-	LOG.info("Withdraw event with ID " + disposable.getId() + "\n");
+	LOG.info("Withdraw event with ID " + disposable.getId());
 
 	disposable.setWithdrawn(true);
 	disposable.setWithdrawnNote("Duplicate of "
 		+ (disposable == e1 ? e2.getId() : e1.getId()));
 
 	getEventDAO().update(disposable);
+
+	// Explicit Solr operation
+	LOG.debug("Deletes single document by unique ID from index = "
+		+ disposable.getId() + "\n");
+	SolrServer solrServer = SolrServerManager.getSolrServer();
+	solrServer.deleteById(disposable.getId());
+	// Commit
+	solrServer.commit();
     }
 
     public void execute(Date limit) {
@@ -273,6 +285,13 @@ public class EventServiceImpl extends GluePersistenceService implements
 		    commit();
 		} catch (Exception ex) {
 		    rollback();
+		    try {
+			SolrServerManager.getSolrServer().rollback();
+		    } catch (SolrServerException | IOException e) {
+			LOG.error(ex.getMessage(), ex);
+			fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex,
+				"Solr", -1);
+		    }
 		    LOG.error(ex.getMessage(), ex);
 		    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex, "db",
 			    -1);

@@ -31,6 +31,6 @@ public interface EventService extends AutoCloseable {
      * @param e1
      * @param e2
      */
-    void resolve(Event e1, Event e2);
+    void resolve(Event e1, Event e2) throws Exception;
 
 }
