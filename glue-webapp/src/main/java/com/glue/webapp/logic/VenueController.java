@@ -180,6 +180,9 @@ public class VenueController extends AbstractPaginatedSearch<List<Event>> {
 
 	List<Predicate> conjunction = new ArrayList<>();
 
+	// Events that are not withdrawn
+	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));
+
 	// Relatively to the start date
 	if (startDate != null) {
 	    // Events that have not yet started

@@ -1,6 +1,7 @@
 package com.glue.feed.dvr;
 
 import java.util.Date;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.quartz.DisallowConcurrentExecution;
@@ -42,6 +43,13 @@ public class EventReconciliationJob implements Job {
 	    service.execute(dateLimit);
 
 	    service.flush();
+
+	    // Update index
+	    LOG.info("Deletes from the index the documents of withdrawn events");
+	    EventIndexService svc = new EventIndexServiceImpl();
+	    List<String> ids = svc.getWithdrawnEventIds(dateLimit);
+	    svc.deleteById(ids);
+
 	    LOG.info("Done");
 	} catch (Exception e) {
 	    LOG.error(e.getMessage(), e);

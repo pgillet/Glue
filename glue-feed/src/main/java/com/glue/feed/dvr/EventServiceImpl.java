@@ -13,8 +13,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +30,6 @@ import com.glue.feed.sim.EventSimilarityMetric;
 import com.glue.feed.sim.MetricHandler;
 import com.glue.feed.sim.SimilarityMetric;
 import com.glue.persistence.GluePersistenceService;
-import com.glue.persistence.index.SolrServerManager;
 
 public class EventServiceImpl extends GluePersistenceService implements
 	EventService, ErrorHandler, ErrorManager {
@@ -208,21 +205,13 @@ public class EventServiceImpl extends GluePersistenceService implements
 	    disposable = e1;
 	}
 
-	LOG.info("Withdraw event with ID " + disposable.getId());
+	LOG.info("Withdraw event with ID " + disposable.getId() + "\n");
 
 	disposable.setWithdrawn(true);
 	disposable.setWithdrawnNote("Duplicate of "
 		+ (disposable == e1 ? e2.getId() : e1.getId()));
 
 	getEventDAO().update(disposable);
-
-	// Explicit Solr operation
-	LOG.debug("Deletes single document by unique ID from index = "
-		+ disposable.getId() + "\n");
-	SolrServer solrServer = SolrServerManager.getSolrServer();
-	solrServer.deleteById(disposable.getId());
-	// Commit
-	solrServer.commit();
     }
 
     public void execute(Date limit) {
@@ -231,11 +220,32 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	LOG.info("Reconciling events created after = " + limit);
 
+	// Disable the query cache.
+	// The named or positional parameters of a JPQL query can be set to
+	// different values across executions. In general, the
+	// corresponding cached SQL statement will be re-parameterized
+	// accordingly. However, the parameter value itself can determine
+	// the SQL query. For example, when a JPQL query compares a relation
+	// field for equality against a parameter p, whether
+	// the actual value of p is null or not will determine the generated SQL
+	// statement. Another example is collection valued
+	// parameter for IN expression. Each element of a collection valued
+	// parameter results into a SQL parameter. If a collection
+	// valued parameter across executions are set to different number of
+	// elements, then the parameters of the cached SQL do not
+	// correspond. If such situations are encountered while
+	// re-parameterizing the cached SQL, the cached version is not reused
+	// and the original JPQL query is used to generate a new SQL statement
+	// for execution.
+	// See
+	// http://openjpa.apache.org/builds/2.3.0/apache-openjpa/docs/ref_guide_cache_querysql.html
+	setQuerySQLCache(false);
+
 	long count = getUnresolvedEventsCount(limit);
 	LOG.info(count + " new events to reconcile");
 
 	int startPosition = 0;
-	final int maxResults = 500;
+	final int maxResults = 250;
 
 	// A list that stores the ID of resolved events
 	List<String> justResolved = new ArrayList<>();
@@ -281,17 +291,12 @@ public class EventServiceImpl extends GluePersistenceService implements
 			}
 
 		    }
+		    
+
 
 		    commit();
 		} catch (Exception ex) {
 		    rollback();
-		    try {
-			SolrServerManager.getSolrServer().rollback();
-		    } catch (SolrServerException | IOException e) {
-			LOG.error(ex.getMessage(), ex);
-			fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex,
-				"Solr", -1);
-		    }
 		    LOG.error(ex.getMessage(), ex);
 		    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex, "db",
 			    -1);

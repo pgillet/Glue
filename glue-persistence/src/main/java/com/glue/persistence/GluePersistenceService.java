@@ -82,6 +82,21 @@ public class GluePersistenceService extends PersistenceService {
     }
 
     /**
+     * Sets whether the entity manager will cache database queries during its
+     * lifetime.
+     * 
+     * @param flag
+     */
+    protected void setQuerySQLCache(boolean flag) {
+	EntityManager em = super.getEntityManager();
+
+    	// Get the OpenJPA facade to the given entity manager
+    	OpenJPAEntityManager facade = OpenJPAPersistence.cast(em);
+    	OpenJPAEntityManagerSPI facadeSPI = (OpenJPAEntityManagerSPI) facade;
+    	facadeSPI.setQuerySQLCache(flag);
+    }
+
+    /**
      * @return the venueDAO
      */
     protected VenueDAO getVenueDAO() {
