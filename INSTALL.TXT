@@ -21,14 +21,14 @@ Modify $CATALINA_HOME/conf/tomcat-users.xml
   <role rolename="tomcat"/>
   <role rolename="tomee-admin" />
   <role rolename="manager-script"/>
-  <user username="tomcat" password="demotest" roles="tomcat,tomee-admin,manager-gui,manager-script"/>
+  <user username="tomcat" password="dummy" roles="tomcat,tomee-admin,manager-gui,manager-script"/>
 
 
 Modify $USER_HOME/.m2/settings.xml
   <server>
        <id>tomcat</id>
        <username>tomcat</username>
-       <password>DUMMY</password>
+       <password>dummy</password>
   </server>
 
 

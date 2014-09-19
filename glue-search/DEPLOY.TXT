@@ -1,4 +1,4 @@
--Dsolr.solr.home=/home/pgillet/git/Glue/glue-search/target/cores
+-Dsolr.solr.home=<GLUE_SRC_DIR>/glue-search/target/cores
 
 in Development environment, add also -Dsolr.allow.unsafe.resourceloading=true to allow SolrResourceLoader 
 loading files from outside the instance's directory, for instance to visualize 

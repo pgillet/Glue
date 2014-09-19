@@ -4,7 +4,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://java.sun.com/jsf/passthrough"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	lang="#{languageBean.language}">
 <f:view locale="#{languageBean.locale}">
@@ -85,7 +85,7 @@
 				<h:inputHidden id="lng" value="#{eventSearchBean.longitude}" />
 				<div class="form-group">
 					<h:inputText id="q" styleClass="typeahead form-control" style="min-width: 300px;"
-						p:placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
+						type="search" placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
 				</div>
 				<div class="form-group">
 					<div class="input-group" style="width: 196px;">
@@ -97,7 +97,7 @@
 							</button>
 						</span>
 						<h:inputText id="ql" styleClass="form-control"
-							p:placeholder="#{bundle.location}"
+							type="search" placeholder="#{bundle.location}"
 							value="#{eventSearchBean.location}"></h:inputText>
 					</div>
 				</div>
@@ -133,7 +133,7 @@
 							<div class="col-lg-10">
 								<h:inputText id="feedback-subject" styleClass="form-control"
 									value="#{feedbackBean.subject}"
-									p:placeholder="Bug, remark, new idea ..." />
+									placeholder="Bug, remark, new idea ..." />
 							</div>
 						</div>
 						<div class="form-group">
@@ -143,7 +143,7 @@
 							<div class="col-lg-10">
 								<h:inputText id="feedback-mail" styleClass="form-control"
 									value="#{feedbackBean.mailAddress}"
-									p:placeholder="you@exemple.com"
+									placeholder="you@exemple.com"
 									validatorMessage="#{bundle.feedback_mail_error}">
 									<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
 									<f:ajax event="valueChange" render="feedback-mail-msg" />
