@@ -133,7 +133,7 @@
 							<div class="col-lg-10">
 								<h:inputText id="feedback-subject" styleClass="form-control"
 									value="#{feedbackBean.subject}"
-									placeholder="Bug, remark, new idea ..." />
+									placeholder="#{bundle.feedback_subject_sample}" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -143,7 +143,7 @@
 							<div class="col-lg-10">
 								<h:inputText id="feedback-mail" styleClass="form-control"
 									value="#{feedbackBean.mailAddress}"
-									placeholder="you@exemple.com"
+									placeholder="#{bundle.feedback_mail_sample}"
 									validatorMessage="#{bundle.feedback_mail_error}">
 									<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
 									<f:ajax event="valueChange" render="feedback-mail-msg" />
