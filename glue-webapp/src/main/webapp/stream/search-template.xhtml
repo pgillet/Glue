@@ -103,7 +103,10 @@
 			<div class="col-md-6 col-md-offset-1">
 				<ui:fragment rendered="#{empty paramBean.events}">
 					<p>
-						<h:outputText value="#{bundle.no_result_found}" />
+						<h:outputFormat value="#{bundle.no_result_found}" escape="false">
+							<f:param value="#{eventSearchBean.query}" />
+							<f:param value="#{eventSearchBean.location}" />
+						</h:outputFormat>
 					</p>
 				</ui:fragment>
 				<ui:fragment rendered="#{not empty paramBean.events}">
