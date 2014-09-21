@@ -32,11 +32,11 @@
 
 			<!-- Open Graph -->
 			<meta property="og:title" content="#{streamItemBean.item.title}" />
-			<meta property="og:site_name" content="Dataglue" />
+			<meta property="og:site_name" content="Glue" />
 			<meta property="og:url"
 				content="#{request.requestURL}?#{request.queryString}" />
 			<meta property="og:description"
-				content="#{streamItemBean.item.description}" />
+				content="#{dateUtilBean.printDateInterval(streamItemBean.item.startTime, streamItemBean.item.stopTime)} - #{streamItemBean.item.venue.name}, #{streamItemBean.item.venue.city}. #{streamItemBean.item.description}" />
 			<ui:fragment
 				rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
 				<meta property="og:image"

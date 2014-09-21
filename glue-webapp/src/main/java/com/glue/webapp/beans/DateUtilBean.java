@@ -1,5 +1,7 @@
 package com.glue.webapp.beans;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.faces.bean.ApplicationScoped;
@@ -19,6 +21,30 @@ public class DateUtilBean {
     public boolean hasTime(Date date) {
 	DateTime dt = new DateTime(date, DateTimeZone.UTC);
 	return dt.getMinuteOfDay() > 0;
+    }
+
+    public String printDateInterval(Date startTime, Date stopTime) {
+	StringBuilder sb = new StringBuilder();
+
+	String datePattern = FacesUtil.getString("date_format_long");
+	DateFormat df = new SimpleDateFormat(datePattern);
+	
+	String timePattern = FacesUtil.getString("time_format");
+	DateFormat tf = new SimpleDateFormat(timePattern);
+
+	if (stopTime != null && startTime.before(stopTime)) {
+	    sb.append(FacesUtil.getString("stream_date_from")).append(" ")
+		    .append(df.format(startTime)).append(" ")
+		    .append(FacesUtil.getString("stream_date_to")).append(" ")
+		    .append(df.format(stopTime));
+	} else {
+	    sb.append(df.format(startTime));
+	    if(hasTime(startTime)){
+		sb = sb.append(" ").append(tf.format(startTime));
+	    }
+	}
+
+	return sb.toString();
     }
 
 }
