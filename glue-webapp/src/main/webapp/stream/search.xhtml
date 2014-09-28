@@ -24,6 +24,7 @@
 			<f:viewParam name="enddate" value="#{eventSearchBean.endDate}">
 				<f:convertDateTime pattern="yyyyMMdd"/>
 			</f:viewParam>
+			<f:viewParam name="int" value="#{eventSearchBean.interval}" />
 			<f:event type="preRenderView" listener="#{eventSearchBean.search}" />
 		</f:metadata>
 	</ui:define>

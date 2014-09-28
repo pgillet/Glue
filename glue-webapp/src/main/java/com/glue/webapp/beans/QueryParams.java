@@ -11,6 +11,7 @@ public final class QueryParams {
     public static final String DISPLAY = "display";
     public static final String START_DATE = "stardate";
     public static final String END_DATE = "enddate";
+    public static final String INTERVAL = "int";
     public static final String EVENT_ID = "e";
     public static final String VENUE_ID = "v";
 
