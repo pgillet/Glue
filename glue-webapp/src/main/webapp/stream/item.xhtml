@@ -28,25 +28,27 @@
 			</f:metadata>
 		</ui:define>
 
-		<ui:define name="tags">
+		<ui:fragment rendered="#{not empty streamItemBean.item}">
+			<ui:define name="tags">
 
-			<!-- Open Graph -->
-			<meta property="og:title" content="#{streamItemBean.item.title}" />
-			<meta property="og:site_name" content="Glue" />
-			<meta property="og:url"
-				content="#{request.requestURL}?#{request.queryString}" />
-			<meta property="og:description"
-				content="#{dateUtilBean.printDateInterval(streamItemBean.item.startTime, streamItemBean.item.stopTime)} - #{streamItemBean.item.venue.name}, #{streamItemBean.item.venue.city}. #{streamItemBean.item.description}" />
-			<ui:fragment
-				rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
-				<meta property="og:image"
-					content="#{eventUtilBean.getStickyImageURI(streamItemBean.item)}" />
-			</ui:fragment>
-			<meta property="og:locale" content="#{languageBean.locale}" />
+				<!-- Open Graph -->
+				<meta property="og:title" content="#{streamItemBean.item.title}" />
+				<meta property="og:site_name" content="Glue" />
+				<meta property="og:url"
+					content="#{request.requestURL}?#{request.queryString}" />
+				<meta property="og:description"
+					content="#{dateUtilBean.printDateInterval(streamItemBean.item.startTime, streamItemBean.item.stopTime)} - #{streamItemBean.item.venue.name}, #{streamItemBean.item.venue.city}. #{streamItemBean.item.description}" />
+				<ui:fragment
+					rendered="#{eventUtilBean.hasStickyImage(streamItemBean.item)}">
+					<meta property="og:image"
+						content="#{eventUtilBean.getStickyImageURI(streamItemBean.item)}" />
+				</ui:fragment>
+				<meta property="og:locale" content="#{languageBean.locale}" />
 
-			<!-- Twitter -->
-			<meta name="twitter:site" content="@data_glue" />
-		</ui:define>
+				<!-- Twitter -->
+				<meta name="twitter:site" content="@data_glue" />
+			</ui:define>
+		</ui:fragment>
 
 		<ui:define name="stylesheet">
 			<!-- Additional stylesheets -->

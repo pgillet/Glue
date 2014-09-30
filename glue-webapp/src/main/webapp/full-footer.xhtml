@@ -4,6 +4,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:o="http://omnifaces.org/ui"
 	xmlns:p="http://java.sun.com/jsf/passthrough"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
@@ -77,7 +78,7 @@
 				</ul>
 			</div>
 			<div class="col-xs-2 col-sm-2 col-md-2">
-				<h:form>
+				<o:form includeViewParams="true">
 					<div class="btn-group pull-right">
 						<h:selectOneMenu styleClass="btn btn-default dropdown-toggle"
 							value="#{languageBean.language}" onchange="submit()"
@@ -85,7 +86,7 @@
 							<f:selectItems value="#{languageBean.locales}" />
 						</h:selectOneMenu>
 					</div>
-				</h:form>
+				</o:form>
 			</div>
 		</div>
 		</footer>

@@ -103,8 +103,8 @@ public class LanguageBean implements Serializable {
 
 	// Modify the URL to append original query parameters if any
 	if (request.getQueryString() != null) {
-	    // TODO: actually, we do not find any from default-footer !!?
-	    requestURL = requestURL.append("?").append(request.getQueryString());
+	    requestURL = requestURL.append("?")
+		    .append(request.getQueryString());
 	}
 
 	// Redirect
