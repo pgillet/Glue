@@ -26,7 +26,11 @@
 
 	<ui:define name="stylesheet">
 		<link rel="stylesheet"
-			href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+			href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		<h:outputStylesheet library="css" name="MarkerCluster.css"
+			media="screen" />
+		<h:outputStylesheet library="css" name="MarkerCluster.Default.css"
+			media="screen" />
 	</ui:define>
 
 	<ui:define name="content">
@@ -57,7 +61,8 @@
 								<i class="fa fa-angle-left text-muted"></i>
 							</h:commandLink> </span>
 						<p:calendar id="glue-map-calendar"
-							value="#{eventSearchBean.startDate}" size="6" timeZone="UTC" styleClass="form-control input-sm">
+							value="#{eventSearchBean.startDate}" size="6" timeZone="UTC"
+							styleClass="form-control input-sm">
 							<p:ajax event="dateSelect"
 								listener="#{eventSearchBean.searchFrom}" execute="@form"
 								update="@form" />
@@ -81,9 +86,10 @@
 
 	<ui:define name="javascript">
 		<h:outputScript library="js" name="primefaces-locales.js" />
-		<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 		<script
 			src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
+		<h:outputScript library="js" name="leaflet.markercluster-src.js" />
 		<h:outputScript>
 		
 			var LeafIcon = L.Icon.extend({
@@ -117,7 +123,7 @@
 			// Setting up the map
 			var map = L.map('glue-map', {
 		    	center: [#{eventSearchBean.latitude}, #{eventSearchBean.longitude}],
-		    	zoom: 11,
+		    	zoom: 13,
 		    	zoomControl: false,
 		    	layers: [mqLayer]
 			});
@@ -134,11 +140,13 @@
 				    "cat": "#{event.category}" }#{!loop.last ? ',' : ''}
 				  </ui:repeat>
 			];
+			
+			var markers = L.markerClusterGroup();
 						
 			for (var i = 0; i &lt; events.length; i++) {
 		    	event = events[i];    		
 		    	catIcon = new LeafIcon({iconUrl: catIconMap[event.cat]});
-		    	marker = L.marker([event.lat, event.lng],{icon: catIcon}).addTo(map);
+		    	marker = L.marker([event.lat, event.lng],{icon: catIcon});
 		    	eventurl = "/glue/stream/item.xhtml?id=" + event.id;
 		    	eventlink = "&lt;strong&gt;&lt;a href=" + eventurl + "&gt;" + event.title + "&lt;/a&gt;&lt;/strong&gt;";
 		    	venueurl = "/glue/venues/search.xhtml?v=" + event.vid;
@@ -148,7 +156,10 @@
 				marker.on('mouseover', function (e) {
             		this.openPopup();
         		});
-		    }	
+				markers.addLayer(marker);
+		    }
+		    
+		    map.addLayer(markers);	
 			
 		</h:outputScript>
 	</ui:define>
