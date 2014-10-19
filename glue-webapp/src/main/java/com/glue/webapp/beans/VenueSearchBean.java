@@ -69,9 +69,7 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 
 	// Pagination controls
 	controller.setStart(getStart());
-
-	int rows = getRowsPerPage(getDisplay());
-	controller.setRowsPerPage(rows);
+	controller.setRowsPerPage(getRowsPerPage());
 
 	this.events = controller.search();
 

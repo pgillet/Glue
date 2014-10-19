@@ -64,6 +64,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 
     public void setDisplay(DisplayType display) {
 	this.display = display;
+	this.rowsPerPage = getRowsPerPage(display);
     }
 
     public IntervalType getInterval() {
