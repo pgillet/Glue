@@ -3,7 +3,7 @@
 		url="${glue.db.jdbc.url}" user="${glue.db.user}" password="${glue.db.password}" />
 	<document name="events">
 		<entity name="event"
-			query="select *, TIMESTAMPDIFF(SECOND,startTime,stopTime) as duration from Event">
+			query="select *, TIMESTAMPDIFF(SECOND,startTime,stopTime) as duration from Event where withdrawn = false">
 			<entity name="venue"
 				query="select * from Venue where parent_id is null and id='${event.VENUE_ID}' union select p.* from Venue p, Venue v where v.parent_id is not null and v.parent_id=p.id and v.id='${event.VENUE_ID}'">
 				<field column="name" name="venue" />
