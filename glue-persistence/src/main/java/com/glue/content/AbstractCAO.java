@@ -290,17 +290,16 @@ public abstract class AbstractCAO {
 
 	    ItemIterable<CmisObject> children = folder.getChildren();
 
-	    ImageRendition r = rendition;
-
 	    for (CmisObject o : children) {
-	        if (BaseTypeId.CMIS_DOCUMENT.equals(o.getBaseTypeId())) {
-	    	do {
-	    	    String prefix = basename + "." + r.name().toLowerCase();
-	    	    if (o.getName().startsWith(prefix)) {
-	    		return (Document) o;
-	    	    }
-	    	} while ((r = r.upper()) != null);
-	        }
+		ImageRendition r = rendition;
+		if (BaseTypeId.CMIS_DOCUMENT.equals(o.getBaseTypeId())) {
+		    do {
+			String prefix = basename + "." + r.name().toLowerCase();
+			if (o.getName().startsWith(prefix)) {
+			    return (Document) o;
+			}
+		    } while ((r = r.upper()) != null);
+		}
 	    }
 	} catch (CmisObjectNotFoundException e) {
 	    LOG.warn("No object found with path = " + parent.getPath());
