@@ -29,68 +29,69 @@ import com.glue.feed.xml.XMLFeedParser;
  * du Patrimoine de Périgord et les 22 bibliothèques de quartier)
  * 
  * @author pgillet
- * @see http
+ * @see http 
  *      ://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23577-
  *      agenda-des-manifestations-de-la-bibliotheque-de-toulouse
  */
 public class LibraryAgendaJob implements Job {
 
-	static final Logger LOG = LoggerFactory.getLogger(LibraryAgendaJob.class);
+    static final Logger LOG = LoggerFactory.getLogger(LibraryAgendaJob.class);
 
-	// No arg constructor
-	public LibraryAgendaJob() {
-	}
+    // No arg constructor
+    public LibraryAgendaJob() {
+    }
 
-	@Override
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
+    @Override
+    public void execute(JobExecutionContext context)
+	    throws JobExecutionException {
 
-		try {
-			URL url = new URL(
-					"http://www.bibliotheque.toulouse.fr/fluxEvents.xml");
-			InputStream in0 = url.openStream();
-			InputStream in = GlueIOUtils.getDeferredInputStream(in0,
-					url.getFile());
+	try {
+	    URL url = new URL(
+		    "http://www.bibliotheque.toulouse.fr/fluxEvents.xml");
+	    InputStream in0 = url.openStream();
+	    InputStream in = GlueIOUtils.getDeferredInputStream(in0,
+		    url.getFile());
 
-			Reader reader0 = new InputStreamReader(in, "UTF-8");
-			Reader reader = new BufferedReader(reader0);
+	    Reader reader0 = new InputStreamReader(in, "UTF-8");
+	    Reader reader = new BufferedReader(reader0);
 
-			XMLFeedParser<Record> parser = new XMLFeedParser<Record>(reader,
-					Record.class);
+	    XMLFeedParser<Record> parser = new XMLFeedParser<Record>(reader,
+		    Record.class);
 
-			final FeedMessageListener delegate = new StreamMessageListener();
-			final GlueObjectBuilder<Record, Event> eventBuilder = new RecordStreamBuilder();
+	    final FeedMessageListener delegate = new StreamMessageListener();
+	    final GlueObjectBuilder<Record, Event> eventBuilder = new RecordStreamBuilder();
 
-			parser.setFeedMessageListener(new FeedMessageListener<Record>() {
+	    parser.setFeedMessageListener(new FeedMessageListener<Record>() {
 
-				@Override
-				public void newMessage(Record msg) throws Exception {
-					Event event = eventBuilder.build(msg);
-					delegate.newMessage(event);
-				}
-
-				@Override
-				public void close() throws IOException {
-					delegate.close();
-				}
-			});
-			
-			parser.addErrorListener(new StoreErrorListener());
-
-			parser.read();
-			parser.close();
-			parser.flush();
-			LOG.info("Done");
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new JobExecutionException(e);
+		@Override
+		public void newMessage(Record msg) throws Exception {
+		    Event event = eventBuilder.build(msg);
+		    delegate.newMessage(event);
 		}
 
+		@Override
+		public void close() throws IOException {
+		    delegate.close();
+		}
+	    });
+
+	    parser.addErrorListener(new StoreErrorListener());
+
+	    parser.read();
+	    parser.close();
+	    parser.flush();
+	    LOG.info("Done");
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new JobExecutionException(e);
 	}
 
-	public static void main(String[] args) throws JobExecutionException {
-		LibraryAgendaJob job = new LibraryAgendaJob();
-		job.execute(null);
-	}
+    }
+
+    public static void main(String[] args) throws JobExecutionException {
+	LibraryAgendaJob job = new LibraryAgendaJob();
+	job.execute(null);
+	System.exit(0);
+    }
 
 }

@@ -79,6 +79,7 @@ public class FnacProductJob implements Job {
     public static void main(String[] args) throws JobExecutionException {
 	FnacProductJob job = new FnacProductJob();
 	job.execute(null);
+	System.exit(0);
     }
 
 }

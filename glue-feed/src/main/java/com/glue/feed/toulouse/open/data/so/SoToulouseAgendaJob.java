@@ -34,64 +34,65 @@ import com.glue.feed.listener.StreamMessageListener;
 @DisallowConcurrentExecution
 public class SoToulouseAgendaJob implements Job {
 
-	static final Logger LOG = LoggerFactory
-			.getLogger(SoToulouseAgendaJob.class);
+    static final Logger LOG = LoggerFactory
+	    .getLogger(SoToulouseAgendaJob.class);
 
-	// No arg constructor
-	public SoToulouseAgendaJob() {
-	}
+    // No arg constructor
+    public SoToulouseAgendaJob() {
+    }
 
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+    @Override
+    public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
-		try {
-			URL url = new URL(
-					"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
+	try {
+	    URL url = new URL(
+		    "http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
 
-			ZipInputStream zin = new ZipInputStream(url.openStream());
-			ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
-					".csv"));
-			InputStream in = GlueIOUtils.getDeferredInputStream(zin,
-					entry.getName());
+	    ZipInputStream zin = new ZipInputStream(url.openStream());
+	    ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
+		    ".csv"));
+	    InputStream in = GlueIOUtils.getDeferredInputStream(zin,
+		    entry.getName());
 
-			// CSV files encoding = "Windows-1252"
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					in, Charset.forName("Windows-1252")));
+	    // CSV files encoding = "Windows-1252"
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(
+		    in, Charset.forName("Windows-1252")));
 
-			CSVFeedParser<EventBean> parser = new CSVFeedParser<>(reader,
-					EventBean.class);
+	    CSVFeedParser<EventBean> parser = new CSVFeedParser<>(reader,
+		    EventBean.class);
 
-			final FeedMessageListener<Event> delegate = new StreamMessageListener();
-			final GlueObjectBuilder<EventBean, Event> eventBuilder = new EventBeanStreamBuilder();
+	    final FeedMessageListener<Event> delegate = new StreamMessageListener();
+	    final GlueObjectBuilder<EventBean, Event> eventBuilder = new EventBeanStreamBuilder();
 
-			parser.setFeedMessageListener(new FeedMessageListener<EventBean>() {
+	    parser.setFeedMessageListener(new FeedMessageListener<EventBean>() {
 
-				@Override
-				public void newMessage(EventBean msg) throws Exception {
-					Event event = eventBuilder.build(msg);
-					delegate.newMessage(event);
-				}
-
-				@Override
-				public void close() throws IOException {
-					delegate.close();
-				}
-			});
-
-			parser.addErrorListener(new StoreErrorListener());
-
-			parser.read();
-			parser.close();
-			parser.flush();
-			LOG.info("Done");
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new JobExecutionException(e);
+		@Override
+		public void newMessage(EventBean msg) throws Exception {
+		    Event event = eventBuilder.build(msg);
+		    delegate.newMessage(event);
 		}
+
+		@Override
+		public void close() throws IOException {
+		    delegate.close();
+		}
+	    });
+
+	    parser.addErrorListener(new StoreErrorListener());
+
+	    parser.read();
+	    parser.close();
+	    parser.flush();
+	    LOG.info("Done");
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new JobExecutionException(e);
 	}
-	
-	public static void main(String[] args) throws JobExecutionException {
-		SoToulouseAgendaJob job = new SoToulouseAgendaJob();
-		job.execute(null);
-	}
+    }
+
+    public static void main(String[] args) throws JobExecutionException {
+	SoToulouseAgendaJob job = new SoToulouseAgendaJob();
+	job.execute(null);
+	System.exit(0);
+    }
 }

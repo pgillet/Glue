@@ -83,5 +83,6 @@ public class InfoLocaleAgendaJob implements Job {
     public static void main(String[] args) throws JobExecutionException {
 	InfoLocaleAgendaJob job = new InfoLocaleAgendaJob();
 	job.execute(null);
+	System.exit(0);
     }
 }

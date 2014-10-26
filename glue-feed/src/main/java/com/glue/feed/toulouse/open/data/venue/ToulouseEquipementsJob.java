@@ -34,54 +34,59 @@ import com.glue.feed.listener.VenueMessageListener;
 @DisallowConcurrentExecution
 public class ToulouseEquipementsJob implements Job {
 
-	static final Logger LOG = LoggerFactory.getLogger(ToulouseEquipementsJob.class);
+    static final Logger LOG = LoggerFactory
+	    .getLogger(ToulouseEquipementsJob.class);
 
-	// No arg constructor
-	public ToulouseEquipementsJob() {
-	}
+    // No arg constructor
+    public ToulouseEquipementsJob() {
+    }
 
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+    @Override
+    public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
-		try {
-			URL url = new URL(
-					"http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23851-equipements-culturels/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
-			ZipInputStream zin = new ZipInputStream(url.openStream());
-			ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(".csv"));
-			InputStream in = GlueIOUtils.getDeferredInputStream(zin, entry.getName());
+	try {
+	    URL url = new URL(
+		    "http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/23851-equipements-culturels/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
+	    ZipInputStream zin = new ZipInputStream(url.openStream());
+	    ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
+		    ".csv"));
+	    InputStream in = GlueIOUtils.getDeferredInputStream(zin,
+		    entry.getName());
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new BOMInputStream(in),
-					Charset.forName("UTF-8")));
-			CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader, VenueBean.class);
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(
+		    new BOMInputStream(in), Charset.forName("UTF-8")));
+	    CSVFeedParser<VenueBean> parser = new CSVFeedParser<>(reader,
+		    VenueBean.class);
 
-			final FeedMessageListener<Venue> delegate = new VenueMessageListener();
-			final GlueObjectBuilder<VenueBean, Venue> venueBuilder = new VenueBeanVenueBuilder();
+	    final FeedMessageListener<Venue> delegate = new VenueMessageListener();
+	    final GlueObjectBuilder<VenueBean, Venue> venueBuilder = new VenueBeanVenueBuilder();
 
-			parser.setFeedMessageListener(new FeedMessageListener<VenueBean>() {
+	    parser.setFeedMessageListener(new FeedMessageListener<VenueBean>() {
 
-				@Override
-				public void newMessage(VenueBean msg) throws Exception {
-					Venue venue = venueBuilder.build(msg);
-					delegate.newMessage(venue);
-				}
-
-				@Override
-				public void close() throws IOException {
-					delegate.close();
-				}
-			});
-
-			parser.read();
-			parser.close();
-			LOG.info("Done");
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			throw new JobExecutionException(e);
+		@Override
+		public void newMessage(VenueBean msg) throws Exception {
+		    Venue venue = venueBuilder.build(msg);
+		    delegate.newMessage(venue);
 		}
-	}
 
-	public static void main(String[] args) throws JobExecutionException {
-		ToulouseEquipementsJob job = new ToulouseEquipementsJob();
-		job.execute(null);
+		@Override
+		public void close() throws IOException {
+		    delegate.close();
+		}
+	    });
+
+	    parser.read();
+	    parser.close();
+	    LOG.info("Done");
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new JobExecutionException(e);
 	}
+    }
+
+    public static void main(String[] args) throws JobExecutionException {
+	ToulouseEquipementsJob job = new ToulouseEquipementsJob();
+	job.execute(null);
+	System.exit(0);
+    }
 }

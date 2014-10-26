@@ -63,7 +63,7 @@ public class VenueReconciliationJob implements Job {
     public static void main(String[] args) throws JobExecutionException {
 	VenueReconciliationJob job = new VenueReconciliationJob();
 	job.execute(null);
-
+	System.exit(0);
     }
 
 }

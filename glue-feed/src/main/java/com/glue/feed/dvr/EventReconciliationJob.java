@@ -64,7 +64,7 @@ public class EventReconciliationJob implements Job {
     public static void main(String[] args) throws JobExecutionException {
 	EventReconciliationJob job = new EventReconciliationJob();
 	job.execute(null);
-
+	System.exit(0);
     }
 
 }
