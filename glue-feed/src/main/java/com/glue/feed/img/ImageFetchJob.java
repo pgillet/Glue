@@ -23,9 +23,9 @@ public class ImageFetchJob implements Job {
 	ImageService service = new ImageServiceImpl();
 
 	try {
-	    
+
 	    Date dateRef = null;
-	    if(context != null){
+	    if (context != null) {
 		dateRef = context.getPreviousFireTime(); // May be null
 	    }
 	    if (dateRef == null) {
@@ -69,6 +69,7 @@ public class ImageFetchJob implements Job {
     public static void main(String[] args) throws JobExecutionException {
 	Job job = new ImageFetchJob();
 	job.execute(null);
+	System.exit(0);
     }
 
 }
