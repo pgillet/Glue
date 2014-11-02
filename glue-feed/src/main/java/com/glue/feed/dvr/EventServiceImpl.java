@@ -129,15 +129,6 @@ public class EventServiceImpl extends GluePersistenceService implements
 	// Note: selected events may be part of the set of unresolved events
 	conjunction.add(cb.notEqual(event.get(Event_.id), e.getId()));
 
-	// Select events from a different source: we consider that a single data
-	// source does not contain any duplicates
-	// TODO: Should add a column AUTHOR. The event source may be null if a
-	// user authored the event.
-	if (e.getSource() != null) {
-	    conjunction
-		    .add(cb.notEqual(event.get(Event_.source), e.getSource()));
-	}
-
 	// Select events that are not already withdrawn
 	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));
 
@@ -193,16 +184,24 @@ public class EventServiceImpl extends GluePersistenceService implements
 	e1 = em.merge(e1);
 	e2 = em.merge(e2);
 
-	EventPriority p = new EventPriority();
+	Event disposable = e1;
+	String source = e1.getSource();
 
-	int p1 = p.getValue(e1);
-	int p2 = p.getValue(e2);
-
-	Event disposable;
-	if (p1 > p2) {
-	    disposable = e2;
+	if (source != null && source.equals(e2.getSource())) {
+	    // Both events are from the same source
+	    if (e1.getCreated().after(e2.getCreated())) {
+		disposable = e2;
+	    }
 	} else {
-	    disposable = e1;
+	    // Compute absolute event priorities
+	    EventPriority p = new EventPriority();
+
+	    int p1 = p.getValue(e1);
+	    int p2 = p.getValue(e2);
+
+	    if (p1 > p2) {
+		disposable = e2;
+	    }
 	}
 
 	LOG.info("Withdraw event with ID " + disposable.getId() + "\n");
@@ -253,8 +252,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 	while (startPosition < count) {
 
 	    LOG.debug(String.format("Events from %d to %d on %d",
-		    startPosition,
-		    startPosition + maxResults, count));
+		    startPosition, startPosition + maxResults, count));
 
 	    List<Event> events = getUnresolvedEvents(limit, startPosition,
 		    maxResults);
@@ -291,8 +289,6 @@ public class EventServiceImpl extends GluePersistenceService implements
 			}
 
 		    }
-		    
-
 
 		    commit();
 		} catch (Exception ex) {
