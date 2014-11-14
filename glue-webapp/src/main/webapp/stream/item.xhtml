@@ -152,7 +152,10 @@
 											</ui:repeat>
 										</p>
 
-										<p>#{streamItemBean.item.description}</p>
+										<p>
+											<h:outputText escape="false"
+												value="#{streamItemBean.item.description}" />
+										</p>
 										<ui:fragment
 											rendered="#{not empty streamItemBean.item.source}">
 											<p class="text-muted">

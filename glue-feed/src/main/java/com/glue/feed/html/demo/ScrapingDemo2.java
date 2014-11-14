@@ -6,6 +6,7 @@ import static com.glue.feed.html.SiteMapBuilder.newSiteMap;
 import java.util.Locale;
 
 import com.glue.domain.Event;
+import com.glue.domain.EventCategory;
 import com.glue.feed.FeedMessageListener;
 import com.glue.feed.html.DirectMappingStrategy;
 import com.glue.feed.html.EventDetailsPage;
@@ -45,6 +46,7 @@ public class ScrapingDemo2 {
 		// Ex: vendredi 21 février 2014 à 20:30
 		.withVenueName("div#infos > div#salle > h3")
 		.withVenueAddress("div#infos > div#salle > div#adresse")
+		.withCategory(EventCategory.MUSIC)
 		.withLocale(Locale.FRENCH)
 		.build();
 
@@ -56,7 +58,7 @@ public class ScrapingDemo2 {
 
 	final FeedMessageListener feedMsgListener = new StreamMessageListener();
 	// Uncomment to persist in db
-	// parser.setFeedMessageListener(feedMsgListener);
+	parser.setFeedMessageListener(feedMsgListener);
 
 	parser.read();
 	parser.close();

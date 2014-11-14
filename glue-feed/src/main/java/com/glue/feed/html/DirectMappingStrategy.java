@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -18,6 +17,8 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 
     private EventDetailsPage details;
 
+    private HTMLFetcher hf = new HTMLFetcher();
+
     public DirectMappingStrategy(EventDetailsPage details) {
 	this.details = details;
     }
@@ -25,7 +26,7 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
     @Override
     public Event parse(String url) throws Exception {
 
-	Element doc = Jsoup.connect(url).get();
+	Element doc = hf.fetch(url);
 
 	if (details.getRootBlock() != null) {
 	    Elements elems = doc.select(details.getRootBlock());
@@ -37,8 +38,8 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 	Event event = new Event();
 
 	event.setUrl(url);
-	event.setTitle(HTMLUtils.selectText(details.getTitle(), doc));
-	event.setDescription(HTMLUtils.selectHtml(details.getDescription(),
+	event.setTitle(hf.selectText(details.getTitle(), doc));
+	event.setDescription(hf.selectHtml(details.getDescription(),
 		doc));
 
 	String datePattern = details.getDatePattern();
@@ -49,14 +50,15 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 	    TimeZone tz = TimeZone.getTimeZone("UTC");
 	    df.setTimeZone(tz);
 
-	    String startSource = HTMLUtils.selectText(details.getStartDate(),
+	    String startSource = hf.selectText(details.getStartDate(),
 		    doc);
 	    Date startDate = df.parse(startSource);
 	    event.setStartTime(startDate);
+	    event.setStopTime(startDate);
 
 	    String endDateQuery = details.getEndDate();
 	    if (endDateQuery != null) {
-		String endSource = HTMLUtils.selectText(endDateQuery, doc);
+		String endSource = hf.selectText(endDateQuery, doc);
 		if (endSource != null) {
 		    Date endDate = df.parse(endSource);
 		    event.setStopTime(endDate);
@@ -89,24 +91,24 @@ public class DirectMappingStrategy implements HTMLMappingStrategy<Event> {
 
 	String priceQuery = details.getPrice();
 	if (priceQuery != null) {
-	    event.setPrice(HTMLUtils.selectText(priceQuery, doc));
+	    event.setPrice(hf.selectText(priceQuery, doc));
 	}
 
 	String venueNameQuery = details.getVenueName();
 	if (venueNameQuery != null) {
 	    Venue venue = new Venue();
-	    venue.setName(HTMLUtils.selectText(venueNameQuery, doc));
+	    venue.setName(hf.selectText(venueNameQuery, doc));
 
 	    String venueAddressQuery = details.getVenueAddress();
 	    if (venueAddressQuery != null) {
-		venue.setAddress(HTMLUtils.selectText(venueAddressQuery, doc));
+		venue.setAddress(hf.selectText(venueAddressQuery, doc));
 	    }
 
 	    event.setVenue(venue);
 	}
 
 	// Thing to handle for sure!
-	// stream.setCategory(category);
+	event.setCategory(details.getCategory());
 	// details.getAudience();
 	// details.getEventType()
 

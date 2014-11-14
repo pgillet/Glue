@@ -6,13 +6,11 @@ import static com.glue.feed.html.SiteMapBuilder.newSiteMap;
 import java.util.Locale;
 
 import com.glue.domain.Event;
-import com.glue.feed.FeedMessageListener;
 import com.glue.feed.html.DirectMappingStrategy;
 import com.glue.feed.html.EventDetailsPage;
 import com.glue.feed.html.HTMLFeedParser;
 import com.glue.feed.html.HTMLMappingStrategy;
 import com.glue.feed.html.SiteMap;
-import com.glue.feed.listener.StreamMessageListener;
 
 /**
  * Demonstration of the DirectMappingStrategy.
@@ -54,7 +52,8 @@ public class JoggingInternationalDemo {
 	HTMLFeedParser<Event> parser = new HTMLFeedParser<>(siteMap,
 		mappingStrategy);
 
-	final FeedMessageListener feedMsgListener = new StreamMessageListener();
+	// final FeedMessageListener feedMsgListener = new
+	// StreamMessageListener();
 	// Uncomment to persist in db
 	// parser.setFeedMessageListener(feedMsgListener);
 

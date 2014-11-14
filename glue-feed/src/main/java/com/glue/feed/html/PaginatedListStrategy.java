@@ -2,7 +2,6 @@ package com.glue.feed.html;
 
 import java.util.Set;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,6 +17,8 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
     private VisitorListener visitorListener = new DefaultVisitorListener();
 
+    private HTMLFetcher hf = new HTMLFetcher();
+
     public PaginatedListStrategy(SiteMap siteMap) {
 	this.siteMap = siteMap;
     }
@@ -25,7 +26,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
     @Override
     public void visit() throws Exception {
 	String baseUri = siteMap.getFrontUrl();
-	Document doc = Jsoup.connect(baseUri).get();
+	Document doc = hf.fetch(baseUri);
 
 	boolean nextPage = false;
 	int numPage = 0;
@@ -37,7 +38,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	    // A base URL for event details page
 	    URLFilter filter = siteMap.getUrlFilter();
 	    if (filter != null) {
-		Set<String> linkHrefs = HTMLUtils.listLinks(doc, filter);
+		Set<String> linkHrefs = hf.listLinks(doc, filter);
 		for (String linkHref : linkHrefs) {
 		    // Notify listener
 		    visitorListener.processLink(linkHref);
@@ -49,7 +50,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 		for (Element elem : elems) {
 		    // Link to the event details page
-		    String linkHref = HTMLUtils.firstLink(elem);
+		    String linkHref = hf.firstLink(elem);
 
 		    if (linkHref != null) {
 			// Notify listener
@@ -82,9 +83,9 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
 		if (nextPage) {
 		    // Load the next page
-		    String linkHref = HTMLUtils.firstLink(nextPageElem);
+		    String linkHref = hf.firstLink(nextPageElem);
 		    if (linkHref != null) {
-			doc = Jsoup.connect(linkHref).get();
+			doc = hf.fetch(linkHref);
 		    }
 		}
 	    }

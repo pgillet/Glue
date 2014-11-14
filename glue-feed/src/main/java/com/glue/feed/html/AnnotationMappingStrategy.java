@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -18,6 +17,8 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
 
     private final Class<T> classModel;
 
+    private HTMLFetcher hf = new HTMLFetcher();
+
     public AnnotationMappingStrategy(Class<T> classModel) {
 	this.classModel = classModel;
     }
@@ -26,7 +27,7 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
     // Main method that will translate HTML to object
     public T parse(String uri) throws Exception {
 	try {
-	    Element rootElem = Jsoup.connect(uri).get();
+	    Element rootElem = hf.fetch(uri);
 	    T model = this.classModel.newInstance();
 
 	    // Check if Selector annotation is present at the class level
@@ -128,7 +129,7 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
 		// HTMLUtils if often used
 		String bodyHtml = StringUtils.trimToNull(elem.html());
 		if (bodyHtml != null) {
-		    bodyHtml = HTMLUtils.cleanHtml(bodyHtml);
+		    bodyHtml = hf.cleanHtml(bodyHtml);
 		}
 		return bodyHtml;
 	    } else if (m.isAnnotationPresent(AttributeValue.class)) {

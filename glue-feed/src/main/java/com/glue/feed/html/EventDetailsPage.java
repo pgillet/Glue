@@ -2,6 +2,8 @@ package com.glue.feed.html;
 
 import java.util.Locale;
 
+import com.glue.domain.EventCategory;
+
 public class EventDetailsPage {
 
     private String rootBlock;
@@ -17,6 +19,7 @@ public class EventDetailsPage {
     private String eventType;
     private String venueName;
     private String venueAddress;
+    private EventCategory category;
     private Locale locale = Locale.ENGLISH;
 
     public String getRootBlock() {
@@ -105,6 +108,14 @@ public class EventDetailsPage {
 
     public void setEventType(String eventType) {
 	this.eventType = eventType;
+    }
+
+    public EventCategory getCategory() {
+	return category;
+    }
+
+    public void setCategory(EventCategory category) {
+	this.category = category;
     }
 
     public String getVenueName() {

@@ -65,8 +65,14 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
     public void processLink(String uri) throws Exception {
 	LOG.info("Parsing event details page = " + uri);
 
-	T obj = mappingStrategy.parse(uri);
-	feedMessageListener.newMessage(obj);
+	try {
+	    T obj = mappingStrategy.parse(uri);
+	    feedMessageListener.newMessage(obj);
+	} catch (Exception e) {
+	    LOG.error(e.getMessage(), e);
+	    errorDispatcher.fireErrorEvent(ErrorLevel.ERROR, e.getMessage(), e,
+		    "html", -1);
+	}
     }
 
     @Override

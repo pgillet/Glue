@@ -2,6 +2,8 @@ package com.glue.feed.html;
 
 import java.util.Locale;
 
+import com.glue.domain.EventCategory;
+
 
 public class EventDetailsPageBuilder {
 
@@ -74,6 +76,11 @@ public class EventDetailsPageBuilder {
 
     public EventDetailsPageBuilder withEventType(String cssQuery) {
 	details.setEventType(cssQuery);
+	return this;
+    }
+
+    public EventDetailsPageBuilder withCategory(EventCategory category) {
+	details.setCategory(category);
 	return this;
     }
 

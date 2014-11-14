@@ -8,12 +8,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.glue.feed.html.EventDetailsPage;
+import com.glue.feed.html.HTMLFetcher;
 import com.glue.feed.html.HTMLMappingStrategy;
-import com.glue.feed.html.HTMLUtils;
 
 public class DateExtractor implements HTMLMappingStrategy<String> {
 
     private EventDetailsPage details;
+    private HTMLFetcher hf = new HTMLFetcher();
 
     public DateExtractor(EventDetailsPage details)
 	    throws IOException {
@@ -35,7 +36,7 @@ public class DateExtractor implements HTMLMappingStrategy<String> {
 	}
 
 	String dateQuery = details.getStartDate();
-	String text = HTMLUtils.selectText(dateQuery, doc);
+	String text = hf.selectText(dateQuery, doc);
 
 	return text;
     }
