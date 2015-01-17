@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -31,6 +32,10 @@ public class Venue {
     @Column(nullable = false)
     private String name;
 
+    /**
+     * Description.
+     */
+    @Lob
     private String description;
 
     private String type;
@@ -419,6 +424,25 @@ public class Venue {
      */
     public void setComments(List<Comment> comments) {
 	this.comments = comments;
+    }
+
+    /**
+     * Venue images.
+     * 
+     * @return the images
+     */
+    public List<Image> getImages() {
+	return images;
+    }
+
+    /**
+     * Set the venue images.
+     * 
+     * @param images
+     *            the images to set
+     */
+    public void setImages(List<Image> images) {
+	this.images = images;
     }
 
     /**

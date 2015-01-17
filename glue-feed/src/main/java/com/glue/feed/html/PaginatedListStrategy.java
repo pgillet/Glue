@@ -28,6 +28,8 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	String baseUri = siteMap.getFrontUrl();
 	Document doc = hf.fetch(baseUri);
 
+	ElementDecorator elem = new ElementDecorator(doc);
+
 	boolean nextPage = false;
 	int numPage = 0;
 
@@ -38,7 +40,7 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	    // A base URL for event details page
 	    URLFilter filter = siteMap.getUrlFilter();
 	    if (filter != null) {
-		Set<String> linkHrefs = hf.listLinks(doc, filter);
+		Set<String> linkHrefs = elem.listLinks(filter);
 		for (String linkHref : linkHrefs) {
 		    // Notify listener
 		    visitorListener.processLink(linkHref);
@@ -48,9 +50,10 @@ public class PaginatedListStrategy implements VisitorStrategy {
 		// Elements that match the list selector
 		Elements elems = doc.select(siteMap.getListSelector());
 
-		for (Element elem : elems) {
+		for (Element e : elems) {
+		    ElementDecorator other = new ElementDecorator(e);
 		    // Link to the event details page
-		    String linkHref = hf.firstLink(elem);
+		    String linkHref = other.firstLink();
 
 		    if (linkHref != null) {
 			// Notify listener
@@ -82,8 +85,9 @@ public class PaginatedListStrategy implements VisitorStrategy {
 		nextPage = (nextPageElem != null);
 
 		if (nextPage) {
+		    ElementDecorator other = new ElementDecorator(nextPageElem);
 		    // Load the next page
-		    String linkHref = hf.firstLink(nextPageElem);
+		    String linkHref = other.firstLink();
 		    if (linkHref != null) {
 			doc = hf.fetch(linkHref);
 		    }

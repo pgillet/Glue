@@ -3,12 +3,12 @@ package com.glue.feed.html;
 public class EventWebsite {
 
     private SiteMap siteMap;
-    private EventDetailsPage details;
+    private EventSelectors details;
 
     public EventWebsite() {
     }
 
-    public EventWebsite(SiteMap siteMap, EventDetailsPage details) {
+    public EventWebsite(SiteMap siteMap, EventSelectors details) {
 	this.siteMap = siteMap;
 	this.details = details;
     }
@@ -21,11 +21,11 @@ public class EventWebsite {
 	this.siteMap = siteMap;
     }
 
-    public EventDetailsPage getDetails() {
+    public EventSelectors getDetails() {
 	return details;
     }
 
-    public void setDetails(EventDetailsPage details) {
+    public void setDetails(EventSelectors details) {
 	this.details = details;
     }
 

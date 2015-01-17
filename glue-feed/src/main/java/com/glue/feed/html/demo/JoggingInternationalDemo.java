@@ -1,16 +1,18 @@
 package com.glue.feed.html.demo;
 
-import static com.glue.feed.html.EventDetailsPageBuilder.newDetails;
+import static com.glue.feed.html.EventSelectorsBuilder.newEventSelectors;
 import static com.glue.feed.html.SiteMapBuilder.newSiteMap;
+import static com.glue.feed.html.VenueSelectorsBuilder.newVenueSelectors;
 
 import java.util.Locale;
 
 import com.glue.domain.Event;
-import com.glue.feed.html.DirectMappingStrategy;
-import com.glue.feed.html.EventDetailsPage;
+import com.glue.feed.html.EventMappingStrategy;
+import com.glue.feed.html.EventSelectors;
 import com.glue.feed.html.HTMLFeedParser;
 import com.glue.feed.html.HTMLMappingStrategy;
 import com.glue.feed.html.SiteMap;
+import com.glue.feed.html.VenueSelectors;
 
 /**
  * Demonstration of the DirectMappingStrategy.
@@ -32,22 +34,24 @@ public class JoggingInternationalDemo {
 		// .url("http://www.jogging-international.net/courses/calendrier/france-metropolitaine/")
 		.build();
 
-	EventDetailsPage details = newDetails()
+	EventSelectors eventSelectors = newEventSelectors()
 		.withRootBlock("div.contenu")
 		.withTitle("div.item_titre > h2")
 		.withDescription("div.item_titre > h2")
 		// .withEventType("div#blocContenu > div#type")
 		// .withThumbnail("div#blocImage > a")
 		// .withPrice("div#blocContenu > div#prix")
-		.withStartDate("table.tab_identite tr:eq(0) td.droite")
-		.withDatePattern("dd/MM/yyyy")
+		.withDates("table.tab_identite tr:eq(0) td.droite")
+		// .withDatePattern("dd/MM/yyyy")
 		// 05/01/2014
-		.withVenueName("table.tab_identite tr:eq(2) td.droite")
-		.withVenueAddress("table.tab_identite tr:eq(2) td.droite")
 		.withLocale(Locale.FRENCH).build();
 
-	HTMLMappingStrategy<Event> mappingStrategy = new DirectMappingStrategy(
-		details);
+	VenueSelectors venueSelectors = newVenueSelectors()
+		.withName("table.tab_identite tr:eq(2) td.droite")
+		.withAddress("table.tab_identite tr:eq(2) td.droite").build();
+
+	HTMLMappingStrategy<Event> mappingStrategy = new EventMappingStrategy(
+		eventSelectors);
 
 	HTMLFeedParser<Event> parser = new HTMLFeedParser<>(siteMap,
 		mappingStrategy);

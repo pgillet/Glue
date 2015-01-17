@@ -8,7 +8,7 @@ import com.glue.feed.html.SiteMap;
 /**
  * Demonstration of the AnnotationMappingStrategy.
  * 
- * @see ScrapingDemo2
+ * @see BikiniScraper
  * 
  * @author pgillet
  * 

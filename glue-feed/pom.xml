@@ -19,6 +19,11 @@
 			<id>JHU</id>
 			<url>http://maven.mse.jhu.edu/m2repository</url>
 		</repository>
+		<repository>
+			<id>glue.feed.local</id>
+			<name>glue-feed</name>
+			<url>file:${project.basedir}/repo</url>
+		</repository>
 	</repositories>
 
 	<build>
@@ -188,6 +193,13 @@
 			<artifactId>geocoder-java</artifactId>
 			<version>0.15</version>
 		</dependency>
+		
+		<!-- HeidelTime -->
+		<dependency>
+	        <groupId>de.unihd.dbs</groupId>
+	        <artifactId>heideltime</artifactId>
+	        <version>1.8</version>
+	    </dependency>
 
 		<!-- YouTube Data V3 support -->
 		<dependency>

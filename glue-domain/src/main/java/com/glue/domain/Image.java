@@ -35,6 +35,7 @@ public class Image {
     /**
      * Image source.
      */
+    @Column(length = 2048)
     private String source;
 
     /**
