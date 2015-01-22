@@ -1,5 +1,6 @@
 package com.glue.feed.html;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,17 +22,19 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 
     private Event eventRef = new Event();
 
-    private DateTimeProcessor dateTimeProcessor = new DateTimeProcessor();
+    private DateTimeProcessor dateTimeProcessor;
 
     private HTMLFetcher hf = new HTMLFetcher();
 
-    public EventMappingStrategy(EventSelectors selectors) {
+    public EventMappingStrategy(EventSelectors selectors) throws IOException {
 	this(selectors, null);
     }
 
-    public EventMappingStrategy(EventSelectors selectors, Event eventRef) {
+    public EventMappingStrategy(EventSelectors selectors, Event eventRef)
+	    throws IOException {
 	this.selectors = selectors;
 	this.eventRef = eventRef;
+	dateTimeProcessor = new DateTimeProcessor();
     }
 
     public Event getEventRef() {

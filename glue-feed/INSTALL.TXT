@@ -1,5 +1,21 @@
-mvn clean compile assembly:single
-Copy the generated jar file in the desired location
-Copy the jobs.xml file next to the JAR file
+To create an executable jar file for glue-feed, 2 options:
 
-java -jar glue-feed-<VERSION>.jar
+********************************************************
+1. Standalone
+********************************************************
+
+ mvn clean compile assembly:single
+
+
+********************************************************
+2. With Maven classpath
+********************************************************
+ mvn clean install
+
+
+Then:
+- Copy the generated jar file in the desired location
+- Copy the jobs.xml file next to the JAR file
+
+Execute the Jar file with:
+ java -jar glue-feed-<VERSION>.jar
