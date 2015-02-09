@@ -2,6 +2,7 @@ package com.glue.webapp.search;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -71,7 +72,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
 	List<? extends Event> items = new ArrayList<Event>();
 
-	SolrQuery query = constructSolrQuery();
+	SolrQuery query = buildQuery();
 	query.setParam("qt", requester);
 
 	try {
@@ -82,7 +83,7 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	    numFound = rsp.getResults().getNumFound();
 
 	    // Highlighting
-	    if (!isFullQuery()) {
+	    if (hasQueryString()) {
 		summarize((List<Event>) items, rsp);
 	    }
 
@@ -149,11 +150,11 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	}
     }
 
-    private SolrQuery constructSolrQuery() {
+    private SolrQuery buildQuery() {
 	SolrQuery query = new SolrQuery();
 
 	// Highlighting
-	if (!isFullQuery()) {
+	if (hasQueryString()) {
 	    query.setHighlight(true);
 	    query.addHighlightField("description"); // param hl.fl
 	    query.setHighlightSnippets(2); // Default 1
@@ -164,33 +165,46 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	}
 
 	// Add location to query if no lat/lon parameter
-	boolean hasLatLon = false;
+	boolean hasLatLon = (getLatitude() != 0 || getLongitude() != 0);
 
 	// Get dates
 	String from = ((startDate != null) ? df.format(startDate) : "NOW/DAY");
 	String to = ((endDate != null) ? df.format(endDate) : "*");
 
-	// Location filtering
-	if ((getLatitude() != 0 || getLongitude() != 0)) {
+	// If no explicit search with keywords, then search events only in the
+	// surrounding area, otherwise we extend the search everywhere
+	String distance = hasQueryString() ? "20000" : "50"; // km
+
+	if (hasLatLon) {
 	    query.addFilterQuery("{!geofilt}");
 	    query.add("sfield", "latlng");
 	    query.add("pt", getLatitude() + "," + getLongitude());
-	    query.add("d", "30");
-	    hasLatLon = true;
+	    query.add("d", distance);
 	} else if (!StringUtils.isEmpty(location)) {
 	    query.addFilterQuery("city:" + location);
 	}
 
-	// Boost dates and location
-	String boostDates = "if(max(ms(" + from + "," + FIELD_START_TIME
-		+ "),0),10000,recip(abs(ms(" + from + "," + FIELD_START_TIME
-		+ ")),3.16e-10,10000,1))";
-	String boostLocation = "recip(geodist(),1,1000,10)";
-	String boost = boostDates;
-	if (hasLatLon) {
-	    boost = "sum(" + boostDates + "," + boostLocation + ")";
+	// Boost the events that have or will soon begin, and/or those which are
+	// about to end
+	final String boostDateFuncFormat = "recip(abs(ms(%s,%s)),3.16e-11,1,1)";
+
+	String boostStartTime = String.format(boostDateFuncFormat, from,
+		FIELD_START_TIME);
+
+	String boostStopTime = String.format(boostDateFuncFormat, from,
+		FIELD_STOP_TIME);
+
+	String boostDates = "sum(" + boostStartTime + "," + boostStopTime + ")";
+
+	// Boost the events from the nearest to the farthest
+	String boostLocation = null;
+	if (hasLatLon && hasQueryString()) {
+
+	    int m = 1, a = 2, b = 1;
+	    boostLocation = String.format("recip(geodist(),%d,%d,%d)", m, a, b);
 	}
-	query.setParam("boost", boost);
+	query.setParam("boost",
+		doSum(boostStartTime, boostStopTime, boostLocation));
 
 	// Category filtering
 	if (categories != null && categories.length > 0) {
@@ -210,12 +224,36 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	query.setRows(rows);
 
 	String finalQuery = queryString;
-	if (isFullQuery()) {
+	if (!hasQueryString()) {
 	    finalQuery = DEFAULT_Q;
 	}
 
 	query.setParam("q", finalQuery);
 	return query;
+    }
+
+    private String doSum(String... funcs) {
+
+	StringBuilder sb = new StringBuilder();
+	sb.append("sum(");
+
+	Iterator<String> itemIterator = Arrays.asList(funcs).iterator();
+	if (itemIterator.hasNext()) {
+	    // special-case first item. in this case, no comma
+	    sb.append(itemIterator.next());
+	    while (itemIterator.hasNext()) {
+		// process the rest
+		String func = itemIterator.next();
+		if (func != null) {
+		    sb.append(",");
+		    sb.append(func);
+		}
+	    }
+	}
+
+	sb.append(")");
+
+	return sb.toString();
     }
 
     /**
@@ -224,10 +262,9 @@ public class SolrSearchServer implements SearchEngine<Event> {
      * @param query
      * @return
      */
-    private boolean isFullQuery() {
-	return (queryString == null)
-		|| ("".equals(queryString) || ("*".equals(queryString)) || ("*:*")
-			.equals(queryString));
+    private boolean hasQueryString() {
+	return (queryString != null && queryString.length() != 0
+		&& !"*".equals(queryString) && !"*:*".equals(queryString));
     }
 
     @Override
