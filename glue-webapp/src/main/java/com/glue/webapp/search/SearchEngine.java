@@ -168,4 +168,14 @@ public interface SearchEngine<T> {
      */
     public String getLocation();
 
+    /**
+     * Sets a string with bounding box coordinates in a
+     * 'southwest_lng,southwest_lat,northeast_lng,northeast_lat' format, for
+     * finding everything in a rectangular area, such as the area covered by a
+     * map the user is looking at.
+     */
+    public void setBoundingBox(String bbox);
+
+    public String getBoundingBox();
+
 }

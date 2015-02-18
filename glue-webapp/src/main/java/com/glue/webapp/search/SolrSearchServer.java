@@ -55,9 +55,16 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
     private String location;
 
+    private String bbox;
+
     private static final String FIELD_STOP_TIME = "stopTime";
 
     private static final String FIELD_START_TIME = "startTime";
+
+    /**
+     * The spatial indexed field.
+     */
+    private static final String SFIELD = "latlng";
 
     private final String DEFAULT_Q = "*:*";
 
@@ -165,7 +172,8 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	}
 
 	// Add location to query if no lat/lon parameter
-	boolean hasLatLon = (getLatitude() != 0 || getLongitude() != 0);
+	boolean hasUserLocation = (getLatitude() != 0 || getLongitude() != 0);
+	boolean hasBounds = StringUtils.isNotBlank(bbox);
 
 	// Get dates
 	String from = ((startDate != null) ? df.format(startDate) : "NOW/DAY");
@@ -175,9 +183,18 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	// surrounding area, otherwise we extend the search everywhere
 	String distance = hasQueryString() ? "20000" : "50"; // km
 
-	if (hasLatLon) {
+	if (hasBounds) {
+
+	    // southwest_lng,southwest_lat,northeast_lng,northeast_lat
+	    String[] latLngBounds = StringUtils.split(bbox, ",");
+
+	    query.addFilterQuery(SFIELD + ":[" + latLngBounds[1] + ","
+		    + latLngBounds[0] + " TO " + latLngBounds[3] + ","
+		    + latLngBounds[2] + "]");
+
+	} else if (hasUserLocation) {
 	    query.addFilterQuery("{!geofilt}");
-	    query.add("sfield", "latlng");
+	    query.add("sfield", SFIELD);
 	    query.add("pt", getLatitude() + "," + getLongitude());
 	    query.add("d", distance);
 	} else if (!StringUtils.isEmpty(location)) {
@@ -194,11 +211,9 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	String boostStopTime = String.format(boostDateFuncFormat, from,
 		FIELD_STOP_TIME);
 
-	String boostDates = "sum(" + boostStartTime + "," + boostStopTime + ")";
-
 	// Boost the events from the nearest to the farthest
 	String boostLocation = null;
-	if (hasLatLon && hasQueryString()) {
+	if (hasUserLocation && hasQueryString() && !hasBounds) {
 
 	    int m = 1, a = 2, b = 1;
 	    boostLocation = String.format("recip(geodist(),%d,%d,%d)", m, a, b);
@@ -374,6 +389,14 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
     public void setLocation(String location) {
 	this.location = location;
+    }
+
+    public String getBoundingBox() {
+	return bbox;
+    }
+
+    public void setBoundingBox(String boundingBox) {
+	this.bbox = boundingBox;
     }
 
     private String constructCategoriesFilter() {

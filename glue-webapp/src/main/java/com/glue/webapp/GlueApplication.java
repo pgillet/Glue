@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.glue.domain.Event;
 import com.glue.persistence.EventDAO;
 import com.glue.webapp.beans.EventUtilBean;
+import com.glue.webapp.logic.EventController;
 import com.glue.webapp.logic.UserController;
 import com.glue.webapp.search.SearchEngine;
 import com.glue.webapp.search.SolrSearchServer;
@@ -72,6 +73,8 @@ public class GlueApplication extends ResourceConfig {
 		BeanManager bm = getBeanManager();
 		bind(getBean(bm, UserController.class))
 			.to(UserController.class)/* .in(Singleton.class) */; // ?
+		bind(getBean(bm, EventController.class)).to(
+			EventController.class)/* .in(Singleton.class) */; // ?
 		bind(getBean(bm, SolrSearchServer.class)).to(
 			new TypeLiteral<SearchEngine<Event>>() {
 			});

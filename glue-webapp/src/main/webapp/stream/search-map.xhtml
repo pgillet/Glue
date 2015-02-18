@@ -20,7 +20,6 @@
 			<f:viewParam name="startdate" value="#{eventSearchBean.startDate}">
 				<f:convertDateTime pattern="yyyyMMdd" />
 			</f:viewParam>
-			<f:event type="preRenderView" listener="#{eventMapSearchBean.search}" />
 		</f:metadata>
 	</ui:define>
 
@@ -85,82 +84,12 @@
 	</ui:define>
 
 	<ui:define name="javascript">
+		<h:outputScript library="js" name="glue.js" />
 		<h:outputScript library="js" name="primefaces-locales.js" />
 		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 		<script
 			src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
 		<h:outputScript library="js" name="leaflet.markercluster-src.js" />
-		<h:outputScript>
-		
-			var LeafIcon = L.Icon.extend({
-			    options: {
-			        shadowUrl: '../resources/img/markers/shadow-marker.png',
-			        iconSize:     [21, 34],
-			        shadowSize:   [40, 37],
-			        iconAnchor:   [10, 34],
-			        shadowAnchor: [12, 35],
-			        popupAnchor:  [0, -20]
-			    }
-			});
-			
-			var catIconMap = {};
-			catIconMap['MUSIC'] = '../resources/img/markers/music-marker.png';
-			catIconMap['PERFORMING_ART'] = '../resources/img/markers/performing_art-marker.png';
-			catIconMap['EXHIBITION'] = '../resources/img/markers/exhibition-marker.png';
-			catIconMap['SPORT'] = '../resources/img/markers/sport-marker.png';
-			catIconMap['YOUTH'] = '../resources/img/markers/youth-marker.png';
-			catIconMap['OTHER'] = '../resources/img/markers/other-marker.png';
-			catIconMap['CONFERENCE'] = '../resources/img/markers/conference-marker.png';					
-			
-			var osmAttrib='Map data &copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors';
-			
-			// MQ layer
-			var mqUrl='http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
-			domains = ['otile1','otile2','otile3','otile4'];
-			var mqAttrib='Tiles &copy; &lt;a href="http://www.mapquest.com/" target="_blank"&gt;MapQuest&lt;/a&gt; &lt;img src="http://developer.mapquest.com/content/osm/mq_logo.png" /&gt;';
-			var mqLayer = L.tileLayer(mqUrl, {maxZoom: 18, subdomains: domains, attribution: osmAttrib+', '+ mqAttrib});
-			
-			// Setting up the map
-			var map = L.map('glue-map', {
-		    	center: [#{eventSearchBean.latitude}, #{eventSearchBean.longitude}],
-		    	zoom: 13,
-		    	zoomControl: false,
-		    	layers: [mqLayer]
-			});
-			
-			// Zoom control position
-			var control = L.control.zoom( {position: 'bottomright'} );
-			control.addTo(map);
-			
-			var events = [
-				  <ui:repeat value="#{eventSearchBean.events}" var="event"
-				varStatus="loop">
-				    { "id": "#{event.id}", "title": '#{of:escapeJS(event.title)}', "vid": "#{event.venue.id}", "venue": "#{event.venue.name}", 
-				    "lat": "#{event.venue.latitude}", "lng": "#{event.venue.longitude}", 
-				    "cat": "#{event.category}" }#{!loop.last ? ',' : ''}
-				  </ui:repeat>
-			];
-			
-			var markers = L.markerClusterGroup();
-						
-			for (var i = 0; i &lt; events.length; i++) {
-		    	event = events[i];    		
-		    	catIcon = new LeafIcon({iconUrl: catIconMap[event.cat]});
-		    	marker = L.marker([event.lat, event.lng],{icon: catIcon});
-		    	eventurl = "/glue/stream/item.xhtml?id=" + event.id;
-		    	eventlink = "&lt;strong&gt;&lt;a href=" + eventurl + "&gt;" + event.title + "&lt;/a&gt;&lt;/strong&gt;";
-		    	venueurl = "/glue/venues/search.xhtml?v=" + event.vid;
-		    	venuelink = '&lt;small&gt;&lt;a href=' + venueurl + ' class="glue-a"&gt;'  + event.venue + '&lt;/a&gt;&lt;/small&gt;';
-		    	content = eventlink + '&lt;br/&gt;' + venuelink;
-				marker.bindPopup(content);
-				marker.on('mouseover', function (e) {
-            		this.openPopup();
-        		});
-				markers.addLayer(marker);
-		    }
-		    
-		    map.addLayer(markers);	
-			
-		</h:outputScript>
+		<h:outputScript library="js" name="map-search.js" />
 	</ui:define>
 </ui:composition>

@@ -43,6 +43,7 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
     private String location;
     private double latitude;
     private double longitude;
+    private String bbox;
 
     private List<String> categories = new ArrayList<>();
 
@@ -101,6 +102,20 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 	this.longitude = longitude;
     }
 
+    public String getBoundingBox() {
+	return bbox;
+    }
+
+    /**
+     * Sets a string with bounding box coordinates in a
+     * 'southwest_lng,southwest_lat,northeast_lng,northeast_lat' format, for
+     * finding everything in a rectangular area, such as the area covered by a
+     * map the user is looking at.
+     */
+    public void setBoundingBox(String bbox) {
+	this.bbox = bbox;
+    }
+
     /**
      * @return the categories
      */
@@ -129,6 +144,7 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 	engine.setLatitude(latitude);
 	engine.setLongitude(longitude);
 	engine.setLocation(location);
+	engine.setBoundingBox(bbox);
 
 	final Map<String, Event> me = (Map<String, Event>) engine.searchAsMap();
 

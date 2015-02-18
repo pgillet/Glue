@@ -12,37 +12,111 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glue.domain.Event;
+import com.glue.webapp.logic.EventController;
 import com.glue.webapp.logic.InternalServerException;
 import com.glue.webapp.search.SearchEngine;
 
 // The Java class will be hosted at the URI path "/autocomplete"
-@Path("/autocomplete")
-public class AutoCompleteResource {
+@Path("search")
+public class SearchResource {
 
     private static final String SOLR_DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'Z'"; // "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
     private SimpleDateFormat df = new SimpleDateFormat(SOLR_DATE_PATTERN);
 
-    static final Logger LOG = LoggerFactory
-	    .getLogger(AutoCompleteResource.class);
+    static final Logger LOG = LoggerFactory.getLogger(SearchResource.class);
 
     @Inject
     private SearchEngine<Event> engine;
 
+    @Inject
+    private EventController controller;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("events")
+    /**
+     * 
+     * @param bbox a string with bounding box coordinates in a 'southwest_lng,southwest_lat,northeast_lng,northeast_lat' format.
+     * @param startDate the start date in the yyyyMMdd.
+     * @return
+     */
+    public List<Event> getEvents(@QueryParam("q") String queryString,
+	    @QueryParam("ql") String location,
+	    @QueryParam("cat") String catSelection,
+	    @QueryParam("lat") double latitude,
+	    @QueryParam("lng") double longitude,
+	    @QueryParam("bbox") String bbox,
+	    @QueryParam("startdate") String startDateString,
+	    @QueryParam("enddate") String endDateString,
+	    @QueryParam("start") int start, @QueryParam("rows") int rows) {
+
+	DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
+
+	List<Event> events = null;
+	try {
+
+	    boolean hasBounds = StringUtils.isNotBlank(bbox);
+
+	    LocalDate startDate = null;
+	    if (StringUtils.isNotBlank(startDateString)) {
+		startDate = formatter.parseLocalDate(startDateString);
+	    } else if (hasBounds) {
+		// Map mode with events of the day only
+		startDate = LocalDate.now();
+	    }
+
+	    LocalDate endDate = null;
+	    if (StringUtils.isNotBlank(endDateString)) {
+		endDate = formatter.parseLocalDate(endDateString);
+
+	    } else if (hasBounds) {
+		// Map mode with events of the day only
+		endDate = startDate.plusDays(1);
+	    }
+
+	    controller.setQueryString(queryString);
+	    controller.setLocation(location);
+	    controller.setStartDate(startDate.toDate());
+	    controller.setEndDate(endDate.toDate());
+	    if (StringUtils.isNotBlank(catSelection)) {
+		controller.setCategories(Arrays.asList(StringUtils.split(
+			catSelection, ",")));
+	    }
+	    controller.setLatitude(latitude);
+	    controller.setLongitude(longitude);
+	    controller.setBoundingBox(bbox);
+	    controller.setRowsPerPage(rows);
+	    controller.setStart(start);
+
+	    events = controller.search();
+	} catch (InternalServerException e) {
+	    LOG.error(e.getMessage(), e);
+	    throw new WebApplicationException();
+	}
+
+	return events;
+    }
+
     // The Java method will process HTTP GET requests
     @GET
     // The Java method will produce content identified by the MIME Media
-    // type "text/plain"
+    // type "application/json"
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> run(@QueryParam("query") String query,
+    @Path("autocomplete")
+    public List<String> autocomplete(@QueryParam("query") String query,
 	    @QueryParam("lat") String lat, @QueryParam("lng") String lng,
 	    @QueryParam("startDate") String startDate,
 	    @QueryParam("stopDate") String endDate) {
