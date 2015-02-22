@@ -39,7 +39,7 @@
   - for best index size and searching performance, set "index" to false
     for all general text fields, use copyField to copy them to the
     catchall "text" field, and use that for searching.
-  - For maximum indexing performance, use the StreamingUpdateSolrServer
+  - For maximum indexing performance, use the ConcurrentUpdateSolrServer
     java client.
   - Remember to run the JVM in server mode, and use a higher logging level
     that avoids logging every request
@@ -250,8 +250,8 @@
    <copyField source="category" dest="text"/>
    <copyField source="tags" dest="text"/>
    
-   <!-- Copy the price into a currency enabled field (default USD) -->
-   <!-- <copyField source="price" dest="price_c"/> -->
+   <!-- Create a string version of author for faceting -->
+   <!-- <copyField source="author" dest="author_s"/> -->
    
    <copyField source="title" dest="suggestions"/>
    <copyField source="title" dest="suggestions_edg"/>
@@ -435,13 +435,15 @@
       value verbatim (and hence don't correctly support range queries, since the
       lexicographic ordering isn't equal to the numeric ordering)
 
-      NOTE: These field types are deprecated will be removed in Solr 5.0!
+      NOTE: These field types are deprecated will be completely removed in Solr 5.0!
     -->
+    <!--
     <fieldType name="pint" class="solr.IntField"/>
     <fieldType name="plong" class="solr.LongField"/>
     <fieldType name="pfloat" class="solr.FloatField"/>
     <fieldType name="pdouble" class="solr.DoubleField"/>
     <fieldType name="pdate" class="solr.DateField" sortMissingLast="true"/>
+    -->
 
     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
@@ -760,6 +762,13 @@
     -->
     <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType"
         geo="true" distErrPct="0.025" maxDistErr="0.000009" units="degrees" />
+
+    <!-- Spatial rectangle (bounding box) field. It supports most spatial predicates, and has
+     special relevancy modes: score=overlapRatio|area|area2D (local-param to the query).  DocValues is required for
+     relevancy. -->
+    <fieldType name="bbox" class="solr.BBoxField"
+        geo="true" units="degrees" numberType="_bbox_coord" />
+    <fieldType name="_bbox_coord" class="solr.TrieDoubleField" precisionStep="8" docValues="true" stored="false"/>
 
    <!-- Money/currency field type. See http://wiki.apache.org/solr/MoneyFieldType
         Parameters:
@@ -1159,9 +1168,8 @@
     <!-- Thai -->
     <fieldType name="text_th" class="solr.TextField" positionIncrementGap="100">
       <analyzer> 
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.ThaiTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ThaiWordFilterFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_th.txt" />
       </analyzer>
     </fieldType>

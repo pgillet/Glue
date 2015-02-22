@@ -9,7 +9,7 @@
 	<name>Glue - Parent</name>
 
 	<properties>
-		<solr.version>4.8.1</solr.version>
+		<solr.version>4.10.3</solr.version>
 		<mysql.version>5.1.26</mysql.version>
 		<openjpa.version>2.3.0</openjpa.version>
 	</properties>
