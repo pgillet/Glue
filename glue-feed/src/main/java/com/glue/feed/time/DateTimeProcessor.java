@@ -5,12 +5,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.chemistry.opencmis.commons.impl.IOUtils;
 import org.slf4j.Logger;
@@ -31,9 +37,14 @@ public class DateTimeProcessor {
 
     static final Logger LOG = LoggerFactory.getLogger(DateTimeProcessor.class);
 
-    private static final String RESOURCE_NAME = "/com/glue/feed/heideltime/"
+    private static final String RESOURCE_NAME = "/heideltime-kit/conf/"
 	    + CONFIG_PROPS;
     private String configPath;
+
+    private HeidelTimeStandalone heidel;
+
+    private Set<Interval> intervals = new TreeSet<>();
+    private Set<Date> dates = new TreeSet<>();
 
     public DateTimeProcessor() throws IOException {
 	InputStream in = DateTimeProcessor.class
@@ -53,17 +64,10 @@ public class DateTimeProcessor {
 	    out.close();
 	}
 	// }
-    }
 
-    private Date startTime;
-    private Date stopTime;
-
-    public Date getStartTime() {
-	return startTime;
-    }
-
-    public Date getStopTime() {
-	return stopTime;
+	heidel = new HeidelTimeStandalone(Language.FRENCH, DocumentType.NEWS,
+		OutputType.TIMEML, configPath, POSTagger.STANFORDPOSTAGGER,
+		true);
     }
 
     /**
@@ -77,13 +81,14 @@ public class DateTimeProcessor {
     public boolean process(String document)
 	    throws DocumentCreationTimeMissingException, ParseException {
 
+	dates.clear();
+	intervals.clear();
+
 	boolean success = false;
 
-	HeidelTimeStandalone heidel = new HeidelTimeStandalone(Language.FRENCH,
-		DocumentType.NEWS, OutputType.TIMEML, configPath,
-		POSTagger.STANFORDPOSTAGGER, true);
-
-	Date documentCreationTime = Calendar.getInstance().getTime();
+	// Reference date
+	Calendar cal = Calendar.getInstance();
+	Date documentCreationTime = cal.getTime();
 
 	LOG.info("Document = " + document);
 
@@ -96,29 +101,51 @@ public class DateTimeProcessor {
 
 	// -- Intervals --
 
-	Map<Integer, Timex3Interval> intervals = rf.getIntervals();
+	Map<Integer, Timex3Interval> timex3Intervals = rf.getIntervals();
 	Map<Integer, Timex3> timexes = rf.getTimexes();
 
-	if (!intervals.isEmpty()) {
-	    Timex3Interval interval = getLastElement(intervals.values());
-	    Timex3IntervalAsDateDecorator decorated = new Timex3IntervalAsDateDecorator(
-		    interval);
+	if (!timex3Intervals.isEmpty()) {
 
-	    startTime = decorated.getEarliestBegin();
-	    stopTime = decorated.getLatestEnd();
+	    for (Timex3Interval interval : timex3Intervals.values()) {
+		Timex3IntervalAsDateDecorator decorated = new Timex3IntervalAsDateDecorator(
+			interval);
+
+		LOG.info("Interval found = from "
+			+ decorated.getEarliestBegin() + " to "
+			+ decorated.getLatestEnd());
+
+		intervals.add(new Interval(decorated.getEarliestBegin(),
+			decorated.getLatestEnd()));
+	    }
+
 	    success = true;
-	} else if (!timexes.isEmpty()) {
-	    Timex3 timex = getLastElement(timexes.values());
-	    Timex3AsDateDecorator decorated = new Timex3AsDateDecorator(timex);
+	}
 
-	    startTime = decorated.getValueAsDate();
+	if (!timexes.isEmpty()) {
+
+	    for (Timex3 timex : timexes.values()) {
+		Timex3AsDateDecorator decorated = new Timex3AsDateDecorator(
+			timex);
+		LOG.info("Date found = " + decorated.getValueAsDate());
+		dates.add(decorated.getValueAsDate());
+	    }
+
 	    success = true;
 	}
 
 	return success;
     }
 
-    private <T> T getLastElement(final Collection<T> c) {
+    public Set<Interval> getIntervals() {
+	return this.intervals;
+    }
+
+    public Set<Date> getDates() {
+	return this.dates;
+    }
+
+    public <T> T getLastElement(final Collection<T> c) {
+
 	final Iterator<T> itr = c.iterator();
 	T lastElement = itr.next();
 	while (itr.hasNext()) {
@@ -127,28 +154,188 @@ public class DateTimeProcessor {
 	return lastElement;
     }
 
+    /**
+     * Checks if two date objects are on the same day ignoring time.
+     * 
+     * @param date1
+     * @param date2
+     * @return true if they represent the same day
+     * @throws java.lang.IllegalArgumentException
+     *             if either date is null
+     */
+    private boolean isSameDay(Date date1, Date date2) {
+	if (date1 == null || date2 == null) {
+	    throw new IllegalArgumentException("The date must not be null");
+	}
+	Calendar cal1 = Calendar.getInstance();
+	cal1.setTime(date1);
+	Calendar cal2 = Calendar.getInstance();
+	cal2.setTime(date2);
+	return isSameDay(cal1, cal2);
+    }
+
+    /**
+     * Checks if two calendar objects are on the same day ignoring time.
+     * 
+     * @param cal1
+     * @param cal2
+     * @return true if they represent the same day
+     * @throws java.lang.IllegalArgumentException
+     *             if either calendar is null
+     * @see org.apache.commons.lang.time.DateUtils
+     */
+    private boolean isSameDay(Calendar cal1, Calendar cal2) {
+	if (cal1 == null || cal2 == null) {
+	    throw new IllegalArgumentException("The date must not be null");
+	}
+	return (/*
+		 * cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+		 */cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1
+		.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+    }
+
+    /**
+     * A time interval represents a period of time between two instants.
+     */
+    public class Interval implements Comparable<Interval> {
+	private Date startTime;
+	private Date stopTime;
+
+	public Interval() {
+	}
+
+	public Interval(Date startTime, Date stopTime) {
+	    setStartTime(startTime);
+	    setStopTime(stopTime);
+	}
+
+	public Date getStartTime() {
+	    return startTime;
+	}
+
+	public Date getStopTime() {
+	    return stopTime;
+	}
+
+	public void setStartTime(Date startTime) {
+	    this.startTime = startTime;
+	}
+
+	public void setStopTime(Date stopTime) {
+	    this.stopTime = stopTime;
+	}
+
+	@Override
+	public int compareTo(Interval o) {
+	    long thisTime = startTime.getTime() + stopTime.getTime();
+	    long anotherTime = o.startTime.getTime() + o.stopTime.getTime();
+	    return (thisTime < anotherTime ? -1 : (thisTime == anotherTime ? 0
+		    : 1));
+	}
+
+	@Override
+	public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result
+		    + ((startTime == null) ? 0 : startTime.hashCode());
+	    result = prime * result
+		    + ((stopTime == null) ? 0 : stopTime.hashCode());
+	    return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj)
+		return true;
+	    if (obj == null)
+		return false;
+	    if (getClass() != obj.getClass())
+		return false;
+	    Interval other = (Interval) obj;
+	    if (startTime == null) {
+		if (other.startTime != null)
+		    return false;
+	    } else if (!startTime.equals(other.startTime))
+		return false;
+	    if (stopTime == null) {
+		if (other.stopTime != null)
+		    return false;
+	    } else if (!stopTime.equals(other.stopTime))
+		return false;
+	    return true;
+	}
+
+    }
+
     public static void main(String[] args)
 	    throws DocumentCreationTimeMissingException, ParseException,
 	    IOException {
-	String document = "Du 21 au 30 janvier 2015.";
-	// document = "Tous les samedis et vendredis de 20h à 22h00.";
-	// document = "mer 28 jan 15, 20:00.";
+	String[] documents = new String[] {
+		"Du 21 au 30 janvier 2015",
+		// "Tous les samedis et vendredis de 20h à 22h00.", Not yet
+		// managed
+		"mer 28 jan 15 à 20:00.",
+		"lun 27 avr 15, 20:00",
+		"sam 3 jan",
+		"Du 11 novembre 2014 au 15 janvier 2015",
+		"Le 16 janvier 2015",
+		"mercredi 1er samedi 4 et dimanche 5 avril à 10h30 et 16h45",
+		"Le mercredi 4 et le samedi 7 et le dimanche 8 mars" /*
+								      * à 10h30
+								      * et
+								      * 16h45"
+								      */,
+		"mercredi 4 et samedi 7 et dimanche 8 mars à 10h30 et 16h45",
+		"Le mercredi 4 et le dimanche 8 mars",
+		"Le mercredi 4",
+		"21.03",
+		"le lundi, mardi et jeudi",
+		"mercredi 1er avril à 10h30 et 16h45",
+		"lundi 20, mardi 21 mercredi 22 jeudi 23 vendredi 24 samedi 25 et dimanche 26 avril à 10h30 et 16h45",
+		"9-10-11 AVRIL 15", "27.03.15",
 
-	// document = "sam 3 jan.";
-	//
-	// document = "Du 11 novembre 2014 au 15 janvier 2015";
-	//
-	// document = "Le 16 janvier 2015";
-	//
-	document = "SAMEDI 24 JANVIER 2015 tagada ... jeudi 12 février 2015";
+	// "Tous les jours du lundi 13 au dimanche 19 avril",
+	};
 
-	// document = "21.03";
+	Map<String, DateTimeProcessor> results = new HashMap<>();
 
-	DateTimeProcessor dateTimeProcessor = new DateTimeProcessor();
-	dateTimeProcessor.process(document);
+	for (String document : documents) {
+	    DateTimeProcessor dateTimeProcessor = new DateTimeProcessor();
+	    dateTimeProcessor.process(document);
 
-	LOG.info("Start time = " + dateTimeProcessor.getStartTime());
-	LOG.info("Stop time = " + dateTimeProcessor.getStopTime());
+	    results.put(document, dateTimeProcessor);
+	}
+
+	// Display results
+	DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL,
+		DateFormat.SHORT, Locale.FRENCH);
+	Set<Entry<String, DateTimeProcessor>> entries = results.entrySet();
+
+	for (Entry<String, DateTimeProcessor> entry : entries) {
+	    System.out.println("--------------------------------------");
+	    System.out.println("Source = \"" + entry.getKey() + "\"");
+	    DateTimeProcessor dtp = entry.getValue();
+
+	    Set<Interval> intervals = dtp.getIntervals();
+	    if (!intervals.isEmpty()) {
+		System.out.println("-- Intervals found --");
+		for (Interval interval : intervals) {
+		    System.out.println("Du "
+			    + df.format(interval.getStartTime()) + " au "
+			    + df.format(interval.getStopTime()));
+		}
+	    }
+
+	    Set<Date> dates = dtp.getDates();
+	    if (!dates.isEmpty()) {
+		System.out.println("-- Dates found --");
+		for (Date date : dates) {
+		    System.out.println(df.format(date));
+		}
+	    }
+
+	}
 
     }
 

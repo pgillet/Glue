@@ -17,7 +17,10 @@ import com.glue.feed.html.VenueSelectors;
 import com.glue.feed.listener.StreamMessageListener;
 
 /**
- * Demonstration of the DirectMappingStrategy.
+ * Demonstration of the EventMappingStrategy.
+ * 
+ * See http://jsoup.org/apidocs/org/jsoup/select/Selector.html for the syntax of
+ * the CSS-like element selectors.
  * 
  * @see ScrapingDemo
  * 

@@ -1,9 +1,9 @@
 package com.glue.feed.time;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,7 +78,9 @@ public class JavaTimeResultFormatter implements ResultFormatter {
 
 	    // check for whether this and the previous timex overlap. ex: [early
 	    // (friday] morning)
-	    if (prevT != null && prevT.getEnd() > thisT.getBegin()) {
+	    if (prevT != null
+		    && (prevT.getEnd() > thisT.getBegin() || containsEither(
+			    prevT.getTimexValue(), thisT.getTimexValue()))) {
 
 		Timex3 removedT = null; // only for debug message
 		// assuming longer value string means better granularity
@@ -131,10 +133,12 @@ public class JavaTimeResultFormatter implements ResultFormatter {
 	    }
 	}
 
-	Set<Entry<Integer, Timex3>> entries = forwardTimexes.entrySet();
-	for (Entry<Integer, Timex3> entry : entries) {
+	Iterator<Entry<Integer, Timex3>> it = forwardTimexes.entrySet()
+		.iterator();
+	while (it.hasNext()) {
+	    Entry<Integer, Timex3> entry = it.next();
 	    if (timexesToSkip.contains(entry.getValue())) {
-		forwardTimexes.remove(entry.getKey());
+		it.remove();
 	    }
 	}
 
@@ -219,6 +223,17 @@ public class JavaTimeResultFormatter implements ResultFormatter {
 	return outText;
     }
 
+    /**
+     * Returns true if either string contains the other one.
+     * 
+     * @param str1
+     * @param str2
+     * @return
+     */
+    private boolean containsEither(String str1, String str2) {
+	return str1.contains(str2) || str2.contains(str1);
+    }
+
     public Map<Integer, Timex3Interval> getIntervals() {
 	return intervals;
     }
@@ -228,4 +243,3 @@ public class JavaTimeResultFormatter implements ResultFormatter {
     }
 
 }
-

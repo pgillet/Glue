@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.jsoup.nodes.Element;
@@ -13,8 +14,10 @@ import org.jsoup.select.Elements;
 import com.glue.domain.Event;
 import com.glue.domain.Image;
 import com.glue.domain.ImageItem;
+import com.glue.domain.Occurrence;
 import com.glue.domain.Venue;
 import com.glue.feed.time.DateTimeProcessor;
+import com.glue.feed.time.DateTimeProcessor.Interval;
 
 public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 
@@ -78,11 +81,29 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 	    boolean success = dateTimeProcessor.process(dates);
 
 	    if (success) {
-		event.setStartTime(dateTimeProcessor.getStartTime());
-		event.setStopTime(dateTimeProcessor.getStopTime());
-		if (event.getStopTime() == null) {
-		    event.setStopTime(event.getStartTime());
+		
+		Set<Interval> intervals = dateTimeProcessor.getIntervals();
+		if(!intervals.isEmpty()){
+		    Interval it = dateTimeProcessor.getLastElement(intervals);
+		    
+		    event.setStartTime(it.getStartTime());
+		    event.setStopTime(it.getStopTime());
+		} else {
+		    
+		    Set<Date> datesCol = dateTimeProcessor.getDates();
+		    if (datesCol.size() == 1) {
+			Date d = datesCol.iterator().next();
+			event.setStartTime(d);
+			event.setStopTime(d);
+		    } else {
+			for (Date date : datesCol) {
+			    Occurrence occur = new Occurrence();
+			    occur.setStartTime(date);
+			    occur.setStopTime(date);
+			}
+		    }
 		}
+		
 	    } else {
 		throw new ParseException("Dates could not be found", -1);
 	    }
