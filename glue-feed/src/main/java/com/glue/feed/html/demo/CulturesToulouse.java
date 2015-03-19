@@ -39,28 +39,28 @@ public class CulturesToulouse {
 		.last("div#nextpage:not(:has(a))").build();
 
 	VenueSelectors venueSelectors = newVenueSelectors()
-		.withName("div.content > h1.title")
-		.withAddress("div.address > div.description > p")
-		.withThumbnail("img.location-image")
-		.withDescription("div.desccription")
-		.withWebsite("div.address > div.description > div > a").build();
+		.name("div.content > h1.title")
+		.address("div.address > div.description > p")
+		.thumbnail("img.location-image")
+		.description("div.desccription")
+		.website("div.address > div.description > div > a").build();
 
 	// 2nd step: describe the structure of an event details page
 	// Note: The selectors are the same as the ones defined in the
 	// BikiniEvent class
 	EventSelectors eventSelectors = newEventSelectors()
-		.withRootBlock("div.article-event")
-		.withTitle("span.title-text")
-		.withDescription("div.description")
+		.rootBlock("div.article-event")
+		.title("span.title-text")
+		.description("div.description")
 		// .withDatePattern("E dd MMM yyyy")
 		// Ex: vendredi 21 février 2014 à 20:30
 		// .withEventType("div#blocContenu > div#type")
-		.withThumbnail("div.image-event > img")
+		.thumbnail("div.image-event > img")
 		// .withPrice("div#blocContenu > div#prix")
-		.withDates("h1.event-title + div.block-child")
-		.withLocale(Locale.FRENCH)
-		.withVenueLink("a[href*=/locations]")
-		.withVenueSelectors(venueSelectors)
+		.dates("h1.event-title + div.block-child")
+		.locale(Locale.FRENCH)
+		.venueLink("a[href*=/locations]")
+		.venueSelectors(venueSelectors)
 		.build();
 
 

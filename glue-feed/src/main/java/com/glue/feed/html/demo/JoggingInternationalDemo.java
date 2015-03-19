@@ -35,20 +35,20 @@ public class JoggingInternationalDemo {
 		.build();
 
 	EventSelectors eventSelectors = newEventSelectors()
-		.withRootBlock("div.contenu")
-		.withTitle("div.item_titre > h2")
-		.withDescription("div.item_titre > h2")
+		.rootBlock("div.contenu")
+		.title("div.item_titre > h2")
+		.description("div.item_titre > h2")
 		// .withEventType("div#blocContenu > div#type")
 		// .withThumbnail("div#blocImage > a")
 		// .withPrice("div#blocContenu > div#prix")
-		.withDates("table.tab_identite tr:eq(0) td.droite")
+		.dates("table.tab_identite tr:eq(0) td.droite")
 		// .withDatePattern("dd/MM/yyyy")
 		// 05/01/2014
-		.withLocale(Locale.FRENCH).build();
+		.locale(Locale.FRENCH).build();
 
 	VenueSelectors venueSelectors = newVenueSelectors()
-		.withName("table.tab_identite tr:eq(2) td.droite")
-		.withAddress("table.tab_identite tr:eq(2) td.droite").build();
+		.name("table.tab_identite tr:eq(2) td.droite")
+		.address("table.tab_identite tr:eq(2) td.droite").build();
 
 	HTMLMappingStrategy<Event> mappingStrategy = new EventMappingStrategy(
 		eventSelectors);

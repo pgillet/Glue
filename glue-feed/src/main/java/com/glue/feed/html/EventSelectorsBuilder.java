@@ -11,10 +11,10 @@ public class EventSelectorsBuilder {
     }
 
     /**
-     * Create a EventDetailsPageBuilder with which to define a
-     * <code>EventDetailsPage</code>.
+     * Create a EventSelectorsBuilder with which to define a
+     * <code>EventSelectors</code>.
      * 
-     * @return a new EventDetailsPageBuilder
+     * @return a new EventSelectorsBuilder
      */
     public static EventSelectorsBuilder newEventSelectors() {
 	EventSelectorsBuilder builder = new EventSelectorsBuilder();
@@ -22,68 +22,68 @@ public class EventSelectorsBuilder {
 	return builder;
     }
 
-    public EventSelectorsBuilder withRootBlock(String cssQuery) {
+    public EventSelectorsBuilder rootBlock(String cssQuery) {
 	selectors.setRootBlock(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withTitle(String cssQuery) {
+    public EventSelectorsBuilder title(String cssQuery) {
 	selectors.setTitle(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withDescription(String cssQuery) {
+    public EventSelectorsBuilder description(String cssQuery) {
 	selectors.setDescription(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withPerformer(String cssQuery) {
+    public EventSelectorsBuilder performer(String cssQuery) {
 	selectors.setPerformer(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withDates(String cssQuery) {
+    public EventSelectorsBuilder dates(String cssQuery) {
 	selectors.setDates(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withDatePattern(String cssQuery) {
+    public EventSelectorsBuilder datePattern(String cssQuery) {
 	selectors.setDatePattern(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withThumbnail(String cssQuery) {
+    public EventSelectorsBuilder thumbnail(String cssQuery) {
 	selectors.setThumbnail(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withPrice(String cssQuery) {
+    public EventSelectorsBuilder price(String cssQuery) {
 	selectors.setPrice(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withAudience(String cssQuery) {
+    public EventSelectorsBuilder audience(String cssQuery) {
 	selectors.setAudience(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withEventType(String cssQuery) {
+    public EventSelectorsBuilder eventType(String cssQuery) {
 	selectors.setEventType(cssQuery);
 	return this;
     }
 
-    public EventSelectorsBuilder withLocale(Locale locale) {
+    public EventSelectorsBuilder locale(Locale locale) {
 	selectors.setLocale(locale);
 	return this;
     }
 
-    public EventSelectorsBuilder withVenueSelectors(
+    public EventSelectorsBuilder venueSelectors(
 	    VenueSelectors venueSelectors) {
 	selectors.setVenueSelectors(venueSelectors);
 	return this;
     }
 
-    public EventSelectorsBuilder withVenueLink(String cssQuery) {
+    public EventSelectorsBuilder venueLink(String cssQuery) {
 	selectors.setVenueLink(cssQuery);
 	return this;
     }

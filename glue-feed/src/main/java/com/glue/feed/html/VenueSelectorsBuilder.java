@@ -8,10 +8,10 @@ public class VenueSelectorsBuilder {
     }
 
     /**
-     * Create a EventDetailsPageBuilder with which to define a
-     * <code>EventDetailsPage</code>.
+     * Create a VenueSelectorsBuilder with which to define a
+     * <code>VenueSelectors</code>.
      * 
-     * @return a new EventDetailsPageBuilder
+     * @return a new VenueSelectorsBuilder
      */
     public static VenueSelectorsBuilder newVenueSelectors() {
 	VenueSelectorsBuilder builder = new VenueSelectorsBuilder();
@@ -19,42 +19,42 @@ public class VenueSelectorsBuilder {
 	return builder;
     }
 
-    public VenueSelectorsBuilder withRootBlock(String cssQuery) {
+    public VenueSelectorsBuilder rootBlock(String cssQuery) {
 	details.setRootBlock(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withName(String cssQuery) {
+    public VenueSelectorsBuilder name(String cssQuery) {
 	details.setVenueName(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withAddress(String cssQuery) {
+    public VenueSelectorsBuilder address(String cssQuery) {
 	details.setVenueAddress(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withCity(String cssQuery) {
+    public VenueSelectorsBuilder city(String cssQuery) {
 	details.setCity(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withPhoneNumber(String cssQuery) {
+    public VenueSelectorsBuilder phoneNumber(String cssQuery) {
 	details.setPhoneNumber(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withWebsite(String cssQuery) {
+    public VenueSelectorsBuilder website(String cssQuery) {
 	details.setWebsite(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withDescription(String cssQuery) {
+    public VenueSelectorsBuilder description(String cssQuery) {
 	details.setDescription(cssQuery);
 	return this;
     }
 
-    public VenueSelectorsBuilder withThumbnail(String cssQuery) {
+    public VenueSelectorsBuilder thumbnail(String cssQuery) {
 	details.setThumbnail(cssQuery);
 	return this;
     }

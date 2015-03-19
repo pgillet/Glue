@@ -33,28 +33,27 @@ public class BikiniScraper {
 
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
-		"http://www.lebikini.com/programmation/index/date/new")
-		.url("http://www.lebikini.com/programmation/concert/").build();
+		"http://www.lebikini.com/programmation/index/date/new").url(
+		"http://www.lebikini.com/programmation/concert/").build();
 
 	VenueSelectors venueSelectors = newVenueSelectors()
-		.withName("div#infos > div#salle > h3")
-		.withAddress("div#infos > div#salle > div#adresse").build();
+		.name("div#infos > div#salle > h3")
+		.address("div#infos > div#salle > div#adresse").build();
 
 	// 2nd step: describe the structure of an event details page
 	// Note: The selectors are the same as the ones defined in the
 	// BikiniEvent class
 	EventSelectors eventSelectors = newEventSelectors()
-		.withRootBlock("div#encartDetailSpectacle")
-		.withTitle("div#blocContenu > h2").withDescription("div#texte")
-		.withEventType("div#blocContenu > div#type")
-		.withThumbnail("div#blocImage > a")
-		.withPrice("div#blocContenu > div#prix")
-		.withDates("div#blocContenu > div#date")
+		.rootBlock("div#encartDetailSpectacle")
+		.title("div#blocContenu > h2").description("div#texte")
+		.eventType("div#blocContenu > div#type")
+		.thumbnail("div#blocImage > a")
+		.price("div#blocContenu > div#prix")
+		.dates("div#blocContenu > div#date")
 		// .withDatePattern("E dd MMM yyyy 'à' HH:mm")
 		// Ex: vendredi 21 février 2014 à 20:30
 		// .withLocale(Locale.FRENCH)
-		.withVenueSelectors(venueSelectors)
-		.build();
+		.venueSelectors(venueSelectors).build();
 
 	// Constants
 	Venue venueRef = new Venue();
@@ -64,7 +63,6 @@ public class BikiniScraper {
 	Event eventRef = new Event();
 	eventRef.setCategory(EventCategory.MUSIC);
 	eventRef.setVenue(venueRef); // Important !
-
 
 	HTMLMappingStrategy<Event> mappingStrategy = new EventMappingStrategy(
 		eventSelectors, eventRef);
