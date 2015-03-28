@@ -75,9 +75,11 @@ function onChange(e) {
 }
 
 function search(latLngBounds) {
+	
+	console.log("Context path = " + _contextPath);
 
 	var xmlhttp = new XMLHttpRequest();
-	var url = "/glue/services/search/events";
+	var url = _contextPath + "/services/search/events";
 	var params = window.location.search + "&bbox="
 			+ latLngBounds.toBBoxString() + "&rows=1000";
 
