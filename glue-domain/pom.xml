@@ -21,6 +21,16 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<compilerArguments>
+						<encoding>UTF-8</encoding>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.openjpa</groupId>
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openjpa.version}</version>
