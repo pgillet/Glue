@@ -91,10 +91,8 @@ public class SearchResource {
 	    controller.setLocation(location);
 	    controller.setStartDate(startDate.toDate());
 	    controller.setEndDate(endDate.toDate());
-	    if (StringUtils.isNotBlank(catSelection)) {
-		controller.setCategories(Arrays.asList(StringUtils.split(
-			catSelection, ",")));
-	    }
+	    controller.setCategories(Arrays.asList(StringUtils.split(
+		    catSelection, ",")));
 	    controller.setLatitude(latitude);
 	    controller.setLongitude(longitude);
 	    controller.setBoundingBox(bbox);
