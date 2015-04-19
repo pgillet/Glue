@@ -30,9 +30,9 @@ $(document).ready(function() {
 	    },
 	    queryTokenizer: Bloodhound.tokenizers.whitespace,
 	    remote: {
-	        url: '/glue/services/autocomplete?query=%QUERY',
+	        url: '/glue/services/search/autocomplete?query=%QUERY',
 	        replace: function () {
-	        	var q = '/glue/services/autocomplete?query=' + $('.typeahead').val();
+	        	var q = '/glue/services/search/autocomplete?query=' + $('.typeahead').val();
 	        	var lat = document.getElementById("lat").value;
 	        	var lng = document.getElementById("lng").value;
 	        	if (lat && lng) {
