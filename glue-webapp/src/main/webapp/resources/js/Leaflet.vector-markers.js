@@ -7,9 +7,9 @@
     L.VectorMarkers.Icon = L.Icon.extend({
       options: {
         iconSize: [30, 50],
-        iconAnchor: [15, 50],
+        iconAnchor: [15, 30],
         popupAnchor: [2, -40],
-        shadowAnchor: [7, 57],
+        shadowAnchor: [8, 40],
         shadowSize: [54, 51],
         className: "vector-marker",
         prefix: "fa",

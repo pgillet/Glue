@@ -19,13 +19,13 @@ function initialize() {
 	});
 	
 	catIconMap = {};
-	catIconMap['MUSIC'] = ['music' , '#3a87ad'];
-	catIconMap['PERFORMING_ART'] = ['eye' , '#b94a48'];
-	catIconMap['EXHIBITION'] = ['fa-picture-o' , '#ef7c00'];
-	catIconMap['SPORT'] = ['fa-futbol-o' , '#468847'];
-	catIconMap['YOUTH'] = ['child' , '#5bc0de'];
-	catIconMap['OTHER'] = ['cloud' , '#bd1789'];
-	catIconMap['CONFERENCE'] = ['university' , '#c09853'];
+	catIconMap['MUSIC'] = ['fa', 'music' , '#3a87ad', ''];
+	catIconMap['PERFORMING_ART'] = ['', 'theatre' , '#b94a48', 'dark maki-icon'];
+	catIconMap['EXHIBITION'] = ['', 'art-gallery' , '#ef7c00', 'dark maki-icon'];
+	catIconMap['SPORT'] = ['fa', 'fa-futbol-o' , '#468847', ''];
+	catIconMap['YOUTH'] = ['fa', 'child' , '#5bc0de', ''];
+	catIconMap['OTHER'] = ['fa', 'cloud' , '#bd1789', ''];
+	catIconMap['CONFERENCE'] = ['fa', 'university' , '#c09853', ''];
 
 	var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 
@@ -107,9 +107,10 @@ function putMarkers(arr) {
 		var iconProps = catIconMap[event.category];
 		
 		catIcon = L.VectorMarkers.icon({
-			prefix: 'fa',
-		    icon: iconProps[0],
-		    markerColor: iconProps[1]
+			prefix: iconProps[0],
+		    icon: iconProps[1],
+		    markerColor: iconProps[2],
+		    extraClasses: iconProps[3]
 		});
 		
 		marker = L.marker([ event.venue.latitude, event.venue.longitude ], {
