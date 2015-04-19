@@ -17,15 +17,15 @@ function initialize() {
 			popupAnchor : [ 0, -20 ]
 		}
 	});
-
+	
 	catIconMap = {};
-	catIconMap['MUSIC'] = '../resources/img/markers/music-marker.png';
-	catIconMap['PERFORMING_ART'] = '../resources/img/markers/performing_art-marker.png';
-	catIconMap['EXHIBITION'] = '../resources/img/markers/exhibition-marker.png';
-	catIconMap['SPORT'] = '../resources/img/markers/sport-marker.png';
-	catIconMap['YOUTH'] = '../resources/img/markers/youth-marker.png';
-	catIconMap['OTHER'] = '../resources/img/markers/other-marker.png';
-	catIconMap['CONFERENCE'] = '../resources/img/markers/conference-marker.png';
+	catIconMap['MUSIC'] = ['music' , '#3a87ad'];
+	catIconMap['PERFORMING_ART'] = ['eye' , '#b94a48'];
+	catIconMap['EXHIBITION'] = ['fa-picture-o' , '#ef7c00'];
+	catIconMap['SPORT'] = ['fa-futbol-o' , '#468847'];
+	catIconMap['YOUTH'] = ['child' , '#5bc0de'];
+	catIconMap['OTHER'] = ['cloud' , '#bd1789'];
+	catIconMap['CONFERENCE'] = ['university' , '#c09853'];
 
 	var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 
@@ -103,10 +103,15 @@ function putMarkers(arr) {
 
 	for (var i = 0; i < arr.length; i++) {
 		event = arr[i];
-
-		catIcon = new LeafIcon({
-			iconUrl : catIconMap[event.category]
+		
+		var iconProps = catIconMap[event.category];
+		
+		catIcon = L.VectorMarkers.icon({
+			prefix: 'fa',
+		    icon: iconProps[0],
+		    markerColor: iconProps[1]
 		});
+		
 		marker = L.marker([ event.venue.latitude, event.venue.longitude ], {
 			icon : catIcon
 		});
