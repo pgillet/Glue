@@ -41,14 +41,18 @@
 		<h:form>
 			<div class="row">
 				<div class="col-sm-12 col-md-7" style="z-index: 1;">
+					<h:commandButton styleClass="btn text-muted glue-btn-link glue-map-btn glue-cat"
+						style="#{empty eventSearchBean.catSelection ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"	
+						value="#{bundle.all}"
+						action="#{eventMapSearchBean.enableAllCategories()}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
 					<ui:repeat var="item" value="#{eventSearchBean.categories}">
 						<ui:param name="enabled"
 							value="#{eventSearchBean.catSelection.contains(item.name)}" />
 						<h:commandButton
-							styleClass="btn text-muted glue-btn-link glue-map-btn"
-							style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
-							onmouseover="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, true)}"
-							onmouseout="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, false)}"
+							styleClass="btn text-muted glue-btn-link glue-map-btn glue-cat"
+							style="#{eventSearchBean.catSelection.contains(item.name) ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
 							value="#{bundle[item.name.toLowerCase()]}"
 							action="#{eventMapSearchBean.enableCategory()}">
 							<f:param name="selectedCat" value="#{item.name}"></f:param>

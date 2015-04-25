@@ -1,7 +1,6 @@
 package com.glue.webapp.beans;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
@@ -24,15 +23,15 @@ public class EventMapSearchBean implements
 
     public String search() throws Exception {
 
-	Date startDate = searchBean.getStartDate();
-	Date endDate = new DateTime(startDate).plusDays(1).toDate();
-	searchBean.setEndDate(endDate);
-
-	// Pagination controls
-	searchBean.setStart(0);
-	searchBean.setDisplay(DisplayType.MAP);
-
-	searchBean.search();
+	// Date startDate = searchBean.getStartDate();
+	// Date endDate = new DateTime(startDate).plusDays(1).toDate();
+	// searchBean.setEndDate(endDate);
+	//
+	// // Pagination controls
+	// searchBean.setStart(0);
+	// searchBean.setDisplay(DisplayType.MAP);
+	//
+	// searchBean.search();
 
 	return null;
     }
@@ -54,6 +53,12 @@ public class EventMapSearchBean implements
 
     public String enableCategory() {
 	searchBean.enableCategory();
+
+	return outcome();
+    }
+
+    public String enableAllCategories() {
+	searchBean.enableAllCategories();
 
 	return outcome();
     }

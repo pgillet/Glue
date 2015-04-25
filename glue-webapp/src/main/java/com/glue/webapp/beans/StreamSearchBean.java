@@ -229,9 +229,18 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	String cat = FacesUtil.getRequestParameter("selectedCat");
 	LOG.debug("Toggle category = " + cat);
 
-	if (!getCatSelection().remove(cat)) {
-	    getCatSelection().add(cat);
-	}
+	// if (!getCatSelection().remove(cat)) {
+	// getCatSelection().add(cat);
+	// }
+
+	catSelection.clear();
+	catSelection.add(cat);
+
+	return first();
+    }
+
+    public String enableAllCategories() {
+	catSelection.clear();
 
 	return first();
     }

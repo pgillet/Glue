@@ -168,7 +168,7 @@ a.text-muted:hover {
 }
 
 .glue-map-btn {
-	background-color: #ffffff;
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 .glue-tab-pane {
@@ -185,4 +185,12 @@ a.text-muted:hover {
 
 .twitter {
 	color: #00aced;
+}
+
+.glue-cat:hover {
+	padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;
+}
+
+.glue-cat {
+	padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;
 }

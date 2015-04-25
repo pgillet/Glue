@@ -34,14 +34,18 @@
 
 		<div class="row glue-hr-bottom-border">
 		
-			<div class="col-sm-10 col-md-8 col-md-offset-1">
+			<div class="col-sm-10 col-md-8 col-md-offset-1 btn-group">
 				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
+				<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
+					style="#{empty paramBean.catSelection ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"	
+					value="#{bundle.all}"
+					action="#{paramBean.enableAllCategories()}">
+					<f:ajax execute="@form" render="@form" />
+				</h:commandButton>
 				<ui:repeat var="item" value="#{paramBean.categories}">
 					<ui:param name="enabled" value="#{paramBean.catSelection.contains(item.name)}"/>
-					<h:commandButton styleClass="btn text-muted glue-btn-link"
-						style="#{eventUtilBean.getCategoryStyle(item.name, false, enabled, false)}"
-						onmouseover="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, true)}"
-						onmouseout="#{eventUtilBean.getCategoryStyle(item.name, true, enabled, false)}"
+					<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
+						style="#{paramBean.catSelection.contains(item.name) ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
 						value="#{bundle[item.name.toLowerCase()]}"
 						action="#{paramBean.enableCategory()}">
 						<f:param name="selectedCat" value="#{item.name}"></f:param>
