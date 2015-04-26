@@ -102,13 +102,15 @@ body { padding-top: 50px; }
 }
 
 .glue-tile {
-	min-height: 350px;
+	min-height: 325px;
+	max-width: 250px;
 	display: block;
 	padding: 15px 10px;
 	line-height: 1.428571429;
 	border: 1px solid #ddd;
-	margin-top: -1px;
-    margin-right: -1px;
+	/* margin-top: -1px;
+    margin-right: -1px; */
+    margin-bottom: 30px;
 }
 
 .glue-a:link {
@@ -193,4 +195,10 @@ a.text-muted:hover {
 
 .glue-cat {
 	padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;
+}
+
+.glue-img-cat {
+	font-size: xx-large;
+	text-align: center;
+	color: 	#eee;
 }
