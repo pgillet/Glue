@@ -25,6 +25,8 @@
 				<f:convertDateTime pattern="yyyyMMdd"/>
 			</f:viewParam>
 			<f:viewParam name="int" value="#{eventSearchBean.interval}" />
+			<f:viewParam name="fq" value="#{eventSearchBean.filterQueries}"
+				converter="FacetCollectionConverter" />
 			<f:event type="preRenderView" listener="#{eventSearchBean.search}" />
 		</f:metadata>
 	</ui:define>

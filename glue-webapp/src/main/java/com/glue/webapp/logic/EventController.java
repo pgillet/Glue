@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.solr.client.solrj.response.FacetField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,8 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
     private double latitude;
     private double longitude;
     private String bbox;
+    private List<FacetField.Count> filterQueries;
+    private List<FacetField> facetFields;
 
     private List<String> categories = new ArrayList<>();
 
@@ -131,6 +134,22 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 	this.categories = categories;
     }
 
+    public List<FacetField.Count> getFilterQueries() {
+	return filterQueries;
+    }
+
+    public void setFilterQueries(List<FacetField.Count> filterQueries) {
+	this.filterQueries = filterQueries;
+    }
+
+    public List<FacetField> getFacetFields() {
+	return facetFields;
+    }
+
+    public void setFacetFields(List<FacetField> facetFields) {
+	this.facetFields = facetFields;
+    }
+
     public List<Event> search() throws InternalServerException {
 
 	// The underlying search engine returns only partial streams (i.e. only
@@ -145,11 +164,15 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 	engine.setLongitude(longitude);
 	engine.setLocation(location);
 	engine.setBoundingBox(bbox);
+	engine.setFilterQueries(filterQueries);
 
 	final Map<String, Event> me = (Map<String, Event>) engine.searchAsMap();
 
 	// Stores the total number of found results
 	totalRows = engine.getNumFound();
+
+	// Facet fields
+	facetFields = engine.getFacetFields();
 
 	final Set<String> ids = me.keySet();
 

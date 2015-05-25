@@ -14,20 +14,23 @@
 		<!-- <ui:define name="search-results"> -->
 
 		<div class="row">
-			<div
-				class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-8 col-xs-offset-2 ">
+			<div class="col-sm-2 col-md-2 pull-right">
+				<ui:include src="/stream/search-calendar.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-1">
+				<ui:include src="/stream/search-tag-facets.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
+			<div class="col-md-8 col-sm-8 col-xs-7">
 				<div class="row">
-
-					<div class="col-sm-4 col-md-4 col-lg-3 pull-right">
-						<ui:include src="/stream/search-calendar.xhtml">
-							<ui:param name="paramBean" value="#{paramBean}" />
-						</ui:include>
-					</div>
 
 					<ui:repeat var="stream" value="#{paramBean.events}"
 						varStatus="status">
 
-						<c:set var="count" value="#{status.index +1}" />
+						<c:set var="count" value="#{status.index}" />
 						<c:set var="bookingLink"
 							value="#{eventUtilBean.getBookingLink(stream)}" />
 						<c:set var="hasImage"
@@ -45,7 +48,7 @@
 						</ui:fragment> -->
 						<div class="clearfix visible-xs"></div>
 
-						<div class="col-sm-4 col-md-4 col-lg-3">
+						<div class="col-sm-4 col-md-4 col-lg-3" style="padding-right: 5px; padding-left: 5px;">
 							<div class="glue-tile">
 
 								<div style="min-width: 170px; min-height: 170px;">
@@ -74,8 +77,8 @@
 											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 												<f:param name="id" value="#{stream.id}"></f:param>
 												<div class="glue-img-cat">
-													<i class="custom-icon custom-icon-theatre" style="font-size: 500%"
-														title="#{stream.title}"></i>
+													<i class="custom-icon custom-icon-theatre"
+														style="font-size: 500%" title="#{stream.title}"></i>
 												</div>
 											</h:link>
 										</ui:fragment>
@@ -104,8 +107,8 @@
 											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 												<f:param name="id" value="#{stream.id}"></f:param>
 												<div class="glue-img-cat">
-													<div class="custom-icon custom-icon-art-gallery" style="font-size: 500%"
-														title="#{stream.title}"></div>
+													<div class="custom-icon custom-icon-art-gallery"
+														style="font-size: 500%" title="#{stream.title}"></div>
 												</div>
 											</h:link>
 										</ui:fragment>

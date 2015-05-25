@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,10 @@ import com.glue.webapp.logic.InternalServerException;
  * 
  */
 public class SolrSearchServer implements SearchEngine<Event> {
+
+    private static final String TAGS_FIELD = "tags";
+
+    private static final String VENUE_FIELD = "venue";
 
     private static final String SOLR_DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'Z'"; // "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
@@ -70,6 +76,10 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
     private SolrServer solr;
 
+    private List<FacetField> facetFields;
+
+    private List<FacetField.Count> filterQueries;
+
     public SolrSearchServer() {
 	this.solr = new HttpSolrServer(
 		com.glue.persistence.index.SolrParams.getSolrServerUrl());
@@ -88,6 +98,8 @@ public class SolrSearchServer implements SearchEngine<Event> {
 
 	    // Get the total number of results
 	    numFound = rsp.getResults().getNumFound();
+
+	    facetFields = rsp.getFacetFields();
 
 	    // Highlighting
 	    if (hasQueryString()) {
@@ -169,6 +181,30 @@ public class SolrSearchServer implements SearchEngine<Event> {
 	    query.setHighlightSimplePost("</strong>");
 	    // query.setHighlightFragsize(100); // Default
 	    // query.setHighlightRequireFieldMatch(false); // Default
+	}
+
+	Map<String, String> exclusionTags = new HashMap<>();
+	exclusionTags.put(VENUE_FIELD, "vn");
+	exclusionTags.put(TAGS_FIELD, "t");
+
+	final String exFormat = "{!ex=%s}%s";
+	query.addFacetField(String.format(exFormat,
+		exclusionTags.get(VENUE_FIELD), VENUE_FIELD));
+	query.addFacetField(String.format(exFormat,
+		exclusionTags.get(TAGS_FIELD), TAGS_FIELD));
+	query.setFacetMinCount(1);
+
+	// Add filter queries
+	final String fqFormat = "{!tag=%s}%s";
+	if (filterQueries != null) {
+	    for (FacetField.Count fq : filterQueries) {
+		String filterQueryString = fq.getFacetField().getName() + ":"
+			+ "\"" + fq.getName() + "\"";
+
+		query.addFilterQuery(String.format(fqFormat,
+			exclusionTags.get(fq.getFacetField().getName()),
+			filterQueryString));
+	    }
 	}
 
 	// Add location to query if no lat/lon parameter
@@ -285,6 +321,19 @@ public class SolrSearchServer implements SearchEngine<Event> {
     @Override
     public long getNumFound() {
 	return numFound;
+    }
+
+    @Override
+    public List<FacetField> getFacetFields() {
+	return facetFields;
+    }
+
+    public List<FacetField.Count> getFilterQueries() {
+	return filterQueries;
+    }
+
+    public void setFilterQueries(List<FacetField.Count> filterQueries) {
+	this.filterQueries = filterQueries;
     }
 
     @Override

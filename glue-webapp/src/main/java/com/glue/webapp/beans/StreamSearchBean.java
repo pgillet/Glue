@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.apache.solr.client.solrj.response.FacetField;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
@@ -54,6 +55,10 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 
     private IntervalType interval;
 
+    private List<FacetField> facetFields;
+
+    private List<FacetField.Count> filterQueries = new ArrayList<>();
+
     public DisplayType getDisplay() {
 	return display;
     }
@@ -82,7 +87,7 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 
 	switch (display) {
 	case GRID:
-	    rows = 11;
+	    rows = 12;
 	    break;
 
 	case TABLE:
@@ -234,12 +239,15 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 	// }
 
 	catSelection.clear();
+	filterQueries.clear();
+
 	catSelection.add(cat);
 
 	return first();
     }
 
     public String enableAllCategories() {
+	filterQueries.clear();
 	catSelection.clear();
 
 	return first();
@@ -338,6 +346,42 @@ public abstract class StreamSearchBean extends AbstractPaginatedSearch<String>
 
     protected String outcome() {
 	return null;
+    }
+
+    public List<FacetField> getFacetFields() {
+	return facetFields;
+    }
+
+    public void setFacetFields(List<FacetField> facetFields) {
+	this.facetFields = facetFields;
+    }
+
+    public List<FacetField.Count> getFilterQueries() {
+	return filterQueries;
+    }
+
+    public void setFilterQueries(List<FacetField.Count> filterQueries) {
+	this.filterQueries = filterQueries;
+    }
+
+    public String addFilterQuery(FacetField.Count fq) {
+
+	// For now, no support for faceting on the same field multiple times.
+	// If it is confirmed on the long term, we should handle a map instead a
+	// list of FacetField.Count objects.
+	for (int i = 0; i < filterQueries.size(); i++) {
+	    FacetField.Count c = filterQueries.get(i);
+
+	    if (c.getFacetField().getName()
+		    .equals(fq.getFacetField().getName())) {
+		filterQueries.remove(i);
+		break;
+	    }
+	}
+
+	filterQueries.add(fq);
+
+	return first();
     }
 
 }

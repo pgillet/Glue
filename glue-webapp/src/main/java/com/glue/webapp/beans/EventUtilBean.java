@@ -9,6 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,6 +140,29 @@ public class EventUtilBean {
 	}
 
 	return null;
+    }
+
+    /**
+     * Custom contains method as FacetField.Count does not implement equals and
+     * hashCode methods.
+     * 
+     * @param l
+     * @param obj
+     * @return
+     */
+    public boolean contains(List<FacetField.Count> l, FacetField.Count obj) {
+
+	if (l != null) {
+	    for (Count count : l) {
+		if (count.getName().equals(obj.getName())
+			&& count.getFacetField().getName()
+				.equals(obj.getFacetField().getName())) {
+		    return true;
+		}
+	    }
+	}
+
+	return false;
     }
 
 }

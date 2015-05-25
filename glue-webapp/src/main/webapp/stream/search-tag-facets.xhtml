@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+	<ui:composition>
+		<br />
+		<div class="glue-block">
+			<ui:repeat var="facet" value="#{paramBean.facetFields[1].values}"
+				varStatus="status">
+				<ui:param name="active"
+					value="#{eventUtilBean.contains(paramBean.filterQueries, facet)}" />
+				<h:commandButton styleClass="btn btn-default btn-xs"
+					style="#{active ? 'font-weight: bold;margin-bottom: 7px;' : 'margin-bottom: 7px;'}" value="#{facet.name}"
+					action="#{paramBean.addFilterQuery(facet)}">
+					<f:ajax execute="@form" render="@form" />
+				</h:commandButton>&#160;
+			</ui:repeat>
+		</div>
+	</ui:composition>
+</h:body>
+</html>

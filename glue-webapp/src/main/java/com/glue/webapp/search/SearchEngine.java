@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.solr.client.solrj.response.FacetField;
+
 import com.glue.webapp.logic.InternalServerException;
 
 public interface SearchEngine<T> {
@@ -138,35 +140,35 @@ public interface SearchEngine<T> {
      * 
      * @param latitude
      */
-    public void setLatitude(double latitude);
+    void setLatitude(double latitude);
 
     /**
      * Returns the latitude.
      * 
      * @return
      */
-    public double getLatitude();
+    double getLatitude();
 
     /**
      * Sets the longitude
      * 
      * @param longitude
      */
-    public void setLongitude(double longitude);
+    void setLongitude(double longitude);
 
     /**
      * Sets the location
      * 
      * @return
      */
-    public void setLocation(String location);
+    void setLocation(String location);
 
     /**
      * Returns the location.
      * 
      * @return
      */
-    public String getLocation();
+    String getLocation();
 
     /**
      * Sets a string with bounding box coordinates in a
@@ -174,8 +176,14 @@ public interface SearchEngine<T> {
      * finding everything in a rectangular area, such as the area covered by a
      * map the user is looking at.
      */
-    public void setBoundingBox(String bbox);
+    void setBoundingBox(String bbox);
 
-    public String getBoundingBox();
+    String getBoundingBox();
+
+    List<FacetField.Count> getFilterQueries();
+
+    void setFilterQueries(List<FacetField.Count> filterQueries);
+
+    List<FacetField> getFacetFields();
 
 }

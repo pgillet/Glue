@@ -47,6 +47,10 @@
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton></li>
 			</ul>
+			
+			<ui:include src="/stream/search-venue-facets.xhtml">
+				<ui:param name="paramBean" value="#{paramBean}" />
+			</ui:include>
 		</div>
 	</ui:composition>
 </h:body>

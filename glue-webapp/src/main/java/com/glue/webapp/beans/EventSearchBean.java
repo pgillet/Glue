@@ -17,7 +17,6 @@ public class EventSearchBean extends StreamSearchBean implements Serializable {
     private String location;
     private double latitude;
     private double longitude;
-
     @Inject
     private transient EventController controller;
 
@@ -57,6 +56,7 @@ public class EventSearchBean extends StreamSearchBean implements Serializable {
 	controller.setStartDate(getStartDate());
 	controller.setEndDate(getEndDate());
 	controller.setCategories(getCatSelection());
+	controller.setFilterQueries(getFilterQueries());
 
 	// Specific params
 	controller.setLocation(location);
@@ -71,6 +71,7 @@ public class EventSearchBean extends StreamSearchBean implements Serializable {
 
 	// Update the total number of rows
 	setTotalRows(controller.getTotalRows());
+	setFacetFields(controller.getFacetFields());
 
 	return null;
     }

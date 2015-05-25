@@ -121,12 +121,12 @@
    <field name="title" type="text_general" indexed="true" stored="true" multiValued="false"/>
    <field name="description" type="text_general" indexed="true" stored="true"/>
    <field name="category" type="text_general" indexed="true" stored="true"/>
-   <field name="tags" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="tags" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="startTime" type="tdate" indexed="true" stored="true"/>
    <field name="stopTime" type="tdate" indexed="true" stored="true"/>
    <field name="duration" type="tlong" indexed="true" stored="false"/>
    <field name="url" type="text_general" indexed="false" stored="true"/>
-   <field name="venue" type="text_general" indexed="true" stored="true"/>
+   <field name="venue" type="string" indexed="true" stored="true"/>
    <field name="city" type="text_general" indexed="true" stored="true"/>
    <field name="latlng" type="location" indexed="true" stored="false" />
    <!-- <field name="latlng_0_coordinate" type="tdouble" indexed="true" stored="true" />

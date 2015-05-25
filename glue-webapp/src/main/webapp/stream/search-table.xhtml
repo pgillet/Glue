@@ -13,14 +13,19 @@
 		<!-- <ui:define name="search-results"> -->
 			<div class="row">
 				<div
-					class="col-xs-6 col-sm-4 col-md-2 col-md-offset-1 col-md-push-9">
+					class="col-xs-6 col-sm-4 col-md-2 col-md-push-11">
 					<div class="pull-right">
 						<ui:include src="/stream/search-calendar.xhtml" >
 							<ui:param name="paramBean" value="#{paramBean}" />
 						</ui:include>
 					</div>
 				</div>
-				<div class="col-sm-12 col-md-8 col-md-offset-1 col-md-pull-3">
+				<div class="col-md-2 col-sm-2 col-xs-1 col-md-pull-2">
+					<ui:include src="/stream/search-tag-facets.xhtml">
+						<ui:param name="paramBean" value="#{paramBean}" />
+					</ui:include>
+				</div>
+				<div class="col-sm-12 col-md-8 col-md-pull-2">
 					<table class="table table-hover table-condensed" style="table-layout: fixed;">
 						<!-- <thead>
 					<tr>

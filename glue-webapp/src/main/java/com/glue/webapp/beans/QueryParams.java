@@ -14,5 +14,6 @@ public final class QueryParams {
     public static final String INTERVAL = "int";
     public static final String EVENT_ID = "e";
     public static final String VENUE_ID = "v";
+    public static final String FILTER_QUERIES = "fq";
 
 }
