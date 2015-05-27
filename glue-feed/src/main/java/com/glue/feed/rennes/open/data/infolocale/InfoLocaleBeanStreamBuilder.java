@@ -35,7 +35,7 @@ public class InfoLocaleBeanStreamBuilder implements
 
 	private static final String DATA_SOURCE = "<a href=\"http://www.infolocale.fr\" title=\"Pour annoncer vos évènements dans cette base rendez-vous sur www.infolocale.fr.\" target=\"_blank\">Infolocale</a>";
 
-	private static final String DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'+'00:00"; // ex:
+	private static final String DATE_PATTERN = "dd/MM/yyyy"; // ex:
 	// "14/05/77"
 
 	private static final String SOURCE = "http://data.infolocale.fr/";
