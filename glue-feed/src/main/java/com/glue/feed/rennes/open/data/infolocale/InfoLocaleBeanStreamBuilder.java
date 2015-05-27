@@ -37,6 +37,8 @@ public class InfoLocaleBeanStreamBuilder implements
 
     private static final String DATE_PATTERN = "yyyy-MM-dd'T'00:00:00'+'00:00"; // ex:
 										// "14/05/77"
+    
+    private static final String SOURCE = "http://data.infolocale.fr/";
 
     static final Logger LOG = LoggerFactory
 	    .getLogger(InfoLocaleBeanStreamBuilder.class);
@@ -118,7 +120,6 @@ public class InfoLocaleBeanStreamBuilder implements
 	event.setStopTime(edate);
 	event.setCategory(getCategory(bean.getRubrique()));
 	event.setPrice(StringUtils.defaultString(bean.getTarifGeneral()).trim());
-	event.setUrl(bean.getUrl());
 	event.setTags(getTags(bean.getRubrique(), bean.getGenre()));
 	event.setSource(DATA_SOURCE);
 
@@ -129,7 +130,7 @@ public class InfoLocaleBeanStreamBuilder implements
 	    item.setUrl(bean.getPhoto1Path());
 	    image.setOriginal(item);
 	    image.setUrl(bean.getPhoto1Path());
-	    image.setSource(bean.getUrl());
+	    image.setSource(SOURCE);
 	    image.setSticky(true);
 	    image.setCaption(bean.getPhoto1Legende());
 	    image.setCreator(bean.getPhoto1Credit());
@@ -141,7 +142,7 @@ public class InfoLocaleBeanStreamBuilder implements
 	    item.setUrl(bean.getPhoto2Path());
 	    image.setOriginal(item);
 	    image.setUrl(bean.getPhoto2Path());
-	    image.setSource(bean.getUrl());
+	    image.setSource(SOURCE);
 	    image.setCaption(bean.getPhoto2Legende());
 	    image.setCreator(bean.getPhoto2Credit());
 	    event.getImages().add(image);
@@ -152,7 +153,7 @@ public class InfoLocaleBeanStreamBuilder implements
 	    item.setUrl(bean.getPhoto3Path());
 	    image.setOriginal(item);
 	    image.setUrl(bean.getPhoto3Path());
-	    image.setSource(bean.getUrl());
+	    image.setSource(SOURCE);
 	    image.setCaption(bean.getPhoto3Legende());
 	    image.setCreator(bean.getPhoto3Credit());
 	    event.getImages().add(image);
