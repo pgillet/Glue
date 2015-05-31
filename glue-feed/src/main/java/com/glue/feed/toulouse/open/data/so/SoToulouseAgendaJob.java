@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -21,8 +19,6 @@ import com.glue.feed.FeedMessageListener;
 import com.glue.feed.GlueObjectBuilder;
 import com.glue.feed.csv.CSVFeedParser;
 import com.glue.feed.error.StoreErrorListener;
-import com.glue.feed.io.FileExtensionFilter;
-import com.glue.feed.io.GlueIOUtils;
 import com.glue.feed.listener.StreamMessageListener;
 
 /**
@@ -46,17 +42,13 @@ public class SoToulouseAgendaJob implements Job {
 
 	try {
 	    URL url = new URL(
-		    "http://data.grandtoulouse.fr/web/guest/les-donnees/-/opendata/card/21905-agenda-des-manifestations-culturelles/resource/document?p_p_state=exclusive&_5_WAR_opendataportlet_jspPage=%2Fsearch%2Fview_card_license.jsp");
+		    "https://data.toulouse-metropole.fr/explore/dataset/agenda-des-manifestations-culturelles-so-toulouse/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true");
 
-	    ZipInputStream zin = new ZipInputStream(url.openStream());
-	    ZipEntry entry = GlueIOUtils.getEntry(zin, new FileExtensionFilter(
-		    ".csv"));
-	    InputStream in = GlueIOUtils.getDeferredInputStream(zin,
-		    entry.getName());
+	    InputStream in = url.openStream();
 
 	    // CSV files encoding = "Windows-1252"
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    in, Charset.forName("Windows-1252")));
+		    in, Charset.forName("UTF-8")));
 
 	    CSVFeedParser<EventBean> parser = new CSVFeedParser<>(reader,
 		    EventBean.class);

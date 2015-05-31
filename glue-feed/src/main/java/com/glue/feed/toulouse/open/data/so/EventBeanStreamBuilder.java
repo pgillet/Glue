@@ -29,9 +29,9 @@ import com.glue.feed.GlueObjectBuilder;
 public class EventBeanStreamBuilder implements
 	GlueObjectBuilder<EventBean, Event> {
 
-    private static final String DATE_PATTERN = "dd/MM/yy"; // ex: "14/05/77"
+    private static final String DATE_PATTERN = "yyyy-MM-dd"; // ex: "14/05/77"
 
-    private static final String DATA_SOURCE = "<a href=\"http://data.grandtoulouse.fr\" target=\"_blank\"><img alt=\"This material is Open Data\" border=\"0\" src=\"http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png\" /></a>";
+    private static final String DATA_SOURCE = "<a href=\"https://data.toulouse-metropole.fr\" target=\"_blank\"><img alt=\"This material is Open Data\" border=\"0\" src=\"http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png\" /></a>";
 
     static final Logger LOG = LoggerFactory
 	    .getLogger(EventBeanStreamBuilder.class);
@@ -57,13 +57,7 @@ public class EventBeanStreamBuilder implements
 	Date edate = null;
 	try {
 	    sdate = format.parse(strdate);
-
-	    // If endate empty, set endate to start_date
-	    if ("".equals(enddate)) {
-		edate = sdate;
-	    } else {
-		edate = format.parse(enddate);
-	    }
+	    edate = format.parse(enddate);
 	} catch (ParseException e) {
 	    LOG.error("Format de date incorrect " + sdate + " " + edate);
 	}
