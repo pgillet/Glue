@@ -9,25 +9,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:glue="http://java.sun.com/jsf/composite/components">
 <h:body>
-	<ui:composition><!-- template="./search.xhtml" -->
+	<ui:composition>
+		<!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
-			<div class="row">
-				<div
-					class="col-xs-6 col-sm-4 col-md-2 col-md-push-11">
-					<div class="pull-right">
-						<ui:include src="/stream/search-calendar.xhtml" >
-							<ui:param name="paramBean" value="#{paramBean}" />
-						</ui:include>
-					</div>
-				</div>
-				<div class="col-md-2 col-sm-2 col-xs-1 col-md-pull-2">
-					<ui:include src="/stream/search-tag-facets.xhtml">
-						<ui:param name="paramBean" value="#{paramBean}" />
-					</ui:include>
-				</div>
-				<div class="col-sm-12 col-md-8 col-md-pull-2">
-					<table class="table table-hover table-condensed" style="table-layout: fixed;">
-						<!-- <thead>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-md-pull-2">
+				<ui:include src="/stream/search-tag-facets.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-1 col-md-push-8">
+				<ui:include src="/stream/search-calendar.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
+			<div class="col-sm-12 col-md-9 col-md-pull-3">
+				<table class="table table-hover table-condensed"
+					style="table-layout: fixed;">
+					<!-- <thead>
 					<tr>
 						<th>#</th>
 						<th>Title</th>
@@ -35,18 +34,17 @@
 						<th>Venue</th>
 					</tr>
 				</thead> -->
-						<tbody>
-							<ui:repeat var="stream" value="#{paramBean.events}"
-								varStatus="status">
-								<tr>
-									<td style="width: 30px;">
-										<glue:categoryBadge category="#{stream.category}" />
-									</td>
-									<td style="width: 40%;"><small><h:link
-												includeViewParams="true" value="#{stream.title}"
-												outcome="/stream/item.xhtml" title="#{stream.title}">
-												<f:param name="id" value="#{stream.id}"></f:param>
-											</h:link></small></td>
+					<tbody>
+						<ui:repeat var="stream" value="#{paramBean.events}"
+							varStatus="status">
+							<tr>
+								<td style="width: 30px;"><glue:categoryBadge
+										category="#{stream.category}" /></td>
+								<td style="width: 40%;"><small><h:link
+											includeViewParams="true" value="#{stream.title}"
+											outcome="/stream/item.xhtml" title="#{stream.title}">
+											<f:param name="id" value="#{stream.id}"></f:param>
+										</h:link></small></td>
 								<td style="width: 17%;"><small><glue:outputDate
 											startTime="#{stream.startTime}" stopTime="#{stream.stopTime}"
 											pattern="#{bundle.date_format_short_interval}" /></small></td>
@@ -56,12 +54,12 @@
 											outcome="/venues/search.xhtml" styleClass="text-muted">
 											<f:param name="v" value="#{stream.venue.id}"></f:param>
 										</h:link></small></td>
-								</tr>
-							</ui:repeat>
-						</tbody>
-					</table>
-				</div>
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
 			</div>
+		</div>
 
 		<!-- </ui:define> -->
 	</ui:composition>

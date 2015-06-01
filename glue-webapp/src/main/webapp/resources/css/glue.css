@@ -103,7 +103,7 @@ body { padding-top: 50px; }
 
 .glue-tile {
 	min-height: 325px;
-	/* max-width: 250px; */
+	max-width: 250px;
 	display: block;
 	padding: 10px 5px;
 	line-height: 1.428571429;

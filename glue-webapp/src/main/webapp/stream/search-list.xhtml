@@ -9,29 +9,30 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:glue="http://java.sun.com/jsf/composite/components">
 <h:body>
-	<ui:composition> <!-- template="./search.xhtml" -->
+	<ui:composition>
+		<!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
 		<div class="row">
-			<div class="col-sm-4 col-sm-push-8 col-md-2 col-md-push-10">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-md-pull-2">
+				<ui:include src="/stream/search-tag-facets.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-1 col-md-push-8">
 				<ui:include src="/stream/search-calendar.xhtml">
 					<ui:param name="paramBean" value="#{paramBean}" />
 				</ui:include>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-1 col-md-pull-2">
-				<ui:include src="/stream/search-tag-facets.xhtml">
-					<ui:param name="paramBean" value="#{paramBean}" />
-				</ui:include>
-			</div>			
-			<div class="col-sm-12 col-md-8 col-md-pull-2">				
+			<div class="col-sm-12 col-md-9 col-md-pull-3">
 				<ui:repeat var="stream" value="#{paramBean.events}"
 					varStatus="status">
-					
-					<c:set var="bookingLink" value="#{eventUtilBean.getBookingLink(stream)}"></c:set>
-					
+
+					<c:set var="bookingLink"
+						value="#{eventUtilBean.getBookingLink(stream)}"></c:set>
+
 					<div class="row">
 						<div class="col-xs-3 col-sm-2 col-md-3">
-							<ui:fragment
-									rendered="#{eventUtilBean.hasStickyImage(stream)}">
+							<ui:fragment rendered="#{eventUtilBean.hasStickyImage(stream)}">
 								<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 									<f:param name="id" value="#{stream.id}"></f:param>
 									<img src="#{eventUtilBean.getStickyImageURI(stream)}"
@@ -43,17 +44,16 @@
 						</div>
 						<div class="col-xs-9 col-sm-10 col-md-9">
 							<ul class="list-unstyled">
-								<li><glue:categoryBadge category="#{stream.category}"/> <strong><h:link
+								<li><glue:categoryBadge category="#{stream.category}" /> <strong><h:link
 											includeViewParams="true" value="#{stream.title}"
 											outcome="/stream/item.xhtml">
 											<f:param name="id" value="#{stream.id}"></f:param>
-										</h:link></strong>
-								<ui:fragment rendered="#{stream.withdrawn}">&#160;
+										</h:link></strong> <ui:fragment rendered="#{stream.withdrawn}">&#160;
 										<small><span class="label label-warning">Withdrawn</span></small>
 									</ui:fragment></li>
 								<li><h:outputText value="#{stream.summary}" escape="false" /></li>
-								<li><glue:outputDate
-										startTime="#{stream.startTime}" stopTime="#{stream.stopTime}" /></li>
+								<li><glue:outputDate startTime="#{stream.startTime}"
+										stopTime="#{stream.stopTime}" /></li>
 								<li><h:link includeViewParams="true"
 										outcome="/venues/search.xhtml" styleClass="text-muted">
 										<h:outputText
