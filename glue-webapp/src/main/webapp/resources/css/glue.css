@@ -102,7 +102,7 @@ body { padding-top: 50px; }
 }
 
 .glue-tile {
-	min-height: 325px;
+	min-height: 300px;
 	max-width: 250px;
 	display: block;
 	padding: 10px 5px;
@@ -202,3 +202,24 @@ a.text-muted:hover {
 	text-align: center;
 	color: 	#eee;
 }
+
+.scroll-elem, .scroll-outer-container {
+    height: 310px;
+}
+
+.scroll-outer-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-inner-container {
+    position: absolute;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.scroll-inner-container::-webkit-scrollbar {
+    display: none;
+}
+

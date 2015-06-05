@@ -10,18 +10,22 @@
 <h:body>
 	<ui:composition>
 		<br />
-		<div class="glue-block">
-			<ul class="fa-ul">
-				<ui:repeat var="facet" value="#{paramBean.facetFields[0].values}"
-					varStatus="status">
-					<ui:param name="active" value="#{eventUtilBean.contains(paramBean.filterQueries, facet)}"/>
-					<li><h:commandButton
-							styleClass="btn text-muted glue-btn-link btn-xs" style="#{active ? 'font-weight: bold;' : ''}" value="#{facet}"
-							action="#{paramBean.addFilterQuery(facet)}">
-							<f:ajax execute="@form" render="@form" />
-						</h:commandButton></li>
-				</ui:repeat>
-			</ul>
+		<div class="scroll-outer-container hidden-xs hidden-sm" style="min-width:300px;">
+			<div class="scroll-inner-container">
+				<ul class="scroll-elem list-unstyled">
+					<ui:repeat var="facet" value="#{paramBean.facetFields[0].values}"
+						varStatus="status">
+						<ui:param name="active"
+							value="#{eventUtilBean.contains(paramBean.filterQueries, facet)}" />
+						<li><h:commandButton
+								styleClass="btn text-muted glue-btn-link btn-xs"
+								style="#{active ? 'font-weight: bold;' : ''}" value="#{facet}"
+								action="#{paramBean.addFilterQuery(facet)}">
+								<f:ajax execute="@form" render="@form" />
+							</h:commandButton></li>
+					</ui:repeat>
+				</ul>
+			</div>
 		</div>
 	</ui:composition>
 </h:body>
