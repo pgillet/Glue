@@ -1,13 +1,4 @@
-body { padding-top: 50px; }
-
-.glue-brand {
-	font-size: 38px;
-	font-weight: bold;
-	font-style: normal;
-	/* color: #3a87ad; */
-	/* padding: 15px 15px; */
-	letter-spacing: -4px;
-}
+body { padding-top: 60px; }
 
 /* Wrapper for page content to push down footer */
 #glue-wrap {

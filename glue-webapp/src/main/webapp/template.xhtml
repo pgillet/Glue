@@ -8,48 +8,57 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	lang="#{languageBean.language}">
 <f:view locale="#{languageBean.locale}">
-<ui:insert name="metadata"/>
-<h:head>
-	<title>Glue</title>
-	<meta name="verification" content="f9588f10c650756d641fa3957e3435e9" />
-	<meta name="description" content="Glue est un moteur de recherche d'événements culturels." />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="icon" type="image/png" href="#{resource['img:favicon.png']}" />
-	<!-- Bootstrap -->
-	<h:outputStylesheet library="css" name="bootstrap.min.css"
-		media="screen" />
-	<h:outputStylesheet library="css" name="typeahead.js-bootstrap.css"
-		media="screen" />
-	<h:outputStylesheet library="css" name="glue.css" media="screen" />
-	<h:outputStylesheet library="css" name="font-awesome.min.css"
-		media="screen" />
-	<h:outputStylesheet library="css" name="fontastic-custom.css"
-		media="screen" />
-	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css' />
-	
-	<!-- Additional stylesheets -->	
-	<ui:insert name="stylesheet"/>
-	<!-- Meta -->
-	<ui:insert name="tags"/>	
+	<ui:insert name="metadata" />
+	<h:head>
+		<title>Glue</title>
+		<meta name="verification" content="f9588f10c650756d641fa3957e3435e9" />
+		<meta name="description"
+			content="Glue est un moteur de recherche d'événements culturels." />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/png"
+			href="#{resource['img:favicon.png']}" />
+		<!-- Bootstrap -->
+		<h:outputStylesheet library="css" name="bootstrap.min.css"
+			media="screen" />
+		<h:outputStylesheet library="css" name="typeahead.js-bootstrap.css"
+			media="screen" />
+		<h:outputStylesheet library="css" name="glue.css" media="screen" />
+		<h:outputStylesheet library="css" name="font-awesome.min.css"
+			media="screen" />
+		<h:outputStylesheet library="css" name="fontastic-custom.css"
+			media="screen" />
+		<link href='http://fonts.googleapis.com/css?family=Lobster'
+			rel='stylesheet' type='text/css' />
 
-	<script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	
-	  ga('create', 'UA-45640046-1', 'auto');
-	  ga('send', 'pageview');
-	
-	</script>
+		<!-- Additional stylesheets -->
+		<ui:insert name="stylesheet" />
+		<!-- Meta -->
+		<ui:insert name="tags" />
 
-</h:head>
-<h:body>
+		<script>
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				i[r] = i[r] || function() {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date();
+				a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m)
+			})(window, document, 'script',
+					'//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', 'UA-45640046-1', 'auto');
+			ga('send', 'pageview');
+		</script>
+
+	</h:head>
+	<h:body>
 		<!-- Facebook -->
 		<div id="fb-root"></div>
-		
+
 		<script>
 			(function(d, s, id) {
 				var js, fjs = d.getElementsByTagName(s)[0];
@@ -62,156 +71,168 @@
 			}(document, 'script', 'facebook-jssdk'));
 		</script>
 
-		<nav class="navbar navbar-default navbar-fixed-top glue-navbar-default"
-		role="navigation">
-	<!-- <div class="container"> -->
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target=".navbar-ex1-collapse">
-				<span class="sr-only">Toggle navigation</span><span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-
-			<h:link class="navbar-brand" outcome="/index">
-				<h:graphicImage library="img" name="glue-icon.svg" width="25"
-					style="vertical-align:top; position: relative; top: -7px;" />
-					<span style="font-family: 'Lobster', cursive; font-size: 50px;" class="text-muted">glue</span>
-			</h:link>
-		</div>
-
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse navbar-ex1-collapse">
-
-			<form id="main_form" action="#{request.contextPath}/stream/search.xhtml" class="navbar-form navbar-left" role="search">
-				<h:inputHidden id="lat" value="#{eventSearchBean.latitude}" />
-				<h:inputHidden id="lng" value="#{eventSearchBean.longitude}" />
-				<div class="form-group">
-					<h:inputText id="q" styleClass="typeahead form-control" style="min-width: 300px;"
-						type="search" placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
-				</div>
-				<div class="form-group">
-					<div class="input-group" style="width: 196px;">
-						<span class="input-group-btn">
-							<button id="btnLocation" class="btn btn-default glue-glyphicon-btn" type="button"
-								title="#{bundle.current_position}"
-								onclick="getCurrentPosition()">
-								<span class="glyphicon glyphicon-map-marker text-muted"></span>
-							</button>
-						</span>
-						<h:inputText id="ql" styleClass="form-control"
-							type="search" placeholder="#{bundle.location}"
-							value="#{eventSearchBean.location}"></h:inputText>
-					</div>
-				</div>
-				<div class="form-group">
-					<button id="dummy-search-input" type="button"
-						class="btn btn-primary glue-glyphicon-btn-lg">
-						<span class="glyphicon glyphicon-search"></span>
+		<nav
+			class="navbar navbar-default navbar-fixed-top glue-navbar-default"
+			role="navigation">
+		<div style="margin: 5px 5px;">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span><span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
 					</button>
+
+					<h:link class="navbar-brand" outcome="/index">
+						<h:graphicImage library="img" name="glue-icon.svg" width="45"
+							style="vertical-align:top; position: relative; top: -13px;" />
+						<span
+							style="font-family: 'Lobster', cursive; font-size: 50px; position: relative; top: -6px;"
+							class="text-muted">glue<span
+							style="font-size: 20px; position: relative; top: 13px; left: -65px;">.events</span></span>
+					</h:link>
 				</div>
-				<input type="submit" value="Submit" style="display:none;"/>
-			</form>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+
+					<form id="main_form"
+						action="#{request.contextPath}/stream/search.xhtml"
+						class="navbar-form navbar-left" role="search">
+						<h:inputHidden id="lat" value="#{eventSearchBean.latitude}" />
+						<h:inputHidden id="lng" value="#{eventSearchBean.longitude}" />
+						<div class="form-group">
+							<h:inputText id="q" styleClass="typeahead form-control"
+								style="min-width: 300px;" type="search"
+								placeholder="#{bundle.search}" value="#{eventSearchBean.query}" />
+						</div>
+						<div class="form-group">
+							<div class="input-group" style="width: 196px;">
+								<span class="input-group-btn">
+									<button id="btnLocation"
+										class="btn btn-default glue-glyphicon-btn" type="button"
+										title="#{bundle.current_position}"
+										onclick="getCurrentPosition()">
+										<span class="glyphicon glyphicon-map-marker text-muted"></span>
+									</button>
+								</span>
+								<h:inputText id="ql" styleClass="form-control" type="search"
+									placeholder="#{bundle.location}"
+									value="#{eventSearchBean.location}"></h:inputText>
+							</div>
+						</div>
+						<div class="form-group">
+							<button id="dummy-search-input" type="button"
+								class="btn btn-primary glue-glyphicon-btn-lg">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</div>
+						<input type="submit" value="Submit" style="display: none;" />
+					</form>
+				</div>
+
+				<!--/.nav-collapse -->
+			</div>
 		</div>
+		</nav>
 
-		<!--/.nav-collapse -->
-	<!-- </div> -->
-	</nav>
-
-	<!-- Feedback modal window -->
-	<div id="feedback" class="modal fade in" tabindex="-1" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<h:form id="feedback-form" class="form-horizontal">
-					<div class="modal-header">
-						<h4 class="modal-title">
-							<h:outputText value="#{bundle.feedback_title}"></h:outputText>
-						</h4>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label class="col-lg-2 control-label" for="feedback-subject">
-								<h:outputText value="#{bundle.feedback_subject}"></h:outputText>
-							</label>
-							<div class="col-lg-10">
-								<h:inputText id="feedback-subject" styleClass="form-control"
-									value="#{feedbackBean.subject}"
-									placeholder="#{bundle.feedback_subject_sample}" />
-							</div>
+		<!-- Feedback modal window -->
+		<div id="feedback" class="modal fade in" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<h:form id="feedback-form" class="form-horizontal">
+						<div class="modal-header">
+							<h4 class="modal-title">
+								<h:outputText value="#{bundle.feedback_title}"></h:outputText>
+							</h4>
 						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label" for="feedback-mail">
-								<h:outputText value="#{bundle.feedback_mail}"></h:outputText>
-							</label>
-							<div class="col-lg-10">
-								<h:inputText id="feedback-mail" styleClass="form-control"
-									value="#{feedbackBean.mailAddress}"
-									placeholder="#{bundle.feedback_mail_sample}"
-									validatorMessage="#{bundle.feedback_mail_error}">
-									<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
-									<f:ajax event="valueChange" render="feedback-mail-msg" />
-								</h:inputText>
-								<h:message id="feedback-mail-msg" for="feedback-mail"
-									style="color: red" />
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-subject">
+									<h:outputText value="#{bundle.feedback_subject}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
+									<h:inputText id="feedback-subject" styleClass="form-control"
+										value="#{feedbackBean.subject}"
+										placeholder="#{bundle.feedback_subject_sample}" />
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label" for="feedback-message">
-								<h:outputText value="#{bundle.feedback_message}"></h:outputText>
-							</label>
-							<div class="col-lg-10">
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-mail">
+									<h:outputText value="#{bundle.feedback_mail}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
+									<h:inputText id="feedback-mail" styleClass="form-control"
+										value="#{feedbackBean.mailAddress}"
+										placeholder="#{bundle.feedback_mail_sample}"
+										validatorMessage="#{bundle.feedback_mail_error}">
+										<f:validateRegex pattern="(.+@.+\.[a-zA-Z]+)?" />
+										<f:ajax event="valueChange" render="feedback-mail-msg" />
+									</h:inputText>
+									<h:message id="feedback-mail-msg" for="feedback-mail"
+										style="color: red" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label" for="feedback-message">
+									<h:outputText value="#{bundle.feedback_message}"></h:outputText>
+								</label>
+								<div class="col-lg-10">
 									<h:inputTextarea id="feedback-message"
 										styleClass="form-control" value="#{feedbackBean.message}"
 										rows="8" />
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-default" data-dismiss="modal"> <h:outputText
-								value="#{bundle.feedback_close}"></h:outputText>
-						</a>
-						<h:commandButton styleClass="btn btn-primary hidefeedback" value="#{bundle.feedback_send}" actionListener="#{feedbackBean.send}">
-							<f:ajax execute="@form"></f:ajax>
-						</h:commandButton>
-					</div>
-				</h:form>
+						<div class="modal-footer">
+							<a class="btn btn-default" data-dismiss="modal"> <h:outputText
+									value="#{bundle.feedback_close}"></h:outputText>
+							</a>
+							<h:commandButton styleClass="btn btn-primary hidefeedback"
+								value="#{bundle.feedback_send}"
+								actionListener="#{feedbackBean.send}">
+								<f:ajax execute="@form"></f:ajax>
+							</h:commandButton>
+						</div>
+					</h:form>
+				</div>
+				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-content -->
+			<!-- /.modal-dialog -->
 		</div>
-		<!-- /.modal-dialog -->
-	</div>
-	<!-- /.modal -->
+		<!-- /.modal -->
 
-	<ui:insert name="header"></ui:insert>
+		<ui:insert name="header"></ui:insert>
 
-	<div id="content" class="container">
-		<div id="glue-wrap" class="glue-block">
-			<ui:insert name="content">Main Content</ui:insert>
+		<div id="content" class="container">
+			<div id="glue-wrap" class="glue-block">
+				<ui:insert name="content">Main Content</ui:insert>
+			</div>
+
+			<ui:insert name="footer">
+				<ui:include src="default-footer.xhtml" />
+			</ui:insert>
+
 		</div>
+		<!-- /container -->
 
-		<ui:insert name="footer">
-			<ui:include src="default-footer.xhtml" />
-		</ui:insert>
+		<!-- <h:outputScript library="js" name="jquery.js" /> -->
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<h:outputScript library="js" name="bootstrap.min.js" />
+		<h:outputScript library="js" name="handlebars.js" />
+		<h:outputScript library="js" name="typeahead.js" />
+		<h:outputScript library="js" name="glue.js" />
 
-	</div>
-	<!-- /container -->
+		<script type="text/javascript"
+			src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+		<h:outputScript library="js" name="geolocation.js" />
 
-	<!-- <h:outputScript library="js" name="jquery.js" /> -->
-	<h:outputScript library="primefaces" name="jquery/jquery.js" />
-	<h:outputScript library="js" name="bootstrap.min.js" />
-	<h:outputScript library="js" name="handlebars.js" />
-	<h:outputScript library="js" name="typeahead.js" />
-	<h:outputScript library="js" name="glue.js" />
-	
-	<script type="text/javascript"
-		src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
-	<h:outputScript library="js" name="geolocation.js" />
-
-	<h:outputScript>
+		<h:outputScript>
 	$('input').popover({trigger: 'focus'});
 	$('.glue-info-badge').popover({trigger: 'hover'});
     </h:outputScript>
-	<h:outputScript>
+		<h:outputScript>
 		$('.hidefeedback').click(function(e){
     		$('#feedback').modal('hide');
 		});
@@ -222,8 +243,8 @@
 		});
 	</h:outputScript>
 
-	<ui:insert name="javascript"></ui:insert>
+		<ui:insert name="javascript"></ui:insert>
 
-</h:body>
+	</h:body>
 </f:view>
 </html>
