@@ -10,48 +10,69 @@
 <h:body>
 	<ui:composition>
 		<div class="glue-block">
-			<p:calendar value="#{paramBean.startDate}" timeZone="UTC" mode="inline">
-				<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}" 
+			<ui:fragment
+				rendered="#{paramBean.latitude ne 0.0 and paramBean.longitude ne 0.0}">
+				<h:link outcome="/stream/search-map" includeViewParams="true">
+					<div id="map" style="width: 230px; height: 150px; cursor: pointer !important;"></div>
+				</h:link>
+			</ui:fragment>
+			<br />
+			<p:calendar value="#{paramBean.startDate}" timeZone="UTC"
+				mode="inline">
+				<p:ajax event="dateSelect" listener="#{paramBean.searchFrom}"
 					update="@form" />
 			</p:calendar>
 			<ul class="fa-ul">
-				<li><ui:fragment
-						rendered="#{paramBean.interval eq 'TODAY'}">
+				<li><ui:fragment rendered="#{paramBean.interval eq 'TODAY'}">
 						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+					</ui:fragment> <h:commandButton styleClass="btn btn-link btn-xs"
 						action="#{paramBean.searchToday}" value="#{bundle.today}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton></li>
-				<li><ui:fragment
-						rendered="#{paramBean.interval eq 'WEEK_END'}">
+				<li><ui:fragment rendered="#{paramBean.interval eq 'WEEK_END'}">
 						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
+					</ui:fragment> <h:commandButton styleClass="btn btn-link btn-xs"
 						action="#{paramBean.searchNextWeekEnd}"
 						value="#{bundle.next_week_end}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton></li>
-				<li><ui:fragment
-						rendered="#{paramBean.interval eq 'WEEK'}">
+				<li><ui:fragment rendered="#{paramBean.interval eq 'WEEK'}">
 						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-						action="#{paramBean.searchWeek}"
-						value="#{bundle.current_week}">
+					</ui:fragment> <h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchWeek}" value="#{bundle.current_week}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton></li>
-				<li><ui:fragment
-						rendered="#{paramBean.interval eq 'MONTH'}">
+				<li><ui:fragment rendered="#{paramBean.interval eq 'MONTH'}">
 						<i class="fa-li glyphicon glyphicon-chevron-right text-primary"></i>
-					</ui:fragment><h:commandButton styleClass="btn btn-link btn-xs"
-						action="#{paramBean.searchMonth}"
-						value="#{bundle.current_month}">
+					</ui:fragment> <h:commandButton styleClass="btn btn-link btn-xs"
+						action="#{paramBean.searchMonth}" value="#{bundle.current_month}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton></li>
 			</ul>
-			
+
 			<ui:include src="/stream/search-venue-facets.xhtml">
 				<ui:param name="paramBean" value="#{paramBean}" />
 			</ui:include>
 		</div>
+		<h:outputScript library="js" name="primefaces-locales.js" />
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+		<script
+			src="http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluur29612h%2C7w%3Do5-90rg0y"></script>
+		<h:outputScript>
+						
+				// MapQuest layer
+				var mqLayer = MQ.mapLayer();
+				
+				// Setting up the map
+				var map = L.map('map', {
+				    center: [#{paramBean.latitude}, #{paramBean.longitude}],
+				    zoomControl:false,
+				    dragging: false,
+				    zoom: 11,
+				    layers: [mqLayer]
+				});	
+			
+		</h:outputScript>
 	</ui:composition>
 </h:body>
 </html>
