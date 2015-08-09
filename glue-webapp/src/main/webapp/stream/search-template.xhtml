@@ -8,16 +8,17 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-	<div id="geolocation-alert" class="row" style="display:none;">
+	<div id="geolocation-alert" class="row" style="display: none;">
 		<div class="col-md-offset-2 col-md-8">
 			<div class="alert alert-danger">
-				<h:outputText value="#{bundle.missing_location_warning}" escape="false"/>
+				<h:outputText value="#{bundle.missing_location_warning}"
+					escape="false" />
 			</div>
 		</div>
 	</div>
 
 	<h:form>
-	
+
 		<c:if test="#{not empty facesContext.messageList}">
 			<div class="row">
 				<div
@@ -33,17 +34,17 @@
 		</c:if>
 
 		<div class="row glue-hr-bottom-border">
-		
+
 			<div class="col-sm-10 col-md-8 btn-group">
 				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
 				<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
-					style="#{empty paramBean.catSelection ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"	
-					value="#{bundle.all}"
-					action="#{paramBean.enableAllCategories()}">
+					style="#{empty paramBean.catSelection ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
+					value="#{bundle.all}" action="#{paramBean.enableAllCategories()}">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton>
 				<ui:repeat var="item" value="#{paramBean.categories}">
-					<ui:param name="enabled" value="#{paramBean.catSelection.contains(item.name)}"/>
+					<ui:param name="enabled"
+						value="#{paramBean.catSelection.contains(item.name)}" />
 					<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
 						style="#{enabled ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
 						value="#{bundle[item.name.toLowerCase()]}"
@@ -53,9 +54,8 @@
 					</h:commandButton>
 				</ui:repeat>
 			</div>
-		
-			<div
-				class="col-sm-2 col-md-2 col-md-offset-2">
+
+			<div class="col-sm-2 col-md-2 col-md-offset-2">
 				<div class="pull-right">
 					<div class="btn-group">
 						<button type="button"
@@ -93,17 +93,21 @@
 									includeViewParams="true">
 									<i class="fa fa-globe text-muted"></i>
 									<h:outputText value=" #{bundle.display_map}" />
-								</h:link>
-							</li>							
+								</h:link></li>
 						</ul>
 					</div>
 				</div>
 			</div>
-						
+
 		</div>
 		<br />
 
 		<div class="row">
+			<div class="col-sm-12 col-md-10">
+				<ui:include src="/stream/search-tag-facets.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
 			<div class="col-md-6">
 				<ui:fragment rendered="#{empty paramBean.events}">
 					<p>
