@@ -13,7 +13,7 @@
 			<ui:fragment
 				rendered="#{paramBean.latitude ne 0.0 and paramBean.longitude ne 0.0}">
 				<h:link outcome="/stream/search-map" includeViewParams="true">
-					<div id="map" style="width: 230px; height: 150px; cursor: pointer !important;"></div>
+					<div id="map" class="glue-map-circle"></div>
 				</h:link>
 			</ui:fragment>
 			<br />

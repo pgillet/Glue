@@ -194,6 +194,17 @@ a.text-muted:hover {
 	color: 	#eee;
 }
 
+.glue-map-circle {
+	border-radius: 50%;
+	z-index: 0;
+	width: 165px; 
+	height: 165px; 
+	cursor: pointer !important;
+	border:1px solid #ddd;
+	/* .center-block(); */
+	margin-left: 35px;
+}
+
 .scroll-elem, .scroll-outer-container {
     height: 310px;
 }
