@@ -126,24 +126,32 @@
 			</div>
 		</div>
 		<br />
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-md-push-10">
+				<ui:include src="/stream/search-calendar.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</div>
 
-		<!-- <ui:insert name="search-results">
-				</ui:insert> -->
-		<ui:fragment rendered="#{paramBean.display eq 'LIST'}">
-			<ui:include src="search-list.xhtml">
-				<ui:param name="paramBean" value="#{paramBean}" />
-			</ui:include>
-		</ui:fragment>
-		<ui:fragment rendered="#{paramBean.display eq 'TABLE'}">
-			<ui:include src="search-table.xhtml">
-				<ui:param name="paramBean" value="#{paramBean}" />
-			</ui:include>
-		</ui:fragment>
-		<ui:fragment rendered="#{paramBean.display eq 'GRID'}">
-			<ui:include src="search-grid.xhtml">
-				<ui:param name="paramBean" value="#{paramBean}" />
-			</ui:include>
-		</ui:fragment>
+			<!-- <ui:insert name="search-results">
+					</ui:insert> -->
+			<ui:fragment rendered="#{paramBean.display eq 'LIST'}">
+				<ui:include src="search-list.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</ui:fragment>
+			<ui:fragment rendered="#{paramBean.display eq 'TABLE'}">
+				<ui:include src="search-table.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</ui:fragment>
+			<ui:fragment rendered="#{paramBean.display eq 'GRID'}">
+				<ui:include src="search-grid.xhtml">
+					<ui:param name="paramBean" value="#{paramBean}" />
+				</ui:include>
+			</ui:fragment>
+		</div>
 
 		<ui:fragment rendered="#{not empty paramBean.events}">
 			<div class="text-center ">

@@ -13,155 +13,149 @@
 		<!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
 
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-2 col-md-push-10">
-				<ui:include src="/stream/search-calendar.xhtml">
-					<ui:param name="paramBean" value="#{paramBean}" />
-				</ui:include>
-			</div>
-			<div class="col-sm-12 col-md-9 col-md-pull-2">
-				<div class="row">
+		<div class="col-sm-12 col-md-9 col-md-pull-2">
+			<div class="row">
 
-					<ui:repeat var="stream" value="#{paramBean.events}"
-						varStatus="status">
+				<ui:repeat var="stream" value="#{paramBean.events}"
+					varStatus="status">
 
-						<c:set var="count" value="#{status.index}" />
-						<c:set var="bookingLink"
-							value="#{eventUtilBean.getBookingLink(stream)}" />
-						<c:set var="hasImage"
-							value="#{eventUtilBean.hasStickyImage(stream)}" />
+					<c:set var="count" value="#{status.index}" />
+					<c:set var="bookingLink"
+						value="#{eventUtilBean.getBookingLink(stream)}" />
+					<c:set var="hasImage"
+						value="#{eventUtilBean.hasStickyImage(stream)}" />
 
-						<ui:fragment rendered="#{count mod 4 == 0}">
-							<div class="clearfix visible-lg"></div>
-						</ui:fragment>
-						<ui:fragment rendered="#{count mod 3 == 0}">
-							<div class="clearfix visible-md"></div>
-							<div class="clearfix visible-sm"></div>
-						</ui:fragment>
-						<!-- <ui:fragment rendered="#{count mod 2 == 0}">
-							<div class="clearfix visible-sm"></div>
-						</ui:fragment> -->
-						<div class="clearfix visible-xs"></div>
+					<ui:fragment rendered="#{count mod 4 == 0}">
+						<div class="clearfix visible-lg"></div>
+					</ui:fragment>
+					<ui:fragment rendered="#{count mod 3 == 0}">
+						<div class="clearfix visible-md"></div>
+						<div class="clearfix visible-sm"></div>
+					</ui:fragment>
+					<!-- <ui:fragment rendered="#{count mod 2 == 0}">
+						<div class="clearfix visible-sm"></div>
+					</ui:fragment> -->
+					<div class="clearfix visible-xs"></div>
 
-						<div class="col-sm-4 col-md-4 col-lg-3"
-							style="padding-right: 5px; padding-left: 5px;">
-							<div class="glue-tile">
+					<div class="col-sm-4 col-md-4 col-lg-3"
+						style="padding-right: 5px; padding-left: 5px;">
+						<div class="glue-tile">
 
-								<div style="min-width: 170px; min-height: 170px;">
-									<ui:fragment rendered="#{hasImage}">
+							<div style="min-width: 170px; min-height: 170px;">
+								<ui:fragment rendered="#{hasImage}">
+									<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+										<f:param name="id" value="#{stream.id}"></f:param>
+										<img src="#{eventUtilBean.getStickyImageURI(stream)}"
+											alt="#{stream.title}"
+											class="img-responsive glue-thumbnail center-block"
+											title="#{stream.title}" />
+									</h:link>
+								</ui:fragment>
+								<ui:fragment rendered="#{! hasImage}">
+									<!-- MUSIC icon -->
+									<ui:fragment rendered="#{stream.category.name eq 'MUSIC'}">
 										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
 											<f:param name="id" value="#{stream.id}"></f:param>
-											<img src="#{eventUtilBean.getStickyImageURI(stream)}"
-												alt="#{stream.title}"
-												class="img-responsive glue-thumbnail center-block"
-												title="#{stream.title}" />
+											<div class="glue-img-cat">
+												<i class="fa fa-music fa-5x" title="#{stream.title}"></i>
+											</div>
 										</h:link>
 									</ui:fragment>
-									<ui:fragment rendered="#{! hasImage}">
-										<!-- MUSIC icon -->
-										<ui:fragment rendered="#{stream.category.name eq 'MUSIC'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="fa fa-music fa-5x" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- PERFORMING_ART icon -->
-										<ui:fragment
-											rendered="#{stream.category.name eq 'PERFORMING_ART'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="custom-icon custom-icon-theatre"
-														style="font-size: 500%" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- SPORT icon -->
-										<ui:fragment rendered="#{stream.category.name eq 'SPORT'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="fa fa-futbol-o fa-5x" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- CONFERENCE icon -->
-										<ui:fragment
-											rendered="#{stream.category.name eq 'CONFERENCE'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="fa fa-university fa-5x" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- EXHIBITION icon -->
-										<ui:fragment
-											rendered="#{stream.category.name eq 'EXHIBITION'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<div class="custom-icon custom-icon-art-gallery"
-														style="font-size: 500%" title="#{stream.title}"></div>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- YOUTH icon -->
-										<ui:fragment rendered="#{stream.category.name eq 'YOUTH'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="fa fa-child fa-5x" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
-										<!-- OTHER icon -->
-										<ui:fragment rendered="#{stream.category.name eq 'OTHER'}">
-											<h:link includeViewParams="true" outcome="/stream/item.xhtml">
-												<f:param name="id" value="#{stream.id}"></f:param>
-												<div class="glue-img-cat">
-													<i class="fa fa-cloud fa-5x" title="#{stream.title}"></i>
-												</div>
-											</h:link>
-										</ui:fragment>
+									<!-- PERFORMING_ART icon -->
+									<ui:fragment
+										rendered="#{stream.category.name eq 'PERFORMING_ART'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<i class="custom-icon custom-icon-theatre"
+													style="font-size: 500%" title="#{stream.title}"></i>
+											</div>
+										</h:link>
 									</ui:fragment>
-								</div>
-								<ul class="list-unstyled">
-									<li>
-										<!-- <glue:categoryBadge category="#{stream.category}" /> -->
-										<small> <strong><h:link
-													includeViewParams="true"
-													value="#{facesUtilBean.abbreviate(stream.title, 100)}"
-													outcome="/stream/item.xhtml">
-													<f:param name="id" value="#{stream.id}"></f:param>
-												</h:link> </strong>
-									</small>
-									</li>
-									<!-- <li><p>
-								<h:outputText value="#{stream.summary}" escape="false" />
-							</p></li> -->
-									<li><glue:outputDate startTime="#{stream.startTime}"
-											stopTime="#{stream.stopTime}"
-											pattern="#{bundle.date_format_short}" /></li>
-									<li><small><h:link includeViewParams="true"
-												outcome="/venues/search.xhtml" styleClass="text-muted">
-											#{stream.venue.name} - #{stream.venue.city}
-											<f:param name="v" value="#{stream.venue.id}"></f:param>
-											</h:link></small></li>
-									<ui:fragment rendered="#{not empty bookingLink}">
-										<li><a href="#{bookingLink}" target="_blank"
-											class="btn btn-warning glue-btn-xxs pull-right"><h:outputText
-													value="#{bundle.booking_link}" /></a></li>
+									<!-- SPORT icon -->
+									<ui:fragment rendered="#{stream.category.name eq 'SPORT'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<i class="fa fa-futbol-o fa-5x" title="#{stream.title}"></i>
+											</div>
+										</h:link>
 									</ui:fragment>
-								</ul>
+									<!-- CONFERENCE icon -->
+									<ui:fragment
+										rendered="#{stream.category.name eq 'CONFERENCE'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<i class="fa fa-university fa-5x" title="#{stream.title}"></i>
+											</div>
+										</h:link>
+									</ui:fragment>
+									<!-- EXHIBITION icon -->
+									<ui:fragment
+										rendered="#{stream.category.name eq 'EXHIBITION'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<div class="custom-icon custom-icon-art-gallery"
+													style="font-size: 500%" title="#{stream.title}"></div>
+											</div>
+										</h:link>
+									</ui:fragment>
+									<!-- YOUTH icon -->
+									<ui:fragment rendered="#{stream.category.name eq 'YOUTH'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<i class="fa fa-child fa-5x" title="#{stream.title}"></i>
+											</div>
+										</h:link>
+									</ui:fragment>
+									<!-- OTHER icon -->
+									<ui:fragment rendered="#{stream.category.name eq 'OTHER'}">
+										<h:link includeViewParams="true" outcome="/stream/item.xhtml">
+											<f:param name="id" value="#{stream.id}"></f:param>
+											<div class="glue-img-cat">
+												<i class="fa fa-cloud fa-5x" title="#{stream.title}"></i>
+											</div>
+										</h:link>
+									</ui:fragment>
+								</ui:fragment>
 							</div>
+							<ul class="list-unstyled">
+								<li>
+									<!-- <glue:categoryBadge category="#{stream.category}" /> -->
+									<small> <strong><h:link
+												includeViewParams="true"
+												value="#{facesUtilBean.abbreviate(stream.title, 100)}"
+												outcome="/stream/item.xhtml">
+												<f:param name="id" value="#{stream.id}"></f:param>
+											</h:link> </strong>
+								</small>
+								</li>
+								<!-- <li><p>
+							<h:outputText value="#{stream.summary}" escape="false" />
+						</p></li> -->
+								<li><glue:outputDate startTime="#{stream.startTime}"
+										stopTime="#{stream.stopTime}"
+										pattern="#{bundle.date_format_short}" /></li>
+								<li><small><h:link includeViewParams="true"
+											outcome="/venues/search.xhtml" styleClass="text-muted">
+										#{stream.venue.name} - #{stream.venue.city}
+										<f:param name="v" value="#{stream.venue.id}"></f:param>
+										</h:link></small></li>
+								<ui:fragment rendered="#{not empty bookingLink}">
+									<li><a href="#{bookingLink}" target="_blank"
+										class="btn btn-warning glue-btn-xxs pull-right"><h:outputText
+												value="#{bundle.booking_link}" /></a></li>
+								</ui:fragment>
+							</ul>
 						</div>
-					</ui:repeat>
-				</div>
+					</div>
+				</ui:repeat>
 			</div>
 		</div>
+
 
 		<!-- </ui:define> -->
 	</ui:composition>

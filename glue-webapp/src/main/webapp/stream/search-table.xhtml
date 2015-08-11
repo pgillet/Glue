@@ -12,48 +12,41 @@
 	<ui:composition>
 		<!-- template="./search.xhtml" -->
 		<!-- <ui:define name="search-results"> -->
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-2 col-md-push-10">
-				<ui:include src="/stream/search-calendar.xhtml">
-					<ui:param name="paramBean" value="#{paramBean}" />
-				</ui:include>
-			</div>
-			<div class="col-sm-12 col-md-9 col-md-pull-2">
-				<table class="table table-hover table-condensed"
-					style="table-layout: fixed;">
-					<!-- <thead>
-					<tr>
-						<th>#</th>
-						<th>Title</th>
-						<th>Dates</th>
-						<th>Venue</th>
-					</tr>
-				</thead> -->
-					<tbody>
-						<ui:repeat var="stream" value="#{paramBean.events}"
-							varStatus="status">
-							<tr>
-								<td style="width: 30px;"><glue:categoryBadge
-										category="#{stream.category}" /></td>
-								<td style="width: 40%;"><small><h:link
-											includeViewParams="true" value="#{stream.title}"
-											outcome="/stream/item.xhtml" title="#{stream.title}">
-											<f:param name="id" value="#{stream.id}"></f:param>
-										</h:link></small></td>
-								<td style="width: 17%;"><small><glue:outputDate
-											startTime="#{stream.startTime}" stopTime="#{stream.stopTime}"
-											pattern="#{bundle.date_format_short_interval}" /></small></td>
-								<td><small><h:link includeViewParams="true"
-											value="#{stream.venue.name}, #{stream.venue.city}"
-											title="#{stream.venue.name}, #{stream.venue.city}"
-											outcome="/venues/search.xhtml" styleClass="text-muted">
-											<f:param name="v" value="#{stream.venue.id}"></f:param>
-										</h:link></small></td>
-							</tr>
-						</ui:repeat>
-					</tbody>
-				</table>
-			</div>
+		<div class="col-sm-12 col-md-9 col-md-pull-2">
+			<table class="table table-hover table-condensed"
+				style="table-layout: fixed;">
+				<!-- <thead>
+				<tr>
+					<th>#</th>
+					<th>Title</th>
+					<th>Dates</th>
+					<th>Venue</th>
+				</tr>
+			</thead> -->
+				<tbody>
+					<ui:repeat var="stream" value="#{paramBean.events}"
+						varStatus="status">
+						<tr>
+							<td style="width: 30px;"><glue:categoryBadge
+									category="#{stream.category}" /></td>
+							<td style="width: 40%;"><small><h:link
+										includeViewParams="true" value="#{stream.title}"
+										outcome="/stream/item.xhtml" title="#{stream.title}">
+										<f:param name="id" value="#{stream.id}"></f:param>
+									</h:link></small></td>
+							<td style="width: 17%;"><small><glue:outputDate
+										startTime="#{stream.startTime}" stopTime="#{stream.stopTime}"
+										pattern="#{bundle.date_format_short_interval}" /></small></td>
+							<td><small><h:link includeViewParams="true"
+										value="#{stream.venue.name}, #{stream.venue.city}"
+										title="#{stream.venue.name}, #{stream.venue.city}"
+										outcome="/venues/search.xhtml" styleClass="text-muted">
+										<f:param name="v" value="#{stream.venue.id}"></f:param>
+									</h:link></small></td>
+						</tr>
+					</ui:repeat>
+				</tbody>
+			</table>
 		</div>
 
 		<!-- </ui:define> -->
