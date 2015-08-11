@@ -67,10 +67,18 @@
 				var map = L.map('map', {
 				    center: [#{paramBean.latitude}, #{paramBean.longitude}],
 				    zoomControl:false,
-				    dragging: false,
-				    zoom: 11,
+				    zoom: 10,
 				    layers: [mqLayer]
-				});	
+				});
+				
+				// Disable drag and zoom handlers.
+				map.dragging.disable();
+				map.touchZoom.disable();
+				map.doubleClickZoom.disable();
+				map.scrollWheelZoom.disable();
+				
+				// Disable tap handler, if present.
+				if (map.tap) map.tap.disable();	
 			
 		</h:outputScript>
 	</ui:composition>
