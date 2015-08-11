@@ -19,7 +19,7 @@
 							value="#{eventUtilBean.contains(paramBean.filterQueries, facet)}" />
 						<li><h:commandButton
 								styleClass="btn text-muted glue-btn-link btn-xs"
-								style="#{active ? 'font-weight: bold;' : ''}" value="#{facet}"
+								style="text-transform: uppercase; #{active ? 'font-weight: bold;' : ''}" value="#{facet}"
 								action="#{paramBean.addFilterQuery(facet)}">
 								<f:ajax execute="@form" render="@form" />
 							</h:commandButton></li>
