@@ -11,6 +11,13 @@ body { padding-top: 60px; }
 	margin-bottom: 20px;
 }
 
+.glue-tags {
+	display: -webkit-flex; /* Safari */
+    -webkit-justify-content: space-around; /* Safari 6.1+ */
+    display: flex;
+    justify-content: space-between;
+}
+
 .glue-label {
 	background-color: rgba(255, 255, 255, 0.7);
 }
@@ -185,6 +192,9 @@ a.text-muted:hover {
 }
 
 .glue-cat {
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #555;
 	padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;
 }
 

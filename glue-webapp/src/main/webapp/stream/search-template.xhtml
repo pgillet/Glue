@@ -35,9 +35,9 @@
 
 		<div class="row glue-hr-bottom-border">
 
-			<div class="col-sm-10 col-md-8 btn-group">
+			<div class="col-sm-10 col-md-10 btn-group">
 				<!-- rendered="#{paramBean.catSelection.contains(item.name)}" -->
-				<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
+				<h:commandButton styleClass="btn glue-btn-link glue-cat"
 					style="#{empty paramBean.catSelection ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
 					value="#{bundle.all}" action="#{paramBean.enableAllCategories()}">
 					<f:ajax execute="@form" render="@form" />
@@ -45,7 +45,7 @@
 				<ui:repeat var="item" value="#{paramBean.categories}">
 					<ui:param name="enabled"
 						value="#{paramBean.catSelection.contains(item.name)}" />
-					<h:commandButton styleClass="btn text-muted glue-btn-link glue-cat"
+					<h:commandButton styleClass="btn glue-btn-link glue-cat"
 						style="#{enabled ? 'padding-bottom: 6px; border-bottom: 2px solid #b94a48 ;' : 'padding-bottom: 8px; border-bottom: 0px solid #b94a48 ;'}"
 						value="#{bundle[item.name.toLowerCase()]}"
 						action="#{paramBean.enableCategory()}">
@@ -55,7 +55,7 @@
 				</ui:repeat>
 			</div>
 
-			<div class="col-sm-2 col-md-2 col-md-offset-2">
+			<div class="col-sm-2 col-md-2">
 				<div class="pull-right">
 					<div class="btn-group">
 						<button type="button"
