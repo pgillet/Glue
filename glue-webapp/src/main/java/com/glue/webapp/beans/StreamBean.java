@@ -221,7 +221,7 @@ public class StreamBean {
 	venue.setLongitude(longitude);
 
 	try {
-	    eventController.createEvent(event);
+	    eventController.create(event);
 	} catch (InternalServerException e) {
 	    LOG.error(e.getMessage(), e);
 	    context.addMessage(null, new FacesMessage(e.getMessage()));
