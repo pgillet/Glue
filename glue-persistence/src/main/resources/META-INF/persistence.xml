@@ -8,6 +8,7 @@
 		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
 		<!-- <jta-data-source>jdbc/gluedb</jta-data-source> -->
 
+		<class>com.glue.domain.City</class>
 		<class>com.glue.domain.Category</class>
 		<class>com.glue.domain.Comment</class>
 		<class>com.glue.domain.Event</class>

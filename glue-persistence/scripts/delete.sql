@@ -1,5 +1,6 @@
 SET foreign_key_checks = 0;
 
+DELETE FROM City ;
 DELETE FROM Category ;
 DELETE FROM Comment ;
 DELETE FROM Event ;
