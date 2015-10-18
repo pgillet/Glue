@@ -1,0 +1,30 @@
+<html>
+
+	
+
+<head>
+</head>
+<!-- Latest compiled and minified CSS -->
+
+<body ng-app="autocomplete">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+
+	<div ng-controller="AutoCompleteCtrl">
+	    <h4>Asynchronous results</h4>
+	    <pre>Model: {{asyncSelected}}</pre>
+	    <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" uib-typeahead="result.formatted_address for result in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+	    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+	    <div ng-show="noResults">
+	      <i class="glyphicon glyphicon-remove"></i> No Results Found
+	    </div>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js" type="text/javascript"></script>
+	<script src="js/ui-bootstrap-tpls-0.14.2.min.js" type="text/javascript"></script>
+	<script src="js/ac.js" type="text/javascript"></script>
+
+</body>
+
+</html>

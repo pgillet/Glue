@@ -21,9 +21,9 @@ public abstract class AbstractDAO<T> implements GenericDAO<T> {
     protected Class<T> type;
 
     public AbstractDAO() {
-        Type t = getClass().getGenericSuperclass();
-        ParameterizedType pt = (ParameterizedType) t;
-        type = (Class) pt.getActualTypeArguments()[0];
+	Type t = getClass().getGenericSuperclass();
+	ParameterizedType pt = (ParameterizedType) t;
+	type = (Class) pt.getActualTypeArguments()[0];
     }
 
     protected EntityManager getEntityManager() {
@@ -46,22 +46,22 @@ public abstract class AbstractDAO<T> implements GenericDAO<T> {
 
     @Override
     public T create(final T t) {
-        this.em.persist(t);
-        return t;
+	this.em.persist(t);
+	return t;
     }
 
     @Override
     public void delete(final String id) {
-        this.em.remove(this.em.getReference(type, id));
+	this.em.remove(this.em.getReference(type, id));
     }
 
     @Override
     public T find(final String id) {
-        return (T) this.em.find(type, id);
+	return (T) this.em.find(type, id);
     }
 
     @Override
     public T update(final T t) {
-        return this.em.merge(t);    
+	return this.em.merge(t);
     }
 }

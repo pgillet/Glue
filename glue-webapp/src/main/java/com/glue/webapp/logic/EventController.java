@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.slf4j.Logger;
@@ -205,6 +207,7 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 	 * @param admin
 	 * @throws InternalServerException
 	 */
+	@Resource private UserTransaction utx; 
 	public Event create(final Event event) throws InternalServerException {
 		Event persistedEvent = null;
 		try {
@@ -216,6 +219,8 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 						"Events without a venue are not allowed");
 			}
 
+			 utx.begin();
+			
 			// Search for an existing venue
 			Venue persistentVenue = venueDAO.findDuplicate(venue);
 			if (persistentVenue == null) {
@@ -234,6 +239,8 @@ public class EventController extends AbstractPaginatedSearch<List<Event>> {
 				LOG.info("Event already exists = " + event);
 			}
 
+			utx.commit();
+			
 			// End transaction ?
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);

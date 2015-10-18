@@ -1,0 +1,85 @@
+<html>
+<head>
+</head>
+	<body ng-app="glue">
+
+		<div style="padding-bottom:20px">
+			<h3>Add an event</h3>
+		</div>
+
+		<form ng-submit="createEvent()">
+			<div>
+				<label>Titre</label><input name="title" ng-model="title" type="text"/>
+			</div>
+			<div>
+				<div style="padding-left:200px">
+					<input type="submit" value="Créer"/>
+				</div>
+			</div>
+		</form>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js" type="text/javascript">
+		</script>
+		<script src="https://code.angularjs.org/1.4.7/angular-resource.min.js" type="text/javascript">
+		</script>
+		<script type="text/javascript">
+
+		var app = angular.module('glue',['ngResource']);
+
+		app.factory('eventFactory', ['$resource', function($resource) {
+			return $resource('/services/events/:id', null,
+			    {
+			        'update': { method:'PUT' }
+			    });
+		}]);
+
+		app.controller('eventController', ['$scope', 'eventFactory', function ($scope, eventFactory) {
+
+		    $scope.status;
+		    $scope.events;
+
+		    getEvents();
+
+		    $scope.insertEvent = function () {
+		        //Fake eventomer data
+		        var event = {
+				    "title": "ceci est un test",
+				    "category": "MUSIC",
+				    "venue": {
+				        "id": "1",
+				        "name": "LE BIKINI",
+				        "description": null,
+				        "type": null,
+				        "address": "rue Theodore Monod RAMONVILLE SAINT-AGNE",
+				        "city": "Toulouse",
+				        "region": null,
+				        "regionAbbreviation": null,
+				        "postalCode": null,
+				        "country": "France",
+				        "countryTwoLetterAbbreviation": null,
+				        "countryThreeLetterAbbreviation": null,
+				        "latitude": 0,
+				        "longitude": 0,
+				        "url": null,
+				        "geocodeType": null,
+				        "source": null,
+				        "parent": null,
+				        "children": null,
+				        "events": null,
+				        "links": null,
+				        "comments": null,
+				        "images": null,
+				        "properties": null,
+				        "tags": null,
+				        "created": 1425246157000,
+				        "timeZone": null,
+				        "reference": false
+				    }
+				};
+		        eventFactory.save(event);
+		    };
+		}]);
+
+		</script>
+	</body>
+</html>

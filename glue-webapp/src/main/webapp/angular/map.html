@@ -1,0 +1,75 @@
+<!-- http://tombatossals.github.io/angular-leaflet-directive/#!/getting-started -->
+<html>
+<head>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"></link>
+</head>
+<style type="text/css">
+.angular-leaflet-map {
+    width: 640px;
+    height: 480px;
+}
+</style>
+<body ng-app="glue">
+
+
+	<form ng-submit="search()" ng-controller="MapController">
+	  	<label>Adresse
+			<input type="text" name="adress" ng-model="address">
+	  	</label>
+	  	<input type="submit" id="submit" value="Submit" />
+	    <leaflet center="center" bounds="bounds" markers="markers" event-broadcast="events" height="480px" width="640px"></leaflet>
+	    <pre>{{markers[0].lat}}</pre>
+	    <pre>{{markers[0].lng}}</pre>
+	</form>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js" type="text/javascript">
+	</script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js" type="text/javascript">
+	</script>
+<!--	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-leaflet-directive/0.9.0/angular-leaflet-directive.min.js" type="text/javascript">
+	</script> -->
+
+<!--	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script> -->
+     <script src="http://tombatossals.github.io/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+
+	<script>
+		var app = angular.module('glue',['leaflet-directive']);
+
+		app.controller('MapController', [ '$scope', 'leafletData', function($scope, leafletData) {
+   		 	
+   		 	$scope.center = {
+           	 		lat: 43.3615,
+           	 		lng: 1.2637,
+           	 		zoom: 12
+        	};
+
+        	$scope.events = {};
+        		
+        	$scope.bounds = {};
+
+    		$scope.search = function() {
+    			$scope.bounds.address = $scope.address;
+    		};
+
+    		$scope.markers = [];
+
+   		 	$scope.$on("leafletDirectiveMap.click", function(event, args){
+				var leafEvent = args.leafletEvent;
+				$scope.markers = [{
+                    lat: leafEvent.latlng.lat,
+                    lng: leafEvent.latlng.lng,
+                    draggable: true,
+                    focus: true
+                }];
+            });
+
+            $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
+    			$scope.markers[0].lat = args.model.lat;
+    			$scope.markers[0].lng = args.model.lng;
+            });
+		}]);
+	</script>
+
+</body>
+</html>

@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,8 @@ public class GlueApplication extends ResourceConfig {
     public GlueApplication() {
 	packages("com.glue.webapp.services");
 	register(JacksonFeature.class);
+	//http://stackoverflow.com/questions/18252990/uploading-file-using-jersey-over-restfull-service-and-the-resource-configuration
+	register(MultiPartFeature.class);
 	register(new DelegateBinder());
     }
 
