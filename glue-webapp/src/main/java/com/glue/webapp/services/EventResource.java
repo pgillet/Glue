@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.FileUtils;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.glue.domain.Event;
 import com.glue.webapp.logic.EventController;
 import com.glue.webapp.logic.InternalServerException;
@@ -42,12 +43,14 @@ public class EventResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Event create(@FormDataParam("username") String param,
+    public Event create(@FormDataParam("event") String param,
 	    @FormDataParam("file") InputStream image) {
 	System.out.println(param);
 	Event event = null;
 	try {
-	    FileUtils.copyInputStreamToFile(image, new File("D:\\test.jpg"));
+	    event = new ObjectMapper().readValue(param, Event.class);
+	    //System.out.println(event);
+	    //FileUtils.copyInputStreamToFile(image, new File("D:\\test.jpg"));
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
