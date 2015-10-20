@@ -15,9 +15,9 @@ considerSet = true
 considerTime = true
 
 
-###################################################
-# Path to TreeTagger (Uni Stuttgart) home directory
-###################################################
+###################################
+# Path to TreeTagger home directory
+###################################
 # Ensure there is no white space in path (try to escape white spaces)
 treeTaggerHome = SET ME IN CONFIG.PROPS!
 # This one is only necessary if you want to process chinese documents.

@@ -141,19 +141,19 @@ RULENAME="date_r0d2",EXTRACTION="([Ll]e )%reDayNumber/(\d)/%reYear2Digit",NORM_V
 RULENAME="date_r0d3",EXTRACTION="%reDayNumber/%reMonthNumber/%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
 RULENAME="date_r0d4",EXTRACTION="%reDayNumber/(\d)/%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
 
-// EXAMPLE r0c_1: (le) 29.09.1999
-// EXAMPLE r0c_2: (le) 29.9.1999
-RULENAME="date_r0c1",EXTRACTION="([Ll]e )%reDayNumber\.%reMonthNumber\.%reYear4Digit",NORM_VALUE="group(4)-%normMonth(group(3))-%normDay(group(2))"
-RULENAME="date_r0c2",EXTRACTION="([Ll]e )%reDayNumber\.(\d)\.%reYear4Digit",NORM_VALUE="group(4)-%normMonth(group(3))-%normDay(group(2))"
-RULENAME="date_r0c3",EXTRACTION="%reDayNumber\.%reMonthNumber\.%reYear4Digit",NORM_VALUE="group(3)-%normMonth(group(2))-%normDay(group(1))"
-RULENAME="date_r0c4",EXTRACTION="%reDayNumber\.(\d)\.%reYear4Digit",NORM_VALUE="group(3)-%normMonth(group(2))-%normDay(group(1))"
+// EXAMPLE r0e_1: (le) 29.09.1999
+// EXAMPLE r0e_2: (le) 29.9.1999
+RULENAME="date_r0e1",EXTRACTION="([Ll]e )%reDayNumber\.%reMonthNumber\.%reYear4Digit",NORM_VALUE="group(4)-%normMonth(group(3))-%normDay(group(2))"
+RULENAME="date_r0e2",EXTRACTION="([Ll]e )%reDayNumber\.(\d)\.%reYear4Digit",NORM_VALUE="group(4)-%normMonth(group(3))-%normDay(group(2))"
+RULENAME="date_r0e3",EXTRACTION="%reDayNumber\.%reMonthNumber\.%reYear4Digit",NORM_VALUE="group(3)-%normMonth(group(2))-%normDay(group(1))"
+RULENAME="date_r0e4",EXTRACTION="%reDayNumber\.(\d)\.%reYear4Digit",NORM_VALUE="group(3)-%normMonth(group(2))-%normDay(group(1))"
 
-// EXAMPLE r0d_1: (le) 29.09.99
-// EXAMPLE r0d_2: (le) 29.9.99
-RULENAME="date_r0d1",EXTRACTION="([Ll]e )%reDayNumber\.%reMonthNumber\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(4)-%normMonth(group(3))-%normDay(group(2))"
-RULENAME="date_r0d2",EXTRACTION="([Ll]e )%reDayNumber\.(\d)\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(4)-%normMonth(group(3))-%normDay(group(2))"
-RULENAME="date_r0d3",EXTRACTION="%reDayNumber\.%reMonthNumber\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
-RULENAME="date_r0d4",EXTRACTION="%reDayNumber\.(\d)\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
+// EXAMPLE r0g_1: (le) 29.09.99
+// EXAMPLE r0g_2: (le) 29.9.99
+RULENAME="date_r0g1",EXTRACTION="([Ll]e )%reDayNumber\.%reMonthNumber\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(4)-%normMonth(group(3))-%normDay(group(2))"
+RULENAME="date_r0g2",EXTRACTION="([Ll]e )%reDayNumber\.(\d)\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(4)-%normMonth(group(3))-%normDay(group(2))"
+RULENAME="date_r0g3",EXTRACTION="%reDayNumber\.%reMonthNumber\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
+RULENAME="date_r0g4",EXTRACTION="%reDayNumber\.(\d)\.%reYear2Digit",NORM_VALUE="UNDEF-centurygroup(3)-%normMonth(group(2))-%normDay(group(1))"
 
 // NEW for ACE Tern 2005 training: 20050528
 RULENAME="date_r0f",EXTRACTION="%reYear4Digit%reMonthNumber%reDayNumber",NORM_VALUE="group(1)-group(2)-group(3)"
@@ -261,7 +261,8 @@ RULENAME="date_r6a",EXTRACTION="le (weekend|week-end) %reThisNextLast",NORM_VALU
 
 ////////////// date_r7
 // EXAMPLE r7a_1: Novembre 
-RULENAME="date_r7a",EXTRACTION="(%reMonthLong|%reMonthShort)",NORM_VALUE="UNDEF-year-%normMonth(group(1))"
+// 09.03.2015: we removed %reMonthShort from the following rule since it's unlikely and produces false positives
+RULENAME="date_r7a",EXTRACTION="%reMonthLong",NORM_VALUE="UNDEF-year-%normMonth(group(1))"
 
 // EXAMPLE r7b_1: Novembre 2001
 // EXAMPLE r7b_2: Nov. 2001
