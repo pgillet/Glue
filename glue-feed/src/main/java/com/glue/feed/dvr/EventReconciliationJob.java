@@ -47,7 +47,7 @@ public class EventReconciliationJob implements Job {
 	    // Update index
 	    LOG.info("Deletes from the index the documents of withdrawn events");
 	    EventIndexService svc = new EventIndexServiceImpl();
-	    List<String> ids = svc.getWithdrawnEventIds(dateLimit);
+	    List<String> ids = svc.getWithdrawnEventIds();
 	    svc.deleteById(ids);
 
 	    LOG.info("Done");

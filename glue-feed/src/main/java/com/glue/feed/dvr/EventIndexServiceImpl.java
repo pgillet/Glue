@@ -26,7 +26,7 @@ public class EventIndexServiceImpl extends GluePersistenceService implements
 	    .getLogger(EventIndexServiceImpl.class);
 
     @Override
-    public List<String> getWithdrawnEventIds(Date limit) {
+    public List<String> getWithdrawnEventIds() {
 
 	EntityManager em = getEntityManager();
 
@@ -39,10 +39,6 @@ public class EventIndexServiceImpl extends GluePersistenceService implements
 	List<Predicate> conjunction = new ArrayList<>();
 
 	conjunction.add(cb.isTrue(event.get(Event_.withdrawn)));
-
-	// Select events created after the date limit
-	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.created),
-		limit));
 
 	cq.where(conjunction.toArray(new Predicate[conjunction.size()]));
 

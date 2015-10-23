@@ -1,18 +1,16 @@
 package com.glue.feed.dvr;
 
-import java.util.Date;
 import java.util.List;
 
 public interface EventIndexService {
 
     /**
-     * Returns a list of event Ids that are withdrawn and created after the date
-     * limit.
+     * Returns a list of event Ids that are withdrawn.
      * 
      * @param limit
      * @return
      */
-    List<String> getWithdrawnEventIds(Date limit);
+    List<String> getWithdrawnEventIds();
 
     /**
      * Deletes from the index a list of documents by unique ID.
