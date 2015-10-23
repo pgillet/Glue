@@ -17,7 +17,7 @@ public class NominatimVenueAdapter {
 
 	v.setAddress(address.getFull());
 	v.setPostalCode(address.getPostcode());
-	v.setCity(address.getCity());
+	v.setCity(address.getTown());
 	v.setRegion(address.getState());
 	v.setCountry(address.getCountry());
 	v.setCountryTwoLetterAbbreviation(address.getCountry_code());

@@ -9,7 +9,7 @@ public class NominatimAddressDetail {
     private String house_number;
     private String road;
     private String retail;
-    private String city;
+    private String town;
     private String county;
     private String state;
     private String postcode;
@@ -37,12 +37,12 @@ public class NominatimAddressDetail {
 	this.retail = retail;
     }
 
-    public String getCity() {
-	return city;
+    public String getTown() {
+	return town;
     }
 
-    public void setCity(String city) {
-	this.city = city;
+    public void setTown(String town) {
+	this.town = town;
     }
 
     public String getCounty() {
@@ -121,8 +121,8 @@ public class NominatimAddressDetail {
 	    sb.append(postcode).append(" ");
 	}
 
-	if (StringUtils.isNotBlank(city)) {
-	    sb.append(city);
+	if (StringUtils.isNotBlank(town)) {
+	    sb.append(town);
 	}
 
 	return sb.toString().trim();

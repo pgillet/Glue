@@ -66,6 +66,7 @@ public class NominatimRequester {
 	}
 
 	WebTarget wt = target.path(SEARCH).queryParam("format", "json")
+		.queryParam("key","Fmjtd|luur29612h,7w=o5-90rg0y")
 		.queryParam("addressdetails", "1")
 		.queryParam("limit", Integer.toString(limit))
 		.queryParam("q", query);
