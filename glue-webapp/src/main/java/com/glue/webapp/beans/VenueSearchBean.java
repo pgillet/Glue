@@ -22,6 +22,9 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
     private String venueId;
 
     private Venue venue;
+    
+    private double latitude;
+    private double longitude;
 
     public void init() {
 	venue = controller.getVenue(venueId);
@@ -55,6 +58,22 @@ public class VenueSearchBean extends StreamSearchBean implements Serializable {
 	this.venue = venue;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+    
     @Override
     public String search() throws Exception {
 
