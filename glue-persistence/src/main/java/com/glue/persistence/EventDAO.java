@@ -145,6 +145,12 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 
 	return result;
     }
+    
+    public long countForthcoming() {
+	return em.createNamedQuery("countForthcoming", type).setParameter("start", new Date()).getMaxResults();
+    }
+    
+    
 
     @Override
     public void addCategory(String id, Category category) {

@@ -25,7 +25,7 @@ public class MetricsBean {
     private EventDAO eventDAO;
 
     public long getEventCount() {
-	return eventDAO.countAll();
+	return eventDAO.countForthcoming();
     }
 
     public long getVenueCount() {
@@ -33,8 +33,8 @@ public class MetricsBean {
 	CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 	Root<Venue> venue = cq.from(Venue.class);
 
-	cq.where(cb.or(cb.isTrue(venue.get(Venue_.reference)),
-		cb.isNull(venue.get(Venue_.parent))));
+	//GD: Only if the venue is a reference one.
+	cq.where(cb.isTrue(venue.get(Venue_.reference)));
 
 	cq.select(cb.countDistinct(venue));
 	return em.createQuery(cq).getSingleResult();
