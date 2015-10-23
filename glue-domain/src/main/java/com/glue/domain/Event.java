@@ -33,8 +33,7 @@ import com.glue.domain.util.OccurrenceComparator;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "findDuplicate", query = "SELECT e FROM Event e WHERE e.title = :title AND e.startTime = :startTime AND e.venue.id = :venueId"),
-	@NamedQuery(name = "findBetween", query = "SELECT e FROM Event e WHERE e.stopTime BETWEEN :start AND :end"),
-	@NamedQuery(name = "countForthcoming", query = "SELECT e FROM Event e WHERE e.stopTime < :start AND e.withdraw=false") })
+	@NamedQuery(name = "findBetween", query = "SELECT e FROM Event e WHERE e.stopTime BETWEEN :start AND :end")})
 public class Event {
 
     /**
