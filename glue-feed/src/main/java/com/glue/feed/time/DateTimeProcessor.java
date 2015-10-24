@@ -45,6 +45,7 @@ public class DateTimeProcessor {
 
     private Set<Interval> intervals = new TreeSet<>();
     private Set<Date> dates = new TreeSet<>();
+    private Date normDate;
 
     public DateTimeProcessor() throws IOException {
 	InputStream in = DateTimeProcessor.class
@@ -78,17 +79,14 @@ public class DateTimeProcessor {
      * @throws DocumentCreationTimeMissingException
      * @throws ParseException
      */
-    public boolean process(String document)
+    private boolean doProcess(String document, Date documentCreationTime)
 	    throws DocumentCreationTimeMissingException, ParseException {
 
 	dates.clear();
+	normDate = null;
 	intervals.clear();
 
 	boolean success = false;
-
-	// Reference date
-	Calendar cal = Calendar.getInstance();
-	Date documentCreationTime = cal.getTime();
 
 	LOG.info("Document = " + document);
 
@@ -123,14 +121,55 @@ public class DateTimeProcessor {
 
 	if (!timexes.isEmpty()) {
 
-	    for (Timex3 timex : timexes.values()) {
+	    for (Iterator<Timex3> iterator = timexes.values().iterator(); iterator
+		    .hasNext();) {
+		Timex3 timex = iterator.next();
+
 		Timex3AsDateDecorator decorated = new Timex3AsDateDecorator(
 			timex);
 		LOG.info("Date found = " + decorated.getValueAsDate());
+
 		dates.add(decorated.getValueAsDate());
+
+		if (!iterator.hasNext()) {
+		    normDate = decorated.getValueAsDate();
+		}
 	    }
 
 	    success = true;
+	}
+
+	return success;
+    }
+
+    /**
+     * Two pass process. This only works for compact date expressions (~ sibling
+     * dates), such as
+     * "mercredi 1er samedi 4 et dimanche 5 avril à 10h30 et 16h45" where the
+     * last date is explicit and can be used as a reference date to normalize
+     * the previous ones, which are implicit.
+     * 
+     * The first pass allows to determine this normalization date which is used
+     * as the reference date in the second pass.
+     * 
+     * 
+     * @param document
+     * @return
+     * @throws DocumentCreationTimeMissingException
+     * @throws ParseException
+     * @see https://github.com/HeidelTime/heideltime/issues/27
+     */
+
+    public boolean process(String document)
+	    throws DocumentCreationTimeMissingException, ParseException {
+	// Reference date
+	Calendar cal = Calendar.getInstance();
+	Date documentCreationTime = cal.getTime();
+
+	boolean success = doProcess(document, documentCreationTime);
+
+	if (success && dates.size() > 2) {
+	    success = doProcess(document, normDate);
 	}
 
 	return success;
@@ -293,7 +332,8 @@ public class DateTimeProcessor {
 		"le lundi, mardi et jeudi",
 		"mercredi 1er avril à 10h30 et 16h45",
 		"lundi 20, mardi 21 mercredi 22 jeudi 23 vendredi 24 samedi 25 et dimanche 26 avril à 10h30 et 16h45",
-		"9-10-11 AVRIL 15", "27.03.15",
+		"9-10-11 AVRIL 15", "27.03.15", "DU 05/05/2015 AU 20/12/2015",
+		"le 8/11/2015 à 19:30", "20 nov. à 20h00",
 
 	// "Tous les jours du lundi 13 au dimanche 19 avril",
 	};
@@ -302,7 +342,8 @@ public class DateTimeProcessor {
 
 	for (String document : documents) {
 	    DateTimeProcessor dateTimeProcessor = new DateTimeProcessor();
-	    dateTimeProcessor.process(document);
+	    dateTimeProcessor.process(document.toLowerCase()); // TODO: thinking
+							       // about the case
 
 	    results.put(document, dateTimeProcessor);
 	}
