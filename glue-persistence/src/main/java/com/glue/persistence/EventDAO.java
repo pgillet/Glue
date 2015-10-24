@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.glue.domain.Category;
@@ -145,25 +144,6 @@ public class EventDAO extends AbstractDAO<Event> implements BaseOperations {
 	Event result = PersistenceHelper.getSingleResultOrNull(q);
 
 	return result;
-    }
-
-    public long countForthcoming() {
-
-	CriteriaBuilder cb = em.getCriteriaBuilder();
-	CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-	Root<Event> event = cq.from(Event.class);
-	cq.select(cb.count(event));
-
-	List<Predicate> conjunction = new ArrayList<>();
-
-	// Events that are not withdrawn and not closed
-	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));
-	conjunction.add(cb.and(cb.greaterThan(event.get(Event_.stopTime),
-		new Date())));
-
-	cq.where(conjunction.toArray(new Predicate[conjunction.size()]));
-
-	return em.createQuery(cq).getSingleResult();
     }
 
     @Override
