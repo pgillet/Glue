@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,13 +126,16 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	if (venueRef == null) {
 
-	    // Request Nominatim
-	    String query = venue.getName() + ", " + venue.getCity();
-	    GeoLocation[] boundingCoordinates = hasLatLong ? location
-		    .boundingCoordinates(15) // 15 kms around
-		    : null;
-
-	    venueRef = nr.search(query, boundingCoordinates);
+	    // Request Nominatim 
+	    // GD : only if city has been filled
+	    if (StringUtils.isNotEmpty(venue.getCity())) {
+        	    String query = venue.getName() + ", " + venue.getCity();
+        	    GeoLocation[] boundingCoordinates = hasLatLong ? location
+        		    .boundingCoordinates(15) // 15 kms around
+        		    : null;
+        
+        	    venueRef = nr.search(query, boundingCoordinates);
+	    }
 
 	    if (venueRef != null) {
 		// Case where the reference venue is already persisted but has

@@ -66,7 +66,7 @@ public class NominatimRequester {
 	}
 
 	WebTarget wt = target.path(SEARCH).queryParam("format", "json")
-		.queryParam("key","Fmjtd|luur29612h,7w=o5-90rg0y")
+		.queryParam("key", "Fmjtd|luur29612h,7w=o5-90rg0y")
 		.queryParam("addressdetails", "1")
 		.queryParam("limit", Integer.toString(limit))
 		.queryParam("q", query);
@@ -93,7 +93,10 @@ public class NominatimRequester {
 		});
 
 	for (NominatimVenue nominatimVenue : venues) {
-	    result.add(adapter.build(nominatimVenue));
+	    // Search only for OSM Nodes
+	    if (nominatimVenue.getOsm_type().equals("node")) {
+		result.add(adapter.build(nominatimVenue));
+	    }
 	}
 
 	return result;
