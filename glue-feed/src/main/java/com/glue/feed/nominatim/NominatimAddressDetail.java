@@ -10,12 +10,15 @@ public class NominatimAddressDetail {
     private String road;
     private String retail;
     private String town;
+    private String city;
+    private String village;
     private String county;
     private String state;
     private String postcode;
     private String country;
     private String country_code;
     private String continent;
+
 
     public NominatimAddressDetail() {
 	// TODO Auto-generated constructor stub
@@ -100,6 +103,14 @@ public class NominatimAddressDetail {
     public void setHouse_number(String house_number) {
 	this.house_number = house_number;
     }
+    
+    public String getCity() {
+	return city;
+    }
+
+    public void setCity(String city) {
+	this.city = city;
+    }
 
     public String getFull() {
 	// Retrieve address
@@ -126,6 +137,14 @@ public class NominatimAddressDetail {
 	}
 
 	return sb.toString().trim();
+    }
+
+    public String getVillage() {
+	return village;
+    }
+
+    public void setVillage(String village) {
+	this.village = village;
     }
 
 }

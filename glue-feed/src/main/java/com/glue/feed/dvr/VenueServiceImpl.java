@@ -98,6 +98,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 		.getLongitude() != 0.0d);
 	GeoLocation location = null;
 
+	// Check for existing reference Venue in database
 	if (hasLatLong) {
 
 	    location = GeoLocation.fromDegrees(venue.getLatitude(),
@@ -107,7 +108,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    List<Venue> del = findWithinDistance(location, distance);
 	    long end = System.currentTimeMillis();
 	    LOG.info("findWithinDistance took " + (end - start) + " ms");
-	    
+
 	    // Filter venues: keep only reference venues and remove the venue to
 	    // be resolved.
 	    List<Venue> candidates = new ArrayList<>(del);
@@ -124,33 +125,39 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    venueRef = metricHandler.getBestMatchOver(venue, candidates);
 	}
 
+	//No reference in database
 	if (venueRef == null) {
 
-	    // Request Nominatim 
-	    // GD : only if city has been filled
-	    if (StringUtils.isNotEmpty(venue.getCity())) {
-        	    String query = venue.getName() + ", " + venue.getCity();
-        	    GeoLocation[] boundingCoordinates = hasLatLong ? location
-        		    .boundingCoordinates(15) // 15 kms around
-        		    : null;
-        
-        	    venueRef = nr.search(query, boundingCoordinates);
+	    // Lat and long provided?
+	    if (hasLatLong) {
+		
+		// No city? try to find it with reverse geocoding
+		if (!StringUtils.isNotEmpty(venue.getCity())) {
+		    Venue reverseVenue = nr.reverse(venue.getLatitude(), venue.getLongitude());
+		    if (StringUtils.isNotEmpty(reverseVenue.getCity())) {
+			venue.setCity(reverseVenue.getCity());
+		    }
+		}
+		venueRef = venue;
 	    }
 
-	    if (venueRef != null) {
-		// Case where the reference venue is already persisted but has
-		// not been found within the given distance. This can happen
-		// when the venue to resolve is located approximately in the
-		// center city.
-		Venue match = venueDAO.findDuplicate(venueRef, true);
-		if (match != null) {
-		    venueRef = match;
-		}
+	    //Nominatim only with city and without lat lng
+	    else if (StringUtils.isNotEmpty(venue.getCity())) {
+		// Request Nominatim
+		String query = venue.getName() + ", " + venue.getCity();
+		venueRef = nr.search(query, null);
 
-	    } else if (hasLatLong) {
-		// Fallback: we consider that a venue with specified lat/long is
-		// good enough
-		venueRef = venue;
+		if (venueRef != null) {
+		    // Case where the reference venue is already persisted but
+		    // has
+		    // not been found within the given distance. This can happen
+		    // when the venue to resolve is located approximately in the
+		    // center city.
+		    Venue match = venueDAO.findDuplicate(venueRef, true);
+		    if (match != null) {
+			venueRef = match;
+		    }
+		}
 	    }
 	}
 
@@ -172,10 +179,10 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	return venueRef;
     }
 
-    public List<Venue> findWithinDistance(GeoLocation location,
-	    double distance) {
+    public List<Venue> findWithinDistance(GeoLocation location, double distance) {
 
-	GeoLocation[] boundingCoordinates = location.boundingCoordinates(distance);
+	GeoLocation[] boundingCoordinates = location
+		.boundingCoordinates(distance);
 	boolean meridian180WithinDistance = boundingCoordinates[0]
 		.getLongitudeInRadians() > boundingCoordinates[1]
 		.getLongitudeInRadians();

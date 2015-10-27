@@ -19,6 +19,8 @@ public class NominatimRequester {
 
     public static final String BASE_URL = "http://open.mapquestapi.com/nominatim/v1/";
     public static final String SEARCH = "search.php";
+    public static final String REVERSE = "reverse.php";
+    public static final String KEY = "Fmjtd|luur29612h,7w=o5-90rg0y";
 
     protected Client client = null;
     protected WebTarget target = null;
@@ -66,8 +68,7 @@ public class NominatimRequester {
 	}
 
 	WebTarget wt = target.path(SEARCH).queryParam("format", "json")
-		.queryParam("key", "Fmjtd|luur29612h,7w=o5-90rg0y")
-		.queryParam("addressdetails", "1")
+		.queryParam("key", KEY).queryParam("addressdetails", "1")
 		.queryParam("limit", Integer.toString(limit))
 		.queryParam("q", query);
 
@@ -85,7 +86,7 @@ public class NominatimRequester {
 
 	    wt.queryParam("viewbox", sb.toString());
 	    // Do not restrict the search results to the bounding box
-	    wt.queryParam("bounded", "0");
+	    wt.queryParam("bounded", "1");
 	}
 
 	List<NominatimVenue> venues = wt.request().get(
@@ -100,6 +101,38 @@ public class NominatimRequester {
 	}
 
 	return result;
+    }
+
+    /**
+     * Reverse geocoding.
+     * 
+     * @param latitude
+     * @param longitude
+     * @param limit
+     * @return a Venue.
+     */
+    public synchronized Venue reverse(double lat, double lng, int limit) {
+
+	final long timeout = 1000;
+	NominatimVenueAdapter adapter = new NominatimVenueAdapter();
+
+	// Max. 1 request/s to not overload the Nominatim search service
+	try {
+	    Thread.sleep(timeout);
+	} catch (InterruptedException e) {
+	    // Since this application has not defined another thread to cause
+	    // the interrupt, it doesn't bother to catch InterruptedException.
+	}
+
+	WebTarget wt = target.path(REVERSE).queryParam("format", "json")
+		.queryParam("key", KEY).queryParam("lat", lat)
+		.queryParam("lon", lng);
+
+	NominatimVenue venue = wt.request().get(
+		new GenericType<NominatimVenue>() {
+		});
+
+	return adapter.build(venue);
     }
 
     /**
@@ -121,6 +154,17 @@ public class NominatimRequester {
 	}
 
 	return null;
+    }
+
+    /**
+     * Reverse geocoding.
+     * 
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    public Venue reverse(double latitude, double longitude) {
+	return reverse(latitude, longitude, 1);
     }
 
     /**
