@@ -38,7 +38,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 
     private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
-    private static final float SIMILARITY_THRESHOLD = 0.85f;
+    private static final float SIMILARITY_THRESHOLD = 0.9f;
 
     private SimilarityMetric<Event> metric = new EventSimilarityMetric();
     private MetricHandler<Event> metricHandler = new MetricHandler<>(metric,

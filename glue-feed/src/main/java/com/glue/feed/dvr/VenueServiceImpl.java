@@ -28,6 +28,8 @@ import com.glue.persistence.VenueDAO;
 public class VenueServiceImpl extends GluePersistenceService implements
 	VenueService {
 
+    private boolean toBeSaved = false;
+
     private static final float SIMILARITY_THRESHOLD = 0.9f;
 
     static final Logger LOG = LoggerFactory.getLogger(VenueServiceImpl.class);
@@ -93,7 +95,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	Venue venueRef = null;
 	VenueDAO venueDAO = getVenueDAO();
-	final double distance = 2; // 2 kms around
+	final double distance = 3; // 3 kms around
 	boolean hasLatLong = (venue.getLatitude() != 0.0d && venue
 		.getLongitude() != 0.0d);
 	GeoLocation location = null;
@@ -125,15 +127,16 @@ public class VenueServiceImpl extends GluePersistenceService implements
 	    venueRef = metricHandler.getBestMatchOver(venue, candidates);
 	}
 
-	//No reference in database
+	// No reference in database
 	if (venueRef == null) {
 
 	    // Lat and long provided?
 	    if (hasLatLong) {
-		
+
 		// No city? try to find it with reverse geocoding
 		if (!StringUtils.isNotEmpty(venue.getCity())) {
-		    Venue reverseVenue = nr.reverse(venue.getLatitude(), venue.getLongitude());
+		    Venue reverseVenue = nr.reverse(venue.getLatitude(),
+			    venue.getLongitude());
 		    if (StringUtils.isNotEmpty(reverseVenue.getCity())) {
 			venue.setCity(reverseVenue.getCity());
 		    }
@@ -141,9 +144,10 @@ public class VenueServiceImpl extends GluePersistenceService implements
 		venueRef = venue;
 	    }
 
-	    //Nominatim only with city and without lat lng
+	    // Nominatim only with city and without lat lng
 	    else if (StringUtils.isNotEmpty(venue.getCity())) {
-		// Request Nominatim
+
+		// Request Nominatim on name + city
 		String query = venue.getName() + ", " + venue.getCity();
 		venueRef = nr.search(query, null);
 
@@ -158,6 +162,24 @@ public class VenueServiceImpl extends GluePersistenceService implements
 			venueRef = match;
 		    }
 		}
+
+		// No reference?
+		// Request nominatim on address + city and update resulted lat
+		// lng on Venue
+		// in order to reconciliate
+		else {
+
+		    query = StringUtils.defaultString(venue.getAddress())
+			    + ", " + venue.getCity();
+		    venueRef = nr.search(query, null);
+		    if (venueRef != null) {
+			venue.setLatitude(venueRef.getLatitude());
+			venue.setLongitude(venueRef.getLongitude());
+			toBeSaved = true;
+		    }
+
+		    venueRef = null;
+		}
 	    }
 	}
 
@@ -170,7 +192,10 @@ public class VenueServiceImpl extends GluePersistenceService implements
 		venueRef.setReference(true);
 		venue.setParent(venueRef);
 	    }
+	    toBeSaved = true;
+	}
 
+	if (toBeSaved) {
 	    begin();
 	    venueDAO.update(venue);
 	    commit();
