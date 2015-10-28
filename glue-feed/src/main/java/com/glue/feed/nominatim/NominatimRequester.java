@@ -94,10 +94,7 @@ public class NominatimRequester {
 		});
 
 	for (NominatimVenue nominatimVenue : venues) {
-	    // Search only for OSM Nodes
-	    if (nominatimVenue.getOsm_type().equals("node")) {
-		result.add(adapter.build(nominatimVenue));
-	    }
+	    result.add(adapter.build(nominatimVenue));
 	}
 
 	return result;
