@@ -250,44 +250,37 @@ public class EventServiceImpl extends GluePersistenceService implements
 		    continue;
 		}
 
-		try {
+		before = System.currentTimeMillis();
+		List<Event> candidates = getPotentialDuplicates(event);
+		after = System.currentTimeMillis();
+		LOG.debug(String.format("getPotentialDuplicates took %d s",
+			(int) ((after - before) / 1000)));
+		if (candidates.size() > 0) {
 
-		    begin();
-
-		    before = System.currentTimeMillis();
-		    List<Event> candidates = getPotentialDuplicates(event);
-		    after = System.currentTimeMillis();
-		    LOG.debug(String.format("getPotentialDuplicates took %d s",
-			    (int) ((after - before) / 1000)));
-		    if (candidates.size() > 0) {
-
-			// Reconciliation by pairs
-			before = System.currentTimeMillis();
-			Event bestMatch = metricHandler.getBestMatchOver(event,
-				candidates);
-			after = System.currentTimeMillis();
-			LOG.debug(String.format(
-				"getPotentialDuplicates took %d s",
-				(int) ((after - before) / 1000)));
-			if (bestMatch != null) {
-			    LOG.info("Event to resolve = " + printEvent(event));
-			    LOG.info("Found match = " + printEvent(bestMatch));
-			    LOG.info("With similarity = "
-				    + metric.getSimilarity(event, bestMatch));
-
+		    // Reconciliation by pairs
+		    Event bestMatch = metricHandler.getBestMatchOver(event,
+			    candidates);
+		    if (bestMatch != null) {
+			LOG.info("Event to resolve = " + printEvent(event));
+			LOG.info("Found match = " + printEvent(bestMatch));
+			LOG.info("With similarity = "
+				+ metric.getSimilarity(event, bestMatch));
+			try {
+			    //Only start a Transaction here
+			    begin();
 			    resolve(event, bestMatch);
 			    justResolved.add(bestMatch.getId());
+			    commit();
+			} catch (Exception ex) {
+			    rollback();
+			    LOG.error(ex.getMessage(), ex);
+			    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(),
+				    ex, "db", -1);
 			}
-
 		    }
 
-		    commit();
-		} catch (Exception ex) {
-		    rollback();
-		    LOG.error(ex.getMessage(), ex);
-		    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex, "db",
-			    -1);
 		}
+
 	    }
 	}
 
