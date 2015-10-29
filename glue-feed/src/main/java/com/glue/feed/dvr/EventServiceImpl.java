@@ -26,6 +26,8 @@ import com.glue.feed.error.ErrorHandler;
 import com.glue.feed.error.ErrorLevel;
 import com.glue.feed.error.ErrorListener;
 import com.glue.feed.error.ErrorManager;
+import com.glue.feed.merge.EventMerger;
+import com.glue.feed.merge.Merger;
 import com.glue.feed.sim.EventSimilarityMetric;
 import com.glue.feed.sim.MetricHandler;
 import com.glue.feed.sim.SimilarityMetric;
@@ -37,12 +39,12 @@ public class EventServiceImpl extends GluePersistenceService implements
     static final Logger LOG = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
-
     private static final float SIMILARITY_THRESHOLD = 0.9f;
 
     private SimilarityMetric<Event> metric = new EventSimilarityMetric();
     private MetricHandler<Event> metricHandler = new MetricHandler<>(metric,
 	    SIMILARITY_THRESHOLD);
+    private Merger<Event> eventMerger = new EventMerger();
 
     public EventServiceImpl() {
 	super();
@@ -184,33 +186,13 @@ public class EventServiceImpl extends GluePersistenceService implements
 	e1 = em.merge(e1);
 	e2 = em.merge(e2);
 
-	Event disposable = e1;
-	String source = e1.getSource();
+	Event withdrawnEvent = eventMerger.merge(e1, e2);
 
-	if (source != null && source.equals(e2.getSource())) {
-	    // Both events are from the same source
-	    if (e1.getCreated().after(e2.getCreated())) {
-		disposable = e2;
-	    }
-	} else {
-	    // Compute absolute event priorities
-	    EventPriority p = new EventPriority();
+	LOG.info("Withdraw event with ID " + withdrawnEvent.getId() + "\n");
 
-	    int p1 = p.getValue(e1);
-	    int p2 = p.getValue(e2);
-
-	    if (p1 > p2) {
-		disposable = e2;
-	    }
-	}
-
-	LOG.info("Withdraw event with ID " + disposable.getId() + "\n");
-
-	disposable.setWithdrawn(true);
-	disposable.setWithdrawnNote("Duplicate of "
-		+ (disposable == e1 ? e2.getId() : e1.getId()));
-
-	getEventDAO().update(disposable);
+	// Update both events
+	getEventDAO().update(e1);
+	getEventDAO().update(e2);
     }
 
     public void execute(Date limit) {
@@ -341,6 +323,15 @@ public class EventServiceImpl extends GluePersistenceService implements
     @Override
     public void flush() throws IOException {
 	errorDispatcher.flush();
+    }
+
+    public static void main(String[] args) {
+	DateTime start = new DateTime();
+	start = start.withTimeAtStartOfDay();
+	DateTime stop = new DateTime(new DateTime());
+	stop = stop.plusDays(1);
+	stop = stop.withTimeAtStartOfDay();
+	System.out.println(stop);
     }
 
 }
