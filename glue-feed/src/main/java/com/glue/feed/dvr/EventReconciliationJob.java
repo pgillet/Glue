@@ -25,15 +25,8 @@ public class EventReconciliationJob implements Job {
 
 	try (EventServiceImpl service = new EventServiceImpl()) {
 
-	    Date dateLimit = null;
-	    if (context != null) {
-		dateLimit = context.getPreviousFireTime(); // May be null
-	    }
-	    // Not a good idea   
-
 	    service.addErrorListener(new StoreErrorListener());
 	    service.execute(new DateTime().toDate());
-
 	    service.flush();
 
 	    // Update index
