@@ -234,15 +234,10 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	while (startPosition < count) {
 
-	    LOG.debug(String.format("Events from %d to %d on %d",
-		    startPosition, startPosition + maxResults, count));
-
 	    before = System.currentTimeMillis();
 	    List<Event> events = getUnresolvedEvents(limit, startPosition,
 		    maxResults);
 	    after = System.currentTimeMillis();
-	    LOG.debug(String.format("getUnresolvedEvents took %d s",
-		    (int) ((after - before) / 1000)));
 	    startPosition += maxResults;
 
 	    for (Event event : events) {
@@ -259,12 +254,21 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 		    begin();
 
+		    before = System.currentTimeMillis();
 		    List<Event> candidates = getPotentialDuplicates(event);
+		    after = System.currentTimeMillis();
+		    LOG.debug(String.format("getPotentialDuplicates took %d s",
+			    (int) ((after - before) / 1000)));
 		    if (candidates.size() > 0) {
 
 			// Reconciliation by pairs
+			before = System.currentTimeMillis();
 			Event bestMatch = metricHandler.getBestMatchOver(event,
 				candidates);
+			after = System.currentTimeMillis();
+			LOG.debug(String.format(
+				"getPotentialDuplicates took %d s",
+				(int) ((after - before) / 1000)));
 			if (bestMatch != null) {
 			    LOG.info("Event to resolve = " + printEvent(event));
 			    LOG.info("Found match = " + printEvent(bestMatch));
