@@ -48,20 +48,20 @@ public class EventServiceImpl extends GluePersistenceService implements
 	super();
     }
 
-    protected long getUnresolvedEventsCount(Date limit) {
+    protected long getUnresolvedEventsCount(Date today) {
 	EntityManager em = getEntityManager();
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 	Root<Event> event = cq.from(Event.class);
 	cq.select(cb.count(event));
-	Predicate[] wc = getWhereClause(cb, event, limit);
+	Predicate[] wc = getWhereClause(cb, event, today);
 	cq.where(wc);
 	return em.createQuery(cq).getSingleResult();
     }
 
     @Override
-    public List<Event> getUnresolvedEvents(Date limit, int start, int maxResults) {
+    public List<Event> getUnresolvedEvents(Date today, int start, int maxResults) {
 	EntityManager em = getEntityManager();
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -70,7 +70,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	cq.select(event);
 
-	Predicate[] wc = getWhereClause(cb, event, limit);
+	Predicate[] wc = getWhereClause(cb, event, today);
 	cq.where(wc);
 
 	// order by created desc, startTime asc
@@ -85,7 +85,7 @@ public class EventServiceImpl extends GluePersistenceService implements
     }
 
     protected Predicate[] getWhereClause(CriteriaBuilder cb, Root<Event> event,
-	    Date limit) {
+	    Date today) {
 	// event.fetch(Event_.venue).fetch(Venue_.parent, JoinType.LEFT);
 
 	Join<Event, Venue> venue = event.join(Event_.venue);
@@ -93,9 +93,9 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	List<Predicate> conjunction = new ArrayList<>();
 
-	// Select events created after the date limit
-	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.created),
-		limit));
+	// Select events not yet finished
+	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.stopTime),
+		today));
 
 	// Select events that are not already withdrawn
 	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));

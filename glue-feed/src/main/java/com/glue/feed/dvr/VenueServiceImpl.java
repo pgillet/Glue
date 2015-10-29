@@ -95,7 +95,7 @@ public class VenueServiceImpl extends GluePersistenceService implements
 
 	Venue venueRef = null;
 	VenueDAO venueDAO = getVenueDAO();
-	final double distance = 3; // 3 kms around
+	final double distance = 1.5; // 1.5 kms around
 	boolean hasLatLong = (venue.getLatitude() != 0.0d && venue
 		.getLongitude() != 0.0d);
 	GeoLocation location = null;

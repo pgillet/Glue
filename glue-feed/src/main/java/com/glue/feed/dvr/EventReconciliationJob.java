@@ -29,18 +29,10 @@ public class EventReconciliationJob implements Job {
 	    if (context != null) {
 		dateLimit = context.getPreviousFireTime(); // May be null
 	    }
-	    if (dateLimit == null) {
-
-		// Last month
-		DateTime dt = new DateTime();
-		dt = dt.withTimeAtStartOfDay();
-		dt = dt.minusMonths(1);
-
-		dateLimit = dt.toDate();
-	    }
+	    // Not a good idea   
 
 	    service.addErrorListener(new StoreErrorListener());
-	    service.execute(dateLimit);
+	    service.execute(new DateTime().toDate());
 
 	    service.flush();
 
