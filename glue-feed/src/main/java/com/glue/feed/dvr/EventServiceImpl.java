@@ -226,7 +226,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 	LOG.info(count + " new events to reconcile");
 
 	int startPosition = 0;
-	final int maxResults = 1000;
+	final int maxResults = 2000;
 
 	// A list that stores the ID of resolved events
 	List<String> justResolved = new ArrayList<>();
