@@ -198,7 +198,6 @@ public class EventServiceImpl extends GluePersistenceService implements
     public void execute(Date limit) {
 
 	long start = System.currentTimeMillis();
-	long before, after;
 
 	LOG.info("Reconciling events created after = " + limit);
 
@@ -234,10 +233,8 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	while (startPosition < count) {
 
-	    before = System.currentTimeMillis();
 	    List<Event> events = getUnresolvedEvents(limit, startPosition,
 		    maxResults);
-	    after = System.currentTimeMillis();
 	    startPosition += maxResults;
 
 	    for (Event event : events) {
@@ -250,11 +247,8 @@ public class EventServiceImpl extends GluePersistenceService implements
 		    continue;
 		}
 
-		before = System.currentTimeMillis();
 		List<Event> candidates = getPotentialDuplicates(event);
-		after = System.currentTimeMillis();
-		LOG.debug(String.format("getPotentialDuplicates took %d s",
-			(int) ((after - before) / 1000)));
+
 		if (candidates.size() > 0) {
 
 		    // Reconciliation by pairs
