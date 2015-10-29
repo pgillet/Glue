@@ -226,12 +226,15 @@ public class EventServiceImpl extends GluePersistenceService implements
 	LOG.info(count + " new events to reconcile");
 
 	int startPosition = 0;
-	final int maxResults = 2000;
+	final int maxResults = 1000;
 
 	// A list that stores the ID of resolved events
 	List<String> justResolved = new ArrayList<>();
 
 	while (startPosition < count) {
+
+	    LOG.debug(String.format("Events from %d to %d on %d",
+		    startPosition, startPosition + maxResults, count));
 
 	    List<Event> events = getUnresolvedEvents(limit, startPosition,
 		    maxResults);
@@ -254,13 +257,14 @@ public class EventServiceImpl extends GluePersistenceService implements
 		    // Reconciliation by pairs
 		    Event bestMatch = metricHandler.getBestMatchOver(event,
 			    candidates);
+
 		    if (bestMatch != null) {
 			LOG.info("Event to resolve = " + printEvent(event));
 			LOG.info("Found match = " + printEvent(bestMatch));
 			LOG.info("With similarity = "
 				+ metric.getSimilarity(event, bestMatch));
 			try {
-			    //Only start a Transaction here
+
 			    begin();
 			    resolve(event, bestMatch);
 			    justResolved.add(bestMatch.getId());
