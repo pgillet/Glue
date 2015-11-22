@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -49,24 +50,50 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
     }
 
     @Override
-    public Event parse(String url) throws Exception {
+    public Event parse(Element e) throws Exception {
 
-	Element doc = hf.fetch(url);
+	Element elem = e;
+	Elements elems;
+	String location = null;
 
-	ElementDecorator elem = new ElementDecorator(doc);
+	if ("a".equals(elem.tagName())) {
+	    location = elem.attr("abs:href");
+	    elem = hf.fetch(location);
+	}
 
-	ElementDecorator otherelem = elem.selectFirst(selectors.getRootBlock());
-	elem = (otherelem != null ? otherelem : elem);
+	if (selectors.getRootBlock() != null) {
+	    Elements tmp = elem.select(selectors.getRootBlock());
+	    Validate.single(tmp);
+	    elem = tmp.get(0);
+	}
 
 	Event event = getRefCopy();
 
-	event.setUrl(url);
-	event.setTitle(elem.selectText(selectors.getTitle(), event.getTitle()));
-	event.setDescription(elem.selectHtml(selectors.getDescription(),
-		event.getDescription()));
+	event.setUrl(location);
 
+	// Title
+	event.setTitle(StringUtils.defaultIfEmpty(
+		elem.select(selectors.getTitle()).text(), event.getTitle()));
+
+	// Description
+	if (selectors.getDescription() != null) {
+	    elems = elem.select(selectors.getDescription());
+	    Validate.notEmpty(elems);
+
+	    String description = elems.html();
+	    description = HtmlUtils.cleanHtml(description);
+
+	    event.setDescription(StringUtils.defaultIfBlank(description,
+		    event.getDescription()));
+	}
+
+	// Dates
 	String datePattern = selectors.getDatePattern();
-	String dates = elem.selectText(selectors.getDates());
+	elems = elem.select(selectors.getDates());
+	Validate.single(elems);
+
+	String dates = elems.text(); // html() ?
+
 	if (datePattern != null) {
 
 	    DateFormat df = new SimpleDateFormat(datePattern,
@@ -81,15 +108,15 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 	    boolean success = dateTimeProcessor.process(dates);
 
 	    if (success) {
-		
+
 		Set<Interval> intervals = dateTimeProcessor.getIntervals();
-		if(!intervals.isEmpty()){
+		if (!intervals.isEmpty()) {
 		    Interval it = dateTimeProcessor.getLastElement(intervals);
-		    
+
 		    event.setStartTime(it.getStartTime());
 		    event.setStopTime(it.getStopTime());
 		} else {
-		    
+
 		    Set<Date> datesCol = dateTimeProcessor.getDates();
 		    if (datesCol.size() == 1) {
 			Date d = datesCol.iterator().next();
@@ -103,21 +130,22 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 			}
 		    }
 		}
-		
+
 	    } else {
 		throw new ParseException("Dates could not be found", -1);
 	    }
 	}
 
+	// Thumbnail
 	String thumbnailQuery = selectors.getThumbnail();
 	if (thumbnailQuery != null) {
-	    Elements elems = elem.getElement().select(thumbnailQuery);
+	    elems = elem.select(thumbnailQuery);
 	    // Get media
-	    elems = elems.select("[src]");
+	    elems = elems.select(HtmlTags.IMAGE);
 
-	    if (!elems.isEmpty()) {
+	    for (Element imgElement : elems) {
 
-		String imageUrl = elems.attr("abs:src");
+		String imageUrl = imgElement.attr("abs:src");
 
 		ImageItem item = new ImageItem();
 		item.setUrl(imageUrl);
@@ -125,38 +153,37 @@ public class EventMappingStrategy implements HTMLMappingStrategy<Event> {
 		Image image = new Image();
 		image.setOriginal(item);
 		image.setUrl(imageUrl);
-		image.setSource(url);
+		image.setSource(location);
 		image.setSticky(true);
 
 		event.getImages().add(image);
 	    }
 	}
 
-	event.setPrice(elem.selectText(selectors.getPrice(), event.getPrice()));
+	// Price
+	if(selectors.getPrice() != null) {
+	    String price = elem.select(selectors.getPrice()).text();
+	    price = StringUtils.defaultIfBlank(price, event.getPrice());
+	    event.setPrice(price);
+	}
 
 	// Things to handle for sure!
 	// details.getAudience();
 	// details.getEventType()
 
+	// Venue
 	VenueSelectors venueSelectors = selectors.getVenueSelectors();
 	if (venueSelectors != null) {
-	    String venueLinkQuery = selectors.getVenueLink();
+
+	    // Venue description for each event description
 
 	    VenueMappingStrategy vms = new VenueMappingStrategy(venueSelectors);
 	    if (eventRef != null) {
 		vms.setVenueRef(eventRef.getVenue());
 	    }
 
-	    Venue venue;
-
-	    if (venueLinkQuery != null) {
-		ElementDecorator other = elem.selectFirst(venueLinkQuery);
-		venue = vms.parse(other.firstLink());
-	    } else {
-		venue = vms.parse(elem.getElement());
-	    }
+	    Venue venue = vms.parse(elem);
 	    event.setVenue(venue);
-
 	}
 
 	return event;

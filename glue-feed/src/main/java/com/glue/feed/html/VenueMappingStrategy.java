@@ -1,6 +1,6 @@
 package com.glue.feed.html;
 
-import org.jsoup.nodes.Document;
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -32,41 +32,67 @@ public class VenueMappingStrategy implements HTMLMappingStrategy<Venue> {
     }
 
     @Override
-    public Venue parse(String url) throws Exception {
+    public Venue parse(Element e) throws Exception {
 
-	Document doc = hf.fetch(url);
-	return parse(doc);
-    }
+	Element elem = e;
+	String location = null;
+	Elements elems;
 
-    protected Venue parse(Element doc) throws Exception {
+	if ("a".equals(elem.tagName())) {
+	    location = elem.attr("abs:href");
+	    elem = hf.fetch(location);
+	}
 
-	ElementDecorator elem = new ElementDecorator(doc);
-
-	ElementDecorator otherelem = elem.selectFirst(selectors.getRootBlock());
-	elem = (otherelem != null ? otherelem : elem);
+	if (selectors.getRootBlock() != null) {
+	    Elements tmp = elem.select(selectors.getRootBlock());
+	    Validate.single(tmp);
+	    elem = tmp.get(0);
+	}
 
 	Venue venue = getRefCopy();
 
-	venue.setName(elem.selectText(selectors.getVenueName(), venue.getName()));
-	venue.setAddress(elem.selectText(selectors.getVenueAddress(),
-		venue.getAddress()));
-	venue.setCity(elem.selectText(selectors.getCity(), venue.getCity()));
-	venue.setUrl(elem.selectText(selectors.getWebsite(), venue.getUrl()));
-	venue.setDescription(elem.selectText(selectors.getDescription(),
-		venue.getDescription()));
+	// Venue name
+
+	elems = elem.select(selectors.getVenueName());
+	Validate.single(elems);
+	String name = elems.text();
+	venue.setName(StringUtils.defaultIfBlank(name, venue.getName()));
+
+	// Address
+	if (selectors.getVenueAddress() != null) {
+	    String address = elem.select(selectors.getVenueAddress()).text();
+	    venue.setAddress(StringUtils.defaultIfBlank(address,
+		    venue.getAddress()));
+	}
+
+	if (selectors.getCity() != null) {
+	    String city = elem.select(selectors.getCity()).text();
+	    venue.setCity(StringUtils.defaultIfBlank(city, venue.getCity()));
+	}
+
+	if (selectors.getWebsite() != null) {
+	    String url = elem.select(selectors.getWebsite()).text();
+	    venue.setUrl(StringUtils.defaultIfBlank(url, venue.getUrl()));
+	}
+
+	if (selectors.getDescription() != null) {
+	    String description = elem.select(selectors.getDescription()).text();
+	    venue.setDescription(StringUtils.defaultIfBlank(description,
+		    venue.getDescription()));
+	}
 
 	// details.getPhoneNumber();
 
 	// Images
 	String thumbnailQuery = selectors.getThumbnail();
 	if (thumbnailQuery != null) {
-	    Elements elems = elem.getElement().select(thumbnailQuery);
+	    elems = elem.select(thumbnailQuery);
 	    // Get media
-	    elems = elems.select("[src]");
+	    elems = elems.select(HtmlTags.IMAGE);
 
-	    if (!elems.isEmpty()) {
+	    for (Element imgElement : elems) {
 
-		String imageUrl = elems.attr("abs:src");
+		String imageUrl = imgElement.attr("abs:src");
 
 		ImageItem item = new ImageItem();
 		item.setUrl(imageUrl);
@@ -74,7 +100,7 @@ public class VenueMappingStrategy implements HTMLMappingStrategy<Venue> {
 		Image image = new Image();
 		image.setOriginal(item);
 		image.setUrl(imageUrl);
-		image.setSource(doc.baseUri());
+		image.setSource(location);
 		image.setSticky(true);
 
 		venue.getImages().add(image);

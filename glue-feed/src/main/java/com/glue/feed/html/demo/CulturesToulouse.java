@@ -32,7 +32,7 @@ public class CulturesToulouse {
 	SiteMap siteMap = newSiteMap(
 		"http://culture.toulouse.fr/web/guest/agenda")
 		// .list("div.info-event a.link-event")
-		.url("http://culture.toulouse.fr/web/guest/agenda/-/agenda/event/")
+		.li("a[href^=http://culture.toulouse.fr/web/guest/agenda/-/agenda/event/]")
 		// finds sibling <a> element immediately preceded by sibling
 		// <strong> element designing the current page
 		.next("strong.journal-article-page-number + a.journal-article-page-number")

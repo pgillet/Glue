@@ -14,9 +14,9 @@ public class EventSelectors {
     private String price;
     private String audience;
     private String eventType;
-    private String venueLink;
+    private String venueRootBlock;
     private VenueSelectors venueSelectors;
-    private Locale locale = Locale.ENGLISH;
+    private Locale locale = Locale.FRENCH;
 
     public String getRootBlock() {
 	return rootBlock;
@@ -98,12 +98,12 @@ public class EventSelectors {
 	this.eventType = eventType;
     }
 
-    public String getVenueLink() {
-	return venueLink;
+    public String getVenueRootBlock() {
+	return venueRootBlock;
     }
 
-    public void setVenueLink(String venueLink) {
-	this.venueLink = venueLink;
+    public void setVenueRootBlock(String venueRootBlock) {
+	this.venueRootBlock = venueRootBlock;
     }
 
     public VenueSelectors getVenueSelectors() {

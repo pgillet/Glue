@@ -29,7 +29,7 @@ public class JoggingInternationalDemo {
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
 		"http://www.jogging-international.net/courses/calendrier/france-metropolitaine#resultats")
-		.list("div.course_line").next("p#navigation span.next")
+		.li("div.course_line").next("p#navigation span.next")
 		.last("p#navigation:not(:has(span.next))")
 		// .url("http://www.jogging-international.net/courses/calendrier/france-metropolitaine/")
 		.build();

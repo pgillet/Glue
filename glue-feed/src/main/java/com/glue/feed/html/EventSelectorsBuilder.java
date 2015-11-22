@@ -84,7 +84,7 @@ public class EventSelectorsBuilder {
     }
 
     public EventSelectorsBuilder venueLink(String cssQuery) {
-	selectors.setVenueLink(cssQuery);
+	selectors.setVenueRootBlock(cssQuery);
 	return this;
     }
 

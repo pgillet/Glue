@@ -2,6 +2,7 @@ package com.glue.feed.html;
 
 import java.io.IOException;
 
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ import com.glue.feed.listener.DefaultFeedMessageListener;
  * @param <T>
  */
 public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
-	FeedParser<T>, VisitorListener {
+	FeedParser<T>, Extractor {
 
     static final Logger LOG = LoggerFactory.getLogger(HTMLFeedParser.class);
 
@@ -30,7 +31,7 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
 
     private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
 
-    private VisitorStrategy visitorStrategy;
+    private BrowsingStrategy browsingStrategy;
     private HTMLMappingStrategy<T> mappingStrategy;
 
     /**
@@ -42,35 +43,36 @@ public class HTMLFeedParser<T> implements ErrorHandler, ErrorManager,
      * @param siteMap
      */
     public HTMLFeedParser(Class<T> classModel, SiteMap siteMap) {
-	this.visitorStrategy = new PaginatedListStrategy(siteMap);
-	this.visitorStrategy.setVisitorListener(this);
+	this.browsingStrategy = new PaginatedListStrategy(siteMap);
+	this.browsingStrategy.setExtractor(this);
 
 	this.mappingStrategy = new AnnotationMappingStrategy<T>(classModel);
     }
 
     public HTMLFeedParser(SiteMap siteMap,
 	    HTMLMappingStrategy<T> mappingStrategy) {
-	this.visitorStrategy = new PaginatedListStrategy(siteMap);
-	this.visitorStrategy.setVisitorListener(this);
+	this.browsingStrategy = new PaginatedListStrategy(siteMap);
+	this.browsingStrategy.setExtractor(this);
 
 	this.mappingStrategy = mappingStrategy;
     }
 
     @Override
     public void read() throws Exception {
-	visitorStrategy.visit();
+	browsingStrategy.browse();
     }
 
     @Override
-    public void processLink(String uri) throws Exception {
-	LOG.info("Parsing event details page = " + uri);
+    public void process(Element e) throws Exception {
+	LOG.info("Parsing event details page");
 
 	try {
-	    T obj = mappingStrategy.parse(uri);
+	    T obj = mappingStrategy.parse(e);
 	    feedMessageListener.newMessage(obj);
-	} catch (Exception e) {
-	    LOG.error(e.getMessage(), e);
-	    errorDispatcher.fireErrorEvent(ErrorLevel.ERROR, e.getMessage(), e,
+	} catch (Exception ex) {
+	    LOG.error(ex.getMessage(), ex);
+	    errorDispatcher.fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(),
+		    ex,
 		    "html", -1);
 	}
     }

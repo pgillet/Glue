@@ -7,14 +7,12 @@ import static com.glue.feed.html.VenueSelectorsBuilder.newVenueSelectors;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Venue;
-import com.glue.feed.FeedMessageListener;
 import com.glue.feed.html.EventMappingStrategy;
 import com.glue.feed.html.EventSelectors;
 import com.glue.feed.html.HTMLFeedParser;
 import com.glue.feed.html.HTMLMappingStrategy;
 import com.glue.feed.html.SiteMap;
 import com.glue.feed.html.VenueSelectors;
-import com.glue.feed.listener.StreamMessageListener;
 
 /**
  * Demonstration of the EventMappingStrategy.
@@ -33,8 +31,9 @@ public class BikiniScraper {
 
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
-		"http://www.lebikini.com/programmation/index/date/new").url(
-		"http://www.lebikini.com/programmation/concert/").build();
+		"http://www.lebikini.com/programmation/index/date/new").li(
+		"a[href^=/programmation/concert/]")
+		.build();
 
 	VenueSelectors venueSelectors = newVenueSelectors()
 		.name("div#infos > div#salle > h3")
@@ -70,9 +69,10 @@ public class BikiniScraper {
 	HTMLFeedParser<Event> parser = new HTMLFeedParser<>(siteMap,
 		mappingStrategy);
 
-	final FeedMessageListener feedMsgListener = new StreamMessageListener();
+	// final FeedMessageListener feedMsgListener = new
+	// StreamMessageListener();
 	// Uncomment to persist in db
-	parser.setFeedMessageListener(feedMsgListener);
+	// parser.setFeedMessageListener(feedMsgListener);
 
 	parser.read();
 	parser.close();

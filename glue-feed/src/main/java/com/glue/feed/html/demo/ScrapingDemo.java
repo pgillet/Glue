@@ -19,7 +19,7 @@ public class ScrapingDemo {
 
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
-		"http://www.penichedidascalie.com/Tout-Public").list(
+		"http://www.penichedidascalie.com/Tout-Public").li(
 		"div.nav_spectacles > div.date").build();
 
 	// 2nd step: define your java bean. The HTML page for an event will be

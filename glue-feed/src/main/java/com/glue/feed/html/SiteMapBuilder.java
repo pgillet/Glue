@@ -1,6 +1,5 @@
 package com.glue.feed.html;
 
-
 /**
  * A builder for SiteMap objects.
  * 
@@ -24,7 +23,7 @@ public class SiteMapBuilder {
     public static SiteMapBuilder newSiteMap(String frontUrl) {
 	SiteMapBuilder builder = new SiteMapBuilder();
 	builder.siteMap = new SiteMap(frontUrl);
-	
+
 	return builder;
     }
 
@@ -66,13 +65,9 @@ public class SiteMapBuilder {
     }
 
     /**
-     * Either {@link #list(String)} or {@link #url(String)} or
-     * {@link #url(URLFilter)} is required for pages listing multiple events.
-     * Sets the Selector CSS query that should match the links to event details
-     * in one page. The selector may directly include the link to the event
-     * details page ( <code><a></code> element), or designate its unambiguous
-     * ancestor. Otherwise, the selector designates the start element where a
-     * bean can be mapped.
+     * Sets the Selector CSS query that should match the links to detailed event
+     * pages ( <code><a></code> elements) or the start elements where events'
+     * details can be parsed.
      * 
      * @param cssQuery
      *            a Selector CSS-like query
@@ -81,39 +76,8 @@ public class SiteMapBuilder {
      *      href="http://jsoup.org/apidocs/org/jsoup/select/Selector.html"
      *      >Selector</a>
      */
-    public SiteMapBuilder list(String cssQuery) {
-	siteMap.setListSelector(cssQuery);
-	return this;
-    }
-
-    /**
-     * Sets the base URL with which all links to event details pages should
-     * start with.
-     * 
-     * <p>
-     * If the given URL is not absolute, it is resolved against the front URL.
-     * </p>
-     * 
-     * @param baseUrl
-     *            the base URL for all event details pages
-     * @return this builder
-     * @see #url(URLFilter)
-     */
-    public SiteMapBuilder url(String baseUrl) {
-	url(new BaseURLFilter(baseUrl));
-	return this;
-    }
-
-    /**
-     * Sets the filter to select all the links to event details pages.
-     * 
-     * @param filter
-     *            an URL filter
-     * @return this builder
-     * @see #url(String)
-     */
-    public SiteMapBuilder url(URLFilter filter) {
-	siteMap.setUrlFilter(filter);
+    public SiteMapBuilder li(String cssQuery) {
+	siteMap.setListItemSelector(cssQuery);
 	return this;
     }
 

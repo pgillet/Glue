@@ -1,21 +1,20 @@
 package com.glue.feed.html;
 
-import java.util.Set;
-
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaginatedListStrategy implements VisitorStrategy {
+public class PaginatedListStrategy implements BrowsingStrategy {
 
     static final Logger LOG = LoggerFactory
 	    .getLogger(PaginatedListStrategy.class);
 
     private SiteMap siteMap;
 
-    private VisitorListener visitorListener = new DefaultVisitorListener();
+    private Extractor extractor = new DefaultExtractor();
 
     private HTMLFetcher hf = new HTMLFetcher();
 
@@ -24,11 +23,9 @@ public class PaginatedListStrategy implements VisitorStrategy {
     }
 
     @Override
-    public void visit() throws Exception {
-	String baseUri = siteMap.getFrontUrl();
-	Document doc = hf.fetch(baseUri);
-
-	ElementDecorator elem = new ElementDecorator(doc);
+    public void browse() throws Exception {
+	String baseUrl = siteMap.getFrontUrl();
+	Document doc = hf.fetch(baseUrl);
 
 	boolean nextPage = false;
 	int numPage = 0;
@@ -37,29 +34,12 @@ public class PaginatedListStrategy implements VisitorStrategy {
 	    numPage++;
 	    LOG.info("Page number  = " + numPage);
 
-	    // A base URL for event details page
-	    URLFilter filter = siteMap.getUrlFilter();
-	    if (filter != null) {
-		Set<String> linkHrefs = elem.listLinks(filter);
-		for (String linkHref : linkHrefs) {
-		    // Notify listener
-		    visitorListener.processLink(linkHref);
-		}
+	    // Elements that match the list selector
+	    Elements elems = doc.select(siteMap.getListItemSelector());
+	    Validate.notEmpty(elems);
 
-	    } else {
-		// Elements that match the list selector
-		Elements elems = doc.select(siteMap.getListSelector());
-
-		for (Element e : elems) {
-		    ElementDecorator other = new ElementDecorator(e);
-		    // Link to the event details page
-		    String linkHref = other.firstLink();
-
-		    if (linkHref != null) {
-			// Notify listener
-			visitorListener.processLink(linkHref);
-		    }
-		}
+	    for (Element e : elems) {
+		extractor.process(e);
 	    }
 
 	    // Pagination
@@ -78,18 +58,22 @@ public class PaginatedListStrategy implements VisitorStrategy {
 		Elements nextPageElems = doc.select(siteMap
 			.getNextPageSelector());
 
-		// The link to the next page is the first matching element: we
-		// ignore the case where there is a link for each individual
-		// page, with no link to the next page
-		Element nextPageElem = nextPageElems.first();
-		nextPage = (nextPageElem != null);
+		nextPage = !nextPageElems.isEmpty();
+
+		// The selector must be sufficiently selective so as to select
+		// only one element
+		Validate.oneAtMost(nextPageElems);
 
 		if (nextPage) {
-		    ElementDecorator other = new ElementDecorator(nextPageElem);
 		    // Load the next page
-		    String linkHref = other.firstLink();
-		    if (linkHref != null) {
-			doc = hf.fetch(linkHref);
+		    nextPageElems = nextPageElems.select(HtmlTags.LINK);
+		    Validate.oneAtMost(nextPageElems);
+
+		    String nextPageUrl = nextPageElems.attr("abs:href");
+		    nextPage = StringUtils.isNotBlank(nextPageUrl);
+
+		    if (nextPage) {
+			doc = hf.fetch(nextPageUrl);
 		    }
 		}
 	    }
@@ -98,13 +82,13 @@ public class PaginatedListStrategy implements VisitorStrategy {
 
     }
 
-    public VisitorListener getVisitorListener() {
-	return visitorListener;
+    public Extractor getExtractor() {
+	return extractor;
     }
 
     @Override
-    public void setVisitorListener(VisitorListener visitorListener) {
-	this.visitorListener = visitorListener;
+    public void setExtractor(Extractor visitorListener) {
+	this.extractor = visitorListener;
     }
 
 }

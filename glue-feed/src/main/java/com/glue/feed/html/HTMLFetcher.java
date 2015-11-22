@@ -5,10 +5,14 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 
 public class HTMLFetcher {
+
+    static final Logger LOG = LoggerFactory.getLogger(HTMLFetcher.class);
 
     private static final HtmlCompressor compressor = new HtmlCompressor();
 
@@ -32,6 +36,8 @@ public class HTMLFetcher {
     }
 
     public Document fetch(String url) throws IOException {
+
+	LOG.info("Fetching HTML document = " + url);
 
 	if (!robotRulesParser.isAllowed(url)) {
 	    throw new IOException(url + " not allowed by robots.txt");

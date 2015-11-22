@@ -25,9 +25,17 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
 
     @Override
     // Main method that will translate HTML to object
-    public T parse(String uri) throws Exception {
+    public T parse(Element e) throws Exception {
 	try {
-	    Element rootElem = hf.fetch(uri);
+	    Element rootElem = e;
+
+	    String location = null;
+
+	    if ("a".equals(rootElem.tagName())) {
+		location = rootElem.attr("abs:href");
+		rootElem = hf.fetch(location);
+	    }
+
 	    T model = this.classModel.newInstance();
 
 	    // Check if Selector annotation is present at the class level
@@ -68,9 +76,9 @@ public class AnnotationMappingStrategy<T> implements HTMLMappingStrategy<T> {
 
 	    return model;
 
-	} catch (Exception e) {
-	    LOG.error(e.getMessage(), e);
-	    throw e;
+	} catch (Exception ex) {
+	    LOG.error(ex.getMessage(), ex);
+	    throw ex;
 	}
     }
 

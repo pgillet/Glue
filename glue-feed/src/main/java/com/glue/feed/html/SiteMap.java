@@ -18,9 +18,7 @@ public class SiteMap {
 
     private String frontUrl;
 
-    private URLFilter urlFilter;
-
-    private String listSelector;
+    private String listItemSelector;
 
     private String nextPageSelector;
 
@@ -32,12 +30,12 @@ public class SiteMap {
 	this.frontUrl = frontUrl;
     }
 
-    public String getListSelector() {
-	return listSelector;
+    public String getListItemSelector() {
+	return listItemSelector;
     }
 
-    public void setListSelector(String cssQuery) {
-	this.listSelector = cssQuery;
+    public void setListItemSelector(String cssQuery) {
+	this.listItemSelector = cssQuery;
     }
 
     public String getNextPageSelector() {
@@ -58,14 +56,6 @@ public class SiteMap {
 
     public String getFrontUrl() {
 	return frontUrl;
-    }
-
-    public URLFilter getUrlFilter() {
-	return urlFilter;
-    }
-
-    public void setUrlFilter(URLFilter urlFilter) {
-	this.urlFilter = urlFilter;
     }
 
     public String getEndOfDataCondition() {
