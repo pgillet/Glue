@@ -25,23 +25,8 @@ public class EventReconciliationJob implements Job {
 
 	try (EventServiceImpl service = new EventServiceImpl()) {
 
-	    Date dateLimit = null;
-	    if (context != null) {
-		dateLimit = context.getPreviousFireTime(); // May be null
-	    }
-	    if (dateLimit == null) {
-
-		// Last month
-		DateTime dt = new DateTime();
-		dt = dt.withTimeAtStartOfDay();
-		dt = dt.minusMonths(1);
-
-		dateLimit = dt.toDate();
-	    }
-
 	    service.addErrorListener(new StoreErrorListener());
-	    service.execute(dateLimit);
-
+	    service.execute(new DateTime().toDate());
 	    service.flush();
 
 	    // Update index

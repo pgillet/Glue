@@ -26,6 +26,8 @@ import com.glue.feed.error.ErrorHandler;
 import com.glue.feed.error.ErrorLevel;
 import com.glue.feed.error.ErrorListener;
 import com.glue.feed.error.ErrorManager;
+import com.glue.feed.merge.EventMerger;
+import com.glue.feed.merge.Merger;
 import com.glue.feed.sim.EventSimilarityMetric;
 import com.glue.feed.sim.MetricHandler;
 import com.glue.feed.sim.SimilarityMetric;
@@ -37,31 +39,31 @@ public class EventServiceImpl extends GluePersistenceService implements
     static final Logger LOG = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private ErrorDispatcher errorDispatcher = new ErrorDispatcher();
-
-    private static final float SIMILARITY_THRESHOLD = 0.85f;
+    private static final float SIMILARITY_THRESHOLD = 0.9f;
 
     private SimilarityMetric<Event> metric = new EventSimilarityMetric();
     private MetricHandler<Event> metricHandler = new MetricHandler<>(metric,
 	    SIMILARITY_THRESHOLD);
+    private Merger<Event> eventMerger = new EventMerger();
 
     public EventServiceImpl() {
 	super();
     }
 
-    protected long getUnresolvedEventsCount(Date limit) {
+    protected long getUnresolvedEventsCount(Date today) {
 	EntityManager em = getEntityManager();
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 	Root<Event> event = cq.from(Event.class);
 	cq.select(cb.count(event));
-	Predicate[] wc = getWhereClause(cb, event, limit);
+	Predicate[] wc = getWhereClause(cb, event, today);
 	cq.where(wc);
 	return em.createQuery(cq).getSingleResult();
     }
 
     @Override
-    public List<Event> getUnresolvedEvents(Date limit, int start, int maxResults) {
+    public List<Event> getUnresolvedEvents(Date today, int start, int maxResults) {
 	EntityManager em = getEntityManager();
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -70,7 +72,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	cq.select(event);
 
-	Predicate[] wc = getWhereClause(cb, event, limit);
+	Predicate[] wc = getWhereClause(cb, event, today);
 	cq.where(wc);
 
 	// order by created desc, startTime asc
@@ -85,7 +87,7 @@ public class EventServiceImpl extends GluePersistenceService implements
     }
 
     protected Predicate[] getWhereClause(CriteriaBuilder cb, Root<Event> event,
-	    Date limit) {
+	    Date today) {
 	// event.fetch(Event_.venue).fetch(Venue_.parent, JoinType.LEFT);
 
 	Join<Event, Venue> venue = event.join(Event_.venue);
@@ -93,9 +95,9 @@ public class EventServiceImpl extends GluePersistenceService implements
 
 	List<Predicate> conjunction = new ArrayList<>();
 
-	// Select events created after the date limit
-	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.created),
-		limit));
+	// Select events not yet finished
+	conjunction.add(cb.greaterThanOrEqualTo(event.get(Event_.stopTime),
+		today));
 
 	// Select events that are not already withdrawn
 	conjunction.add(cb.isFalse(event.get(Event_.withdrawn)));
@@ -184,33 +186,13 @@ public class EventServiceImpl extends GluePersistenceService implements
 	e1 = em.merge(e1);
 	e2 = em.merge(e2);
 
-	Event disposable = e1;
-	String source = e1.getSource();
+	Event withdrawnEvent = eventMerger.merge(e1, e2);
 
-	if (source != null && source.equals(e2.getSource())) {
-	    // Both events are from the same source
-	    if (e1.getCreated().after(e2.getCreated())) {
-		disposable = e2;
-	    }
-	} else {
-	    // Compute absolute event priorities
-	    EventPriority p = new EventPriority();
+	LOG.info("Withdraw event with ID " + withdrawnEvent.getId() + "\n");
 
-	    int p1 = p.getValue(e1);
-	    int p2 = p.getValue(e2);
-
-	    if (p1 > p2) {
-		disposable = e2;
-	    }
-	}
-
-	LOG.info("Withdraw event with ID " + disposable.getId() + "\n");
-
-	disposable.setWithdrawn(true);
-	disposable.setWithdrawnNote("Duplicate of "
-		+ (disposable == e1 ? e2.getId() : e1.getId()));
-
-	getEventDAO().update(disposable);
+	// Update both events
+	getEventDAO().update(e1);
+	getEventDAO().update(e2);
     }
 
     public void execute(Date limit) {
@@ -244,7 +226,7 @@ public class EventServiceImpl extends GluePersistenceService implements
 	LOG.info(count + " new events to reconcile");
 
 	int startPosition = 0;
-	final int maxResults = 250;
+	final int maxResults = 1000;
 
 	// A list that stores the ID of resolved events
 	List<String> justResolved = new ArrayList<>();
@@ -268,35 +250,35 @@ public class EventServiceImpl extends GluePersistenceService implements
 		    continue;
 		}
 
-		try {
+		List<Event> candidates = getPotentialDuplicates(event);
 
-		    begin();
+		if (candidates.size() > 0) {
 
-		    List<Event> candidates = getPotentialDuplicates(event);
-		    if (candidates.size() > 0) {
+		    // Reconciliation by pairs
+		    Event bestMatch = metricHandler.getBestMatchOver(event,
+			    candidates);
 
-			// Reconciliation by pairs
-			Event bestMatch = metricHandler.getBestMatchOver(event,
-				candidates);
-			if (bestMatch != null) {
-			    LOG.info("Event to resolve = " + printEvent(event));
-			    LOG.info("Found match = " + printEvent(bestMatch));
-			    LOG.info("With similarity = "
-				    + metric.getSimilarity(event, bestMatch));
+		    if (bestMatch != null) {
+			LOG.info("Event to resolve = " + printEvent(event));
+			LOG.info("Found match = " + printEvent(bestMatch));
+			LOG.info("With similarity = "
+				+ metric.getSimilarity(event, bestMatch));
+			try {
 
+			    begin();
 			    resolve(event, bestMatch);
 			    justResolved.add(bestMatch.getId());
+			    commit();
+			} catch (Exception ex) {
+			    rollback();
+			    LOG.error(ex.getMessage(), ex);
+			    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(),
+				    ex, "db", -1);
 			}
-
 		    }
 
-		    commit();
-		} catch (Exception ex) {
-		    rollback();
-		    LOG.error(ex.getMessage(), ex);
-		    fireErrorEvent(ErrorLevel.ERROR, ex.getMessage(), ex, "db",
-			    -1);
 		}
+
 	    }
 	}
 
@@ -341,6 +323,15 @@ public class EventServiceImpl extends GluePersistenceService implements
     @Override
     public void flush() throws IOException {
 	errorDispatcher.flush();
+    }
+
+    public static void main(String[] args) {
+	DateTime start = new DateTime();
+	start = start.withTimeAtStartOfDay();
+	DateTime stop = new DateTime(new DateTime());
+	stop = stop.plusDays(1);
+	stop = stop.withTimeAtStartOfDay();
+	System.out.println(stop);
     }
 
 }

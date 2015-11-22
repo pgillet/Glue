@@ -1,5 +1,7 @@
 package com.glue.feed.nominatim;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.glue.domain.Venue;
 
 public class NominatimVenueAdapter {
@@ -17,7 +19,14 @@ public class NominatimVenueAdapter {
 
 	v.setAddress(address.getFull());
 	v.setPostalCode(address.getPostcode());
-	v.setCity(address.getTown());
+	String city = address.getCity();
+	if (StringUtils.isEmpty(city)) {
+	    city = address.getTown();
+	    if (StringUtils.isEmpty(city)) {
+		city = address.getVillage();
+	    }
+	}
+	v.setCity(city);
 	v.setRegion(address.getState());
 	v.setCountry(address.getCountry());
 	v.setCountryTwoLetterAbbreviation(address.getCountry_code());
@@ -29,5 +38,4 @@ public class NominatimVenueAdapter {
 
 	return v;
     }
-
 }
