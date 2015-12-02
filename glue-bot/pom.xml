@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>glue-bot</artifactId>
+
+	<parent>
+		<groupId>com.glue</groupId>
+		<artifactId>glue-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.glue</groupId>
+			<artifactId>glue-persistence</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<!-- jsoup HTML parser -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
+		<!-- Crawler commons -->
+		<dependency>
+			<groupId>com.google.code.crawler-commons</groupId>
+			<artifactId>crawler-commons</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<!-- HtmlCompressor to minify HTML -->
+		<dependency>
+			<groupId>com.googlecode.htmlcompressor</groupId>
+			<artifactId>htmlcompressor</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- HeidelTime -->
+        <dependency>
+            <groupId>org.apache.uima</groupId>
+            <artifactId>uimaj-core</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <dependency>
+			<groupId>com.github.heideltime</groupId>
+			<artifactId>heideltime</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        
+        <dependency>
+			<groupId>commons-chain</groupId>
+			<artifactId>commons-chain</artifactId>
+			<version>1.2</version>
+		</dependency>
+	</dependencies>
+
+</project>

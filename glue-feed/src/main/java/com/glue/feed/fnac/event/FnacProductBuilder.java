@@ -22,7 +22,7 @@ import com.glue.domain.Occurrence;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
 import com.glue.feed.GlueObjectBuilder;
-import com.glue.feed.html.URLFilter;
+import com.glue.feed.URLFilter;
 
 public class FnacProductBuilder implements GlueObjectBuilder<Product, Event> {
 

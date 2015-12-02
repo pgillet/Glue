@@ -1,6 +1,6 @@
 package com.glue.feed.fnac.event;
 
-import com.glue.feed.html.URLFilter;
+import com.glue.feed.URLFilter;
 
 /**
  * An URL filter that rejects the default Fnac image.

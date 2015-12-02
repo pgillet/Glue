@@ -19,11 +19,6 @@
 			<id>JHU</id>
 			<url>http://maven.mse.jhu.edu/m2repository</url>
 		</repository>
-		<repository>
-			<id>glue.feed.local</id>
-			<name>glue-feed</name>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
 	</repositories>
 
 	<build>
@@ -31,34 +26,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.github.goldin</groupId>
-				<artifactId>copy-maven-plugin</artifactId>
-				<version>0.2.5</version>
-				<executions>
-					<execution>
-						<id>copy-config</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<!-- Copy Logback configuration file -->
-								<resource>
-									<directory>${project.basedir}/src/main/resources</directory>
-									<filtering>true</filtering>
-									<targetPath>${project.basedir}/target/classes</targetPath>
-									<preservePath>true</preservePath>
-									<includes>
-										<include>logback.xml</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- mvn clean compile assembly:single -->
 			<plugin>
@@ -92,7 +59,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<properties>
 		<jersey.version>2.7</jersey.version>
 	</properties>
@@ -106,10 +73,10 @@
 		</dependency>
 		<!-- JSON Support -->
 		<dependency>
-		    <groupId>org.glassfish.jersey.media</groupId>
-		    <artifactId>jersey-media-json-jackson</artifactId>
-		    <version>${jersey.version}</version>
-		</dependency> 
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-persistence</artifactId>
@@ -132,9 +99,9 @@
 			<version>2.6.1</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -183,37 +150,18 @@
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 		</dependency>
-		<!-- Crawler commons -->
-		<dependency>
-			<groupId>com.google.code.crawler-commons</groupId>
-			<artifactId>crawler-commons</artifactId>
-			<version>0.5</version>
-		</dependency>
-		<!-- HtmlCompressor to minify HTML -->
-		<dependency>
-			<groupId>com.googlecode.htmlcompressor</groupId>
-			<artifactId>htmlcompressor</artifactId>
-			<version>1.4</version>
-		</dependency>
 		<!-- Thumbnailator - a thumbnail generation library for Java -->
 		<dependency>
-		  <groupId>net.coobird</groupId>
-		  <artifactId>thumbnailator</artifactId>
-		  <version>0.4.7</version>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.7</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.geocoder-java</groupId>
 			<artifactId>geocoder-java</artifactId>
 			<version>0.15</version>
 		</dependency>
-		
-		<!-- HeidelTime -->
-		<dependency>
-	        <groupId>de.unihd.dbs</groupId>
-	        <artifactId>heideltime</artifactId>
-	        <version>2.0.1</version>
-	    </dependency>
 
 		<!-- YouTube Data V3 support -->
 		<dependency>
@@ -227,11 +175,12 @@
 			<artifactId>google-http-client-jackson2</artifactId>
 			<version>1.12.0-beta</version>
 		</dependency>
-		
+
 		<dependency>
-    		<groupId>org.apache.opennlp</groupId>
-	   		 <artifactId>opennlp-tools</artifactId>
-	    	<version>1.5.3</version>
+			<groupId>org.apache.opennlp</groupId>
+			<artifactId>opennlp-tools</artifactId>
+			<version>1.5.3</version>
 		</dependency>
+
 	</dependencies>
 </project>
