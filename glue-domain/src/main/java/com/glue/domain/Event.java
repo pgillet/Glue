@@ -730,19 +730,19 @@ public class Event {
 
     @Override
     public String toString() {
-	return "Event [id=" + id + ", title=" + title + ", description="
-		+ description + ", summary=" + summary + ", url=" + url
-		+ ", startTime=" + startTime + ", stopTime=" + stopTime
-		+ ", timeZone=" + timeZone + ", allDay=" + allDay + ", free="
-		+ free + ", price=" + price + ", withdrawn=" + withdrawn
-		+ ", withdrawnNote=" + withdrawnNote + ", source=" + source
-		+ ", parent=" + parent + ", children=" + children + ", links="
-		+ links + ", comments=" + comments + ", performers="
-		+ performers + ", images=" + images + ", tags=" + tags
-		+ ", properties=" + properties + ", going=" + going
-		+ ", category=" + category + ", categories=" + categories
-		+ ", reference=" + reference + ", venue=" + venue
-		+ ", created=" + created + "]";
+	return "Event [id=" + id + "\ntitle=" + title + "\ndescription="
+		+ description + "\nsummary=" + summary + "\nurl=" + url
+		+ "\nstartTime=" + startTime + "\nstopTime=" + stopTime
+		+ "\ntimeZone=" + timeZone + "\nallDay=" + allDay + "\nfree="
+		+ free + "\nprice=" + price + "\nwithdrawn=" + withdrawn
+		+ "\nwithdrawnNote=" + withdrawnNote + "\nsource=" + source
+		+ "\nparent=" + parent + "\nchildren=" + children + "\nlinks="
+		+ links + "\ncomments=" + comments + "\nperformers="
+		+ performers + "\nimages=" + images + "\ntags=" + tags
+		+ "\nproperties=" + properties + "\ngoing=" + going
+		+ "\ncategory=" + category + "\ncategories=" + categories
+		+ "\nreference=" + reference + "\nvenue=" + venue
+		+ "\ncreated=" + created + "]";
     }
 
 }
