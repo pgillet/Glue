@@ -311,48 +311,49 @@ public class DateTimeProcessor {
 	    throws DocumentCreationTimeMissingException, ParseException,
 	    IOException {
 	String[] documents = new String[] {
-	// "Du 21 au 30 janvier 2015",
-	// // "Tous les samedis et vendredis de 20h à 22h00.", Not yet
-	// // managed
-	// "mer 28 jan 15 à 20:00.",
-	// "lun 27 avr 15, 20:00",
-		// "sam 3 jan",
-	// "Du 11 novembre 2014 au 15 janvier 2015",
-	// "Le 16 janvier 2015",
-	// "mercredi 1er samedi 4 et dimanche 5 avril à 10h30 et 16h45",
-	// "Le mercredi 4 et le samedi 7 et le dimanche 8 mars" /*
-	// * à 10h30
-	// * et
-	// * 16h45"
-	// */,
-	// "mercredi 4 et samedi 7 et dimanche 8 mars à 10h30 et 16h45",
-	// "Le mercredi 4 et le dimanche 8 mars",
-	// "Le mercredi 4",
-	// "21.03",
-	// "le lundi, mardi et jeudi",
-	// "mercredi 1er avril à 10h30 et 16h45",
-	// "lundi 20, mardi 21 mercredi 22 jeudi 23 vendredi 24 samedi 25 et dimanche 26 avril à 10h30 et 16h45",
-		// "9-10-11 AVRIL 15", "27.03.15",
-	// "DU 05/05/2015 AU 20/12/2015",
-	// "le 8/11/2015 à 19:30", "20 nov. à 20h00",
-	// "Les 26 et 27 Novembre</br>Les 3, 10, 12, 17, 19, 21, 22, 23, 26, 28, 29 et 30 Décembre</br>Le 2 Janvier",
-	// "Les 3, 10, 12, 17, 19, 21, 22, 23, 26, 28, 29 et 30 Décembre",
-		// "du 20 au 30 juin",
-
-	// "Tous les jours du lundi 13 au dimanche 19 avril",
-
-		"Le jeudi 24 décembre",
-		"Du lundi 21 décembre au vendredi 25 décembre"
-	};
+		"Du 21 au 30 janvier 2015",
+		// "Tous les samedis et vendredis de 20h à 22h00.", Not yet
+		// managed
+		"mer 28 jan 15 à 20:00.",
+		"lun 27 avr 15, 20:00",
+		"sam 3 jan",
+		"Du 11 novembre 2014 au 15 janvier 2015",
+		"Le 16 janvier 2015",
+		"mercredi 1er samedi 4 et dimanche 5 avril à 10h30 et 16h45",
+		"Le mercredi 4 et le samedi 7 et le dimanche 8 mars à 10h30 et 16h45",
+		"mercredi 4 et samedi 7 et dimanche 8 mars à 10h30 et 16h45",
+		"Le mercredi 4 et le dimanche 8 mars",
+		"Le mercredi 4",
+		"21.03",
+		"le lundi, mardi et jeudi",
+		"mercredi 1er avril à 10h30 et 16h45",
+		"lundi 20, mardi 21 mercredi 22 jeudi 23 vendredi 24 samedi 25 et dimanche 26 avril à 10h30 et 16h45",
+		"9-10-11 AVRIL 15",
+		"27.03.15",
+		"DU 05/05/2015 AU 20/12/2015",
+		"le 8/11/2015 à 19:30",
+		"20 nov. à 20h00",
+		"Les 26 et 27 Novembre</br>Les 3, 10, 12, 17, 19, 21, 22, 23, 26, 28, 29 et 30 Décembre</br>Le 2 Janvier",
+		"Les 3, 10, 12, 17, 19, 21, 22, 23, 26, 28, 29 et 30 Décembre",
+		"du 20 au 30 juin",
+		"Tous les jours du lundi 13 au dimanche 19 avril",
+		"Le jeudi 24 décembre", "Le jeudi 24 décembre à 20h00",
+		"Du lundi 21 décembre au vendredi 25 décembre" };
 
 	Map<String, DateTimeProcessor> results = new HashMap<>();
 
 	for (String document : documents) {
 	    DateTimeProcessor dateTimeProcessor = new DateTimeProcessor();
-	    dateTimeProcessor.process(document.toLowerCase()); // TODO: thinking
-							       // about the case
+	    try {
+		dateTimeProcessor.process(document.toLowerCase()); // TODO:
+								   // thinking
+								   // about the
+								   // case
 
-	    results.put(document, dateTimeProcessor);
+		results.put(document, dateTimeProcessor);
+	    } catch (Exception e) {
+		LOG.error(e.getMessage(), e);
+	    }
 	}
 
 	// Display results
