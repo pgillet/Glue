@@ -655,17 +655,17 @@ public class Venue {
      */
     @Override
     public String toString() {
-	return "Venue [name=" + name + ", description=" + description
-		+ ", type=" + type + ", address=" + address + ", city=" + city
-		+ ", region=" + region + ", regionAbbreviation="
-		+ regionAbbreviation + ", postalCode=" + postalCode
-		+ ", country=" + country + ", countryTwoLetterAbbreviation="
+	return "Venue [name=" + name + "\ndescription=" + description
+		+ "\ntype=" + type + "\naddress=" + address + "\ncity=" + city
+		+ "\nregion=" + region + "\nregionAbbreviation="
+		+ regionAbbreviation + "\npostalCode=" + postalCode
+		+ "\ncountry=" + country + "\ncountryTwoLetterAbbreviation="
 		+ countryTwoLetterAbbreviation
-		+ ", countryThreeLetterAbbreviation="
-		+ countryThreeLetterAbbreviation + ", latitude=" + latitude
-		+ ", longitude=" + longitude + ", url=" + url
-		+ ", geocodeType=" + geocodeType + ", created=" + created
-		+ ", timeZone=" + timeZone + ", reference=" + reference + "]";
+		+ "\ncountryThreeLetterAbbreviation="
+		+ countryThreeLetterAbbreviation + "\nlatitude=" + latitude
+		+ "\nlongitude=" + longitude + "\nurl=" + url
+		+ "\ngeocodeType=" + geocodeType + "\ncreated=" + created
+		+ "\ntimeZone=" + timeZone + "\nreference=" + reference + "]";
     }
 
 }
