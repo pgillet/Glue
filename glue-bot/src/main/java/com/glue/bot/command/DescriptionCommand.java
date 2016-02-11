@@ -31,6 +31,8 @@ public class DescriptionCommand extends BaseCommand implements Command {
     @Override
     public boolean execute(Context context) throws Exception {
 
+	LOG.trace("Entering " + this.getClass().getName() + " execute method");
+
 	Element elem = (Element) context.get(getElementKey());
 	Event event = (Event) context.get(getEventKey());
 
@@ -47,6 +49,8 @@ public class DescriptionCommand extends BaseCommand implements Command {
 	    event.setDescription(StringUtils.defaultIfBlank(description,
 		    event.getDescription()));
 	}
+
+	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 
 	return Command.CONTINUE_PROCESSING;
     }

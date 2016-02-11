@@ -31,6 +31,8 @@ public class ImageCommand extends BaseCommand implements Command {
     @Override
     public boolean execute(Context context) throws Exception {
 
+	LOG.trace("Entering " + this.getClass().getName() + " execute method");
+
 	Element elem = (Element) context.get(getElementKey());
 	Event event = (Event) context.get(getEventKey());
 	String imageSelector = (String) context.get(getImageSelectorKey());
@@ -56,6 +58,8 @@ public class ImageCommand extends BaseCommand implements Command {
 		event.getImages().add(image);
 	    }
 	}
+
+	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 
 	return Command.CONTINUE_PROCESSING;
     }

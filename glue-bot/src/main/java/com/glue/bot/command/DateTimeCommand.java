@@ -77,6 +77,9 @@ public class DateTimeCommand extends BaseCommand implements Command {
      */
     @Override
     public boolean execute(Context context) throws Exception {
+
+	LOG.trace("Entering " + this.getClass().getName() + " execute method");
+
 	Element elem = (Element) context.get(getElementKey());
 	Event event = (Event) context.get(getEventKey());
 
@@ -131,6 +134,8 @@ public class DateTimeCommand extends BaseCommand implements Command {
 		throw new ParseException("Dates could not be found", -1);
 	    }
 	}
+
+	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 
 	return Command.CONTINUE_PROCESSING;
 

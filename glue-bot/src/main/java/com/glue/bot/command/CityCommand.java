@@ -27,6 +27,8 @@ public class CityCommand extends BaseCommand implements Command {
     @Override
     public boolean execute(Context context) throws Exception {
 
+	LOG.trace("Entering " + this.getClass().getName() + " execute method");
+
 	Element elem = (Element) context.get(getElementKey());
 	Venue venue = (Venue) context.get(getVenueKey());
 
@@ -36,6 +38,9 @@ public class CityCommand extends BaseCommand implements Command {
 	    String city = elem.select(citySelector).text();
 	    venue.setCity(StringUtils.defaultIfBlank(city, venue.getCity()));
 	}
+
+	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
+
 	return Command.CONTINUE_PROCESSING;
     }
 
