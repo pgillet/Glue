@@ -28,7 +28,7 @@ import org.apache.commons.chain.Chain;
  * <code>get("foo")</code>, and a value stored via a call to
  * <code>put("foo", value)</code> should be visible by calling
  * <code>getFoo()</code>. If your {@link Context} implementation class exhibits
- * this featue, it becomes easier to reuse the implementation in multiple
+ * this feature, it becomes easier to reuse the implementation in multiple
  * environments, without the need to cast to a particular implementation class
  * in order to access the property getter and setter methods.
  * </p>

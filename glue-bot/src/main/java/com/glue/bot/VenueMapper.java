@@ -1,11 +1,20 @@
 package com.glue.bot;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import com.glue.domain.Image;
-import com.glue.domain.ImageItem;
+import com.glue.bot.command.AddressCommand;
+import com.glue.bot.command.CityCommand;
+import com.glue.bot.command.ForwardCommand;
+import com.glue.bot.command.InitVenueCommand;
+import com.glue.bot.command.NarrowerCommand;
+import com.glue.bot.command.VenueDescriptionCommand;
+import com.glue.bot.command.VenueImageCommand;
+import com.glue.bot.command.VenueNameCommand;
+import com.glue.bot.command.WebsiteCommand;
+import com.glue.chain.Chain;
+import com.glue.chain.Context;
+import com.glue.chain.impl.ChainBase;
+import com.glue.chain.impl.ContextBase;
 import com.glue.domain.Venue;
 
 public class VenueMapper implements HtmlMapper<Venue> {
@@ -34,122 +43,39 @@ public class VenueMapper implements HtmlMapper<Venue> {
     @Override
     public Venue parse(Element e) throws Exception {
 
-	Element elem = e;
-	String location = null;
-	Elements elems;
+	Chain chain = new ChainBase();
 
-	if ("a".equals(elem.tagName())) {
-	    location = elem.attr("abs:href");
-	    elem = hf.fetch(location);
-	}
+	chain.addCommand(new ForwardCommand());
+	chain.addCommand(new NarrowerCommand());
+	chain.addCommand(new InitVenueCommand());
+	chain.addCommand(new VenueNameCommand());
+	chain.addCommand(new AddressCommand());
+	chain.addCommand(new CityCommand());
+	chain.addCommand(new WebsiteCommand());
+	chain.addCommand(new VenueDescriptionCommand());
+	chain.addCommand(new VenueImageCommand());
 
-	if (selectors.getRootBlock() != null) {
-	    Elements tmp = elem.select(selectors.getRootBlock());
-	    Validate.single(tmp);
-	    elem = tmp.get(0);
-	}
 
-	Venue venue = getRefCopy();
+	Context context = new ContextBase();
+	context.put(SelectorKeys.ELEMENT_KEY, e);
+	context.put(SelectorKeys.ROOT_BLOCK_SELECTOR_KEY,
+		selectors.getRootBlock());
+	context.put(SelectorKeys.VENUE_TEMPLATE_KEY, venueTemplate);
+	context.put(SelectorKeys.VENUE_NAME_SELECTOR_KEY,
+		selectors.getVenueName());
+	context.put(SelectorKeys.VENUE_ADDRESS_SELECTOR_KEY,
+		selectors.getVenueAddress());
+	context.put(SelectorKeys.CITY_SELECTOR_KEY, selectors.getCity());
+	context.put(SelectorKeys.WEBSITE_SELECTOR_KEY, selectors.getWebsite());
+	context.put(SelectorKeys.DESCRIPTION_SELECTOR_KEY,
+		selectors.getDescription());
+	context.put(SelectorKeys.IMAGE_SELECTOR_KEY, selectors.getThumbnail());
 
-	// Venue name
+	chain.execute(context);
 
-	elems = elem.select(selectors.getVenueName());
-	Validate.single(elems);
-	String name = elems.text();
-	venue.setName(StringUtils.defaultIfBlank(name, venue.getName()));
-
-	// Address
-	if (selectors.getVenueAddress() != null) {
-	    String address = elem.select(selectors.getVenueAddress()).text();
-	    venue.setAddress(StringUtils.defaultIfBlank(address,
-		    venue.getAddress()));
-	}
-
-	if (selectors.getCity() != null) {
-	    String city = elem.select(selectors.getCity()).text();
-	    venue.setCity(StringUtils.defaultIfBlank(city, venue.getCity()));
-	}
-
-	if (selectors.getWebsite() != null) {
-	    String url = elem.select(selectors.getWebsite()).text();
-	    venue.setUrl(StringUtils.defaultIfBlank(url, venue.getUrl()));
-	}
-
-	if (selectors.getDescription() != null) {
-	    String description = elem.select(selectors.getDescription()).text();
-	    venue.setDescription(StringUtils.defaultIfBlank(description,
-		    venue.getDescription()));
-	}
-
-	// details.getPhoneNumber();
-
-	// Images
-	String thumbnailQuery = selectors.getThumbnail();
-	if (thumbnailQuery != null) {
-	    elems = elem.select(thumbnailQuery);
-	    // Get media
-	    elems = elems.select(HtmlTags.IMAGE);
-
-	    for (Element imgElement : elems) {
-
-		String imageUrl = imgElement.attr("abs:src");
-
-		ImageItem item = new ImageItem();
-		item.setUrl(imageUrl);
-
-		Image image = new Image();
-		image.setOriginal(item);
-		image.setUrl(imageUrl);
-		image.setSource(location);
-		image.setSticky(true);
-
-		venue.getImages().add(image);
-	    }
-	}
+	Venue venue = (Venue) context.get(SelectorKeys.VENUE_KEY);
 
 	return venue;
-    }
-
-    /**
-     * Returns a dumb copy of the reference event.
-     * 
-     * @return
-     */
-    private Venue getRefCopy() {
-	Venue copy = new Venue();
-
-	copy.setAddress(venueTemplate.getAddress());
-	copy.setChildren(venueTemplate.getChildren());
-	copy.setCity(venueTemplate.getCity());
-	copy.setComments(venueTemplate.getComments());
-	copy.setCountry(venueTemplate.getCountry());
-	copy.setCountryThreeLetterAbbreviation(venueTemplate
-		.getCountryThreeLetterAbbreviation());
-	copy.setCountryTwoLetterAbbreviation(venueTemplate
-		.getCountryTwoLetterAbbreviation());
-	copy.setCreated(venueTemplate.getCreated());
-	copy.setDescription(venueTemplate.getDescription());
-	copy.setEvents(venueTemplate.getEvents());
-	copy.setGeocodeType(venueTemplate.getGeocodeType());
-	copy.setId(venueTemplate.getId());
-	copy.setImages(venueTemplate.getImages());
-	copy.setLatitude(venueTemplate.getLatitude());
-	copy.setLongitude(venueTemplate.getLongitude());
-	copy.setLinks(venueTemplate.getLinks());
-	copy.setName(venueTemplate.getName());
-	copy.setParent(venueTemplate.getParent());
-	copy.setPostalCode(venueTemplate.getPostalCode());
-	copy.setProperties(venueTemplate.getProperties());
-	copy.setReference(venueTemplate.isReference());
-	copy.setRegion(venueTemplate.getRegion());
-	copy.setRegionAbbreviation(venueTemplate.getRegionAbbreviation());
-	copy.setSource(venueTemplate.getSource());
-	copy.setTags(venueTemplate.getTags());
-	copy.setTimeZone(venueTemplate.getTimeZone());
-	copy.setType(venueTemplate.getType());
-	copy.setUrl(venueTemplate.getUrl());
-
-	return copy;
     }
 
 }

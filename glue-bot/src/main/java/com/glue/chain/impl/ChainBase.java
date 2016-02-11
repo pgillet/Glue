@@ -153,10 +153,10 @@ public class ChainBase implements Chain {
      *
      * @return <code>true</code> if the processing of this {@link Context} has
      *         been completed, or <code>false</code> if the processing of this
-     *         {@link Context} should be delegated to a subsequent
+     *         {@link Context} should be continued to a subsequent
      *         {@link Command} in an enclosing {@link Chain}
      */
-    public void execute(Context context) throws Exception {
+    public boolean execute(Context context) throws Exception {
 
 	// Verify our parameters
 	if (context == null) {
@@ -168,12 +168,16 @@ public class ChainBase implements Chain {
 
 	// Execute the commands in this list until one returns true
 	// or throws an exception
+	boolean saveResult = false;
 	Exception saveException = null;
 	int i = 0;
 	int n = commands.length;
 	for (i = 0; i < n; i++) {
 	    try {
-		commands[i].execute(context);
+		saveResult = commands[i].execute(context);
+		if (saveResult) {
+		    break;
+		}
 	    } catch (Exception e) {
 		saveException = e;
 		break;
@@ -203,6 +207,8 @@ public class ChainBase implements Chain {
 	// Return the exception or result state from the last execute()
 	if ((saveException != null) && !handled) {
 	    throw saveException;
+	} else {
+	    return (saveResult);
 	}
 
     }

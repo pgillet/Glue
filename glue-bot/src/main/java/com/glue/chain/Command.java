@@ -1,7 +1,5 @@
 package com.glue.chain;
 
-import org.apache.commons.chain.Chain;
-
 /**
  * <p>A {@link Command} encapsulates a unit of processing work to be
  * performed, whose purpose is to examine and/or modify the state of a
@@ -64,9 +62,32 @@ public interface Command {
 
     /**
      * <p>
+     * Commands should return <code>CONTINUE_PROCESSING</code> if the processing
+     * of the given {@link Context} should be delegated to a subsequent
+     * {@link Command} in an enclosing {@link Chain}.
+     * </p>
+     *
+     * @since Chain 1.1
+     */
+    public static final boolean CONTINUE_PROCESSING = false;
+
+    /**
+     * <p>
+     * Commands should return <code>PROCESSING_COMPLETE</code> if the processing
+     * of the given {@link Context} has been completed.
+     * </p>
+     *
+     * @since Chain 1.1
+     */
+    public static final boolean PROCESSING_COMPLETE = true;
+
+    /**
+     * <p>
      * Execute a unit of processing work to be performed. This {@link Command}
-     * completes its own processing, then delegates remaining processing to the
-     * next {@link Command} in a {@link Chain} containing this {@link Command}.
+     * may either complete the required processing and return <code>true</code>,
+     * or delegate remaining processing to the next {@link Command} in a
+     * {@link Chain} containing this {@link Command} by returning
+     * <code>false</code>
      *
      * @param context
      *            The {@link Context} to be processed by this {@link Command}
@@ -76,8 +97,13 @@ public interface Command {
      *                termination
      * @exception IllegalArgumentException
      *                if <code>context</code> is <code>null</code>
+     *
+     * @return <code>true</code> if the processing of this {@link Context} has
+     *         been completed, or <code>false</code> if the processing of this
+     *         {@link Context} should be continued to a subsequent
+     *         {@link Command} in an enclosing {@link Chain}
      */
-    void execute(Context context) throws Exception;
+    boolean execute(Context context) throws Exception;
 
 
 }

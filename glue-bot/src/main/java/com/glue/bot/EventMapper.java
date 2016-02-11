@@ -1,24 +1,24 @@
 package com.glue.bot;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
+import com.glue.bot.command.DateTimeCommand;
+import com.glue.bot.command.DescriptionCommand;
+import com.glue.bot.command.ForwardCommand;
+import com.glue.bot.command.ImageCommand;
+import com.glue.bot.command.InitEventCommand;
+import com.glue.bot.command.NarrowerCommand;
+import com.glue.bot.command.PriceListCommand;
+import com.glue.bot.command.TitleCommand;
+import com.glue.chain.Chain;
+import com.glue.chain.Context;
+import com.glue.chain.impl.ChainBase;
+import com.glue.chain.impl.ContextBase;
 import com.glue.domain.Event;
-import com.glue.domain.Image;
-import com.glue.domain.ImageItem;
-import com.glue.domain.Occurrence;
 import com.glue.domain.Venue;
 import com.glue.time.DateTimeProcessor;
-import com.glue.time.DateTimeProcessor.Interval;
 
 public class EventMapper implements HtmlMapper<Event> {
 
@@ -52,125 +52,34 @@ public class EventMapper implements HtmlMapper<Event> {
     @Override
     public Event parse(Element e) throws Exception {
 
-	Element elem = e;
-	Elements elems;
-	String location = null;
+	Chain chain = new ChainBase();
 
-	if ("a".equals(elem.tagName())) {
-	    location = elem.attr("abs:href");
-	    elem = hf.fetch(location);
-	}
+	chain.addCommand(new ForwardCommand());
+	chain.addCommand(new NarrowerCommand());
+	chain.addCommand(new InitEventCommand());
+	chain.addCommand(new TitleCommand());
+	chain.addCommand(new DescriptionCommand());
+	chain.addCommand(new DateTimeCommand());
+	chain.addCommand(new ImageCommand());
+	chain.addCommand(new PriceListCommand());
 
-	if (selectors.getRootBlock() != null) {
-	    Elements tmp = elem.select(selectors.getRootBlock());
-	    Validate.single(tmp);
-	    elem = tmp.get(0);
-	}
+	Context context = new ContextBase();
+	context.put(SelectorKeys.ELEMENT_KEY, e);
+	context.put(SelectorKeys.ROOT_BLOCK_SELECTOR_KEY, selectors.getRootBlock());
+	context.put(SelectorKeys.EVENT_TEMPLATE_KEY, eventTemplate);
+	context.put(SelectorKeys.TITLE_SELECTOR_KEY, selectors.getTitle());
+	context.put(SelectorKeys.DESCRIPTION_SELECTOR_KEY,
+		selectors.getDescription());
+	context.put(SelectorKeys.DATE_PATTERN_KEY,
+		selectors.getDatePattern());
+	context.put(SelectorKeys.DATE_SELECTOR_KEY, selectors.getDates());
+	context.put(SelectorKeys.LOCALE_KEY, selectors.getLocale());
+	context.put(SelectorKeys.IMAGE_SELECTOR_KEY, selectors.getThumbnail());
+	context.put(SelectorKeys.PRICE_SELECTOR_KEY, selectors.getPrice());
 
-	Event event = getRefCopy();
+	chain.execute(context);
 
-	event.setUrl(location);
-
-	// Title
-	event.setTitle(StringUtils.defaultIfEmpty(
-		elem.select(selectors.getTitle()).text(), event.getTitle()));
-
-	// Description
-	if (selectors.getDescription() != null) {
-	    elems = elem.select(selectors.getDescription());
-	    Validate.notEmpty(elems);
-
-	    String description = elems.html();
-	    description = HtmlUtils.cleanHtml(description);
-
-	    event.setDescription(StringUtils.defaultIfBlank(description,
-		    event.getDescription()));
-	}
-
-	// Dates
-	String datePattern = selectors.getDatePattern();
-	elems = selectors.getDates() != null ? elem
-		.select(selectors.getDates()) : elem.children();
-	Validate.notEmpty(elems);
-
-	String dates = elems.text(); // html() ?
-
-	if (datePattern != null) {
-
-	    DateFormat df = new SimpleDateFormat(datePattern,
-		    selectors.getLocale());
-	    TimeZone tz = TimeZone.getTimeZone("UTC");
-	    df.setTimeZone(tz);
-
-	    Date startTime = df.parse(dates);
-	    event.setStartTime(startTime);
-	    event.setStopTime(startTime);
-	} else {
-	    boolean success = dateTimeProcessor.process(dates);
-
-	    if (success) {
-
-		Set<Interval> intervals = dateTimeProcessor.getIntervals();
-		if (!intervals.isEmpty()) {
-		    Interval it = dateTimeProcessor.getLastElement(intervals);
-
-		    event.setStartTime(it.getStartTime());
-		    event.setStopTime(it.getStopTime());
-		} else {
-
-		    Set<Date> datesCol = dateTimeProcessor.getDates();
-		    if (datesCol.size() == 1) {
-			Date d = datesCol.iterator().next();
-			event.setStartTime(d);
-			event.setStopTime(d);
-		    } else {
-			for (Date date : datesCol) {
-			    Occurrence occur = new Occurrence();
-			    occur.setStartTime(date);
-			    occur.setStopTime(date);
-			}
-		    }
-		}
-
-	    } else {
-		throw new ParseException("Dates could not be found", -1);
-	    }
-	}
-
-	// Thumbnail
-	String thumbnailQuery = selectors.getThumbnail();
-	if (thumbnailQuery != null) {
-	    elems = elem.select(thumbnailQuery);
-	    // Get media
-	    elems = elems.select(HtmlTags.IMAGE);
-
-	    for (Element imgElement : elems) {
-
-		String imageUrl = imgElement.attr("abs:src");
-
-		ImageItem item = new ImageItem();
-		item.setUrl(imageUrl);
-
-		Image image = new Image();
-		image.setOriginal(item);
-		image.setUrl(imageUrl);
-		image.setSource(location);
-		image.setSticky(true);
-
-		event.getImages().add(image);
-	    }
-	}
-
-	// Price
-	if(selectors.getPrice() != null) {
-	    String price = elem.select(selectors.getPrice()).text();
-	    price = StringUtils.defaultIfBlank(price, event.getPrice());
-	    event.setPrice(price);
-	}
-
-	// Things to handle for sure!
-	// details.getAudience();
-	// details.getEventType()
+	Event event = (Event) context.get(SelectorKeys.EVENT_KEY);
 
 	// Venue
 	VenueSelectors venueSelectors = selectors.getVenueSelectors();
@@ -183,52 +92,11 @@ public class EventMapper implements HtmlMapper<Event> {
 		vms.setVenueTemplate(eventTemplate.getVenue());
 	    }
 
-	    Venue venue = vms.parse(elem);
+	    Venue venue = vms.parse(e);
 	    event.setVenue(venue);
 	}
 
 	return event;
-    }
-
-    /**
-     * Returns a dumb copy of the reference event.
-     * 
-     * @return
-     */
-    private Event getRefCopy() {
-	Event copy = new Event();
-
-	copy.setAllDay(eventTemplate.isAllDay());
-	copy.setCategories(eventTemplate.getCategories());
-	copy.setCategory(eventTemplate.getCategory());
-	copy.setChildren(eventTemplate.getChildren());
-	copy.setComments(eventTemplate.getComments());
-	copy.setCreated(eventTemplate.getCreated());
-	copy.setDescription(eventTemplate.getDescription());
-	copy.setFree(eventTemplate.isFree());
-	copy.setGoing(eventTemplate.getGoing());
-	// copy.setId(id);
-	// copy.setImages(eventRef.getImages());
-	copy.setLinks(eventTemplate.getLinks());
-	copy.setOccurrences(eventTemplate.getOccurrences());
-	copy.setParent(eventTemplate.getParent());
-	copy.setPerformers(eventTemplate.getPerformers());
-	copy.setPrice(eventTemplate.getPrice());
-	copy.setProperties(eventTemplate.getProperties());
-	copy.setReference(eventTemplate.isReference());
-	copy.setSource(eventTemplate.getSource());
-	copy.setStartTime(eventTemplate.getStartTime());
-	copy.setStopTime(eventTemplate.getStopTime());
-	copy.setSummary(eventTemplate.getSummary());
-	copy.setTags(eventTemplate.getTags());
-	copy.setTimeZone(eventTemplate.getTimeZone());
-	copy.setTitle(eventTemplate.getTitle());
-	copy.setUrl(eventTemplate.getUrl());
-	copy.setVenue(eventTemplate.getVenue());
-	copy.setWithdrawn(eventTemplate.isWithdrawn());
-	copy.setWithdrawnNote(eventTemplate.getWithdrawnNote());
-
-	return copy;
     }
 
 }

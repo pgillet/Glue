@@ -89,7 +89,11 @@ public interface Chain extends Command {
      *                <code>postprocess()</code> method of a {@link Filter}
      * @exception IllegalArgumentException
      *                if <code>context</code> is <code>null</code>
+     * @return <code>true</code> if the processing of this {@link Context} has
+     *         been completed, or <code>false</code> if the processing of this
+     *         {@link Context} should be continued to a subsequent
+     *         {@link Command} in an enclosing {@link Chain}
      */
-    void execute(Context context) throws Exception;
+    boolean execute(Context context) throws Exception;
 
 }
