@@ -52,13 +52,19 @@
 				<artifactId>jsoup</artifactId>
 				<version>1.8.3</version>
 			</dependency>
+			<!-- Gson -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.6.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
 			<plugins>
-			    <plugin>
+				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>properties-maven-plugin</artifactId>
 					<version>1.0-alpha-2</version>
@@ -87,7 +93,7 @@
 						</execution>
 					</executions>
 				</plugin>
-			    <plugin>
+				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
@@ -104,7 +110,7 @@
 					<version>2.1</version>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
-						only. It has no influence on the Maven build itself. -->
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -133,9 +139,9 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute >
-             								<runOnIncremental>false</runOnIncremental>
-           								</execute >
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -154,9 +160,9 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute >
-             								<runOnIncremental>false</runOnIncremental>
-           								</execute >
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -176,9 +182,9 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute >
-             								<runOnIncremental>false</runOnIncremental>
-           								</execute >
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -220,34 +226,34 @@
 				<module>glue-webapp</module>
 			</modules>
 		</profile>
-		
-		<profile>  
-    		<id>dev</id>
-    		<activation>  
-      			<activeByDefault>true</activeByDefault>  
-    		</activation>
+
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<filters>
 					<filter>../glue_dev.properties</filter>
-				</filters>			
+				</filters>
 			</build>
-    		<properties>  
-      			<build.profile.id>dev</build.profile.id>
-		        <javax.faces.project.stage>Development</javax.faces.project.stage>
-	   		</properties>  		
-  		</profile>  
-  		<profile>  
-    		<id>prod</id>
+			<properties>
+				<build.profile.id>dev</build.profile.id>
+				<javax.faces.project.stage>Development</javax.faces.project.stage>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
 			<build>
 				<filters>
 					<filter>../glue_prod.properties</filter>
-				</filters>			
+				</filters>
 			</build>
-    		<properties>  
-     			<build.profile.id>prod</build.profile.id>
-				<javax.faces.project.stage>Production</javax.faces.project.stage>  
-    		</properties>  
-	  	</profile> 
+			<properties>
+				<build.profile.id>prod</build.profile.id>
+				<javax.faces.project.stage>Production</javax.faces.project.stage>
+			</properties>
+		</profile>
 	</profiles>
 
 </project>

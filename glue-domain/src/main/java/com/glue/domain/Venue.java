@@ -648,24 +648,24 @@ public class Venue {
 	this.source = source;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-	return "Venue [name=" + name + "\ndescription=" + description
-		+ "\ntype=" + type + "\naddress=" + address + "\ncity=" + city
-		+ "\nregion=" + region + "\nregionAbbreviation="
-		+ regionAbbreviation + "\npostalCode=" + postalCode
-		+ "\ncountry=" + country + "\ncountryTwoLetterAbbreviation="
+	return "Venue [id=" + id + ", name=" + name + ", description="
+		+ description + ", type=" + type + ", address=" + address
+		+ ", city=" + city + ", region=" + region
+		+ ", regionAbbreviation=" + regionAbbreviation
+		+ ", postalCode=" + postalCode + ", country=" + country
+		+ ", countryTwoLetterAbbreviation="
 		+ countryTwoLetterAbbreviation
-		+ "\ncountryThreeLetterAbbreviation="
-		+ countryThreeLetterAbbreviation + "\nlatitude=" + latitude
-		+ "\nlongitude=" + longitude + "\nurl=" + url
-		+ "\ngeocodeType=" + geocodeType + "\ncreated=" + created
-		+ "\ntimeZone=" + timeZone + "\nreference=" + reference + "]";
+		+ ", countryThreeLetterAbbreviation="
+		+ countryThreeLetterAbbreviation + ", latitude=" + latitude
+		+ ", longitude=" + longitude + ", url=" + url
+		+ ", geocodeType=" + geocodeType + ", source=" + source
+		+ ", parent=" + parent + ", children=" + children + ", events="
+		+ events + ", links=" + links + ", comments=" + comments
+		+ ", images=" + images + ", properties=" + properties
+		+ ", tags=" + tags + ", created=" + created + ", timeZone="
+		+ timeZone + ", reference=" + reference + "]";
     }
 
 }

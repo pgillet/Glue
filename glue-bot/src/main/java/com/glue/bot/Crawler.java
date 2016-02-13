@@ -4,6 +4,9 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  * Annotation-based HTML to Object Mapper using JSoup Parser.
  * 
@@ -17,6 +20,11 @@ public class Crawler<T> implements Extractor {
 
     private BrowsingStrategy browsingStrategy;
     private HtmlMapper<T> mappingStrategy;
+
+    /**
+     * For JSON pretty printing.
+     */
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /**
      * Pass in the class Java bean that will contain the mapped data from the
@@ -58,7 +66,9 @@ public class Crawler<T> implements Extractor {
 
 	try {
 	    T obj = mappingStrategy.parse(e);
-	    LOG.info("Item parsed = " + obj);
+
+	    String jsonObj = gson.toJson(obj);
+	    LOG.info("Item parsed = " + jsonObj);
 	} catch (Exception ex) {
 	    LOG.error(ex.getMessage(), ex);
 	    throw ex;
