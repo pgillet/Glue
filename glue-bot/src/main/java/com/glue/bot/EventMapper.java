@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 
 import com.glue.bot.command.DateTimeCommand;
 import com.glue.bot.command.DescriptionCommand;
+import com.glue.bot.command.EventUrlCommand;
 import com.glue.bot.command.ForwardCommand;
 import com.glue.bot.command.ImageCommand;
 import com.glue.bot.command.InitEventCommand;
@@ -57,6 +58,7 @@ public class EventMapper implements HtmlMapper<Event> {
 	chain.addCommand(new ForwardCommand());
 	chain.addCommand(new NarrowerCommand());
 	chain.addCommand(new InitEventCommand());
+	chain.addCommand(new EventUrlCommand());
 	chain.addCommand(new TitleCommand());
 	chain.addCommand(new DescriptionCommand());
 	chain.addCommand(new DateTimeCommand());
