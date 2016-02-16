@@ -41,8 +41,7 @@ public class Crawler<T> implements Extractor {
 	this.mappingStrategy = new AnnotationMappingStrategy<T>(classModel);
     }
 
-    public Crawler(SiteMap siteMap,
-	    HtmlMapper<T> mappingStrategy) {
+    public Crawler(SiteMap siteMap, HtmlMapper<T> mappingStrategy) {
 	this.browsingStrategy = new PaginatedListStrategy(siteMap);
 	this.browsingStrategy.setExtractor(this);
 
@@ -67,8 +66,10 @@ public class Crawler<T> implements Extractor {
 	try {
 	    T obj = mappingStrategy.parse(e);
 
-	    String jsonObj = gson.toJson(obj);
-	    LOG.info("Item parsed = " + jsonObj);
+	    if (obj != null) {
+		String jsonObj = gson.toJson(obj);
+		LOG.info("Item parsed = " + jsonObj);
+	    }
 	} catch (Exception ex) {
 	    LOG.error(ex.getMessage(), ex);
 	    throw ex;

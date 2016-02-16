@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.nodes.Element;
 
+import com.glue.bot.command.CacheVisitedCommand;
 import com.glue.bot.command.DateTimeCommand;
 import com.glue.bot.command.DescriptionCommand;
 import com.glue.bot.command.EventUrlCommand;
@@ -31,6 +32,10 @@ public class EventMapper implements HtmlMapper<Event> {
 
     private HtmlFetcher hf = new HtmlFetcher();
 
+    private Chain chain;
+
+    private VenueMapper venueMapper;
+
     public EventMapper(EventSelectors selectors) throws IOException {
 	this(selectors, null);
     }
@@ -40,6 +45,7 @@ public class EventMapper implements HtmlMapper<Event> {
 	this.selectors = selectors;
 	this.eventTemplate = eventTemplate;
 	dateTimeProcessor = new DateTimeProcessor();
+	init();
     }
 
     public Event getEventTemplate() {
@@ -53,9 +59,41 @@ public class EventMapper implements HtmlMapper<Event> {
     @Override
     public Event parse(Element e) throws Exception {
 
-	Chain chain = new ChainBase();
+	Event event = null;
+
+	// Build a whole new context for each event webpage
+	Context context = new ContextBase();
+	context.put(SelectorKeys.ELEMENT_KEY, e);
+	context.put(SelectorKeys.ROOT_BLOCK_SELECTOR_KEY,
+		selectors.getRootBlock());
+	context.put(SelectorKeys.EVENT_TEMPLATE_KEY, eventTemplate);
+	context.put(SelectorKeys.TITLE_SELECTOR_KEY, selectors.getTitle());
+	context.put(SelectorKeys.DESCRIPTION_SELECTOR_KEY,
+		selectors.getDescription());
+	context.put(SelectorKeys.DATE_PATTERN_KEY, selectors.getDatePattern());
+	context.put(SelectorKeys.DATE_SELECTOR_KEY, selectors.getDates());
+	context.put(SelectorKeys.LOCALE_KEY, selectors.getLocale());
+	context.put(SelectorKeys.IMAGE_SELECTOR_KEY, selectors.getThumbnail());
+	context.put(SelectorKeys.PRICE_SELECTOR_KEY, selectors.getPrice());
+
+	/* if ( */chain.execute(context); /* ) { */
+
+	event = (Event) context.get(SelectorKeys.EVENT_KEY);
+
+	if ((event != null) && (venueMapper != null)) {
+	    Venue venue = venueMapper.parse(e);
+	    event.setVenue(venue);
+	}
+	/* } */
+
+	return event;
+    }
+
+    private void init() throws IOException {
+	chain = new ChainBase();
 
 	chain.addCommand(new ForwardCommand());
+	chain.addCommand(new CacheVisitedCommand());
 	chain.addCommand(new NarrowerCommand());
 	chain.addCommand(new InitEventCommand());
 	chain.addCommand(new EventUrlCommand());
@@ -65,40 +103,14 @@ public class EventMapper implements HtmlMapper<Event> {
 	chain.addCommand(new ImageCommand());
 	chain.addCommand(new PriceListCommand());
 
-	Context context = new ContextBase();
-	context.put(SelectorKeys.ELEMENT_KEY, e);
-	context.put(SelectorKeys.ROOT_BLOCK_SELECTOR_KEY, selectors.getRootBlock());
-	context.put(SelectorKeys.EVENT_TEMPLATE_KEY, eventTemplate);
-	context.put(SelectorKeys.TITLE_SELECTOR_KEY, selectors.getTitle());
-	context.put(SelectorKeys.DESCRIPTION_SELECTOR_KEY,
-		selectors.getDescription());
-	context.put(SelectorKeys.DATE_PATTERN_KEY,
-		selectors.getDatePattern());
-	context.put(SelectorKeys.DATE_SELECTOR_KEY, selectors.getDates());
-	context.put(SelectorKeys.LOCALE_KEY, selectors.getLocale());
-	context.put(SelectorKeys.IMAGE_SELECTOR_KEY, selectors.getThumbnail());
-	context.put(SelectorKeys.PRICE_SELECTOR_KEY, selectors.getPrice());
-
-	chain.execute(context);
-
-	Event event = (Event) context.get(SelectorKeys.EVENT_KEY);
-
-	// Venue
 	VenueSelectors venueSelectors = selectors.getVenueSelectors();
 	if (venueSelectors != null) {
 
-	    // Venue description for each event description
-
-	    VenueMapper vms = new VenueMapper(venueSelectors);
+	    venueMapper = new VenueMapper(venueSelectors);
 	    if (eventTemplate != null) {
-		vms.setVenueTemplate(eventTemplate.getVenue());
+		venueMapper.setVenueTemplate(eventTemplate.getVenue());
 	    }
-
-	    Venue venue = vms.parse(e);
-	    event.setVenue(venue);
 	}
-
-	return event;
     }
 
 }

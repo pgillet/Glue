@@ -22,6 +22,7 @@ public class VenueMapper implements HtmlMapper<Venue> {
     private HtmlFetcher hf = new HtmlFetcher();
     private VenueSelectors selectors;
     private Venue venueTemplate = new Venue();
+    private Chain chain;
 
     public VenueMapper(VenueSelectors selectors) {
 	this(selectors, null);
@@ -30,6 +31,8 @@ public class VenueMapper implements HtmlMapper<Venue> {
     public VenueMapper(VenueSelectors selectors, Venue venueTemplate) {
 	this.selectors = selectors;
 	this.venueTemplate = venueTemplate;
+
+	init();
     }
 
     public Venue getVenueTemplate() {
@@ -42,19 +45,6 @@ public class VenueMapper implements HtmlMapper<Venue> {
 
     @Override
     public Venue parse(Element e) throws Exception {
-
-	Chain chain = new ChainBase();
-
-	chain.addCommand(new ForwardCommand());
-	chain.addCommand(new NarrowerCommand());
-	chain.addCommand(new InitVenueCommand());
-	chain.addCommand(new VenueNameCommand());
-	chain.addCommand(new AddressCommand());
-	chain.addCommand(new CityCommand());
-	chain.addCommand(new WebsiteCommand());
-	chain.addCommand(new VenueDescriptionCommand());
-	chain.addCommand(new VenueImageCommand());
-
 
 	Context context = new ContextBase();
 	context.put(SelectorKeys.ELEMENT_KEY, e);
@@ -76,6 +66,20 @@ public class VenueMapper implements HtmlMapper<Venue> {
 	Venue venue = (Venue) context.get(SelectorKeys.VENUE_KEY);
 
 	return venue;
+    }
+
+    private void init() {
+	chain = new ChainBase();
+
+	chain.addCommand(new ForwardCommand());
+	chain.addCommand(new NarrowerCommand());
+	chain.addCommand(new InitVenueCommand());
+	chain.addCommand(new VenueNameCommand());
+	chain.addCommand(new AddressCommand());
+	chain.addCommand(new CityCommand());
+	chain.addCommand(new WebsiteCommand());
+	chain.addCommand(new VenueDescriptionCommand());
+	chain.addCommand(new VenueImageCommand());
     }
 
 }
