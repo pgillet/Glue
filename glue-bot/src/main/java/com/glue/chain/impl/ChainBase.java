@@ -6,6 +6,7 @@ import java.util.Iterator;
 import com.glue.chain.Chain;
 import com.glue.chain.Command;
 import com.glue.chain.Context;
+import com.glue.chain.Contract;
 import com.glue.chain.Filter;
 
 /**
@@ -174,7 +175,18 @@ public class ChainBase implements Chain {
 	int n = commands.length;
 	for (i = 0; i < n; i++) {
 	    try {
+		// Precondition
+		if (commands[i] instanceof Contract) {
+		    ((Contract) commands[i]).require(context);
+		}
+
 		saveResult = commands[i].execute(context);
+
+		// Postcondition
+		if (commands[i] instanceof Contract) {
+		    ((Contract) commands[i]).ensure(context);
+		}
+
 		if (saveResult) {
 		    break;
 		}

@@ -18,12 +18,13 @@ import com.glue.bot.SelectorKeys;
 import com.glue.bot.Validate;
 import com.glue.chain.Command;
 import com.glue.chain.Context;
+import com.glue.chain.Contract;
 import com.glue.domain.Event;
 import com.glue.domain.Occurrence;
 import com.glue.time.DateTimeProcessor;
 import com.glue.time.DateTimeProcessor.Interval;
 
-public class DateTimeCommand extends BaseCommand implements Command {
+public class DateTimeCommand extends BaseCommand implements Contract {
 
     public static final Logger LOG = LoggerFactory
 	    .getLogger(DateTimeCommand.class);
@@ -62,6 +63,11 @@ public class DateTimeCommand extends BaseCommand implements Command {
 
     public void setLocaleKey(String localeKey) {
 	this.localeKey = localeKey;
+    }
+
+    @Override
+    public void require(Context context) throws Exception {
+	// No op
     }
 
     /**
@@ -138,6 +144,19 @@ public class DateTimeCommand extends BaseCommand implements Command {
 	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 
 	return Command.CONTINUE_PROCESSING;
+
+    }
+
+    @Override
+    public void ensure(Context context) throws Exception {
+	Event event = (Event) context.get(getEventKey());
+
+	Date startTime = event.getStartTime();
+	Date stopTime = event.getStopTime();
+
+	if (startTime == null || stopTime == null) {
+	    throw new IllegalArgumentException("Date is null");
+	}
 
     }
 

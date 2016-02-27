@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 import com.glue.bot.SelectorKeys;
 import com.glue.chain.Command;
 import com.glue.chain.Context;
+import com.glue.chain.Contract;
 import com.glue.domain.Event;
 
-public class TitleCommand extends BaseCommand implements Command {
+public class TitleCommand extends BaseCommand implements Contract {
 
     public static final Logger LOG = LoggerFactory
 	    .getLogger(TitleCommand.class);
@@ -23,6 +24,11 @@ public class TitleCommand extends BaseCommand implements Command {
 
     public void setTitleSelectorKey(String titleSelectorKey) {
 	this.titleSelectorKey = titleSelectorKey;
+    }
+
+    @Override
+    public void require(Context context) throws Exception {
+	// No op
     }
 
     /**
@@ -53,6 +59,17 @@ public class TitleCommand extends BaseCommand implements Command {
 	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 
 	return Command.CONTINUE_PROCESSING;
+    }
+
+    @Override
+    public void ensure(Context context) throws Exception {
+	Event event = (Event) context.get(getEventKey());
+	String title = event.getTitle();
+
+	if (title == null) {
+	    throw new IllegalArgumentException("Title is null");
+	}
+
     }
 
 }
