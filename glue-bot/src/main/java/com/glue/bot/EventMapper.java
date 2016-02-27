@@ -20,7 +20,6 @@ import com.glue.chain.impl.ChainBase;
 import com.glue.chain.impl.ContextBase;
 import com.glue.domain.Event;
 import com.glue.domain.Venue;
-import com.glue.time.DateTimeProcessor;
 
 public class EventMapper implements HtmlMapper<Event> {
 
@@ -28,23 +27,19 @@ public class EventMapper implements HtmlMapper<Event> {
 
     private Event eventTemplate = new Event();
 
-    private DateTimeProcessor dateTimeProcessor;
-
-    private HtmlFetcher hf = new HtmlFetcher();
-
     private Chain chain;
 
     private VenueMapper venueMapper;
 
-    public EventMapper(EventSelectors selectors) throws IOException {
+    public EventMapper(EventSelectors selectors) throws Exception {
 	this(selectors, null);
     }
 
     public EventMapper(EventSelectors selectors, Event eventTemplate)
-	    throws IOException {
+	    throws Exception {
 	this.selectors = selectors;
 	this.eventTemplate = eventTemplate;
-	dateTimeProcessor = new DateTimeProcessor();
+	validate();
 	init();
     }
 
@@ -109,6 +104,28 @@ public class EventMapper implements HtmlMapper<Event> {
 	    venueMapper = new VenueMapper(venueSelectors);
 	    if (eventTemplate != null) {
 		venueMapper.setVenueTemplate(eventTemplate.getVenue());
+	    }
+	}
+    }
+
+    private void validate() {
+
+	String title = selectors.getTitle();
+	if (title == null || title.length() == 0) {
+	    throw new IllegalArgumentException("Title selector is null");
+	}
+
+	String dates = selectors.getDates();
+	if (dates == null || dates.length() == 0) {
+	    throw new IllegalArgumentException("Dates' selector is null");
+	}
+
+	VenueSelectors venueSelectors = selectors.getVenueSelectors();
+	if (venueSelectors != null) {
+	    String venueName = venueSelectors.getVenueName();
+	    if (venueName == null || venueName.length() == 0) {
+		throw new IllegalArgumentException(
+			"Venue name selector is null");
 	    }
 	}
     }
