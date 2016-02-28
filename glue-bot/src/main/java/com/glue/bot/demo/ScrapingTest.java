@@ -4,6 +4,9 @@ import static com.glue.bot.EventSelectorsBuilder.newEventSelectors;
 import static com.glue.bot.SiteMapBuilder.newSiteMap;
 import static com.glue.bot.VenueSelectorsBuilder.newVenueSelectors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.glue.bot.Crawler;
 import com.glue.bot.EventMapper;
 import com.glue.bot.EventSelectors;
@@ -26,15 +29,14 @@ import com.glue.domain.Venue;
  * @author pgillet
  * 
  */
-public class BikiniScraper {
+public class ScrapingTest {
 
     public static void testBikini() throws Exception {
 
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
 		"http://www.lebikini.com/programmation/index/date/new").li(
-		"a[href^=/programmation/concert/]")
-		.build();
+		"a[href^=/programmation/concert/]").build();
 
 	VenueSelectors venueSelectors = newVenueSelectors()
 		.name("div#infos > div#salle > h3")
@@ -64,11 +66,56 @@ public class BikiniScraper {
 	eventRef.setCategory(EventCategory.MUSIC);
 	eventRef.setVenue(venueRef); // Important !
 
-	HtmlMapper<Event> mappingStrategy = new EventMapper(
-		eventSelectors, eventRef);
+	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
+		eventRef);
 
-	Crawler<Event> parser = new Crawler<>(siteMap,
-		mappingStrategy);
+	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
+
+	parser.run();
+
+	System.out.println("We're done here.");
+    }
+
+    public static void testMandala() throws Exception {
+
+	// 1st step: describe the structure of your web site
+	SiteMap siteMap = newSiteMap(
+		"http://www.mandalabouge.com/wp/category/tout-le-programme/")
+		.li("#listing > div > div.listContent > h2 > a")
+		.next("#nextpage").build();
+
+	// 2nd step: describe the structure of an event details page
+	// Note: The selectors are the same as the ones defined in the
+	// BikiniEvent class
+	EventSelectors eventSelectors = newEventSelectors()
+		.title("#postTitle:first-child")
+		.description("#content div.entry > p")
+		.thumbnail("#content div.entry")
+		.dates("#metaStuff > li > div.smallMeta")
+		.build();
+
+	// Template
+	List<Tag> tags = new ArrayList<Tag>();
+	tags.add(new Tag("Jazz"));
+	tags.add(new Tag("Musique du monde"));
+	tags.add(new Tag("Jam-sessions"));
+	
+	Venue venueRef = new Venue();
+	venueRef.setName("Le Mandala");
+	venueRef.setAddress("23 Rue des Amidonniers");
+	venueRef.setCity("Toulouse");
+	venueRef.setCountry("France");
+	venueRef.setPostalCode("31000");
+	venueRef.setTags(tags);
+
+	Event eventRef = new Event();
+	eventRef.setCategory(EventCategory.MUSIC);
+	eventRef.setVenue(venueRef); // Important !
+
+	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
+		eventRef);
+
+	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
 
 	parser.run();
 
@@ -88,10 +135,8 @@ public class BikiniScraper {
 		.title("span.titrespec")
 		.description(
 			"#principal > table:nth-child(4) > tbody > tr > td")
-		.thumbnail("#show > div > a > img")
-		.build();
-	
-	
+		.thumbnail("#show > div > a > img").build();
+
 	// VenueSelectors venueSelectors = newVenueSelectors()
 	// .name("#block_gauche > strong")
 	// .address(
@@ -109,11 +154,10 @@ public class BikiniScraper {
 	eventRef.getTags().add(new Tag("Tout public"));
 	eventRef.setVenue(venueRef); // Important !
 
-	HtmlMapper<Event> mappingStrategy = new EventMapper(
-		eventSelectors, eventRef);
+	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
+		eventRef);
 
-	Crawler<Event> parser = new Crawler<>(siteMap,
-		mappingStrategy);
+	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
 
 	parser.run();
 
@@ -122,7 +166,7 @@ public class BikiniScraper {
     }
 
     public static void main(String[] args) throws Exception {
-	testBikini();
+	testMandala();
     }
 
 }

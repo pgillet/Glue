@@ -8,7 +8,7 @@ import com.glue.bot.SiteMap;
 /**
  * Demonstration of the AnnotationMappingStrategy.
  * 
- * @see BikiniScraper
+ * @see ScrapingTest
  * 
  * @author pgillet
  * 
