@@ -76,6 +76,48 @@ public class ScrapingTest {
 	System.out.println("We're done here.");
     }
 
+    public static void testLAutreCanal() throws Exception {
+
+	// 1st step: describe the structure of your web site
+	SiteMap siteMap = newSiteMap("http://www.lautrecanalnancy.fr/-Agenda-")
+		.li("#liste_agenda > tbody > tr > td > div > a").build();
+
+	// 2nd step: describe the structure of an event details page
+	// Note: The selectors are the same as the ones defined in the
+	// BikiniEvent class
+	EventSelectors eventSelectors = newEventSelectors()
+		.rootBlock("#evenement").title("h1.titre")
+		.description("#texte_art")
+		.eventType("#evenement > div.mots_event")
+		.thumbnail("#illustration").price("#tarifs")
+		.dates("#bloc_infos > div.date_ev")
+		// .withDatePattern("E dd MMM yyyy 'à' HH:mm")
+		// Ex: vendredi 21 février 2014 à 20:30
+		// .withLocale(Locale.FRENCH)
+		.build();
+
+	// Template
+	Venue venueRef = new Venue();
+	venueRef.setName("L'Autre Canal");
+	venueRef.setAddress("45 Boulevard d'Austrasie");
+	venueRef.setCity("Nancy");
+	venueRef.setCountry("France");
+	venueRef.setPostalCode("54000");
+
+	Event eventRef = new Event();
+	eventRef.setCategory(EventCategory.MUSIC);
+	eventRef.setVenue(venueRef); // Important !
+
+	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
+		eventRef);
+
+	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
+
+	parser.run();
+
+	System.out.println("We're done here.");
+    }
+
     public static void testMandala() throws Exception {
 
 	// 1st step: describe the structure of your web site
@@ -91,15 +133,14 @@ public class ScrapingTest {
 		.title("#postTitle:first-child")
 		.description("#content div.entry > p")
 		.thumbnail("#content div.entry")
-		.dates("#metaStuff > li > div.smallMeta")
-		.build();
+		.dates("#metaStuff > li > div.smallMeta").build();
 
 	// Template
 	List<Tag> tags = new ArrayList<Tag>();
 	tags.add(new Tag("Jazz"));
 	tags.add(new Tag("Musique du monde"));
 	tags.add(new Tag("Jam-sessions"));
-	
+
 	Venue venueRef = new Venue();
 	venueRef.setName("Le Mandala");
 	venueRef.setAddress("23 Rue des Amidonniers");
@@ -166,7 +207,7 @@ public class ScrapingTest {
     }
 
     public static void main(String[] args) throws Exception {
-	testMandala();
+	testLAutreCanal();
     }
 
 }

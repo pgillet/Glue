@@ -1,5 +1,7 @@
 package com.glue.bot.command;
 
+import java.util.List;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -53,10 +55,17 @@ public class ImageCommand extends BaseCommand implements Command {
 		image.setOriginal(item);
 		image.setUrl(imageUrl);
 		image.setSource(event.getUrl());
-		image.setSticky(true);
 
 		event.getImages().add(image);
 	    }
+
+	    // Set the first image as sticky
+	    List<Image> images = event.getImages();
+	    if (!images.isEmpty()) {
+		Image image = images.get(0);
+		image.setSticky(true);
+	    }
+
 	}
 
 	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
