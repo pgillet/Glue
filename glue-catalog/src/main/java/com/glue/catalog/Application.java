@@ -1,4 +1,4 @@
-package com.glue.bot.demo;
+package com.glue.catalog;
 
 import static com.glue.catalog.domain.EventSelectorsBuilder.newEventSelectors;
 import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
@@ -7,32 +7,70 @@ import static com.glue.catalog.domain.VenueSelectorsBuilder.newVenueSelectors;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glue.bot.Crawler;
-import com.glue.bot.EventMapper;
-import com.glue.bot.HtmlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.glue.catalog.domain.CatalogRepository;
 import com.glue.catalog.domain.EventSelectors;
+import com.glue.catalog.domain.EventWebsite;
 import com.glue.catalog.domain.SiteMap;
 import com.glue.catalog.domain.VenueSelectors;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Tag;
 import com.glue.domain.Venue;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-/**
- * Demonstration of the EventMappingStrategy.
- * 
- * See http://jsoup.org/apidocs/org/jsoup/select/Selector.html for the syntax of
- * the CSS-like element selectors.
- * 
- * @see ScrapingDemo
- * 
- * @author pgillet
- * 
- */
-public class ScrapingTest {
+@SpringBootApplication
+public class Application implements CommandLineRunner {
 
-    public static void testBikini() throws Exception {
+    @Autowired
+    private CatalogRepository repository;
 
+    /**
+     * For JSON pretty printing.
+     */
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    public static void main(String[] args) {
+	SpringApplication.run(Application.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
+	repository.deleteAll();
+
+	// save a couple of customers
+	repository.save(getBikini());
+	repository.save(getLAutreCanal());
+	repository.save(getMandala());
+
+	// fetch all customers
+	System.out.println("Event websites found with findAll():");
+	System.out.println("-------------------------------");
+	for (EventWebsite eventWebsite : repository.findAll()) {
+	    System.out.println(toJson(eventWebsite));
+	}
+	System.out.println();
+
+	// fetch an individual event website
+	System.out
+		.println("Event website found with findOne('http://www.lebikini.com/'):");
+	System.out.println("--------------------------------");
+	System.out.println(toJson(repository
+		.findOne("http://www.lebikini.com/")));
+    }
+
+    private String toJson(EventWebsite eventWebsite) {
+	String jsonObj = gson.toJson(eventWebsite);
+	return jsonObj;
+    }
+
+    private EventWebsite getBikini() {
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
 		"http://www.lebikini.com/programmation/index/date/new").li(
@@ -66,18 +104,15 @@ public class ScrapingTest {
 	eventRef.setCategory(EventCategory.MUSIC);
 	eventRef.setVenue(venueRef); // Important !
 
-	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
-		eventRef);
+	EventWebsite retval = new EventWebsite("http://www.lebikini.com/");
+	retval.setSiteMap(siteMap);
+	retval.setEventSelectors(eventSelectors);
+	retval.setEventTemplate(eventRef);
 
-	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
-
-	parser.run();
-
-	System.out.println("We're done here.");
+	return retval;
     }
 
-    public static void testLAutreCanal() throws Exception {
-
+    private EventWebsite getLAutreCanal() {
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap("http://www.lautrecanalnancy.fr/-Agenda-")
 		.li("#liste_agenda > tbody > tr > td > div > a").build();
@@ -90,11 +125,7 @@ public class ScrapingTest {
 		.description("#texte_art")
 		.eventType("#evenement > div.mots_event")
 		.thumbnail("#illustration").price("#tarifs")
-		.dates("#bloc_infos > div.date_ev")
-		// .withDatePattern("E dd MMM yyyy 'à' HH:mm")
-		// Ex: vendredi 21 février 2014 à 20:30
-		// .withLocale(Locale.FRENCH)
-		.build();
+		.dates("#bloc_infos > div.date_ev").build();
 
 	// Template
 	Venue venueRef = new Venue();
@@ -108,18 +139,16 @@ public class ScrapingTest {
 	eventRef.setCategory(EventCategory.MUSIC);
 	eventRef.setVenue(venueRef); // Important !
 
-	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
-		eventRef);
+	EventWebsite retval = new EventWebsite(
+		"http://www.lautrecanalnancy.fr/");
+	retval.setSiteMap(siteMap);
+	retval.setEventSelectors(eventSelectors);
+	retval.setEventTemplate(eventRef);
 
-	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
-
-	parser.run();
-
-	System.out.println("We're done here.");
+	return retval;
     }
 
-    public static void testMandala() throws Exception {
-
+    private EventWebsite getMandala() {
 	// 1st step: describe the structure of your web site
 	SiteMap siteMap = newSiteMap(
 		"http://www.mandalabouge.com/wp/category/tout-le-programme/")
@@ -153,61 +182,11 @@ public class ScrapingTest {
 	eventRef.setCategory(EventCategory.MUSIC);
 	eventRef.setVenue(venueRef); // Important !
 
-	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
-		eventRef);
+	EventWebsite retval = new EventWebsite("http://www.mandalabouge.com/");
+	retval.setSiteMap(siteMap);
+	retval.setEventSelectors(eventSelectors);
+	retval.setEventTemplate(eventRef);
 
-	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
-
-	parser.run();
-
-	System.out.println("We're done here.");
+	return retval;
     }
-
-    public static void testTheatreDuGrandRond() throws Exception {
-	// Théâtre du Grand Rond - Tout Public
-	SiteMap siteMap = newSiteMap(
-		"http://www.grand-rond.org/index.php/grandrond/programmation")
-		// .list("td a.savoir_plus:containsOwn(En savoir plus)")
-		.li("a.savoir_plus[href^=http://www.grand-rond.org/index.php/grandrond/spectacle?]")
-		.build();
-
-	EventSelectors eventSelectors = newEventSelectors()
-		.rootBlock("div#principal")
-		.title("span.titrespec")
-		.description(
-			"#principal > table:nth-child(4) > tbody > tr > td")
-		.thumbnail("#show > div > a > img").build();
-
-	// VenueSelectors venueSelectors = newVenueSelectors()
-	// .name("#block_gauche > strong")
-	// .address(
-	// "#block_gauche > br:nth-child(3), #block_gauche > br:nth-child(4)")
-	// .phoneNumber("#block_gauche > span").build();
-
-	Venue venueRef = new Venue();
-	venueRef.setName("Théâtre du Grand Rond");
-	venueRef.setAddress("23 rue des Potiers 31000 Toulouse");
-	venueRef.setCity("Toulouse");
-	venueRef.setCountry("France");
-
-	Event eventRef = new Event();
-	eventRef.setCategory(EventCategory.PERFORMING_ART);
-	eventRef.getTags().add(new Tag("Tout public"));
-	eventRef.setVenue(venueRef); // Important !
-
-	HtmlMapper<Event> mappingStrategy = new EventMapper(eventSelectors,
-		eventRef);
-
-	Crawler<Event> parser = new Crawler<>(siteMap, mappingStrategy);
-
-	parser.run();
-
-	System.out.println("We're done here.");
-
-    }
-
-    public static void main(String[] args) throws Exception {
-	testLAutreCanal();
-    }
-
 }

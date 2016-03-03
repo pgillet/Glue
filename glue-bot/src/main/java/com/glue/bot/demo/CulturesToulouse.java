@@ -1,17 +1,17 @@
 package com.glue.bot.demo;
 
-import static com.glue.bot.EventSelectorsBuilder.newEventSelectors;
-import static com.glue.bot.SiteMapBuilder.newSiteMap;
-import static com.glue.bot.VenueSelectorsBuilder.newVenueSelectors;
+import static com.glue.catalog.domain.EventSelectorsBuilder.newEventSelectors;
+import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
+import static com.glue.catalog.domain.VenueSelectorsBuilder.newVenueSelectors;
 
 import java.util.Locale;
 
 import com.glue.bot.Crawler;
 import com.glue.bot.EventMapper;
-import com.glue.bot.EventSelectors;
 import com.glue.bot.HtmlMapper;
-import com.glue.bot.SiteMap;
-import com.glue.bot.VenueSelectors;
+import com.glue.catalog.domain.EventSelectors;
+import com.glue.catalog.domain.SiteMap;
+import com.glue.catalog.domain.VenueSelectors;
 import com.glue.domain.Event;
 
 /**

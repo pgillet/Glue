@@ -1,9 +1,9 @@
 package com.glue.bot.demo;
 
-import static com.glue.bot.SiteMapBuilder.newSiteMap;
+import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
 
 import com.glue.bot.Crawler;
-import com.glue.bot.SiteMap;
+import com.glue.catalog.domain.SiteMap;
 
 /**
  * Demonstration of the AnnotationMappingStrategy.

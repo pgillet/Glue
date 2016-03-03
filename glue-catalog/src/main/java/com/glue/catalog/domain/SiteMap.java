@@ -1,4 +1,5 @@
-package com.glue.bot;
+package com.glue.catalog.domain;
+
 
 /**
  * An object that describes a site map accessible for Web scraping.

@@ -14,6 +14,8 @@ import com.glue.bot.command.InitEventCommand;
 import com.glue.bot.command.NarrowerCommand;
 import com.glue.bot.command.PriceListCommand;
 import com.glue.bot.command.TitleCommand;
+import com.glue.catalog.domain.EventSelectors;
+import com.glue.catalog.domain.VenueSelectors;
 import com.glue.chain.Chain;
 import com.glue.chain.Context;
 import com.glue.chain.impl.ChainBase;

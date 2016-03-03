@@ -1,4 +1,4 @@
-package com.glue.bot;
+package com.glue.catalog.domain;
 
 import java.util.Locale;
 

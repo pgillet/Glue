@@ -7,6 +7,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.glue.catalog.domain.SiteMap;
+
 public class PaginatedListStrategy implements BrowsingStrategy {
 
     static final Logger LOG = LoggerFactory

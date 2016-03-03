@@ -1,4 +1,5 @@
-package com.glue.bot;
+package com.glue.catalog.domain;
+
 
 /**
  * A builder for SiteMap objects.
