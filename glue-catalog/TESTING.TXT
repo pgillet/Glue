@@ -1,0 +1,20 @@
+$ curl http://localhost:8080
+
+$ curl http://localhost:8080/eventWebsites
+
+$ curl http://localhost:8080/eventWebsites/56d8c8b244aeab3ec50c24ab
+
+$ curl http://localhost:8080/eventWebsites/search
+
+$ curl -i -X POST -H "Content-Type:application/json" -d '{  "uri" : "http://www.connexionlive.fr/programmation/" }' http://localhost:8080/eventWebsites
+
+$ curl http://localhost:8080/eventWebsites/search/findByUri?uri=http://www.connexionlive.fr/programmation/
+
+// Replace
+$ curl -X PUT -H "Content-Type:application/json" -d '{ "uri" : "http://www.connexionlive.fr" }' http://localhost:8080/eventWebsites/56d8cd2c44ae4e0e6a45f64e
+
+// Update
+$ curl -X PATCH -H "Content-Type:application/json" -d '{ "uri" : "http://www.connexionlive.fr", ... }' http://localhost:8080/eventWebsites/56d8cd2c44ae4e0e6a45f64e
+
+// Delete
+$ curl -X DELETE http://localhost:8080/eventWebsites/56d8cd2c44ae4e0e6a45f64e

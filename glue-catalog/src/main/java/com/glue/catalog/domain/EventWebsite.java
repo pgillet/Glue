@@ -7,6 +7,7 @@ import com.glue.domain.Event;
 public class EventWebsite {
 
     @Id
+    private String id;
     private String uri;
     private SiteMap siteMap;
     private EventSelectors eventSelectors;
