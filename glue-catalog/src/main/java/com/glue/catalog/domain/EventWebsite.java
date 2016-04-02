@@ -2,6 +2,7 @@ package com.glue.catalog.domain;
 
 import org.springframework.data.annotation.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.glue.domain.Event;
 
 public class EventWebsite {
@@ -11,6 +12,8 @@ public class EventWebsite {
     private String uri;
     private SiteMap siteMap;
     private EventSelectors eventSelectors;
+
+    @JsonIgnore
     private Event eventTemplate;
 
     public EventWebsite() {

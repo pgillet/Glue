@@ -11,7 +11,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {eventWebsites: [], attributes: [], pageSize: 2, links: {}};
+		this.state = {eventWebsites: [], attributes: [], pageSize: 10, links: {}};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
@@ -26,7 +26,7 @@ class App extends React.Component {
 			return client({
 				method: 'GET',
 				path: websiteCollection.entity._links.profile.href,
-				headers: {'Accept': 'application/json'}
+				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
 				this.schema = schema.entity;
 				return websiteCollection;
@@ -34,7 +34,7 @@ class App extends React.Component {
 		}).done(websiteCollection => {
 			this.setState({
 				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
-				/*attributes: Object.keys(this.schema.properties),*/
+				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
 				links: websiteCollection.entity._links});
 		});
