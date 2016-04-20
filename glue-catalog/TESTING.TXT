@@ -6,7 +6,7 @@ $ curl http://localhost:8080/api/eventWebsites/56d8c8b244aeab3ec50c24ab
 
 $ curl http://localhost:8080/api/eventWebsites/search
 
-$ curl -i -X POST -H "Content-Type:application/json" -d '{  "uri" : "http://www.connexionlive.fr/programmation/" }' http://localhost:8080/eventWebsites
+$ curl -i -X POST -H "Content-Type:application/json" -d '{  "uri" : "http://www.connexionlive.fr/programmation/" }' http://localhost:8080/api/eventWebsites
 
 $ curl http://localhost:8080/api/eventWebsites/search/findByUri?uri=http://www.connexionlive.fr/programmation/
 

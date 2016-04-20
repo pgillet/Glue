@@ -2,6 +2,8 @@ package com.glue.catalog.domain;
 
 import java.util.Locale;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class EventSelectors {
 
     private String rootBlock;
@@ -16,6 +18,8 @@ public class EventSelectors {
     private String eventType;
     private String venueRootBlock;
     private VenueSelectors venueSelectors;
+
+    @JsonIgnore
     private Locale locale = Locale.FRENCH;
 
     public String getRootBlock() {

@@ -1,17 +1,20 @@
 'use strict';
 
 const React = require('react');
+const ReactDOM = require('react-dom');
 const client = require('./client');
 
 const follow = require('./follow'); // function to hop multiple links by "rel"
 
 const root = '/api';
 
+var Form = require('react-jsonschema-form').default;
+
 class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {eventWebsites: [], attributes: [], pageSize: 10, links: {}};
+		this.state = {eventWebsites: [], attributes: {}, pageSize: 10, links: {}};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
@@ -34,10 +37,11 @@ class App extends React.Component {
 		}).done(websiteCollection => {
 			this.setState({
 				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
-				attributes: Object.keys(this.schema.properties),
+				attributes: this.schema,
 				pageSize: pageSize,
 				links: websiteCollection.entity._links});
 		});
+		
 	}
 	// end::follow-2[]
 
@@ -118,29 +122,31 @@ class CreateDialog extends React.Component {
 	}
 
 	handleSubmit(e) {
-		e.preventDefault();
-		var newEventWebsite = {};
-		this.props.attributes.forEach(attribute => {
-			newEventWebsite[attribute] = React.findDOMNode(this.refs[attribute]).value.trim();
-		});
-		this.props.onCreate(newEventWebsite);
+		console.log("formData = " + formData)
+//		e.preventDefault();
+//		var newEventWebsite = {};
+//		this.props.attributes.forEach(attribute => {
+//			newEventWebsite[attribute] = React.findDOMNode(this.refs[attribute]).value.trim();
+//		});
+		this.props.onCreate(formData);
 
 		// clear out the dialog's inputs
-		this.props.attributes.forEach(attribute => {
-			React.findDOMNode(this.refs[attribute]).value = '';
-		});
+//		this.props.attributes.forEach(attribute => {
+//			React.findDOMNode(this.refs[attribute]).value = '';
+//		});
 
 		// Navigate away from the dialog to hide it.
 		window.location = "#";
 	}
 
-	render() {
-		var inputs = this.props.attributes.map(attribute =>
-			<p key={attribute}>
-				<input type="text" placeholder={attribute} ref={attribute} className="field" />
-			</p>
-		);
-
+	render() {		
+		
+//		var inputs = this.props.attributes.map(attribute =>
+//			<p key={attribute}>
+//				<input type="text" placeholder={attribute} ref={attribute} className="field" />
+//			</p>
+//		);
+		
 		return (
 			<div>
 				<a href="#createEventWebsite">Create</a>
@@ -150,11 +156,8 @@ class CreateDialog extends React.Component {
 						<a href="#" title="Close" className="close">X</a>
 
 						<h2>Create new eventWebsite</h2>
-
-						<form>
-							{inputs}
-							<button onClick={this.handleSubmit}>Create</button>
-						</form>
+					
+						<Form schema={this.props.attributes} onSubmit={this.handleSubmit}  />
 					</div>
 				</div>
 			</div>
@@ -278,7 +281,7 @@ class EventWebsite extends React.Component {
 }
 // end::eventWebsite[]
 
-React.render(
+ReactDOM.render(
 	<App />,
 	document.getElementById('react')
 )
