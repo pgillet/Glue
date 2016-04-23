@@ -122,30 +122,13 @@ class CreateDialog extends React.Component {
 	}
 
 	handleSubmit(e) {
-		console.log("formData = " + formData)
-//		e.preventDefault();
-//		var newEventWebsite = {};
-//		this.props.attributes.forEach(attribute => {
-//			newEventWebsite[attribute] = React.findDOMNode(this.refs[attribute]).value.trim();
-//		});
-		this.props.onCreate(formData);
-
-		// clear out the dialog's inputs
-//		this.props.attributes.forEach(attribute => {
-//			React.findDOMNode(this.refs[attribute]).value = '';
-//		});
+		this.props.onCreate(e.formData);
 
 		// Navigate away from the dialog to hide it.
 		window.location = "#";
 	}
 
 	render() {		
-		
-//		var inputs = this.props.attributes.map(attribute =>
-//			<p key={attribute}>
-//				<input type="text" placeholder={attribute} ref={attribute} className="field" />
-//			</p>
-//		);
 		
 		return (
 			<div>
@@ -157,7 +140,9 @@ class CreateDialog extends React.Component {
 
 						<h2>Create new eventWebsite</h2>
 					
-						<Form schema={this.props.attributes} onSubmit={this.handleSubmit}  />
+						<Form schema={this.props.attributes} onSubmit={this.handleSubmit}>
+							<button>Submit</button>
+						</Form>
 					</div>
 				</div>
 			</div>

@@ -15,7 +15,8 @@ td, th {
 /*Classes for creating dialogs*/
 
 .modalDialog {
-    position: fixed;
+    position: absolute;
+    overflow: scroll;
     font-family: Arial, Helvetica, sans-serif;
     top: 0;
     right: 0;

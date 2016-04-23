@@ -29,6 +29,9 @@ public class SiteMap {
 
     private int maxPages = DEFAULT_MAX_PAGES;
 
+    public SiteMap() {
+    }
+
     public SiteMap(String frontUrl) {
 	this.frontUrl = frontUrl;
     }
@@ -59,6 +62,10 @@ public class SiteMap {
 
     public String getFrontUrl() {
 	return frontUrl;
+    }
+
+    public void setFrontUrl(String frontUrl) {
+	this.frontUrl = frontUrl;
     }
 
     public String getEndOfDataCondition() {
