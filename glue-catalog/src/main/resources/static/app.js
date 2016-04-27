@@ -58,7 +58,10 @@ class App extends React.Component {
 			return follow(client, root, [
 				{rel: 'eventWebsites', params: {'size': this.state.pageSize}}]);
 		}).done(response => {
-			this.onNavigate(response.entity._links.last.href);
+			if(this.state.eventWebsites.length < this.state.pageSize)
+				this.loadFromServer(this.state.pageSize);
+			else
+				this.onNavigate(response.entity._links.last.href);
 		});
 	}
 	// end::create[]
