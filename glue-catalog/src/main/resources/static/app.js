@@ -103,14 +103,16 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-				<WebsiteList eventWebsites={this.state.eventWebsites}
-							  links={this.state.links}
-							  pageSize={this.state.pageSize}
-							  onNavigate={this.onNavigate}
-							  onDelete={this.onDelete}
-							  updatePageSize={this.updatePageSize}/>
+			<div className="container">
+				<div className="row">
+					<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+					<WebsiteList eventWebsites={this.state.eventWebsites}
+								  links={this.state.links}
+								  pageSize={this.state.pageSize}
+								  onNavigate={this.onNavigate}
+								  onDelete={this.onDelete}
+								  updatePageSize={this.updatePageSize}/>
+				</div>
 			</div>
 		)
 	}
