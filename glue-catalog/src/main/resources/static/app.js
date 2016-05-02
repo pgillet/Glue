@@ -169,11 +169,11 @@ class WebsiteList extends React.Component {
 	// tag::handle-page-size-updates[]
 	handleInput(e) {
 		e.preventDefault();
-		var pageSize = React.findDOMNode(this.refs.pageSize).value;
+		var pageSize = this.refs.pageSize.value;
 		if (/^[0-9]+$/.test(pageSize)) {
 			this.props.updatePageSize(pageSize);
 		} else {
-			React.findDOMNode(this.refs.pageSize).value =
+			this.refs.pageSize.value =
 				pageSize.substring(0, pageSize.length - 1);
 		}
 	}
