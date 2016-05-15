@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 public interface CatalogRepository extends
 	MongoRepository<EventWebsite, String> {
 
-    List<EventWebsite> findByUri(@Param("uri") String uri);
+    List<EventWebsite> findByUriLike(@Param("uri") String uri);
 
 }

@@ -98,7 +98,7 @@ class App extends React.Component {
 	
 	search(terms) {
 		follow(client, root, [
-  			'eventWebsites', 'search', {rel: 'findByUri', params: {'uri': terms}}]
+  			'eventWebsites', 'search', {rel: 'findByUriLike', params: {'uri': terms}}]
   		).done(websiteCollection => {
   			this.setState({
   				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
