@@ -16,6 +16,7 @@ class App extends React.Component {
 		super(props);
 		this.state = {eventWebsites: [], attributes: {}, pageSize: 10, links: {}};
 		this.updatePageSize = this.updatePageSize.bind(this);
+		this.search = this.search.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
@@ -94,6 +95,18 @@ class App extends React.Component {
 		}
 	}
 	// end::update-page-size[]
+	
+	search(terms) {
+		follow(client, root, [
+  			'eventWebsites', 'search', {rel: 'findByUri', params: {'uri': terms}}]
+  		).done(websiteCollection => {
+  			this.setState({
+  				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
+  				attributes: this.schema,
+  				pageSize: this.state.pageSize,
+  				links: websiteCollection.entity._links});
+  		});
+	}
 
 	// tag::follow-1[]
 	componentDidMount() {
@@ -111,7 +124,8 @@ class App extends React.Component {
 								  pageSize={this.state.pageSize}
 								  onNavigate={this.onNavigate}
 								  onDelete={this.onDelete}
-								  updatePageSize={this.updatePageSize}/>
+								  updatePageSize={this.updatePageSize}
+								  search={this.search}/>
 				</div>
 			</div>
 		)
@@ -166,6 +180,7 @@ class WebsiteList extends React.Component {
 		this.handleNavNext = this.handleNavNext.bind(this);
 		this.handleNavLast = this.handleNavLast.bind(this);
 		this.handleInput = this.handleInput.bind(this);
+		this.handleSearch = this.handleSearch.bind(this);
 	}
 
 	// tag::handle-page-size-updates[]
@@ -180,6 +195,12 @@ class WebsiteList extends React.Component {
 		}
 	}
 	// end::handle-page-size-updates[]
+	
+	handleSearch(e) {
+		e.preventDefault();
+		var terms = this.refs.search.value;
+		this.props.search(terms)
+	}
 
 	// tag::handle-nav[]
 	handleNavFirst(e){
@@ -225,7 +246,12 @@ class WebsiteList extends React.Component {
 
 		return (
 			<div>
-				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
+				<form onSubmit={this.handleSearch}>
+					<input type="search" ref="search" />
+					<input type="submit" value="Search" />
+				</form>
+				<label for="pageSize">Page size: </label>
+				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput} size="2"/>
 				<table>
 					<tr>
 						<th>Venue name</th>
