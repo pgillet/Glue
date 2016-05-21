@@ -18,6 +18,7 @@ class App extends React.Component {
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.search = this.search.bind(this);
 		this.onCreate = this.onCreate.bind(this);
+		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
 	}
@@ -66,6 +67,26 @@ class App extends React.Component {
 		});
 	}
 	// end::create[]
+	
+	onUpdate(eventWebsite, updatedEventWebsite) {
+		client({
+			method: 'PUT',
+			path: eventWebsite._links.self.href,
+			entity: updatedEventWebsite,
+			headers: {
+				'Content-Type': 'application/json'
+					//,
+				//'If-Match': eventWebsite.headers.Etag
+			}
+		}).done(response => {
+			this.loadFromServer(this.state.pageSize);
+		}, response => {
+			if (response.status.code === 412) {
+				alert('DENIED: Unable to update ' +
+					eventWebsite.entity._links.self.href + '. Your copy is stale.');
+			}
+		});
+	}
 
 	// tag::delete[]
 	onDelete(eventWebsite) {
@@ -122,7 +143,9 @@ class App extends React.Component {
 					<WebsiteList eventWebsites={this.state.eventWebsites}
 								  links={this.state.links}
 								  pageSize={this.state.pageSize}
+								  attributes={this.state.attributes}
 								  onNavigate={this.onNavigate}
+								  onUpdate={this.onUpdate}
 								  onDelete={this.onDelete}
 								  updatePageSize={this.updatePageSize}
 								  search={this.search}/>
@@ -170,6 +193,44 @@ class CreateDialog extends React.Component {
 
 }
 // end::create-dialog[]
+
+
+class UpdateDialog extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(e) {
+		this.props.onUpdate(this.props.eventWebsite, e.formData);
+		window.location = "#";
+	}
+
+	render() {
+		var dialogId = "updateEmployee-" + this.props.eventWebsite._links.self.href;
+
+		return (
+			<div key={this.props.eventWebsite._links.self.href}>
+				<a href={"#" + dialogId}>Update</a>
+				<div id={dialogId} className="modalDialog">
+					<div>
+						<a href="#" title="Close" className="close">X</a>
+
+						<h2>Update an eventWebsite</h2>
+
+						<Form schema={this.props.attributes} formData={this.props.eventWebsite} onSubmit={this.handleSubmit}>
+							<button>Update</button>
+						</Form>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+};
+
+
 
 class WebsiteList extends React.Component {
 
@@ -227,7 +288,7 @@ class WebsiteList extends React.Component {
 	// tag::eventWebsite-list-render[]
 	render() {
 		var eventWebsites = this.props.eventWebsites.map(eventWebsite =>
-			<EventWebsite key={eventWebsite._links.self.href} eventWebsite={eventWebsite} onDelete={this.props.onDelete}/>
+			<EventWebsite attributes={this.props.attributes} key={eventWebsite._links.self.href} eventWebsite={eventWebsite} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
 		);
 
 		var navLinks = [];
@@ -287,7 +348,11 @@ class EventWebsite extends React.Component {
 			<tr>
 				<td></td>
 				<td>{this.props.eventWebsite.uri}</td>
-				<td></td>
+				<td>
+					<UpdateDialog eventWebsite={this.props.eventWebsite}
+								  attributes={this.props.attributes}
+								  onUpdate={this.props.onUpdate}/>
+				</td>
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
 				</td>

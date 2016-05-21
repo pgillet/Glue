@@ -1,5 +1,7 @@
 package com.glue.catalog.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 
 /**
  * An object that describes a site map accessible for Web scraping.
@@ -9,6 +11,7 @@ package com.glue.catalog.domain;
  * @author pgillet
  * 
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SiteMap {
 
     public static final int LINK_DISABLED = 0;

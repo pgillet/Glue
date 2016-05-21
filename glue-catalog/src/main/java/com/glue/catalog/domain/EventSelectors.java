@@ -3,7 +3,9 @@ package com.glue.catalog.domain;
 import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EventSelectors {
 
     private String rootBlock;
