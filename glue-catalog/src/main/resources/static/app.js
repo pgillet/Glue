@@ -2,6 +2,7 @@
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const when = require('when');
 const client = require('./client');
 
 const follow = require('./follow'); // function to hop multiple links by "rel"
@@ -34,14 +35,24 @@ class App extends React.Component {
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
 				this.schema = schema.entity;
+				this.links = websiteCollection.entity._links;
 				return websiteCollection;
 			});
-		}).done(websiteCollection => {
+		}).then(websiteCollection => {
+			return websiteCollection.entity._embedded.eventWebsites.map(website =>
+					client({
+						method: 'GET',
+						path: website._links.self.href
+					})
+			);
+		}).then(websitePromises => {
+			return when.all(websitePromises);
+		}).done(eventWebsites => {
 			this.setState({
-				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
+				eventWebsites: eventWebsites,
 				attributes: this.schema,
 				pageSize: pageSize,
-				links: websiteCollection.entity._links});
+				links: this.links});
 		});
 		
 	}
@@ -71,12 +82,11 @@ class App extends React.Component {
 	onUpdate(eventWebsite, updatedEventWebsite) {
 		client({
 			method: 'PUT',
-			path: eventWebsite._links.self.href,
+			path: eventWebsite.entity._links.self.href,
 			entity: updatedEventWebsite,
 			headers: {
-				'Content-Type': 'application/json'
-					//,
-				//'If-Match': eventWebsite.headers.Etag
+				'Content-Type': 'application/json',
+				'If-Match': eventWebsite.headers.Etag
 			}
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
@@ -90,7 +100,7 @@ class App extends React.Component {
 
 	// tag::delete[]
 	onDelete(eventWebsite) {
-		client({method: 'DELETE', path: eventWebsite._links.self.href}).done(response => {
+		client({method: 'DELETE', path: eventWebsite.entity._links.self.href}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
@@ -98,12 +108,25 @@ class App extends React.Component {
 
 	// tag::navigate[]
 	onNavigate(navUri) {
-		client({method: 'GET', path: navUri}).done(websiteCollection => {
+		client({
+			method: 'GET', 
+			path: navUri
+		}).then(websiteCollection => {
+			this.links = websiteCollection.entity._links;
+			return websiteCollection.entity._embedded.eventWebsites.map(website =>
+					client({
+						method: 'GET',
+						path: website._links.self.href
+					})
+			);
+		}).then(websitePromises => {
+			return when.all(websitePromises);
+		}).done(eventWebsites => {
 			this.setState({
-				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
+				eventWebsites: eventWebsites,
 				attributes: this.state.attributes,
 				pageSize: this.state.pageSize,
-				links: websiteCollection.entity._links
+				links: this.links
 			});
 		});
 	}
@@ -120,12 +143,21 @@ class App extends React.Component {
 	search(terms) {
 		follow(client, root, [
   			'eventWebsites', 'search', {rel: 'findByUriLike', params: {'uri': terms}}]
-  		).done(websiteCollection => {
+		).then(websiteCollection => {
+  			return websiteCollection.entity._embedded.eventWebsites.map(website =>
+  					client({
+  						method: 'GET',
+  						path: website._links.self.href
+  					})
+  			);
+  		}).then(websitePromises => {
+  			return when.all(websitePromises);
+  		}).done(eventWebsites => {
   			this.setState({
-  				eventWebsites: websiteCollection.entity._embedded.eventWebsites,
+  				eventWebsites: eventWebsites,
   				attributes: this.schema,
   				pageSize: this.state.pageSize,
-  				links: websiteCollection.entity._links});
+  				links: this.links});
   		});
 	}
 
@@ -208,10 +240,10 @@ class UpdateDialog extends React.Component {
 	}
 
 	render() {
-		var dialogId = "updateEmployee-" + this.props.eventWebsite._links.self.href;
+		var dialogId = "updateEmployee-" + this.props.eventWebsite.entity._links.self.href;
 
 		return (
-			<div key={this.props.eventWebsite._links.self.href}>
+			<div key={this.props.eventWebsite.entity._links.self.href}>
 				<a href={"#" + dialogId}>Update</a>
 				<div id={dialogId} className="modalDialog">
 					<div>
@@ -219,7 +251,7 @@ class UpdateDialog extends React.Component {
 
 						<h2>Update an eventWebsite</h2>
 
-						<Form schema={this.props.attributes} formData={this.props.eventWebsite} onSubmit={this.handleSubmit}>
+						<Form schema={this.props.attributes} formData={this.props.eventWebsite.entity} onSubmit={this.handleSubmit}>
 							<button>Update</button>
 						</Form>
 					</div>
@@ -288,7 +320,11 @@ class WebsiteList extends React.Component {
 	// tag::eventWebsite-list-render[]
 	render() {
 		var eventWebsites = this.props.eventWebsites.map(eventWebsite =>
-			<EventWebsite attributes={this.props.attributes} key={eventWebsite._links.self.href} eventWebsite={eventWebsite} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+			<EventWebsite attributes={this.props.attributes} 
+							key={eventWebsite.entity._links.self.href} 
+							eventWebsite={eventWebsite} 
+							onUpdate={this.props.onUpdate} 
+							onDelete={this.props.onDelete}/>
 		);
 
 		var navLinks = [];
@@ -347,7 +383,7 @@ class EventWebsite extends React.Component {
 		return (
 			<tr>
 				<td></td>
-				<td>{this.props.eventWebsite.uri}</td>
+				<td>{this.props.eventWebsite.entity.uri}</td>
 				<td>
 					<UpdateDialog eventWebsite={this.props.eventWebsite}
 								  attributes={this.props.attributes}
