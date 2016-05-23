@@ -142,8 +142,9 @@ class App extends React.Component {
 	
 	search(terms) {
 		follow(client, root, [
-  			'eventWebsites', 'search', {rel: 'findByUriLike', params: {'uri': terms}}]
+  			'eventWebsites', 'search', {rel: 'findByUriLike', params: {'uri': terms, 'size': this.state.pageSize}}]
 		).then(websiteCollection => {
+			this.links = websiteCollection.entity._links;
   			return websiteCollection.entity._embedded.eventWebsites.map(website =>
   					client({
   						method: 'GET',
@@ -281,6 +282,8 @@ class WebsiteList extends React.Component {
 		e.preventDefault();
 		var pageSize = this.refs.pageSize.value;
 		if (/^[0-9]+$/.test(pageSize)) {
+			// TODO: ugly!?
+			this.refs.searchForm.reset();
 			this.props.updatePageSize(pageSize);
 		} else {
 			this.refs.pageSize.value =
@@ -343,7 +346,7 @@ class WebsiteList extends React.Component {
 
 		return (
 			<div>
-				<form onSubmit={this.handleSearch}>
+				<form ref="searchForm" onSubmit={this.handleSearch}>
 					<input type="search" ref="search" />
 					<input type="submit" value="Search" />
 				</form>
