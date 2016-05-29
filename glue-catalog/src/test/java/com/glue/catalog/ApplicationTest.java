@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.glue.catalog.domain.CatalogRepository;
 import com.glue.catalog.domain.EventSelectors;
 import com.glue.catalog.domain.EventWebsite;
 import com.glue.catalog.domain.SiteMap;
 import com.glue.catalog.domain.VenueSelectors;
+import com.glue.catalog.security.Manager;
+import com.glue.catalog.security.ManagerRepository;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Tag;
@@ -30,10 +35,15 @@ public class ApplicationTest implements CommandLineRunner {
     @Autowired
     private CatalogRepository repository;
 
+    @Autowired
+    private ManagerRepository managers;
+
     /**
      * For JSON pretty printing.
      */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    private Manager manager;
 
     public static void main(String[] args) {
 	SpringApplication.run(ApplicationTest.class, args);
@@ -41,6 +51,15 @@ public class ApplicationTest implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+	final String username = "pasgille";
+	manager = this.managers.save(new Manager(username, "secr3t",
+		"ROLE_MANAGER"));
+
+	SecurityContextHolder.getContext().setAuthentication(
+		new UsernamePasswordAuthenticationToken(username,
+			"doesn't matter", AuthorityUtils
+				.createAuthorityList("ROLE_MANAGER")));
 
 	repository.deleteAll();
 
@@ -63,6 +82,8 @@ public class ApplicationTest implements CommandLineRunner {
 	System.out.println("--------------------------------");
 	System.out.println(toJson(repository
 		.findOne("http://www.lebikini.com/")));
+
+	SecurityContextHolder.clearContext();
     }
 
     private String toJson(EventWebsite eventWebsite) {
@@ -109,6 +130,8 @@ public class ApplicationTest implements CommandLineRunner {
 	retval.setEventSelectors(eventSelectors);
 	retval.setEventTemplate(eventRef);
 
+	retval.setManager(manager);
+
 	return retval;
     }
 
@@ -144,6 +167,8 @@ public class ApplicationTest implements CommandLineRunner {
 	retval.setSiteMap(siteMap);
 	retval.setEventSelectors(eventSelectors);
 	retval.setEventTemplate(eventRef);
+
+	retval.setManager(manager);
 
 	return retval;
     }
@@ -186,6 +211,8 @@ public class ApplicationTest implements CommandLineRunner {
 	retval.setSiteMap(siteMap);
 	retval.setEventSelectors(eventSelectors);
 	retval.setEventTemplate(eventRef);
+
+	retval.setManager(manager);
 
 	return retval;
     }

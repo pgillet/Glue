@@ -1,9 +1,12 @@
 package com.glue.catalog.domain;
 
+import javax.persistence.ManyToOne;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.glue.catalog.security.Manager;
 import com.glue.domain.Event;
 
 
@@ -14,6 +17,8 @@ public class EventWebsite {
     private String uri;
     private SiteMap siteMap;
     private EventSelectors eventSelectors;
+    // @ReadOnlyProperty
+    private @ManyToOne Manager manager;
 
     private @Version @JsonIgnore Long version;
 
@@ -33,6 +38,14 @@ public class EventWebsite {
 
     public void setUri(String uri) {
 	this.uri = uri;
+    }
+
+    public Manager getManager() {
+	return manager;
+    }
+
+    public void setManager(Manager manager) {
+	this.manager = manager;
     }
 
     public SiteMap getSiteMap() {

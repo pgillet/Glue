@@ -1,4 +1,4 @@
-$ curl http://localhost:8080/api
+$ curl -v -u username:password http://localhost:8080/api
 
 $ curl http://localhost:8080/api/eventWebsites
 

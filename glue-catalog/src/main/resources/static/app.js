@@ -34,6 +34,10 @@ class App extends React.Component {
 				path: websiteCollection.entity._links.profile.href,
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
+				
+				// TODO Manager: read-only property
+				delete schema.entity.properties.manager;
+				
 				this.schema = schema.entity;
 				this.links = websiteCollection.entity._links;
 				return websiteCollection;
@@ -91,6 +95,10 @@ class App extends React.Component {
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		}, response => {
+			if (response.status.code === 403) {
+				alert('ACCESS DENIED: You are not authorized to update ' +
+						eventWebsite.entity._links.self.href);
+			}
 			if (response.status.code === 412) {
 				alert('DENIED: Unable to update ' +
 					eventWebsite.entity._links.self.href + '. Your copy is stale.');
@@ -101,8 +109,14 @@ class App extends React.Component {
 	// tag::delete[]
 	onDelete(eventWebsite) {
 		client({method: 'DELETE', path: eventWebsite.entity._links.self.href}).done(response => {
-			this.loadFromServer(this.state.pageSize);
-		});
+			this.loadFromServer(this.state.pageSize);},
+			response => {
+				if (response.status.code === 403) {
+					alert('ACCESS DENIED: You are not authorized to delete ' +
+						employee.entity._links.self.href);
+				}
+			}
+		);
 	}
 	// end::delete[]
 
@@ -356,6 +370,7 @@ class WebsiteList extends React.Component {
 					<tr>
 						<th>Venue name</th>
 						<th>URL</th>
+						<th>Manager</th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -387,6 +402,7 @@ class EventWebsite extends React.Component {
 			<tr>
 				<td></td>
 				<td>{this.props.eventWebsite.entity.uri}</td>
+				<td>{this.props.eventWebsite.entity.manager.name}</td>
 				<td>
 					<UpdateDialog eventWebsite={this.props.eventWebsite}
 								  attributes={this.props.attributes}
