@@ -11,6 +11,11 @@ const root = '/api';
 
 var Form = require('react-jsonschema-form').default;
 
+var SockJS = require('sockjs-client');
+require('stompjs');
+
+var stompClient = null;
+
 class App extends React.Component {
 
 	constructor(props) {
@@ -22,6 +27,9 @@ class App extends React.Component {
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
+		this.connect = this.connect.bind(this);
+		this.disconnect = this.disconnect.bind(this);
+		this.showGreeting = this.showGreeting.bind(this);
 	}
 
 	// tag::follow-2[]
@@ -175,10 +183,39 @@ class App extends React.Component {
   				links: this.links});
   		});
 	}
+	
+	connect(callback) {
+        var socket = new SockJS('/hello');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/greetings', function(greeting){
+            	callback(JSON.parse(greeting.body).content);
+            });
+        });
+    }
+	
+	showGreeting(message) {
+        var response = document.getElementById('response');
+        var p = document.createElement('p');
+        p.style.wordWrap = 'break-word';
+        p.appendChild(document.createTextNode(message));
+        response.appendChild(p);
+    }
+
+    disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+	
 
 	// tag::follow-1[]
 	componentDidMount() {
+		this.disconnect();
 		this.loadFromServer(this.state.pageSize);
+		this.connect(this.showGreeting);
 	}
 	// end::follow-1[]
 
@@ -255,7 +292,7 @@ class UpdateDialog extends React.Component {
 	}
 
 	render() {
-		var dialogId = "updateEmployee-" + this.props.eventWebsite.entity._links.self.href;
+		var dialogId = "update-" + this.props.eventWebsite.entity._links.self.href;
 
 		return (
 			<div key={this.props.eventWebsite.entity._links.self.href}>
@@ -278,6 +315,35 @@ class UpdateDialog extends React.Component {
 };
 
 
+class ValidateDialog extends React.Component {
+	constructor(props) {
+		super(props);
+		this.send = this.send.bind(this);
+	}
+	
+	send() {
+        stompClient.send("/app/hello", {}, JSON.stringify({ 'eventWebsite': this.props.eventWebsite.entity }));
+    }
+	
+	render() {
+		var dialogId = "validate-" + this.props.eventWebsite.entity._links.self.href;
+
+		return (
+			<div key={this.props.eventWebsite.entity._links.self.href}>
+				<a href={"#" + dialogId} onClick={this.send}>Validate</a>
+				<div id={dialogId} className="modalDialog">
+					<div>
+						<a href="#" title="Close" className="close">X</a>
+
+						<h2>Validate an eventWebsite</h2>
+
+						<p id="response"></p>
+					</div>
+				</div>
+			</div>
+		)
+	}
+}
 
 class WebsiteList extends React.Component {
 
@@ -408,6 +474,10 @@ class EventWebsite extends React.Component {
 								  attributes={this.props.attributes}
 								  onUpdate={this.props.onUpdate}/>
 				</td>
+				<td>
+					<ValidateDialog eventWebsite={this.props.eventWebsite}
+								  attributes={this.props.attributes} />
+				</td>	
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
 				</td>
