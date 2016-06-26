@@ -112,17 +112,17 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.goldin</groupId>
-				<artifactId>copy-maven-plugin</artifactId>
-				<version>0.2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>copy-solr-config</id>
 						<phase>prepare-package</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>.</outputDirectory>
 							<resources>
 								<!-- Copy db-data-config.xml and applies properties filtering -->
 								<resource>
@@ -156,7 +156,6 @@
 								<resource>
 									<directory>${project.basedir}/src/main/conf</directory>
 									<targetPath>${solr.solr.home}/${solr.default.core.directory}/conf</targetPath>
-									<preservePath>true</preservePath>
 									<excludes>
 										<exclude>solrconfig.xml</exclude>
 									</excludes>
@@ -173,47 +172,50 @@
 							</resources>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
 					<!-- clean -->
 					<execution>
 						<id>clean-solr</id>
-						<phase>clean</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>clean</goal>
 						</goals>
 						<configuration>
-							<failIfNotFound>false</failIfNotFound>
-							<resources>
+							<failOnError>false</failOnError>
+							<filesets>
 								<!-- Clean the overlays directory from the project root directory -->
-								<resource>
-									<clean>true</clean>
-									<cleanEmptyDirectories>true</cleanEmptyDirectories>
+								<fileset>
 									<directory>${project.basedir}/overlays</directory>
 									<includes>
 										<include>**/**</include>
 									</includes>
-								</resource>
+								</fileset>
 								<!-- Remove the solr.xml file -->
-								<resource>
-									<clean>true</clean>
+								<fileset>
 									<directory>${solr.solr.home}</directory>
 									<includes>
 										<include>solr.xml</include>
 									</includes>
-								</resource>
+								</fileset>
 								<!-- Remove the conf directory -->
-								<resource>
-									<clean>true</clean>
-									<cleanEmptyDirectories>true</cleanEmptyDirectories>
+								<fileset>
 									<directory>${solr.solr.home}/${solr.default.core.directory}</directory>
 									<includes>
 										<include>conf</include>
 									</includes>
-								</resource>
-							</resources>
+								</fileset>
+							</filesets>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+
 			<!-- CAUTION: The goal tomcat7:deploy is used to deploy the WAR in the 
 				container under $CATALINA_HOME (the container must be previously started 
 				and the solr.solr.home system property must be set), while tomcat7:run will 
@@ -223,7 +225,8 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<!-- http://${glue.webapp.http.host}:${glue.webapp.http.port}/manager/html sur Tomcat -->
+					<!-- http://${glue.webapp.http.host}:${glue.webapp.http.port}/manager/html 
+						sur Tomcat -->
 					<url>http://${glue.webapp.http.host}:${glue.webapp.http.port}/manager/text</url>
 					<server>tomcat</server>
 					<path>/solr</path>
@@ -232,39 +235,15 @@
 						<solr.solr.home>${solr.solr.home}</solr.solr.home>
 					</systemProperties>
 				</configuration>
-				<!-- <executions>
-					<execution>
-						<id>deploy-solr</id>
-						<phase>package</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-				</executions> -->
+				<!-- <executions> <execution> <id>deploy-solr</id> <phase>package</phase> 
+					<goals> <goal>deploy</goal> </goals> </execution> </executions> -->
 			</plugin>
-			<!-- <plugin>
-				<groupId>org.apache.openejb.maven</groupId>
-				<artifactId>tomee-maven-plugin</artifactId>
-				<version>1.0.1</version>
-				<configuration>
-				    <tomeeVersion>1.5.2</tomeeVersion>
-					<tomeeClassifier>webprofile</tomeeClassifier>
-					<server>tomcat</server>
-					<systemVariables>
-						<solr.solr.home>${solr.solr.home}</solr.solr.home>
-					</systemVariables>
-					<path>/solr</path>
-				</configuration>
-				<executions>
-					<execution>
-						<id>deploy-solr</id>
-						<phase>package</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin> -->
+			<!-- <plugin> <groupId>org.apache.openejb.maven</groupId> <artifactId>tomee-maven-plugin</artifactId> 
+				<version>1.0.1</version> <configuration> <tomeeVersion>1.5.2</tomeeVersion> 
+				<tomeeClassifier>webprofile</tomeeClassifier> <server>tomcat</server> <systemVariables> 
+				<solr.solr.home>${solr.solr.home}</solr.solr.home> </systemVariables> <path>/solr</path> 
+				</configuration> <executions> <execution> <id>deploy-solr</id> <phase>package</phase> 
+				<goals> <goal>deploy</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

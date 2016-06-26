@@ -17,68 +17,93 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-			</plugin>			
+			</plugin>
 			<plugin>
-				<groupId>com.github.goldin</groupId>
-				<artifactId>copy-maven-plugin</artifactId>
-				<version>0.2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>copy-tomee-config</id>
 						<phase>process-resources</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>${env.CATALINA_HOME}/conf</outputDirectory>
+							<overwrite>true</overwrite>
 							<resources>
 								<!-- Copy Tomee configuration files -->
 								<resource>
 									<directory>${project.basedir}/src/main/webapp/META-INF/conf</directory>
-									<targetPath>${env.CATALINA_HOME}/conf</targetPath>
 									<includes>
 										<include>*.*</include>
 									</includes>
 									<filtering>true</filtering>
-								</resource>
-								<!-- Copy MySQL JDBC Driver -->
-								<resource>
-									<targetPath>${env.CATALINA_HOME}/lib</targetPath>
-									<dependencies>
-										<dependency>
-											<groupId>mysql</groupId>
-											<artifactId>mysql-connector-java</artifactId>
-											<version>${mysql.version}</version>
-										</dependency>
-									</dependencies>
-								</resource>
-								<!-- Jersey v2.x is compiled against v2.0 of the JAX-RS API. But 
-									Tomee runs with Java EE 6, which defines JAX-RS API v1.1, while Tomee Web 
-									Profile doesn't need them. So our code expects v2.0 of the JAX-RS API, but 
-									gets v1.1 at runtime, and it leads to a NoSuchMethodError exception. Therefore, 
-									we ensure that the classes from JAX-RS API v2.0 will be properly loaded by 
-									placing them under the directory $JAVA_HOME/jre/lib/ext. -->
-								<!-- See http://mail-archives.apache.org/mod_mbox/tomee-users/201307.mbox/%3CCACLE=7NNeeoq9un5DxZ2WuYZ84JznNsAY+xeWv13_-ViV4BhJA@mail.gmail.com%3E -->
-								<!-- See http://tomcat.apache.org/tomcat-7.0-doc/class-loader-howto.html -->
-								<resource>
-									<targetPath>${env.JAVA_HOME}/jre/lib/ext</targetPath>
-									<dependencies>
-										<dependency>
-											<groupId>javax.ws.rs</groupId>
-											<artifactId>javax.ws.rs-api</artifactId>
-											<version>2.0</version>
-										</dependency>
-										<dependency>
-											<groupId>javax.annotation</groupId>
-											<artifactId>javax.annotation-api</artifactId>
-											<version>1.2</version>
-										</dependency>
-									</dependencies>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<!-- Copy MySQL JDBC Driver -->
+					<execution>
+						<id>copy-dependencies-0</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>mysql</groupId>
+									<artifactId>mysql-connector-java</artifactId>
+									<version>${mysql.version}</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${env.CATALINA_HOME}/lib</outputDirectory>
+						</configuration>
+					</execution>
+					<!-- Jersey v2.x is compiled against v2.0 of the JAX-RS API. But Tomee 
+						runs with Java EE 6, which defines JAX-RS API v1.1, while Tomee Web Profile 
+						doesn't need them. So our code expects v2.0 of the JAX-RS API, but gets v1.1 
+						at runtime, and it leads to a NoSuchMethodError exception. Therefore, we 
+						ensure that the classes from JAX-RS API v2.0 will be properly loaded by placing 
+						them under the directory $JAVA_HOME/jre/lib/ext. -->
+					<!-- See http://mail-archives.apache.org/mod_mbox/tomee-users/201307.mbox/%3CCACLE=7NNeeoq9un5DxZ2WuYZ84JznNsAY+xeWv13_-ViV4BhJA@mail.gmail.com%3E -->
+					<!-- See http://tomcat.apache.org/tomcat-7.0-doc/class-loader-howto.html -->
+					<execution>
+						<id>copy-dependencies-1</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>javax.ws.rs</groupId>
+									<artifactId>javax.ws.rs-api</artifactId>
+									<version>2.0</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>javax.annotation</groupId>
+									<artifactId>javax.annotation-api</artifactId>
+									<version>1.2</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${env.JAVA_HOME}/jre/lib/ext</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -115,7 +140,7 @@
 		<jersey.version>2.22.1</jersey.version>
 	</properties>
 
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
@@ -124,9 +149,9 @@
 		</dependency>
 		<!-- Omnifaces - Thank you BalusC! -->
 		<dependency>
-		    <groupId>org.omnifaces</groupId>
-		    <artifactId>omnifaces</artifactId>
-		    <version>1.8.1</version>
+			<groupId>org.omnifaces</groupId>
+			<artifactId>omnifaces</artifactId>
+			<version>1.8.1</version>
 		</dependency>
 		<!-- RESTful Web Services -->
 		<dependency>
@@ -139,12 +164,12 @@
 			<artifactId>jersey-media-multipart</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		
+
 		<!-- JSON Support -->
 		<dependency>
-		    <groupId>org.glassfish.jersey.media</groupId>
-		    <artifactId>jersey-media-json-jackson</artifactId>
-		    <version>${jersey.version}</version>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>${jersey.version}</version>
 		</dependency>
 		<!-- Primefaces -->
 		<dependency>
@@ -199,10 +224,10 @@
 			<artifactId>jsoup</artifactId>
 		</dependency>
 		<dependency>
-    		<groupId>org.omnifaces</groupId>
-    		<artifactId>omnifaces</artifactId>
-    		<version>1.7</version> <!-- Or 1.8-SNAPSHOT -->
-		</dependency>	
+			<groupId>org.omnifaces</groupId>
+			<artifactId>omnifaces</artifactId>
+			<version>1.7</version> <!-- Or 1.8-SNAPSHOT -->
+		</dependency>
 	</dependencies>
 
 </project>

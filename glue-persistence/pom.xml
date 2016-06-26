@@ -66,8 +66,8 @@
 		</dependency>
 	</dependencies>
 
-	<build>	
-		<plugins>			
+	<build>
+		<plugins>
 			<!-- Generate OpenJPA metamodel classes -->
 			<!-- See http://rmannibucau.wordpress.com/2013/01/24/enhancing-openjpa-classes-with-maven-maven-compiler-alternative/ -->
 			<plugin>
@@ -125,30 +125,28 @@
 				<artifactId>properties-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>com.github.goldin</groupId>
-				<artifactId>copy-maven-plugin</artifactId>
-				<version>0.2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>copy-persistence-config</id>
 						<phase>generate-resources</phase>
 						<goals>
-							<goal>copy</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>${project.basedir}/target/classes</outputDirectory>
 							<resources>
 								<!-- Copy persistence.xml and applies properties filtering -->
 								<resource>
 									<directory>${project.basedir}/src/main/resources</directory>
 									<filtering>true</filtering>
-									<targetPath>${project.basedir}/target/classes</targetPath>
-									<preservePath>true</preservePath>
 									<includes>
 										<include>META-INF/persistence.xml</include>
 										<include>com/glue/content/cmis.properties</include>
 										<include>com/glue/persistence/index/solr.properties</include>
 									</includes>
-								</resource>								
+								</resource>
 							</resources>
 						</configuration>
 					</execution>
@@ -200,8 +198,8 @@
 									</pluginExecutionFilter>
 									<action>
 										<execute>
-             								<runOnIncremental>false</runOnIncremental>
-           								</execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
