@@ -24,5 +24,10 @@ module.exports = {
                 loader: 'babel-loader'
             }
         ]
-    }
+    },
+    node: {
+    	  net: 'empty',
+    	  tls: 'empty',
+    	  dns: 'empty'
+	}
 };
