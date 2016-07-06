@@ -319,27 +319,40 @@ class ValidateDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.send = this.send.bind(this);
+		this.openNav = this.openNav.bind(this);
+		this.closeNav = this.closeNav.bind(this);
 	}
 	
 	send() {
         stompClient.send("/app/hello", {}, JSON.stringify({ 'eventWebsite': this.props.eventWebsite.entity }));
     }
 	
+	/* Open when someone clicks on the span element */
+	openNav() {
+	    document.getElementById("myNav").style.width = "100%";
+	}
+
+	/* Close when someone clicks on the "x" symbol inside the overlay */
+	closeNav() {
+	    document.getElementById("myNav").style.width = "0%";
+	}
+	
 	render() {
 		var dialogId = "validate-" + this.props.eventWebsite.entity._links.self.href;
 
 		return (
 			<div key={this.props.eventWebsite.entity._links.self.href}>
-				<a href={"#" + dialogId} onClick={this.send}>Validate</a>
-				<div id={dialogId} className="modalDialog">
-					<div>
-						<a href="#" title="Close" className="close">X</a>
+				<a href={"#" + dialogId} onClick={ () => {this.send(); this.openNav() }}>Validate</a>
+				
+				<div id="myNav" className="overlay">
 
-						<h2>Validate an eventWebsite</h2>
+				  <a href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</a>
 
-						<p id="response"></p>
-					</div>
+				  <div className="overlay-content">
+				  	<p id="response"></p>
+				  </div>
 				</div>
+				
 			</div>
 		)
 	}
