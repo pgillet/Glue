@@ -190,7 +190,7 @@ class App extends React.Component {
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/greetings', function(greeting){
-            	callback(JSON.parse(greeting.body).content);
+            	callback(greeting.body);
             });
         });
     }
