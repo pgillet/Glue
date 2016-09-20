@@ -4,10 +4,10 @@ import com.glue.catalog.domain.EventWebsite;
 
 public class ValidationRequest {
 
-    private EventWebsite eventWebsite;
+	private EventWebsite eventWebsite;
 
-    public EventWebsite getEventWebsite() {
-	return eventWebsite;
-    }
+	public EventWebsite getEventWebsite() {
+		return eventWebsite;
+	}
 
 }

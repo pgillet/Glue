@@ -1,16 +1,15 @@
 package com.glue.catalog.ws;
 
-
 public class Greeting {
 
-    private String content;
+	private String content;
 
-    public Greeting(String content) {
-	this.content = content;
-    }
+	public Greeting(String content) {
+		this.content = content;
+	}
 
-    public String getContent() {
-	return content;
-    }
+	public String getContent() {
+		return content;
+	}
 
 }
