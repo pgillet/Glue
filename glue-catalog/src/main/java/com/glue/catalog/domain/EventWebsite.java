@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.glue.bot.domain.EventSelectors;
+import com.glue.bot.domain.SiteMap;
 import com.glue.catalog.security.Manager;
 import com.glue.domain.Event;
 

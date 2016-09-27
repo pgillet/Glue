@@ -21,6 +21,8 @@ public class EventUrlCommand extends BaseCommand implements Command {
 	Event event = (Event) context.get(getEventKey());
 
 	event.setUrl(elem.baseUri());
+	
+	LOG.info("Current page URL = " + elem.baseUri());
 
 	LOG.trace("Exiting " + this.getClass().getName() + " execute method");
 

@@ -11,7 +11,7 @@ import com.glue.bot.command.VenueDescriptionCommand;
 import com.glue.bot.command.VenueImageCommand;
 import com.glue.bot.command.VenueNameCommand;
 import com.glue.bot.command.WebsiteCommand;
-import com.glue.catalog.domain.VenueSelectors;
+import com.glue.bot.domain.VenueSelectors;
 import com.glue.chain.Chain;
 import com.glue.chain.Context;
 import com.glue.chain.impl.ChainBase;

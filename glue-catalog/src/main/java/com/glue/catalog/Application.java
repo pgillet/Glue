@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import com.glue.catalog.logging.HTMLPatternLayoutEncoder;
 import com.glue.catalog.logging.WebSocketAppender;
 import com.glue.catalog.logging.WebSocketOutputStream;
 
@@ -19,12 +20,8 @@ public class Application {
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(Application.class, args);
 		
-		Logger foo = createLoggerFor("foo", ctx);
+		Logger foo = createLoggerFor("com.glue", ctx);
 		
-		
-		for (int i = 0; i < 100; i++) {
-			foo.info("Foo " + i);
-		}
 	}
 	
 	
@@ -36,7 +33,7 @@ public class Application {
 		WebSocketAppender wsAppender = new WebSocketAppender();
 		
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+        PatternLayoutEncoder ple = new HTMLPatternLayoutEncoder();
 
         ple.setPattern("%date %level [%thread] %logger{10} [%file:%line] %msg%n");
         ple.setContext(lc);
@@ -51,7 +48,7 @@ public class Application {
         Logger logger = (Logger) LoggerFactory.getLogger(string);
         logger.addAppender(wsAppender);
         logger.setLevel(Level.DEBUG);
-        logger.setAdditive(false); /* set to true if root should log too */
+        logger.setAdditive(true); /* set to true if root should log too */
 
         return logger;
   }

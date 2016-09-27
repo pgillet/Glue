@@ -199,8 +199,12 @@ class App extends React.Component {
         var response = document.getElementById('response');
         var p = document.createElement('p');
         p.style.wordWrap = 'break-word';
-        p.appendChild(document.createTextNode(message));
+        p.innerHTML = message;
         response.appendChild(p);
+        
+        // Auto scroll
+        var elt = document.getElementById("myNav");
+        elt.scrollTop = elt.scrollHeight;
     }
 
     disconnect() {
@@ -329,7 +333,11 @@ class ValidateDialog extends React.Component {
 	
 	/* Open when someone clicks on the span element */
 	openNav() {
-	    document.getElementById("myNav").style.width = "44%";
+		// Clear console
+		var response = document.getElementById('response');
+        response.innerHTML = '';
+        
+	    document.getElementById("myNav").style.width = "50%";
 	}
 
 	/* Close when someone clicks on the "x" symbol inside the overlay */
@@ -349,7 +357,7 @@ class ValidateDialog extends React.Component {
 				  <a href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</a>
 
 				  <div className="overlay-content">
-				  	<p id="response"></p>
+				  	<div id="response"></div>
 				  </div>
 				</div>
 				

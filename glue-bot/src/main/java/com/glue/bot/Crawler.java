@@ -4,7 +4,7 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glue.catalog.domain.SiteMap;
+import com.glue.bot.domain.SiteMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

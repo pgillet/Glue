@@ -1,8 +1,8 @@
 package com.glue.catalog;
 
-import static com.glue.catalog.domain.EventSelectorsBuilder.newEventSelectors;
-import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
-import static com.glue.catalog.domain.VenueSelectorsBuilder.newVenueSelectors;
+import static com.glue.bot.domain.EventSelectorsBuilder.newEventSelectors;
+import static com.glue.bot.domain.SiteMapBuilder.newSiteMap;
+import static com.glue.bot.domain.VenueSelectorsBuilder.newVenueSelectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.glue.bot.domain.EventSelectors;
+import com.glue.bot.domain.SiteMap;
+import com.glue.bot.domain.VenueSelectors;
 import com.glue.catalog.domain.CatalogRepository;
-import com.glue.catalog.domain.EventSelectors;
 import com.glue.catalog.domain.EventWebsite;
-import com.glue.catalog.domain.SiteMap;
-import com.glue.catalog.domain.VenueSelectors;
 import com.glue.catalog.security.Manager;
 import com.glue.catalog.security.ManagerRepository;
 import com.glue.domain.Event;

@@ -1,8 +1,8 @@
 package com.glue.bot.demo;
 
-import static com.glue.catalog.domain.EventSelectorsBuilder.newEventSelectors;
-import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
-import static com.glue.catalog.domain.VenueSelectorsBuilder.newVenueSelectors;
+import static com.glue.bot.domain.EventSelectorsBuilder.newEventSelectors;
+import static com.glue.bot.domain.SiteMapBuilder.newSiteMap;
+import static com.glue.bot.domain.VenueSelectorsBuilder.newVenueSelectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 import com.glue.bot.Crawler;
 import com.glue.bot.EventMapper;
 import com.glue.bot.HtmlMapper;
-import com.glue.catalog.domain.EventSelectors;
-import com.glue.catalog.domain.SiteMap;
-import com.glue.catalog.domain.VenueSelectors;
+import com.glue.bot.domain.EventSelectors;
+import com.glue.bot.domain.SiteMap;
+import com.glue.bot.domain.VenueSelectors;
 import com.glue.domain.Event;
 import com.glue.domain.EventCategory;
 import com.glue.domain.Tag;

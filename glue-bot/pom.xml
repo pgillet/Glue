@@ -9,21 +9,21 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<repositories>
-       <repository>
-         <id>snapshots-repo</id>
-         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-       </repository>
-     </repositories>
+		<repository>
+			<id>snapshots-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.glue</groupId>
-			<artifactId>glue-catalog</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.glue</groupId>
 			<artifactId>glue-persistence</artifactId>
@@ -58,28 +58,34 @@
 			<artifactId>htmlcompressor</artifactId>
 			<version>1.4</version>
 		</dependency>
-		
+
 		<!-- HeidelTime -->
-        <dependency>
-            <groupId>org.apache.uima</groupId>
-            <artifactId>uimaj-core</artifactId>
-            <version>2.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.heideltime</groupId>
-            <artifactId>heideltime</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        
-        <dependency>
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimaj-core</artifactId>
+			<version>2.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.heideltime</groupId>
+			<artifactId>heideltime</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>commons-chain</groupId>
 			<artifactId>commons-chain</artifactId>
 			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.6.5</version>
 		</dependency>
 	</dependencies>
 

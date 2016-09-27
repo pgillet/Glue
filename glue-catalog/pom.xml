@@ -16,10 +16,20 @@
 			<artifactId>glue-domain</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.glue</groupId>
+			<artifactId>glue-bot</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa</artifactId>
 			<version>${openjpa.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+          			<groupId>commons-lang</groupId>
+          			<artifactId>commons-lang</artifactId>
+        		</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

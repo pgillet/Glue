@@ -19,16 +19,9 @@ public class WebSocketOutputStream extends OutputStream {
 
 	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
-		// super.write(b, off, len);
-		if (b == null) {
-			throw new NullPointerException();
-		} else if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
-			throw new IndexOutOfBoundsException();
-		} else if (len == 0) {
-			return;
-		}
 
-		this.template.convertAndSend("/topic/greetings", new String(b));
+		String msg = new String(b, off, len);
+		this.template.convertAndSend("/topic/greetings", msg);
 	}
 
 	@Override

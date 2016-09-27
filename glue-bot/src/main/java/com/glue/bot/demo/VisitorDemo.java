@@ -1,10 +1,10 @@
 package com.glue.bot.demo;
 
-import static com.glue.catalog.domain.SiteMapBuilder.newSiteMap;
+import static com.glue.bot.domain.SiteMapBuilder.newSiteMap;
 
 import com.glue.bot.BrowsingStrategy;
 import com.glue.bot.PaginatedListStrategy;
-import com.glue.catalog.domain.SiteMap;
+import com.glue.bot.domain.SiteMap;
 
 public class VisitorDemo {
 
