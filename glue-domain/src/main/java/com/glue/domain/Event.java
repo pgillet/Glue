@@ -25,6 +25,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.glue.domain.util.OccurrenceComparator;
 
 /**
@@ -34,6 +36,7 @@ import com.glue.domain.util.OccurrenceComparator;
 @NamedQueries({
 	@NamedQuery(name = "findDuplicate", query = "SELECT e FROM Event e WHERE e.title = :title AND e.startTime = :startTime AND e.venue.id = :venueId"),
 	@NamedQuery(name = "findBetween", query = "SELECT e FROM Event e WHERE e.stopTime BETWEEN :start AND :end")})
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Event {
 
     /**
@@ -109,6 +112,7 @@ public class Event {
      */
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
+    @JsonIgnore
     private Event parent;
 
     /**
@@ -116,6 +120,7 @@ public class Event {
      */
     @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
+    @JsonIgnore
     private List<Event> children = new ArrayList<>();
 
     /**
@@ -128,6 +133,7 @@ public class Event {
      * Event comments.
      */
     @OneToMany(cascade = { CascadeType.ALL })
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     /**
@@ -135,6 +141,7 @@ public class Event {
      */
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE }, mappedBy = "events")
+    @JsonIgnore
     private List<Performer> performers = new ArrayList<>();
 
     /**
@@ -161,6 +168,7 @@ public class Event {
      */
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE }, mappedBy = "going")
+    @JsonIgnore
     private List<User> going = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -182,12 +190,14 @@ public class Event {
      * in this event.
      */
     @OneToMany(cascade = { CascadeType.ALL })
+    @JsonIgnore
     private Collection<Occurrence> occurrences = new TreeSet<>(
 	    new OccurrenceComparator());
 
     /**
      * Date event was created.
      */
+    @JsonIgnore
     private Date created = new Date();
 
     /**

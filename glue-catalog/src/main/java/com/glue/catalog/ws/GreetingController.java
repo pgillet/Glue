@@ -13,14 +13,15 @@ import com.glue.domain.Event;
 
 @Controller
 public class GreetingController {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(GreetingController.class);
 
 	@MessageMapping("/hello")
 	@SendTo("/topic/greetings")
 	public Greeting greeting(ValidationRequest message) throws Exception {
 
-		HtmlMapper<Event> mappingStrategy = new EventMapper(message.getEventWebsite().getEventSelectors(), new Event());
+		HtmlMapper<Event> mappingStrategy = new EventMapper(message.getEventWebsite().getEventSelectors(),
+				message.getEventWebsite().getEventTemplate());
 
 		Crawler<Event> parser = new Crawler<>(message.getEventWebsite().getSiteMap(), mappingStrategy);
 

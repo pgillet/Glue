@@ -24,7 +24,6 @@ public class EventWebsite {
 
     private @Version @JsonIgnore Long version;
 
-    @JsonIgnore
     private Event eventTemplate;
 
     public EventWebsite() {

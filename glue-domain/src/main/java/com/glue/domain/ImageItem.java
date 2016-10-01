@@ -5,11 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Each image contains several image items. These are specific image
  * characteristics.
  */
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ImageItem {
 
     @Id

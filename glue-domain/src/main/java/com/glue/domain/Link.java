@@ -10,10 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Implementation of the Link object.
  */
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Link {
 
     /**
@@ -48,6 +52,7 @@ public class Link {
     /**
      * Time the link was created.
      */
+    @JsonIgnore
     private Date created = new Date();
 
     /**

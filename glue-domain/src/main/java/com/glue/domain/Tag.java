@@ -6,10 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Tag object implementation.
  */
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Tag {
 
     /**

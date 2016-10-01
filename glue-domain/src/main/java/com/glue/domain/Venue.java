@@ -17,12 +17,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Venue object.
  */
 @Entity
 // @NamedQueries({ @NamedQuery(name = "findDuplicate", query =
 // "SELECT v FROM Venue v WHERE v.name = :name AND v.city = :city") })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Venue {
 
     @Id
@@ -72,6 +76,7 @@ public class Venue {
      */
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
+    @JsonIgnore
     private Venue parent;
 
     /**
@@ -79,9 +84,11 @@ public class Venue {
      */
     @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST,
 	    CascadeType.REFRESH, CascadeType.MERGE })
+    @JsonIgnore
     private List<Venue> children = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venue", orphanRemoval = true)
+    @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
     /**
@@ -94,6 +101,7 @@ public class Venue {
      * Venue comments.
      */
     @OneToMany(cascade = { CascadeType.ALL })
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     /**
@@ -118,6 +126,7 @@ public class Venue {
     /**
      * Date venue was created
      */
+    @JsonIgnore
     private Date created = new Date();
 
     private String timeZone;

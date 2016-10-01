@@ -9,10 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Image object.
  */
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Image {
 
     /**
