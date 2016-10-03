@@ -28,7 +28,7 @@
     "sockjs-client": "^1.0.3",
     "stompjs": "^2.3.3",
     "webpack": "^1.12.2",
-    "react-jsonschema-form": "^0.25.0"
+    "react-jsonschema-form": "^0.40.0"
   },
   "scripts": {
     "watch": "webpack --watch -d"
