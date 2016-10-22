@@ -37,11 +37,6 @@ public class EventSelectorsBuilder {
 	return this;
     }
 
-    public EventSelectorsBuilder performer(String cssQuery) {
-	selectors.setPerformer(cssQuery);
-	return this;
-    }
-
     public EventSelectorsBuilder dates(String cssQuery) {
 	selectors.setDates(cssQuery);
 	return this;
@@ -59,11 +54,6 @@ public class EventSelectorsBuilder {
 
     public EventSelectorsBuilder price(String cssQuery) {
 	selectors.setPrice(cssQuery);
-	return this;
-    }
-
-    public EventSelectorsBuilder audience(String cssQuery) {
-	selectors.setAudience(cssQuery);
 	return this;
     }
 

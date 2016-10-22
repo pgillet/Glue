@@ -4,21 +4,25 @@ import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EventSelectors {
 
     private String rootBlock;
+    @JsonPropertyDescription("CSS selector for event title")
+    @JsonProperty(required=true)
     private String title;
     private String description;
-    private String performer;
     private String dates;
     private String datePattern;
     private String thumbnail;
     private String price;
-    private String audience;
     private String eventType;
     private String venueRootBlock;
+    
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private VenueSelectors venueSelectors;
 
     @JsonIgnore
@@ -46,14 +50,6 @@ public class EventSelectors {
 
     public void setDescription(String description) {
 	this.description = description;
-    }
-
-    public String getPerformer() {
-	return performer;
-    }
-
-    public void setPerformer(String performer) {
-	this.performer = performer;
     }
 
     public String getDates() {
@@ -86,14 +82,6 @@ public class EventSelectors {
 
     public void setPrice(String price) {
 	this.price = price;
-    }
-
-    public String getAudience() {
-	return audience;
-    }
-
-    public void setAudience(String audience) {
-	this.audience = audience;
     }
 
     public String getEventType() {

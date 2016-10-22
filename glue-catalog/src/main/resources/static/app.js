@@ -16,6 +16,8 @@ require('stompjs');
 
 var stompClient = null;
 
+var uiSchema = require('./UISchema.json');
+
 class App extends React.Component {
 
 	constructor(props) {
@@ -270,7 +272,7 @@ class CreateDialog extends React.Component {
 
 						<h2>Create new eventWebsite</h2>
 					
-						<Form schema={this.props.attributes} onSubmit={this.handleSubmit}>
+						<Form schema={this.props.attributes} uiSchema={uiSchema} onSubmit={this.handleSubmit}>
 							<button>Submit</button>
 						</Form>
 					</div>
@@ -307,7 +309,7 @@ class UpdateDialog extends React.Component {
 
 						<h2>Update an eventWebsite</h2>
 
-						<Form schema={this.props.attributes} formData={this.props.eventWebsite.entity} onSubmit={this.handleSubmit}>
+						<Form schema={this.props.attributes} uiSchema={uiSchema} formData={this.props.eventWebsite.entity} onSubmit={this.handleSubmit}>
 							<button>Update</button>
 						</Form>
 					</div>

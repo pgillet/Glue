@@ -59,6 +59,7 @@ public class Event {
     private String description;
 
     @Transient
+    @JsonIgnore
     private String summary;
 
     /**

@@ -1,0 +1,93 @@
+{
+	"ui:order": [
+		"uri",
+		"siteMap",
+		"eventSelectors",
+		"eventTemplate"
+	],
+	"siteMap": {
+		"ui:order": [
+			"frontUrl",
+			"listItemSelector",
+			"nextPageSelector",
+			"endOfDataCondition",
+			"venuePage"
+		]
+	},
+	"eventSelectors": {
+		"ui:order": [
+			"rootBlock",
+			"title",
+			"description",
+			"dates",
+			"datePattern",
+			"price",
+			"thumbnail",
+			"eventType",
+			"venueRootBlock",
+			"venueSelectors"
+		]
+	},
+	"venueSelectors": {
+		"ui:order": [
+			"rootBlock",
+			"venueName",
+			"venueAddress",
+			"city",
+			"phoneNumber",
+			"website",
+			"description",
+			"thumbnail"
+		]
+	},
+	"eventTemplate": {
+		"ui:order": [
+			"title",
+			"description",
+			"url",
+			"source",
+			"category",
+			"free",
+			"price",
+			"allDay",
+			"startTime",
+			"stopTime",
+			"timeZone",
+			"links",
+			"images",
+			"tags",
+			"properties",
+			"categories",
+			"withdrawn",
+			"withdrawnNote",
+			"reference",
+			"venue"
+		]
+	},
+	"venue": {
+		"ui-order": [
+			"name",
+			"description",
+			"type",
+			"address",
+			"city",
+			"region",
+			"regionAbbreviation",
+			"postalCode",
+			"country",
+			"countryTwoLetterAbbreviation",
+			"countryThreeLetterAbbreviation",
+			"latitude",
+			"longitude",
+			"url",
+			"geocodeType",
+			"source",
+			"links",
+			"images",
+			"properties",
+			"tags",
+			"timeZone",
+			"reference"
+		]
+	}
+}

@@ -83,17 +83,6 @@ public class SiteMapBuilder {
     }
 
     /**
-     * TODO: not yet implemented.
-     * 
-     * @param num
-     * @return
-     */
-    public SiteMapBuilder maxPages(int num) {
-	siteMap.setMaxPages(num);
-	return this;
-    }
-
-    /**
      * Returns the SiteMap object with the parameters set in this builder.
      * 
      * @return a SiteMap object.

@@ -30,8 +30,6 @@ public class SiteMap {
 
     private String venuePage;
 
-    private int maxPages = DEFAULT_MAX_PAGES;
-
     public SiteMap() {
     }
 
@@ -53,14 +51,6 @@ public class SiteMap {
 
     public void setNextPageSelector(String cssQuery) {
 	this.nextPageSelector = cssQuery;
-    }
-
-    public int getMaxPages() {
-	return maxPages;
-    }
-
-    public void setMaxPages(int maxPages) {
-	this.maxPages = maxPages;
     }
 
     public String getFrontUrl() {
