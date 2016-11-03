@@ -17,6 +17,7 @@ public class EventWebsite {
     @Id
     private String id;
     private String uri;
+    private boolean activated;
     private SiteMap siteMap;
     private EventSelectors eventSelectors;
     // @ReadOnlyProperty
@@ -40,8 +41,16 @@ public class EventWebsite {
     public void setUri(String uri) {
 	this.uri = uri;
     }
+    
+    public boolean isActivated() {
+		return activated;
+	}
 
-    public Manager getManager() {
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	public Manager getManager() {
 	return manager;
     }
 

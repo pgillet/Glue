@@ -1,6 +1,7 @@
 {
 	"ui:order": [
 		"uri",
+		"activated",
 		"siteMap",
 		"eventSelectors",
 		"eventTemplate"
