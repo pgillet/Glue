@@ -1,5 +1,7 @@
 package com.glue.catalog.domain;
 
+import java.util.Date;
+
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +20,9 @@ public class EventWebsite {
     private String id;
     private String uri;
     private boolean activated;
+    // java.time classes not yet supported when serialized in Json
+    private Date lastVisited;
+    private Frequency crawlFrequency = Frequency.MONTHLY;
     private SiteMap siteMap;
     private EventSelectors eventSelectors;
     // @ReadOnlyProperty
@@ -48,6 +53,22 @@ public class EventWebsite {
 
 	public void setActivated(boolean activated) {
 		this.activated = activated;
+	}
+
+	public Date getLastVisited() {
+		return lastVisited;
+	}
+
+	public void setLastVisited(Date lastVisited) {
+		this.lastVisited = lastVisited;
+	}
+
+	public Frequency getCrawlFrequency() {
+		return crawlFrequency;
+	}
+
+	public void setCrawlFrequency(Frequency crawlFrequency) {
+		this.crawlFrequency = crawlFrequency;
 	}
 
 	public Manager getManager() {

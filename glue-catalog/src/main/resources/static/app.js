@@ -45,8 +45,9 @@ class App extends React.Component {
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
 				
-				// TODO Manager: read-only property
+				// TODO: read-only properties
 				delete schema.entity.properties.manager;
+				delete schema.entity.properties.lastVisited;
 				
 				this.schema = schema.entity;
 				this.links = websiteCollection.entity._links;

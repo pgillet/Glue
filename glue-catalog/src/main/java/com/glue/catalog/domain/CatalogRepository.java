@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 //@RepositoryRestResource(collectionResourceRel = "websites", path = "websites")
 @PreAuthorize("hasRole('ROLE_MANAGER')")
 public interface CatalogRepository extends
-	MongoRepository<EventWebsite, String> {
+	MongoRepository<EventWebsite, String>, CatalogRepositoryCustom {
 
     Page<EventWebsite> findByUriLike(@Param("uri") String uri, Pageable pageable);
 

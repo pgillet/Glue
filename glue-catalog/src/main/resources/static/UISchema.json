@@ -2,6 +2,7 @@
 	"ui:order": [
 		"uri",
 		"activated",
+		"crawlFrequency",
 		"siteMap",
 		"eventSelectors",
 		"eventTemplate"
