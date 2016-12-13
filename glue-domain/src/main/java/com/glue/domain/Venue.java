@@ -657,24 +657,16 @@ public class Venue {
 	this.source = source;
     }
 
-    @Override
-    public String toString() {
-	return "Venue [id=" + id + ", name=" + name + ", description="
-		+ description + ", type=" + type + ", address=" + address
-		+ ", city=" + city + ", region=" + region
-		+ ", regionAbbreviation=" + regionAbbreviation
-		+ ", postalCode=" + postalCode + ", country=" + country
-		+ ", countryTwoLetterAbbreviation="
-		+ countryTwoLetterAbbreviation
-		+ ", countryThreeLetterAbbreviation="
-		+ countryThreeLetterAbbreviation + ", latitude=" + latitude
-		+ ", longitude=" + longitude + ", url=" + url
-		+ ", geocodeType=" + geocodeType + ", source=" + source
-		+ ", parent=" + parent + ", children=" + children + ", events="
-		+ events + ", links=" + links + ", comments=" + comments
-		+ ", images=" + images + ", properties=" + properties
-		+ ", tags=" + tags + ", created=" + created + ", timeZone="
-		+ timeZone + ", reference=" + reference + "]";
-    }
+	@Override
+	public String toString() {
+		return "Venue [id=" + id + ", name=" + name + ", description=" + description + ", type=" + type + ", address="
+				+ address + ", city=" + city + ", region=" + region + ", regionAbbreviation=" + regionAbbreviation
+				+ ", postalCode=" + postalCode + ", country=" + country + ", countryTwoLetterAbbreviation="
+				+ countryTwoLetterAbbreviation + ", countryThreeLetterAbbreviation=" + countryThreeLetterAbbreviation
+				+ ", latitude=" + latitude + ", longitude=" + longitude + ", url=" + url + ", geocodeType="
+				+ geocodeType + ", source=" + source + ", links=" + links + ", comments=" + comments + ", images="
+				+ images + ", properties=" + properties + ", tags=" + tags + ", created=" + created + ", timeZone="
+				+ timeZone + ", reference=" + reference + "]";
+	}
 
 }
