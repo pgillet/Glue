@@ -28,19 +28,19 @@
 			"eventType",
 			"venueRootBlock",
 			"venueSelectors"
-		]
-	},
-	"venueSelectors": {
-		"ui:order": [
-			"rootBlock",
-			"venueName",
-			"venueAddress",
-			"city",
-			"phoneNumber",
-			"website",
-			"description",
-			"thumbnail"
-		]
+		],
+		"venueSelectors": {
+			"ui:order": [
+				"rootBlock",
+				"venueName",
+				"venueAddress",
+				"city",
+				"phoneNumber",
+				"website",
+				"description",
+				"thumbnail"
+			]
+		}
 	},
 	"eventTemplate": {
 		"ui:order": [
@@ -64,32 +64,32 @@
 			"withdrawnNote",
 			"reference",
 			"venue"
-		]
-	},
-	"venue": {
-		"ui-order": [
-			"name",
-			"description",
-			"type",
-			"address",
-			"city",
-			"region",
-			"regionAbbreviation",
-			"postalCode",
-			"country",
-			"countryTwoLetterAbbreviation",
-			"countryThreeLetterAbbreviation",
-			"latitude",
-			"longitude",
-			"url",
-			"geocodeType",
-			"source",
-			"links",
-			"images",
-			"properties",
-			"tags",
-			"timeZone",
-			"reference"
-		]
+		],
+		"venue": {
+			"ui:order": [
+				"name",
+				"description",
+				"type",
+				"address",
+				"city",
+				"region",
+				"regionAbbreviation",
+				"postalCode",
+				"country",
+				"countryTwoLetterAbbreviation",
+				"countryThreeLetterAbbreviation",
+				"latitude",
+				"longitude",
+				"url",
+				"geocodeType",
+				"source",
+				"links",
+				"images",
+				"properties",
+				"tags",
+				"timeZone",
+				"reference"
+			]
+		}
 	}
 }
