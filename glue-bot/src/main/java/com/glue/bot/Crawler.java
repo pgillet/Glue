@@ -17,64 +17,68 @@ import com.google.gson.GsonBuilder;
  */
 public class Crawler<T> implements Extractor {
 
-    static final Logger LOG = LoggerFactory.getLogger(Crawler.class);
+	static final Logger LOG = LoggerFactory.getLogger(Crawler.class);
 
-    private BrowsingStrategy browsingStrategy;
-    private HtmlMapper<T> mappingStrategy;
+	private BrowsingStrategy browsingStrategy;
+	private HtmlMapper<T> mappingStrategy;
 
-    /**
-     * For JSON pretty printing.
-     */
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	/**
+	 * For JSON pretty printing.
+	 */
+	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    /**
-     * Pass in the class Java bean that will contain the mapped data from the
-     * HTML source. The HTML source is described within the given site map, and
-     * is traversed according to a PaginatedListStrategy.
-     * 
-     * @param classModel
-     * @param siteMap
-     */
-    public Crawler(Class<T> classModel, SiteMap siteMap) {
-	this.browsingStrategy = new PaginatedListStrategy(siteMap);
-	this.browsingStrategy.setExtractor(this);
+	/**
+	 * Pass in the class Java bean that will contain the mapped data from the
+	 * HTML source. The HTML source is described within the given site map, and
+	 * is traversed according to a PaginatedListStrategy.
+	 * 
+	 * @param classModel
+	 * @param siteMap
+	 */
+	public Crawler(Class<T> classModel, SiteMap siteMap) {
+		this.browsingStrategy = new PaginatedListStrategy(siteMap);
+		this.browsingStrategy.setExtractor(this);
 
-	this.mappingStrategy = new AnnotationMappingStrategy<T>(classModel);
-    }
-
-    public Crawler(SiteMap siteMap, HtmlMapper<T> mappingStrategy) {
-	this.browsingStrategy = new PaginatedListStrategy(siteMap);
-	this.browsingStrategy.setExtractor(this);
-
-	this.mappingStrategy = mappingStrategy;
-    }
-
-    /**
-     * Runs this spider.
-     * 
-     * @throws Exception
-     */
-    public void run() throws Exception {
-	browsingStrategy.browse();
-    }
-
-    /**
-     * Callback method from the <{@link BrowsingStrategy}.
-     */
-    @Override
-    public void process(Element e) throws Exception {
-
-	try {
-	    T obj = mappingStrategy.parse(e);
-
-	    if (obj != null) {
-		String jsonObj = gson.toJson(obj);
-		LOG.info("Item parsed = " + jsonObj);
-	    }
-	} catch (Exception ex) {
-	    LOG.error(ex.getMessage(), ex);
-	    throw ex;
+		this.mappingStrategy = new AnnotationMappingStrategy<T>(classModel);
 	}
-    }
+
+	public Crawler(SiteMap siteMap, HtmlMapper<T> mappingStrategy) {
+		this.browsingStrategy = new PaginatedListStrategy(siteMap);
+		this.browsingStrategy.setExtractor(this);
+
+		this.mappingStrategy = mappingStrategy;
+	}
+
+	/**
+	 * Runs this spider.
+	 * 
+	 * @throws Exception
+	 */
+	public void run() throws Exception {
+		browsingStrategy.browse();
+	}
+
+	/**
+	 * Callback method from the <{@link BrowsingStrategy}.
+	 */
+	@Override
+	public void process(Element e) throws Exception {
+
+		try {
+			T obj = mappingStrategy.parse(e);
+
+			if (obj != null) {
+				String jsonObj = gson.toJson(obj);
+				LOG.info("Item parsed = " + jsonObj);
+			}
+		} catch (Exception ex) {
+			LOG.error(ex.getMessage(), ex);
+			throw ex;
+		}
+	}
+
+	public void setExtractor(Extractor extractor) {
+		this.browsingStrategy.setExtractor(extractor);
+	}
 
 }

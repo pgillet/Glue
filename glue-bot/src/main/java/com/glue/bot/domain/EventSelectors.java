@@ -22,7 +22,7 @@ public class EventSelectors {
     private String eventType;
     private String venueRootBlock;
     
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private VenueSelectors venueSelectors;
 
     @JsonIgnore
