@@ -17,7 +17,7 @@
 		</repository>
 		<repository>
 			<id>JHU</id>
-			<url>http://maven.mse.jhu.edu/m2repository</url>
+			<url>https://dev-iesl.cs.umass.edu/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
