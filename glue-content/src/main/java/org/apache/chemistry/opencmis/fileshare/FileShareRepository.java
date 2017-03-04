@@ -239,7 +239,7 @@ public class FileShareRepository {
         capabilities.setCapabilityRendition(CapabilityRenditions.NONE);
 
         if (cmisVersion != CmisVersion.CMIS_1_0) {
-            capabilities.setOrderByCapability(CapabilityOrderBy.NONE);
+            capabilities.setCapabilityOrderBy(CapabilityOrderBy.NONE);
 
             NewTypeSettableAttributesImpl typeSetAttributes = new NewTypeSettableAttributesImpl();
             typeSetAttributes.setCanSetControllableAcl(false);
@@ -1985,7 +1985,7 @@ public class FileShareRepository {
         for (Map.Entry<String, Boolean> ue : readWriteUserMap.entrySet()) {
             // create principal
             AccessControlPrincipalDataImpl principal = new AccessControlPrincipalDataImpl();
-            principal.setPrincipalId(ue.getKey());
+            principal.setId(ue.getKey());
 
             // create ACE
             AccessControlEntryImpl entry = new AccessControlEntryImpl();
